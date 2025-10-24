@@ -31,11 +31,27 @@ pub const Lexer = struct {
             '<' => self.scanLessThan(),
             '>' => self.scanGreaterThan(),
             '=' => self.scanAssignOrEqualOrArrow(),
+            '&' => self.scanAnd(),
             '%' => self.scanPercent(),
             '0'...'9' => self.scanNumber(),
             '"', '\'' => self.scanString(),
             '/' => self.scanSlashOrRegex(),
             else => self.consumeSingleCharToken(TokenType.Invalid),
+        };
+    }
+
+    fn scanAnd(self: *Lexer) Token {
+        const next_1 = self.peekAhead(1);
+        const next_2 = self.peekAhead(2);
+
+        if (next_1 == '&' and next_2 == '=') {
+            return self.consumeMultiCharToken(.LogicalAndAssign, 3);
+        }
+
+        return switch (next_1) {
+            '&' => self.consumeMultiCharToken(.LogicalAnd, 2),
+            '=' => self.consumeMultiCharToken(.BitwiseAndAssign, 2),
+            else => self.consumeSingleCharToken(.BitwiseAnd),
         };
     }
 
@@ -374,21 +390,21 @@ pub const Lexer = struct {
         }
     }
 
-    fn consumeSingleCharToken(self: *Lexer, token_type: TokenType) Token {
+    fn consumeSingleCharToken(self: *Lexer, comptime token_type: TokenType) Token {
         const start = self.position;
         self.advanceBy(1);
         const lexeme = self.source[start..self.position];
         return self.createToken(token_type, lexeme, start, self.position);
     }
 
-    fn consumeMultiCharToken(self: *Lexer, token_type: TokenType, length: u8) Token {
+    fn consumeMultiCharToken(self: *Lexer, comptime token_type: TokenType, comptime length: u8) Token {
         const start = self.position;
-        self.advanceBy(length);
+        self.position += length;
         const end = self.position;
         return self.createToken(token_type, self.source[start..end], start, end);
     }
 
-    fn createEmptyToken(self: *Lexer, token_type: TokenType) Token {
+    fn createEmptyToken(self: *Lexer, comptime token_type: TokenType) Token {
         return self.createToken(token_type, "", self.position, self.position);
     }
 
@@ -401,7 +417,7 @@ pub const Lexer = struct {
         };
     }
 
-    fn advanceBy(self: *Lexer, offset: u8) void {
+    fn advanceBy(self: *Lexer, comptime offset: u8) void {
         self.position += offset;
     }
 
@@ -410,7 +426,7 @@ pub const Lexer = struct {
         return self.source[self.position];
     }
 
-    fn peekAhead(self: *Lexer, offset: u8) u8 {
+    fn peekAhead(self: *Lexer, comptime offset: u8) u8 {
         if (self.isAtEndWithOffset(offset)) return 0;
         return self.source[self.position + offset];
     }
@@ -425,7 +441,7 @@ pub const Lexer = struct {
         return self.position >= self.source.len;
     }
 
-    fn isAtEndWithOffset(self: *Lexer, offset: u8) bool {
+    fn isAtEndWithOffset(self: *Lexer, comptime offset: u8) bool {
         return (self.position + offset) >= self.source.len;
     }
 };

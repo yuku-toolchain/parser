@@ -43,11 +43,11 @@ pub const TokenType = enum {
     LessThanEqual,      // <= (done)
     GreaterThanEqual,   // >= (done)
 
-    LogicalAnd,         // &&
+    LogicalAnd,         // && (done)
     LogicalOr,          // ||
     LogicalNot,         // ! (done)
 
-    BitwiseAnd,         // &
+    BitwiseAnd,         // & (done)
     BitwiseOr,          // |
     BitwiseXor,         // ^
     BitwiseNot,         // ~
@@ -55,7 +55,7 @@ pub const TokenType = enum {
     RightShift,         // >> (done)
     UnsignedRightShift, // >>> (done)
 
-    BitwiseAndAssign,   // &=
+    BitwiseAndAssign,   // &= (done)
     BitwiseOrAssign,    // |=
     BitwiseXorAssign,   // ^=
     LeftShiftAssign,    // <<= (done)
@@ -64,7 +64,7 @@ pub const TokenType = enum {
 
     NullishCoalescing,  // ??
     NullishAssign,      // ??=
-    LogicalAndAssign,   // &&=
+    LogicalAndAssign,   // &&= (done)
     LogicalOrAssign,    // ||=
     OptionalChaining,   // ?.
 
