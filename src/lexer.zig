@@ -17,100 +17,107 @@ pub const Lexer = struct {
         self.skipWhitespace();
 
         if (self.isAtEnd()) {
-            return self.emptyToken(TokenType.EOF);
+            return self.createEmptyToken(TokenType.EOF);
         }
 
-        const c = self.peek();
+        const current_char = self.currentChar();
 
-        return switch (c) {
+        return switch (current_char) {
             '+' => self.scanPlus(),
             '0'...'9' => self.scanNumber(),
-            else => self.singleCharToken(TokenType.Invalid),
+            else => self.consumeSingleCharToken(TokenType.Invalid),
         };
     }
 
     fn scanPlus(self: *Lexer) Token {
-        if (self.peekNext(1) == '+') {
-            const start = self.position;
-            _ = self.advance(2);
-            const end = self.position;
-            return Lexer.makeToken(.Increment, self.source[start..end], start, end);
-        } else if (self.peekNext(1) == '=') {
-            const start = self.position;
-            _ = self.advance(2);
-            const end = self.position;
-            return Lexer.makeToken(.PlusAssign, self.source[start..end], start, end);
-        } else {
-            return self.singleCharToken(.Plus);
-        }
+        const next_char = self.peekAhead(1);
+
+        return switch (next_char) {
+            '+' => self.consumeMultiCharToken(.Increment, 2),
+            '=' => self.consumeMultiCharToken(.PlusAssign, 2),
+            else => self.consumeSingleCharToken(.Plus),
+        };
     }
 
     fn scanNumber(self: *Lexer) Token {
         const start = self.position;
 
-        while (!self.isAtEnd() and std.ascii.isDigit(self.peek())) {
-            _ = self.advance(1);
-        }
+        self.consumeWhile(std.ascii.isDigit);
 
-        if (!self.isAtEndOffset(1) and self.peek() == '.' and std.ascii.isDigit(self.peekNext(1))) {
-            _ = self.advance(1);
-
-            while (!self.isAtEnd() and std.ascii.isDigit(self.peek())) {
-                _ = self.advance(1);
-            }
+        if (self.currentChar() == '.' and
+            !self.isAtEndWithOffset(1) and
+            std.ascii.isDigit(self.peekAhead(1)))
+        {
+            self.advanceBy(1);
+            self.consumeWhile(std.ascii.isDigit);
         }
 
         const end = self.position;
-
-        return Lexer.makeToken(.NumericLiteral, self.source[start..end], start, end);
+        return self.createToken(.NumericLiteral, self.source[start..end], start, end);
     }
 
     fn skipWhitespace(self: *Lexer) void {
         while (!self.isAtEnd()) {
-            const c = self.peek();
-            switch (c) {
-                ' ', '\t', '\r' => _ = self.advance(1),
+            const current_char = self.currentChar();
+            switch (current_char) {
+                ' ', '\t', '\r' => self.advanceBy(1),
                 else => break,
             }
         }
     }
 
-    fn singleCharToken(self: *Lexer, token_type: TokenType) Token {
+    fn consumeSingleCharToken(self: *Lexer, token_type: TokenType) Token {
         const start = self.position;
-        _ = self.advance(1);
-        const c = self.source[start..self.position];
-        return Lexer.makeToken(token_type, c, start, self.position);
+        self.advanceBy(1);
+        const lexeme = self.source[start..self.position];
+        return self.createToken(token_type, lexeme, start, self.position);
     }
 
-    fn emptyToken(self: *Lexer, token_type: TokenType) Token {
-        return Lexer.makeToken(token_type, "", self.position, self.position);
+    fn consumeMultiCharToken(self: *Lexer, token_type: TokenType, length: u8) Token {
+        const start = self.position;
+        self.advanceBy(length);
+        const end = self.position;
+        return self.createToken(token_type, self.source[start..end], start, end);
     }
 
-    fn advance(self: *Lexer, offset: u8) u8 {
-        const c = self.source[self.position];
+    fn createEmptyToken(self: *Lexer, token_type: TokenType) Token {
+        return self.createToken(token_type, "", self.position, self.position);
+    }
+
+    fn createToken(self: *Lexer, token_type: TokenType, lexeme: []const u8, start: usize, end: usize) Token {
+        _ = self;
+        return Token{
+            .type = token_type,
+            .lexeme = lexeme,
+            .span = .{ .start = start, .end = end },
+        };
+    }
+
+    fn advanceBy(self: *Lexer, offset: u8) void {
         self.position += offset;
-        return c;
     }
 
-    fn peek(self: *Lexer) u8 {
+    fn currentChar(self: *Lexer) u8 {
         if (self.isAtEnd()) return 0;
         return self.source[self.position];
     }
 
-    fn peekNext(self: *Lexer, offset: u8) u8 {
-        if (self.isAtEndOffset(offset)) return 0;
+    fn peekAhead(self: *Lexer, offset: u8) u8 {
+        if (self.isAtEndWithOffset(offset)) return 0;
         return self.source[self.position + offset];
+    }
+
+    fn consumeWhile(self: *Lexer, predicate: fn (u8) bool) void {
+        while (!self.isAtEnd() and predicate(self.currentChar())) {
+            self.advanceBy(1);
+        }
     }
 
     fn isAtEnd(self: *Lexer) bool {
         return self.position >= self.source.len;
     }
 
-    fn isAtEndOffset(self: *Lexer, offset: u8) bool {
+    fn isAtEndWithOffset(self: *Lexer, offset: u8) bool {
         return (self.position + offset) >= self.source.len;
-    }
-
-    fn makeToken(token_type: TokenType, lexeme: []const u8, start: usize, end: usize) Token {
-        return Token{ .type = token_type, .lexeme = lexeme, .span = .{ .start = start, .end = end } };
     }
 };
