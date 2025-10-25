@@ -68,19 +68,19 @@ pub const TokenType = enum {
     LogicalOrAssign,    // ||= (done)
     OptionalChaining,   // ?. (done)
 
-    LeftParen,          // (
-    RightParen,         // )
-    LeftBrace,          // {
-    RightBrace,         // }
-    LeftBracket,        // [
-    RightBracket,       // ]
-    Semicolon,          // ;
-    Comma,              // ,
+    LeftParen,          // ( (done)
+    RightParen,         // ) (done)
+    LeftBrace,          // { (done)
+    RightBrace,         // } (done)
+    LeftBracket,        // [ (done)
+    RightBracket,       // ] (done)
+    Semicolon,          // ; (done)
+    Comma,              // , (done)
     Dot,                // .   (done)
     Spread,             // ... (done)
     Arrow,              // => (done)
     Question,           // ? (done)
-    Colon,              // :
+    Colon,              // : (done)
 
     If, Else, Switch, Case, Default,
     For, While, Do, Break, Continue,

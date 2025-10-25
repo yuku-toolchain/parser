@@ -40,6 +40,15 @@ pub const Lexer = struct {
             '/' => self.scanSlashOrRegex(),
             '?' => self.scanQuestionMark(),
             '~' => self.consumeSingleCharToken(TokenType.BitwiseNot),
+            '(' => self.consumeSingleCharToken(TokenType.LeftParen),
+            ')' => self.consumeSingleCharToken(TokenType.RightParen),
+            '{' => self.consumeSingleCharToken(TokenType.LeftBracket),
+            '}' => self.consumeSingleCharToken(TokenType.RightBracket),
+            '[' => self.consumeSingleCharToken(TokenType.LeftBrace),
+            ']' => self.consumeSingleCharToken(TokenType.RightBrace),
+            ';' => self.consumeSingleCharToken(TokenType.Semicolon),
+            ',' => self.consumeSingleCharToken(TokenType.Comma),
+            ':' => self.consumeSingleCharToken(TokenType.Colon),
             else => self.consumeSingleCharToken(TokenType.Invalid),
         };
     }
