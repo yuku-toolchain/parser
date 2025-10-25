@@ -6,11 +6,13 @@ const KeywordMap = @import("token.zig").KeywordMap;
 pub const Lexer = struct {
     source: []const u8,
     position: usize,
+    template_depth: usize,
 
     pub fn init(source: []const u8) Lexer {
         return .{
             .source = source,
             .position = 0,
+            .template_depth = 0,
         };
     }
 
@@ -40,11 +42,12 @@ pub const Lexer = struct {
             '"', '\'' => self.scanString(),
             '/' => self.scanSlashOrRegex(),
             '?' => self.scanQuestionMark(),
+            '`' => self.scanTemplateLiteral(),
             '~' => self.consumeSingleCharToken(TokenType.BitwiseNot),
             '(' => self.consumeSingleCharToken(TokenType.LeftParen),
             ')' => self.consumeSingleCharToken(TokenType.RightParen),
             '{' => self.consumeSingleCharToken(TokenType.LeftBrace),
-            '}' => self.consumeSingleCharToken(TokenType.RightBrace),
+            '}' => self.handleRightBrace(),
             '[' => self.consumeSingleCharToken(TokenType.LeftBracket),
             ']' => self.consumeSingleCharToken(TokenType.RightBracket),
             ';' => self.consumeSingleCharToken(TokenType.Semicolon),
@@ -259,6 +262,87 @@ pub const Lexer = struct {
 
         const end = self.position;
         return self.createToken(.Invalid, self.source[start..end], start, end);
+    }
+
+    fn scanTemplateLiteral(self: *Lexer) Token {
+        const start = self.position;
+        self.advanceBy(1);
+
+        while (!self.isAtEnd()) {
+            const c = self.currentChar();
+
+            if (c == '`') {
+                self.advanceBy(1);
+                const end = self.position;
+                return self.createToken(.NoSubstitutionTemplate, self.source[start..end], start, end);
+            }
+
+            if (c == '$' and self.peekAhead(1) == '{') {
+                self.advanceBy(2); // consume ${
+                self.template_depth += 1;
+                const end = self.position;
+                return self.createToken(.TemplateHead, self.source[start..end], start, end);
+            }
+
+            if (c == '\\') {
+                self.advanceBy(1);
+                if (!self.isAtEnd()) {
+                    self.advanceBy(1);
+                }
+                continue;
+            }
+
+            self.advanceBy(1);
+        }
+
+        const end = self.position;
+        return self.createToken(.Invalid, self.source[start..end], start, end);
+    }
+
+    fn scanTemplateMiddleOrTail(self: *Lexer) Token {
+        const start = self.position;
+        self.advanceBy(1); // consume closing brace
+
+        while (!self.isAtEnd()) {
+            const c = self.currentChar();
+
+            if (c == '`') {
+                self.advanceBy(1); // consume closing backtick
+                if (self.template_depth > 0) {
+                    self.template_depth -= 1;
+                }
+                const end = self.position;
+                return self.createToken(.TemplateTail, self.source[start..end], start, end);
+            }
+
+            if (c == '$' and self.peekAhead(1) == '{') {
+                self.advanceBy(2); // consume ${
+                const end = self.position;
+                return self.createToken(.TemplateMiddle, self.source[start..end], start, end);
+            }
+
+            if (c == '\\') {
+                self.advanceBy(1);
+                if (!self.isAtEnd()) {
+                    self.advanceBy(1);
+                }
+                continue;
+            }
+
+            self.advanceBy(1);
+        }
+
+        const end = self.position;
+        return self.createToken(.Invalid, self.source[start..end], start, end);
+    }
+
+    fn handleRightBrace(self: *Lexer) Token {
+        // if we're inside a template substitution, scan template middle/tail
+        if (self.template_depth > 0) {
+            return self.scanTemplateMiddleOrTail();
+        }
+
+        return self.consumeSingleCharToken(TokenType.RightBrace);
     }
 
     fn scanSlashOrRegex(self: *Lexer) Token {
