@@ -166,6 +166,7 @@ pub const Lexer = struct {
         while (!self.isAtEnd()) {
             const c = self.currentChar();
 
+            // found closing quote
             if (c == quote) {
                 self.advanceBy(1);
                 const end = self.position;
@@ -175,15 +176,22 @@ pub const Lexer = struct {
             if (c == '\\') {
                 self.advanceBy(1);
 
-                if (!self.isAtEnd()) {
-                    const next = self.currentChar();
-                    if (next == '\r' and self.peekAhead(1) == '\n') {
-                        self.advanceBy(2);
-                    } else {
-                        self.advanceBy(1);
-                    }
+                if (self.isAtEnd()) {
+                    break;
                 }
 
+                const next = self.currentChar();
+
+                if (next == '\n') {
+                    self.advanceBy(1);
+                } else if (next == '\r') {
+                    self.advanceBy(1);
+                    if (!self.isAtEnd() and self.currentChar() == '\n') {
+                        self.advanceBy(1);
+                    }
+                } else {
+                    self.advanceBy(1);
+                }
                 continue;
             }
 
