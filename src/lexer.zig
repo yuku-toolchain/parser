@@ -20,8 +20,8 @@ const LexError = error{
 
 // NEXT:
 // handle unicodes in identifiers
-// different escapes in strings
-// handle some strict mode rules, like octal escapes
+// different escapes in strings https://claude.ai/chat/ce282993-8223-4759-bd38-f3ef2cbc57b5
+// handle some strict mode rules, like octal escapes https://claude.ai/chat/ce282993-8223-4759-bd38-f3ef2cbc57b5
 // and some simd optimizations
 
 pub const Lexer = struct {
