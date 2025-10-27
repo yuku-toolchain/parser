@@ -28,21 +28,21 @@ pub const Lexer = struct {
     source: []const u8,
     position: usize,
     template_depth: usize,
-    comments: std.array_list.Managed(Comment),
     allocator: std.mem.Allocator,
+    comments: std.ArrayListUnmanaged(Comment),
 
     pub fn init(allocator: std.mem.Allocator, source: []const u8) Lexer {
         return .{
             .source = source,
             .position = 0,
             .template_depth = 0,
-            .comments = std.array_list.Managed(Comment).init(allocator),
             .allocator = allocator,
+            .comments = .{},
         };
     }
 
     pub fn deinit(self: *Lexer) void {
-        self.comments.deinit();
+        self.comments.deinit(self.allocator);
     }
 
     pub fn nextToken(self: *Lexer) LexError!Token {
@@ -877,10 +877,10 @@ pub const Lexer = struct {
         }
 
         self.position = i;
-        try self.comments.append(Comment{
-            .type = .SingleLine,
+        try self.comments.append(self.allocator, Comment{
             .content = self.source[start..i],
             .span = .{ .start = start, .end = i },
+            .type = .SingleLine,
         });
     }
 
@@ -893,10 +893,10 @@ pub const Lexer = struct {
             if (c == '*' and i + 1 < self.source.len and self.source[i + 1] == '/') {
                 i += 2;
                 self.position = i;
-                try self.comments.append(Comment{
-                    .type = .MultiLine,
+                try self.comments.append(self.allocator, Comment{
                     .content = self.source[start..i],
                     .span = .{ .start = start, .end = i },
+                    .type = .MultiLine,
                 });
                 return;
             }

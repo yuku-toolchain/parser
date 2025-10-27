@@ -171,7 +171,11 @@ pub const Span = struct {
     end: usize,
 };
 
-pub const Token = struct { type: TokenType, lexeme: []const u8, span: Span };
+pub const Token = struct {
+    lexeme: []const u8,
+    span: Span,
+    type: TokenType,
+};
 
 pub const CommentType = enum {
     SingleLine, // // comment
@@ -179,7 +183,7 @@ pub const CommentType = enum {
 };
 
 pub const Comment = struct {
-    type: CommentType,
     content: []const u8,
     span: Span,
+    type: CommentType,
 };
