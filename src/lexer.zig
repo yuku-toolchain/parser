@@ -4,6 +4,8 @@ const Token = @import("token.zig").Token;
 const TokenType = @import("token.zig").TokenType;
 const Comment = @import("token.zig").Comment;
 const CommentType = @import("token.zig").CommentType;
+const unicodeId = @import("unicode-id.zig");
+const util = @import("util.zig");
 
 const LexError = error{
     UnterminatedString,
@@ -12,7 +14,7 @@ const LexError = error{
     UnterminatedRegexLiteral,
     InvalidRegexLineTerminator,
     InvalidRegex,
-    IncompletePrivateIdentifier,
+    InvalidIdentifierStart,
     InvalidPrivateIdentifierStart,
     UnexpectedCharacter,
     UnterminatedMultiLineComment,
@@ -20,6 +22,7 @@ const LexError = error{
 
 // NEXT:
 // handle unicodes in identifiers
+// different whitespaces handling, check jam, read and learn, then implement it
 // different escapes in strings https://claude.ai/chat/ce282993-8223-4759-bd38-f3ef2cbc57b5
 // handle some strict mode rules, like octal escapes https://claude.ai/chat/ce282993-8223-4759-bd38-f3ef2cbc57b5
 // and some simd optimizations
@@ -74,8 +77,7 @@ pub const Lexer = struct {
             '~', '(', ')', '{', '[', ']', ';', ',', ':' => self.scanSimplePunctuation(),
             '}' => self.handleRightBrace(),
             '#' => self.scanPrivateIdentifier(),
-            'a'...'z', 'A'...'Z', '_', '$' => self.scanIdentifierOrKeyword(),
-            else => error.UnexpectedCharacter,
+            else => self.scanIdentifierOrKeyword(),
         };
     }
 
@@ -548,26 +550,29 @@ pub const Lexer = struct {
         return self.createToken(.Dot, self.source[start..self.position], start, self.position);
     }
 
-    fn scanIdentifierOrKeyword(self: *Lexer) Token {
+    fn scanIdentifierOrKeyword(self: *Lexer) !Token {
         const start = self.position;
-        var i = start + 1;
+        var i = start;
+
+        const c_cp = util.codePointAt(self.source, i);
+
+        if(!unicodeId.canStartIdentifier(c_cp.value)){
+            return error.InvalidIdentifierStart;
+        }
+
+        i += 1;
 
         while (i < self.source_len) {
-            const c = self.source[i];
-            if (c < 128) {
-                @branchHint(.likely);
-                if (std.ascii.isAlphanumeric(c) or c == '_' or c == '$') {
-                    i += 1;
-                } else {
-                    break;
-                }
+            const cp = util.codePointAt(self.source, i);
+            if (unicodeId.canContinueIdentifier(cp.value)) {
+                i += 1;
             } else {
-                @branchHint(.cold);
                 break;
             }
         }
 
         self.position = i;
+
         const lexeme = self.source[start..i];
         const token_type: TokenType = self.getKeywordType(lexeme);
 
@@ -578,20 +583,17 @@ pub const Lexer = struct {
         const start = self.position;
         var i = start + 1;
 
-        if (i >= self.source_len) {
-            return error.IncompletePrivateIdentifier;
-        }
+        const first_cp = util.codePointAt(self.source, i);
 
-        const first = self.source[i];
-        if (!std.ascii.isAlphabetic(first) and first != '_' and first != '$') {
+        if (!unicodeId.canStartIdentifier(first_cp.value)) {
             return error.InvalidPrivateIdentifierStart;
         }
 
         i += 1;
 
         while (i < self.source_len) {
-            const c = self.source[i];
-            if (std.ascii.isAlphanumeric(c) or c == '_' or c == '$') {
+            const cp = util.codePointAt(self.source, i);
+            if (unicodeId.canContinueIdentifier(cp.value)) {
                 i += 1;
             } else {
                 break;
@@ -843,7 +845,14 @@ pub const Lexer = struct {
         while (i < self.source_len) {
             const c = self.source[i];
             switch (c) {
-                ' ', '\t', '\r', '\n' => {
+                ' ',
+                '\t',
+                '\n',
+                '\r',
+                '\u{00A0}',
+                '\u{000B}',
+                '\u{000C}',
+                => {
                     @branchHint(.likely);
                     i += 1;
                 },

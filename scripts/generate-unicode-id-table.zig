@@ -17,7 +17,7 @@ pub fn main() !void {
 
     const allocator = gpa.allocator();
 
-    if(!exists(extracted_dir)){
+    if (!exists(extracted_dir)) {
         try downloadAndExtractSpec(allocator);
     }
 
@@ -208,7 +208,7 @@ pub fn downloadAndExtractSpec(allocator: std.mem.Allocator) !void {
 }
 
 fn exists(path: []const u8) bool {
-    if(std.fs.accessAbsolute(path, .{})) |_| {
+    if (std.fs.accessAbsolute(path, .{})) |_| {
         return true;
     } else |_| {
         return false;
@@ -253,5 +253,5 @@ fn writeStructuresToFile(structures: Structures, writer: *std.Io.Writer, name: [
         \\
     );
 
-    std.log.info("Successfully wrote {s} to {s}", .{name, tables_file});
+    std.log.info("Successfully wrote {s} to {s}", .{ name, tables_file });
 }
