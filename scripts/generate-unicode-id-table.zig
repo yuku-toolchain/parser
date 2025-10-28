@@ -27,11 +27,16 @@ pub fn main() !void {
     std.debug.print("{d} {d}", .{id_start_codes.items.len, id_continue_codes.items.len});
 }
 
-fn bitsToRootAndLeaf() !struct {
+fn codesToRootAndLeaf(codes: Codes) !struct {
     root: []u32,
     leaf: []u64
 } {
+    const n_chunk_bits = 512;
+    const n_code_points = std.math.maxInt(u21) + 1;
 
+    while (n_code_points / n_chunk_bits) {
+
+    }
 }
 
 fn readSpecToCodes(allocator: std.mem.Allocator) !struct {Codes, Codes} {
