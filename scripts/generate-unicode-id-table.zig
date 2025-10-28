@@ -3,13 +3,13 @@ const std = @import("std");
 const spec_url = "https://www.unicode.org/Public/17.0.0/ucd/UCD.zip";
 const zip_dest = "/tmp/ucd.zip";
 const extracted_dir = "/tmp/ucd";
+const tables_file = "./src/unicode-id-tables.zig";
 
 const Codes = std.AutoArrayHashMap(u32, void);
 
-const Kind = enum {
-    Start,
-    Continue
-};
+const Structures = struct { root: []u32, leaf: []u32 };
+
+const Kind = enum { Start, Continue };
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -17,29 +17,48 @@ pub fn main() !void {
 
     const allocator = gpa.allocator();
 
-    try downloadAndExtractSpec(allocator);
+    if(!exists(extracted_dir)){
+        try downloadAndExtractSpec(allocator);
+    }
 
     var id_start_codes, var id_continue_codes = try readSpecToCodes(allocator);
 
     defer id_start_codes.deinit();
     defer id_continue_codes.deinit();
 
-    const result = try codesToRootAndLeaf(allocator, id_start_codes);
+    const id_start_structures = try codesToRootAndLeaf(allocator, id_start_codes);
+    const id_continue_structures = try codesToRootAndLeaf(allocator, id_start_codes);
 
-    defer allocator.free(result.root);
-    defer allocator.free(result.leaf);
+    defer allocator.free(id_start_structures.root);
+    defer allocator.free(id_start_structures.leaf);
+    defer allocator.free(id_continue_structures.root);
+    defer allocator.free(id_continue_structures.leaf);
 
-    std.debug.print("root: {any}\n\nleaf: {any}\n", .{result.root, result.leaf});
+    const cwd = std.fs.cwd();
+    const file = try cwd.createFile(tables_file, .{});
+    defer file.close();
+
+    var buffer: [1024]u8 = undefined;
+    var file_writer = file.writer(&buffer);
+    const writer = &file_writer.interface;
+
+    try writer.writeAll(
+        \\// Generated file, do not edit.
+        \\// See: scripts/generate-unicode-id-table.zig
+        \\
+    );
+
+    try writeStructuresToFile(id_start_structures, writer, "id_start");
+    try writeStructuresToFile(id_continue_structures, writer, "id_continue");
+
+    try file_writer.end();
 }
 
 const Chunk = [16]u32;
 
 const init_chunk: Chunk = .{0} ** 16;
 
-fn codesToRootAndLeaf(allocator: std.mem.Allocator, codes: Codes) !struct {
-    root: []u32,
-    leaf: []u32
-} {
+fn codesToRootAndLeaf(allocator: std.mem.Allocator, codes: Codes) !Structures {
     const n_piece_per_chunk = 16;
     const n_bits_per_chunk_piece = 32;
     const n_chunk_items = n_piece_per_chunk * n_bits_per_chunk_piece;
@@ -55,10 +74,10 @@ fn codesToRootAndLeaf(allocator: std.mem.Allocator, codes: Codes) !struct {
     for (0..n_chunks) |chunk_i| {
         var chunk: Chunk = init_chunk;
 
-        for(0.., &chunk) |i, *piece| {
-            for(0..n_bits_per_chunk_piece) |bi| {
+        for (0.., &chunk) |i, *piece| {
+            for (0..n_bits_per_chunk_piece) |bi| {
                 const cp: u32 = @intCast(chunk_i * n_chunk_items + i * n_bits_per_chunk_piece + bi);
-                const should: u32 = if(codes.contains(cp)) 1 else 0;
+                const should: u32 = if (codes.contains(cp)) 1 else 0;
                 piece.* = piece.* | (should << @as(u5, @intCast(bi)));
             }
         }
@@ -66,7 +85,7 @@ fn codesToRootAndLeaf(allocator: std.mem.Allocator, codes: Codes) !struct {
         try root_indexes.put(chunk_i, chunk);
 
         const res = try leaf_offset_for_chunks.getOrPut(chunk);
-        if(!res.found_existing) res.value_ptr.* = leaf_offset_for_chunks.count() - 1;
+        if (!res.found_existing) res.value_ptr.* = leaf_offset_for_chunks.count() - 1;
     }
 
     var root = try allocator.alloc(u32, n_chunks);
@@ -79,7 +98,7 @@ fn codesToRootAndLeaf(allocator: std.mem.Allocator, codes: Codes) !struct {
 
     var leaf: std.ArrayList(u32) = .empty;
 
-    for(leaf_offset_for_chunks.keys()) |*pieces| {
+    for (leaf_offset_for_chunks.keys()) |*pieces| {
         for (pieces) |p| {
             try leaf.append(allocator, p);
         }
@@ -87,10 +106,10 @@ fn codesToRootAndLeaf(allocator: std.mem.Allocator, codes: Codes) !struct {
 
     const leaf_slice = try leaf.toOwnedSlice(allocator);
 
-    return .{.root = root, .leaf = leaf_slice};
+    return .{ .root = root, .leaf = leaf_slice };
 }
 
-fn readSpecToCodes(allocator: std.mem.Allocator) !struct {Codes, Codes} {
+fn readSpecToCodes(allocator: std.mem.Allocator) !struct { Codes, Codes } {
     const file_path: []const u8 = "DerivedCoreProperties.txt";
 
     var dir = try std.fs.openDirAbsolute(extracted_dir, .{});
@@ -111,43 +130,40 @@ fn readSpecToCodes(allocator: std.mem.Allocator) !struct {Codes, Codes} {
             continue;
         }
 
-        const kind: Kind = if(std.mem.indexOf(u8, line, "ID_Start")) |_| .Start else if (std.mem.indexOf(u8, line, "ID_Continue")) |_| .Continue else continue;
+        const kind: Kind = if (std.mem.indexOf(u8, line, "ID_Start")) |_| .Start else if (std.mem.indexOf(u8, line, "ID_Continue")) |_| .Continue else continue;
 
         const parsed = try parseStartEnd(line) orelse continue;
 
-            for (parsed.start..parsed.end) |c| {
-                if(kind == .Start){
-                    try id_start_codes.put(@intCast(c), {});
-                } else if(kind == .Continue){
-                    try id_continue_codes.put(@intCast(c), {});
-                } else {
-                    break;
-                }
+        for (parsed.start..parsed.end) |c| {
+            if (kind == .Start) {
+                try id_start_codes.put(@intCast(c), {});
+            } else if (kind == .Continue) {
+                try id_continue_codes.put(@intCast(c), {});
+            } else {
+                break;
             }
+        }
     }
 
     return .{ id_start_codes, id_continue_codes };
 }
 
-const Parsed = struct {
-    start: u32,
-    end: u32
-};
+const Parsed = struct { start: u32, end: u32 };
 
 fn parseStartEnd(line: []const u8) !?Parsed {
     const space_index = std.mem.indexOfScalar(u8, line, ' ') orelse line.len;
 
     const to_parse = line[0..space_index];
 
-    if(std.mem.indexOf(u8, line, "..")) |i| {
+    if (std.mem.indexOf(u8, line, "..")) |i| {
         const start = try std.fmt.parseInt(u32, to_parse[0..i], 16);
         const end = try std.fmt.parseInt(u32, to_parse[i + 2 ..], 16);
 
-        return .{.start = start, .end = end + 1};
+        return .{ .start = start, .end = end + 1 };
     } else {
         const x = try std.fmt.parseInt(u32, to_parse, 16);
 
-        return .{.start = x, .end = x + 1};
+        return .{ .start = x, .end = x + 1 };
     }
 }
 
@@ -189,4 +205,53 @@ pub fn downloadAndExtractSpec(allocator: std.mem.Allocator) !void {
     try std.zip.extract(dir, &zip_reader, .{});
 
     std.log.info("Extracted successfully to {s}", .{extracted_dir});
+}
+
+fn exists(path: []const u8) bool {
+    if(std.fs.accessAbsolute(path, .{})) |_| {
+        return true;
+    } else |_| {
+        return false;
+    }
+}
+
+fn writeStructuresToFile(structures: Structures, writer: *std.Io.Writer, name: []const u8) !void {
+    try writer.print(
+        \\
+        \\pub const {s}_root = [_]u8{{
+    , .{name});
+
+    for (0.., structures.root) |i, x| {
+        if (i % 16 == 0) {
+            try writer.writeAll("\n    ");
+        } else {
+            try writer.writeAll(" ");
+        }
+        try writer.print("0x{x:0>2},", .{x});
+    }
+    try writer.writeAll(
+        \\
+        \\};
+        \\
+    );
+
+    try writer.print(
+        \\
+        \\pub const {s}_leaf = [_]u64{{
+    , .{name});
+    for (0.., structures.leaf) |i, x| {
+        if (i % 8 == 0) {
+            try writer.writeAll("\n    ");
+        } else {
+            try writer.writeAll(" ");
+        }
+        try writer.print("0x{x:0>2},", .{x});
+    }
+    try writer.writeAll(
+        \\
+        \\};
+        \\
+    );
+
+    std.log.info("Successfully wrote {s} to {s}", .{name, tables_file});
 }
