@@ -5,16 +5,33 @@ const zip_dest = "/tmp/ucd.zip";
 const extracted_dir = "/tmp/ucd";
 
 pub fn main() !void {
-    var gpa = std.heap.DebugAllocator(.{}){};
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
 
     const allocator = gpa.allocator();
 
     try downloadAndExtractSpec(allocator);
+
+    try readSpecToCodes(allocator);
 }
 
-fn readSpecToBits() !void {
+fn readSpecToCodes(allocator: std.mem.Allocator) !void {
+    const file_path: []const u8 = "DerivedCoreProperties.txt";
 
+    var dir = try std.fs.openDirAbsolute(extracted_dir, .{});
+    defer dir.close();
+
+    const content = try dir.readFileAlloc(file_path, allocator, .limited(1024 * 1024 * 1024));
+    defer allocator.free(content);
+
+    const delim: u8 = '\n';
+
+    var lines = std.mem.splitScalar(u8, content, delim);
+    while (lines.next()) |line| {
+        if (line.len > 0 and !std.mem.startsWith(u8, line, "#")) {
+            std.log.info("{s}", .{line});
+        }
+    }
 }
 
 pub fn downloadAndExtractSpec(allocator: std.mem.Allocator) !void {
@@ -39,7 +56,7 @@ pub fn downloadAndExtractSpec(allocator: std.mem.Allocator) !void {
     const reader = response.reader(&response_reader_buf);
     _ = try reader.streamRemaining(writer);
 
-    try std.fs.cwd().deleteTree(extracted_dir);
+    try std.fs.deleteTreeAbsolute(extracted_dir);
 
     try std.fs.makeDirAbsolute(extracted_dir);
 
