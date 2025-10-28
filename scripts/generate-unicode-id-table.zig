@@ -1,13 +1,27 @@
 const std = @import("std");
 
+const spec_url = "https://www.unicode.org/Public/17.0.0/ucd/UCD.zip";
 const zip_dest = "/tmp/ucd.zip";
 const extracted_dir = "/tmp/ucd";
+
+pub fn main() !void {
+    var gpa = std.heap.DebugAllocator(.{}){};
+    defer _ = gpa.deinit();
+
+    const allocator = gpa.allocator();
+
+    try downloadAndExtractSpec(allocator);
+}
+
+fn readSpecToBits() !void {
+
+}
 
 pub fn downloadAndExtractSpec(allocator: std.mem.Allocator) !void {
     var client: std.http.Client = .{ .allocator = allocator };
     defer client.deinit();
 
-    const uri = try std.Uri.parse("https://www.unicode.org/Public/17.0.0/ucd/UCD.zip");
+    const uri = try std.Uri.parse(spec_url);
     var req = try client.request(.GET, uri, .{ .redirect_behavior = .unhandled, .keep_alive = false });
     defer req.deinit();
 
@@ -41,13 +55,4 @@ pub fn downloadAndExtractSpec(allocator: std.mem.Allocator) !void {
     try std.zip.extract(dir, &zip_reader, .{});
 
     std.log.info("Extracted successfully to {s}", .{extracted_dir});
-}
-
-pub fn main() !void {
-    var gpa = std.heap.DebugAllocator(.{}){};
-    defer _ = gpa.deinit();
-
-    const allocator = gpa.allocator();
-
-    try downloadAndExtractSpec(allocator);
 }
