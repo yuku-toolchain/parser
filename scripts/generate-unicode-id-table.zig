@@ -1,10 +1,9 @@
 const std = @import("std");
 
-pub fn downloadSpec(allocator: std.mem.Allocator, dest: []const u8) !void {
-    if (std.fs.accessAbsolute(dest, .{})) {
-        try std.fs.deleteFileAbsolute(dest);
-    } else |_| {}
+const zip_dest = "/tmp/ucd.zip";
+const extracted_dir = "/tmp/ucd";
 
+pub fn downloadAndExtractSpec(allocator: std.mem.Allocator) !void {
     var client: std.http.Client = .{ .allocator = allocator };
     defer client.deinit();
 
@@ -15,22 +14,40 @@ pub fn downloadSpec(allocator: std.mem.Allocator, dest: []const u8) !void {
     try req.sendBodiless();
     var response = try req.receiveHead(&.{});
 
-    const file = try std.fs.createFileAbsolute(dest, .{});
+    const file = try std.fs.createFileAbsolute(zip_dest, .{});
     defer file.close();
+    defer std.fs.deleteFileAbsolute(zip_dest) catch {};
 
     var file_writer = file.writer(&.{});
     const writer = &file_writer.interface;
 
-    var buf: [1024]u8 = undefined;
-    const reader = response.reader(&buf);
+    var response_reader_buf: [1024]u8 = undefined;
+    const reader = response.reader(&response_reader_buf);
     _ = try reader.streamRemaining(writer);
+
+    try std.fs.cwd().deleteTree(extracted_dir);
+
+    try std.fs.makeDirAbsolute(extracted_dir);
+
+    var dir = try std.fs.openDirAbsolute(extracted_dir, .{});
+    defer dir.close();
+
+    const zip = try std.fs.openFileAbsolute(zip_dest, .{});
+    defer zip.close();
+
+    var zip_reader_buf: [1024]u8 = undefined;
+    var zip_reader = zip.reader(&zip_reader_buf);
+
+    try std.zip.extract(dir, &zip_reader, .{});
+
+    std.log.info("Extracted successfully to {s}", .{extracted_dir});
 }
 
 pub fn main() !void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    var gpa = std.heap.DebugAllocator(.{}){};
     defer _ = gpa.deinit();
 
     const allocator = gpa.allocator();
 
-    try downloadSpec(allocator, "/tmp/ucd.zip");
+    try downloadAndExtractSpec(allocator);
 }
