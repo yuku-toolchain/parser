@@ -15,9 +15,10 @@ const LexError = error{
     InvalidRegexLineTerminator,
     InvalidRegex,
     InvalidIdentifierStart,
-    InvalidPrivateIdentifierStart,
     UnexpectedCharacter,
     UnterminatedMultiLineComment,
+    InvalidUnicodeEscape,
+    InvalidEscape,
 };
 
 // NEXT:
@@ -75,8 +76,7 @@ pub const Lexer = struct {
             '`' => self.scanTemplateLiteral(),
             '~', '(', ')', '{', '[', ']', ';', ',', ':' => self.scanSimplePunctuation(),
             '}' => self.handleRightBrace(),
-            '#' => self.scanPrivateIdentifier(),
-            else => self.scanIdentifierOrKeyword(),
+            else => try self.scanIdentifierOrKeyword(),
         };
     }
 
@@ -549,20 +549,25 @@ pub const Lexer = struct {
         return self.createToken(.Dot, self.source[start..self.position], start, self.position);
     }
 
-    inline fn scanIdentifierBody(self: *Lexer, i: usize) usize {
+    inline fn scanIdentifierBody(self: *Lexer, i: usize) !usize {
         var pos = i;
         while (pos < self.source_len) {
             const c = self.source[pos];
             if (c < 128) {
                 @branchHint(.likely);
-                if ((c >= 'a' and c <= 'z') or
-                    (c >= 'A' and c <= 'Z') or
-                    (c >= '0' and c <= '9') or
-                    c == '_' or c == '$')
-                {
-                    pos += 1;
+
+                if (c == '\\') {
+                    pos = try self.parseUnicodeEscape(pos);
                 } else {
-                    break;
+                    if ((c >= 'a' and c <= 'z') or
+                        (c >= 'A' and c <= 'Z') or
+                        (c >= '0' and c <= '9') or
+                        c == '_' or c == '$')
+                    {
+                        pos += 1;
+                    } else {
+                        break;
+                    }
                 }
             } else {
                 @branchHint(.cold);
@@ -582,20 +587,30 @@ pub const Lexer = struct {
         const start = self.position;
         var i = start;
 
+        const is_private = self.source[i] == '#';
+
+        if (is_private) {
+            i += 1;
+        }
+
         const first_char = self.source[i];
 
         if (first_char < 128) {
             @branchHint(.likely);
 
-            if (!((first_char >= 'a' and first_char <= 'z') or
-                (first_char >= 'A' and first_char <= 'Z') or
-                first_char == '_' or first_char == '$'))
-            {
-                return error.InvalidIdentifierStart;
+            if (first_char == '\\') {
+                i = try self.parseUnicodeEscape(i);
+            } else {
+                if (!((first_char >= 'a' and first_char <= 'z') or
+                    (first_char >= 'A' and first_char <= 'Z') or
+                    first_char == '_' or first_char == '$'))
+                {
+                    return error.InvalidIdentifierStart;
+                }
+                i += 1;
             }
 
-            i += 1;
-            i = self.scanIdentifierBody(i);
+            i = try self.scanIdentifierBody(i);
         } else {
             @branchHint(.cold);
 
@@ -606,50 +621,59 @@ pub const Lexer = struct {
             }
 
             i += c_cp.len;
-            i = self.scanIdentifierBody(i);
+            i = try self.scanIdentifierBody(i);
         }
 
         self.position = i;
 
         const lexeme = self.source[start..i];
-        const token_type: TokenType = self.getKeywordType(lexeme);
+        const token_type: TokenType = if (is_private) .PrivateIdentifier else self.getKeywordType(lexeme);
 
         return self.createToken(token_type, lexeme, start, i);
     }
 
-    fn scanPrivateIdentifier(self: *Lexer) LexError!Token {
-        const start = self.position;
-        var i = start + 1; // skip the '#'
+    fn parseUnicodeEscape(self: *Lexer, pos: usize) !usize {
+        var i = pos + 1;
 
-        const first_char = self.source[i];
-
-        if (first_char < 128) {
-            @branchHint(.likely);
-
-            if (!((first_char >= 'a' and first_char <= 'z') or
-                (first_char >= 'A' and first_char <= 'Z') or
-                first_char == '_' or first_char == '$'))
-            {
-                return error.InvalidPrivateIdentifierStart;
-            }
-
-            i += 1;
-            i = self.scanIdentifierBody(i);
-        } else {
-            @branchHint(.cold);
-
-            const first_cp = util.codePointAt(self.source, i);
-
-            if (!unicodeJsHelpers.canStartJsIdentifier(first_cp.value)) {
-                return error.InvalidPrivateIdentifierStart;
-            }
-
-            i += first_cp.len;
-            i = self.scanIdentifierBody(i);
+        if (i >= self.source_len or self.source[i] != 'u') {
+            return error.InvalidEscape;
         }
+        i += 1;
 
-        self.position = i;
-        return self.createToken(.PrivateIdentifier, self.source[start..i], start, i);
+        if (i < self.source_len and self.source[i] == '{') {
+            // \u{XXXXX} format
+            i += 1;
+            const start = i;
+
+            const end = std.mem.indexOfScalarPos(u8, self.source, i, '}') orelse
+                return error.InvalidUnicodeEscape;
+
+            const hex_len = end - start;
+
+            if (hex_len == 0 or hex_len > 6) {
+                return error.InvalidUnicodeEscape;
+            }
+
+            for (self.source[start..end]) |c| {
+                if (!std.ascii.isHex(c)) {
+                    return error.InvalidUnicodeEscape;
+                }
+            }
+
+            return end + 1;
+        } else {
+            // \uXXXX format
+            const end = i + 4;
+            if (end > self.source_len) {
+                return error.InvalidUnicodeEscape;
+            }
+            for (self.source[i..end]) |c| {
+                if (!std.ascii.isHex(c)) {
+                    return error.InvalidUnicodeEscape;
+                }
+            }
+            return end;
+        }
     }
 
     fn getKeywordType(self: *Lexer, lexeme: []const u8) TokenType {

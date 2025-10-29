@@ -7,14 +7,14 @@ const Token = @import("token.zig").Token;
 //     defer arena.deinit();
 //     const allocator = arena.allocator();
 
-//     const content = "let عمر = 25;";
+//     const content = "let \\u0041 = 'العربية'";
 
 //     var lexer = try Lexer.init(allocator, content);
 //     defer lexer.deinit();
 
 //     while (true) {
 //         const token = try lexer.nextToken();
-//         std.debug.print("{s}", .{token.lexeme});
+//         std.debug.print("{s}\n", .{token.lexeme});
 //         if (token.type == .EOF) break;
 //     }
 // }
