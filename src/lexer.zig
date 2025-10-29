@@ -26,7 +26,7 @@ const LexError = error{
 // [ ] handle some strict mode rules, like octal escapes https://claude.ai/chat/ce282993-8223-4759-bd38-f3ef2cbc57b5
 // [ ] and some simd optimizations
 
-const PADDING_SIZE = 4; // four safe lookaheads
+const padding_size = 4; // four safe lookaheads
 
 pub const Lexer = struct {
     source: []u8,
@@ -37,7 +37,7 @@ pub const Lexer = struct {
     comments: std.ArrayListUnmanaged(Comment),
 
     pub fn init(allocator: std.mem.Allocator, source: []const u8) !Lexer {
-        const padded_buffer = try allocator.alloc(u8, source.len + PADDING_SIZE);
+        const padded_buffer = try allocator.alloc(u8, source.len + padding_size);
 
         @memcpy(padded_buffer[0..source.len], source);
 
