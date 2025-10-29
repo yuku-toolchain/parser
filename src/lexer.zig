@@ -556,7 +556,7 @@ pub const Lexer = struct {
 
         const c_cp = util.codePointAt(self.source, i);
 
-        if(!unicodeId.canStartIdentifier(c_cp.value)){
+        if (!unicodeId.canStartIdentifier(c_cp.value)) {
             return error.InvalidIdentifierStart;
         }
 

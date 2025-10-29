@@ -107,7 +107,7 @@ fn buildLookupTables(alloc: std.mem.Allocator, codepoints: CodepointSet) !TableD
     return .{ .root = root, .leaf = leaf };
 }
 
-fn parseUnicodeProperties(alloc: std.mem.Allocator) !struct { CodepointSet, CodepointSet } {
+pub fn parseUnicodeProperties(alloc: std.mem.Allocator) !struct { CodepointSet, CodepointSet } {
     const target_file = "DerivedCoreProperties.txt";
 
     var data_dir = try std.fs.openDirAbsolute(extraction_path, .{});

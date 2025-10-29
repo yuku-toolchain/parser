@@ -29,7 +29,7 @@ pub fn build(b: *std.Build) void {
 
     const lexer_tests = b.addTest(.{
         .root_module = b.createModule(.{
-            .root_source_file = b.path("src/lexer_test.zig"),
+            .root_source_file = b.path("src/unicode-id.zig"),
             .target = target,
             .optimize = optimize,
         }),
@@ -40,17 +40,18 @@ pub fn build(b: *std.Build) void {
     const test_step = b.step("test", "Run tests");
     test_step.dependOn(&run_lexer_tests.step);
 
-    const gen_unicode_id = b.addExecutable(.{
+    const gen_unicode_id_table = b.addExecutable(.{
         .name = "generate-unicode-id-table",
         .root_module = b.createModule(.{
-            .root_source_file = b.path("scripts/generate-unicode-id-table.zig"),
+            .root_source_file = b.path("src/tools/generate-unicode-id-table.zig"),
             .target = b.graph.host,
             .optimize = b.standardOptimizeOption(.{
                 .preferred_optimize_mode = std.builtin.OptimizeMode.ReleaseFast,
             }),
         }),
     });
-    const run_gen_unicode_id = b.addRunArtifact(gen_unicode_id);
-    const gen_unicode_id_step = b.step("generate-unicode-id-table", "Run unicode identifier table generation");
-    gen_unicode_id_step.dependOn(&run_gen_unicode_id.step);
+
+    const run_gen_unicode_id_table = b.addRunArtifact(gen_unicode_id_table);
+    const gen_unicode_id_table_step = b.step("generate-unicode-id-table", "Run unicode identifier table generation");
+    gen_unicode_id_table_step.dependOn(&run_gen_unicode_id_table.step);
 }

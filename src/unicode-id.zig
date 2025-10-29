@@ -1,4 +1,6 @@
+const std = @import("std");
 const tables = @import("unicode-id-tables.zig");
+const genTable = @import("tools/generate-unicode-id-table.zig");
 
 const chunk_size = 512;
 const bits_per_word = 32;
@@ -33,4 +35,33 @@ inline fn queryBitTable(cp: u32, root: []const u8, leaf: []const u64) bool {
     const bit_position: u5 = @truncate(offset_in_chunk % bits_per_word);
     const word = leaf[word_idx];
     return (word >> bit_position) & 1 == 1;
+}
+
+test {
+    var start_set, var continue_set = try genTable.parseUnicodeProperties(std.testing.allocator);
+
+    defer start_set.deinit();
+    defer continue_set.deinit();
+
+    for (0..std.math.maxInt(u21)) |ch| {
+        const expected = start_set.contains(@intCast(ch)) or ch == '_' or ch == '$';
+        if (std.testing.expectEqual(expected, canStartIdentifier(@intCast(ch)))) {} else |err| {
+            std.debug.print("ID Start failed for codepoint:  ({d})\n", .{ch});
+            return err;
+        }
+    }
+
+    const codepoint_slice = "_‍";
+    const utf8view = try std.unicode.Utf8View.init(codepoint_slice);
+    var iter = utf8view.iterator();
+    try std.testing.expect(canStartIdentifier(iter.nextCodepoint() orelse unreachable));
+    try std.testing.expect(canContinueIdentifier(iter.nextCodepoint() orelse unreachable));
+
+    for (0..std.math.maxInt(u21)) |ch| {
+        const expected = continue_set.contains(@intCast(ch)) or ch == '_' or ch == '$';
+        if (std.testing.expectEqual(expected, canContinueIdentifier(@intCast(ch)))) {} else |err| {
+            std.debug.print("ID Continue failed for codepoint:  ({d})\n", .{ch});
+            return err;
+        }
+    }
 }
