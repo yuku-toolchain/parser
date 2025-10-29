@@ -43,7 +43,7 @@ pub fn build(b: *std.Build) void {
     const gen_unicode_id_table = b.addExecutable(.{
         .name = "generate-unicode-id-table",
         .root_module = b.createModule(.{
-            .root_source_file = b.path("src/tools/generate-unicode-id-table.zig"),
+            .root_source_file = b.path("scripts/generate-unicode-id-tables.zig"),
             .target = b.graph.host,
             .optimize = b.standardOptimizeOption(.{
                 .preferred_optimize_mode = std.builtin.OptimizeMode.ReleaseFast,
