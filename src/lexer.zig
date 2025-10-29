@@ -413,6 +413,11 @@ pub const Lexer = struct {
         while (i < self.source_len) {
             const c = self.source[i];
 
+            if (c == '\\') {
+                i = try self.consumeEscape(i);
+                continue;
+            }
+
             if (c == '`') {
                 i += 1;
                 if (self.template_depth > 0) {
@@ -426,14 +431,6 @@ pub const Lexer = struct {
                 i += 2;
                 self.position = i;
                 return self.createToken(.TemplateMiddle, self.source[start..i], start, i);
-            }
-
-            if (c == '\\') {
-                i += 1;
-                if (self.source[i] != 0) {
-                    i += 1;
-                }
-                continue;
             }
 
             i += 1;
