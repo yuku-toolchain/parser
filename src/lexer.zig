@@ -18,18 +18,18 @@ const LexError = error{
     UnexpectedCharacter,
     UnterminatedMultiLineComment,
     InvalidUnicodeEscape,
-    InvalidEscape,
+    InvalidHexEscape,
+    InvalidOctalEscape,
+    OctalInStrict,
 };
 
-// NEXT:
-// [x] handle unicodes in identifiers
-// [ ] different escapes in strings https://claude.ai/chat/ce282993-8223-4759-bd38-f3ef2cbc57b5
-// [ ] handle some strict mode rules, like octal escapes https://claude.ai/chat/ce282993-8223-4759-bd38-f3ef2cbc57b5
-// [ ] and some simd optimizations
+// TODO:
+// [ ] some simd optimizations
 
 const padding_size = 4; // four safe lookaheads
 
 pub const Lexer = struct {
+    strict_mode: bool,
     source: []u8,
     source_len: usize,
     position: usize,
@@ -45,6 +45,7 @@ pub const Lexer = struct {
         @memset(padded_buffer[source.len..], 0);
 
         return .{
+            .strict_mode = false,
             .source = padded_buffer,
             .source_len = source.len,
             .position = 0,
@@ -353,42 +354,22 @@ pub const Lexer = struct {
         while (i < self.source_len) {
             const c = self.source[i];
 
-            if (c < 128) {
-                @branchHint(.likely);
-
-                if (c == quote) {
-                    i += 1;
-                    self.position = i;
-                    return self.createToken(.StringLiteral, self.source[start..i], start, i);
-                }
-
-                if (c == '\\') {
-                    i += 1;
-                    const c1 = self.source[i];
-                    if (c1 == 0) break;
-                    if (c1 == '\n') {
-                        i += 1;
-                    } else if (c1 == '\r') {
-                        i += 1;
-                        if (self.source[i] == '\n') {
-                            i += 1;
-                        }
-                    } else {
-                        i += 1;
-                    }
-                    continue;
-                }
-
-                if (c == '\r' or c == '\n') {
-                    @branchHint(.cold);
-                    break;
-                }
-
-                i += 1;
-            } else {
-                @branchHint(.cold);
-                i += 1;
+            if (c == '\\') {
+                i = try self.consumeEscape(i);
+                continue;
             }
+
+            if (c == quote) {
+                i += 1;
+                self.position = i;
+                return self.createToken(.StringLiteral, self.source[start..i], start, i);
+            }
+
+            if (c == '\n' or c == '\r' or c == '\u{2028}' or c == '\u{2029}') {
+                return error.UnterminatedString;
+            }
+
+            i += 1;
         }
 
         return error.UnterminatedString;
@@ -401,6 +382,11 @@ pub const Lexer = struct {
         while (i < self.source_len) {
             const c = self.source[i];
 
+            if (c == '\\') {
+                i = try self.consumeEscape(i);
+                continue;
+            }
+
             if (c == '`') {
                 i += 1;
                 self.position = i;
@@ -412,14 +398,6 @@ pub const Lexer = struct {
                 self.template_depth += 1;
                 self.position = i;
                 return self.createToken(.TemplateHead, self.source[start..i], start, i);
-            }
-
-            if (c == '\\') {
-                i += 1;
-                if (self.source[i] != 0) {
-                    i += 1;
-                }
-                continue;
             }
 
             i += 1;
@@ -462,6 +440,115 @@ pub const Lexer = struct {
         }
 
         return error.NonTerminatedTemplateLiteral;
+    }
+
+    fn consumeEscape(self: *Lexer, pos: usize) LexError!usize {
+        var i = pos + 1;
+
+        brk: switch (self.source[i]) {
+            '0' => {
+                const c1 = self.source[i + 1];
+                // null
+                if (!util.isOctalDigit(c1)) {
+                    i += 1;
+                    break :brk;
+                }
+
+                if (self.strict_mode) return error.OctalInStrict;
+
+                i = try self.consumeOctal(i);
+            },
+
+            // hex
+            'x' => {
+                i = try self.consumeHex(i);
+            },
+
+            // unicode
+            'u' => {
+                i = try self.consumeUnicodeEscape(i);
+            },
+
+            // octal
+            '1'...'7' => {
+                if (self.strict_mode) return error.OctalInStrict;
+
+                i = try self.consumeOctal(i);
+            },
+
+            else => {
+                i += 1;
+            },
+        }
+
+        return i;
+    }
+
+    fn consumeOctal(self: *Lexer, pos: usize) LexError!usize {
+        var i = pos;
+        var count: u8 = 0;
+
+        while (i < self.source_len and count < 3) {
+            const c = self.source[i];
+            if (util.isOctalDigit(c)) {
+                i += 1;
+                count += 1;
+            } else {
+                break;
+            }
+        }
+
+        return if (count > 0) i else error.InvalidOctalEscape;
+    }
+
+    fn consumeHex(self: *Lexer, pos: usize) LexError!usize {
+        const c1 = self.source[pos + 1];
+        const c2 = self.source[pos + 2];
+
+        if (!std.ascii.isHex(c1) or !std.ascii.isHex(c2)) {
+            return error.InvalidHexEscape;
+        }
+
+        return pos + 3;
+    }
+
+    fn consumeUnicodeEscape(self: *Lexer, pos: usize) LexError!usize {
+        var i = pos + 1;
+
+        if (i < self.source_len and self.source[i] == '{') {
+            // \u{XXXXX} format
+            i += 1;
+            const start = i;
+
+            const end = std.mem.indexOfScalarPos(u8, self.source, i, '}') orelse
+                return error.InvalidUnicodeEscape;
+
+            const hex_len = end - start;
+
+            if (hex_len == 0 or hex_len > 6) {
+                return error.InvalidUnicodeEscape;
+            }
+
+            for (self.source[start..end]) |c| {
+                if (!std.ascii.isHex(c)) {
+                    return error.InvalidUnicodeEscape;
+                }
+            }
+
+            return end + 1;
+        } else {
+            // \uXXXX format
+            const end = i + 4;
+            if (end > self.source_len) {
+                return error.InvalidUnicodeEscape;
+            }
+            for (self.source[i..end]) |c| {
+                if (!std.ascii.isHex(c)) {
+                    return error.InvalidUnicodeEscape;
+                }
+            }
+            return end;
+        }
     }
 
     fn handleRightBrace(self: *Lexer) LexError!Token {
@@ -559,7 +646,14 @@ pub const Lexer = struct {
 
                 if (c == '\\') {
                     @branchHint(.cold);
-                    pos = try self.parseUnicodeEscape(pos);
+
+                    if (self.source[pos + 1] != 'u') {
+                        return error.InvalidUnicodeEscape;
+                    }
+
+                    pos += 1; // consume u
+
+                    pos = try self.consumeUnicodeEscape(pos);
                 } else {
                     if ((c >= 'a' and c <= 'z') or
                         (c >= 'A' and c <= 'Z') or
@@ -601,7 +695,13 @@ pub const Lexer = struct {
             @branchHint(.likely);
 
             if (first_char == '\\') {
-                i = try self.parseUnicodeEscape(i);
+                if (self.source[i + 1] != 'u') {
+                    return error.InvalidUnicodeEscape;
+                }
+
+                i += 1; // consume u
+
+                i = try self.consumeUnicodeEscape(i);
             } else {
                 if (!((first_char >= 'a' and first_char <= 'z') or
                     (first_char >= 'A' and first_char <= 'Z') or
@@ -633,50 +733,6 @@ pub const Lexer = struct {
         const token_type: TokenType = if (is_private) .PrivateIdentifier else self.getKeywordType(lexeme);
 
         return self.createToken(token_type, lexeme, start, i);
-    }
-
-    fn parseUnicodeEscape(self: *Lexer, pos: usize) !usize {
-        var i = pos + 1;
-
-        if (i >= self.source_len or self.source[i] != 'u') {
-            return error.InvalidEscape;
-        }
-        i += 1;
-
-        if (i < self.source_len and self.source[i] == '{') {
-            // \u{XXXXX} format
-            i += 1;
-            const start = i;
-
-            const end = std.mem.indexOfScalarPos(u8, self.source, i, '}') orelse
-                return error.InvalidUnicodeEscape;
-
-            const hex_len = end - start;
-
-            if (hex_len == 0 or hex_len > 6) {
-                return error.InvalidUnicodeEscape;
-            }
-
-            for (self.source[start..end]) |c| {
-                if (!std.ascii.isHex(c)) {
-                    return error.InvalidUnicodeEscape;
-                }
-            }
-
-            return end + 1;
-        } else {
-            // \uXXXX format
-            const end = i + 4;
-            if (end > self.source_len) {
-                return error.InvalidUnicodeEscape;
-            }
-            for (self.source[i..end]) |c| {
-                if (!std.ascii.isHex(c)) {
-                    return error.InvalidUnicodeEscape;
-                }
-            }
-            return end;
-        }
     }
 
     fn getKeywordType(self: *Lexer, lexeme: []const u8) TokenType {
@@ -841,7 +897,7 @@ pub const Lexer = struct {
             } else if (c1 == 'o') {
                 token_type = .OctalLiteral;
                 i += 2;
-                while (i < self.source_len and self.source[i] >= '0' and self.source[i] <= '7') {
+                while (i < self.source_len and util.isOctalDigit(self.source[i])) {
                     i += 1;
                 }
             } else if (c1 == 'b') {

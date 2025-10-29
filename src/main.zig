@@ -7,7 +7,7 @@ const Token = @import("token.zig").Token;
 //     defer arena.deinit();
 //     const allocator = arena.allocator();
 
-//     const content = "let \\u0041 = 'العربية'";
+//     const content = @embedFile("test-file.js");
 
 //     var lexer = try Lexer.init(allocator, content);
 //     defer lexer.deinit();
@@ -46,7 +46,7 @@ pub fn main() !void {
     defer arena.deinit();
     const allocator = arena.allocator();
 
-    const content = @embedFile("test.js");
+    const content = @embedFile("large-test-file.js");
 
     const num_runs = 10;
     var total_time: i128 = 0;

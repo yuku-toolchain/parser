@@ -13,3 +13,7 @@ pub fn codePointAt(str: []const u8, i: usize) CodePoint {
     };
     return .{ .len = @intCast(len), .value = codepoint catch unreachable };
 }
+
+pub inline fn isOctalDigit(digit: u8) bool {
+    return digit >= '0' and digit <= '7';
+}
