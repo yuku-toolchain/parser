@@ -20,10 +20,10 @@ Very fast parser for the web, written in Zig.
 
 <br/>
 
-- [ ] Javascript Lexer (95%)
-- [ ] Javascript Parser (0%)
-- [ ] TypeScript Support (0%)
-- [ ] JSX Support (0%)
+- [x] Javascript Lexer
+- [ ] Javascript Parser
+- [ ] TypeScript Support
+- [ ] JSX Support
 
 </div>
 <!-- markdownlint-restore -->
