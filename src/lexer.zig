@@ -550,25 +550,64 @@ pub const Lexer = struct {
         return self.createToken(.Dot, self.source[start..self.position], start, self.position);
     }
 
+    inline fn scanIdentifierBody(self: *Lexer, i: usize) usize {
+        var pos = i;
+        while (pos < self.source_len) {
+            const c = self.source[pos];
+            if (c < 128) {
+                @branchHint(.likely);
+                if ((c >= 'a' and c <= 'z') or
+                    (c >= 'A' and c <= 'Z') or
+                    (c >= '0' and c <= '9') or
+                    c == '_' or c == '$')
+                {
+                    pos += 1;
+                } else {
+                    break;
+                }
+            } else {
+                @branchHint(.cold);
+                const cp = util.codePointAt(self.source, pos);
+                if (unicodeJsHelpers.canContinueJsIdentifier(cp.value)) {
+                    pos += cp.len;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return pos;
+    }
+
     fn scanIdentifierOrKeyword(self: *Lexer) !Token {
         const start = self.position;
         var i = start;
 
-        const c_cp = util.codePointAt(self.source, i);
+        const first_char = self.source[i];
 
-        if (!unicodeJsHelpers.canStartJsIdentifier(c_cp.value)) {
-            return error.InvalidIdentifierStart;
-        }
+        if (first_char < 128) {
+            @branchHint(.likely);
 
-        i += c_cp.len;
-
-        while (i < self.source_len) {
-            const cp = util.codePointAt(self.source, i);
-            if (unicodeJsHelpers.canContinueJsIdentifier(cp.value)) {
-                i += cp.len;
-            } else {
-                break;
+            if (!((first_char >= 'a' and first_char <= 'z') or
+                (first_char >= 'A' and first_char <= 'Z') or
+                first_char == '_' or first_char == '$'))
+            {
+                return error.InvalidIdentifierStart;
             }
+
+            i += 1;
+            i = self.scanIdentifierBody(i);
+        } else {
+            @branchHint(.cold);
+
+            const c_cp = util.codePointAt(self.source, i);
+
+            if (!unicodeJsHelpers.canStartJsIdentifier(c_cp.value)) {
+                return error.InvalidIdentifierStart;
+            }
+
+            i += c_cp.len;
+            i = self.scanIdentifierBody(i);
         }
 
         self.position = i;
@@ -581,23 +620,33 @@ pub const Lexer = struct {
 
     fn scanPrivateIdentifier(self: *Lexer) LexError!Token {
         const start = self.position;
-        var i = start + 1;
+        var i = start + 1; // skip the '#'
 
-        const first_cp = util.codePointAt(self.source, i);
+        const first_char = self.source[i];
 
-        if (!unicodeJsHelpers.canStartJsIdentifier(first_cp.value)) {
-            return error.InvalidPrivateIdentifierStart;
-        }
+        if (first_char < 128) {
+            @branchHint(.likely);
 
-        i += first_cp.len;
-
-        while (i < self.source_len) {
-            const cp = util.codePointAt(self.source, i);
-            if (unicodeJsHelpers.canContinueJsIdentifier(cp.value)) {
-                i += cp.len;
-            } else {
-                break;
+            if (!((first_char >= 'a' and first_char <= 'z') or
+                (first_char >= 'A' and first_char <= 'Z') or
+                first_char == '_' or first_char == '$'))
+            {
+                return error.InvalidPrivateIdentifierStart;
             }
+
+            i += 1;
+            i = self.scanIdentifierBody(i);
+        } else {
+            @branchHint(.cold);
+
+            const first_cp = util.codePointAt(self.source, i);
+
+            if (!unicodeJsHelpers.canStartJsIdentifier(first_cp.value)) {
+                return error.InvalidPrivateIdentifierStart;
+            }
+
+            i += first_cp.len;
+            i = self.scanIdentifierBody(i);
         }
 
         self.position = i;
@@ -611,14 +660,14 @@ pub const Lexer = struct {
                 switch (lexeme[1]) {
                     'f' => {
                         return switch (lexeme[0]) {
-                            'i' => .If, // "if"
-                            'o' => .Of, // "of"
+                            'i' => .If,
+                            'o' => .Of,
                             else => .Identifier,
                         };
                     },
-                    'n' => if (lexeme[0] == 'i') return .In, // "in"
-                    'o' => if (lexeme[0] == 'd') return .Do, // "do"
-                    's' => if (lexeme[0] == 'a') return .As, // "as"
+                    'n' => if (lexeme[0] == 'i') return .In,
+                    'o' => if (lexeme[0] == 'd') return .Do,
+                    's' => if (lexeme[0] == 'a') return .As,
                     else => {},
                 }
             },
