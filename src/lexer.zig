@@ -33,7 +33,10 @@ pub const Lexer = struct {
     source: []u8,
     source_len: usize,
     position: usize,
+    // state
     template_depth: usize,
+    //
+    /// expects arena allocator
     allocator: std.mem.Allocator,
     comments: std.ArrayList(Comment),
 
@@ -55,13 +58,8 @@ pub const Lexer = struct {
         };
     }
 
-    pub fn deinit(self: *Lexer) void {
-        self.comments.deinit(self.allocator);
-        self.allocator.free(self.source);
-    }
-
     pub fn nextToken(self: *Lexer) LexError!Token {
-        self.skipSkippable();
+        try self.skipSkippable();
 
         if (self.position >= self.source_len) {
             return self.createToken(.EOF, "", self.position, self.position);
@@ -163,19 +161,10 @@ pub const Lexer = struct {
                     self.position += 2;
                     break :blk self.createToken(.SlashAssign, self.source[start..self.position], start, self.position);
                 }
+
                 self.position += 1;
 
-                const slash = self.createToken(.Slash, self.source[start..self.position], start, self.position);
-
-                // TODO: remove this, this is added now just for testing
-                // when starting parser, should remove this handle scanning regex from parser.
-                const token = self.reScanAsRegex(slash);
-                if (@TypeOf(token) == Token) {
-                    break :blk token;
-                }
-                //
-
-                break :blk slash;
+                break :blk self.createToken(.Slash, self.source[start..self.position], start, self.position);
             },
             '%' => switch (c1) {
                 '=' => blk: {
@@ -558,7 +547,7 @@ pub const Lexer = struct {
         return self.createToken(.RightBrace, self.source[start..self.position], start, self.position);
     }
 
-    pub fn reScanAsRegex(self: *Lexer, slash_token: Token) LexError!Token {
+    pub fn a(self: *Lexer, slash_token: Token) LexError!Token {
         self.position = slash_token.span.start;
 
         return self.scanRegex();
@@ -967,7 +956,7 @@ pub const Lexer = struct {
         return self.createToken(token_type, self.source[start..i], start, i);
     }
 
-    inline fn skipSkippable(self: *Lexer) void {
+    inline fn skipSkippable(self: *Lexer) LexError!void {
         var i = self.position;
 
         while (i < self.source_len) {
@@ -985,14 +974,10 @@ pub const Lexer = struct {
                         const c1 = self.source[i + 1];
                         if (c1 == 0) break;
                         if (c1 == '/') {
-                            self.position = i;
-                            self.skipSingleLineComment() catch return;
-                            i = self.position;
+                            i = try self.skipSingleLineComment(i);
                             continue;
                         } else if (c1 == '*') {
-                            self.position = i;
-                            self.skipMultiLineComment() catch return;
-                            i = self.position;
+                            i = try self.skipMultiLineComment(i);
                             continue;
                         } else {
                             break;
@@ -1016,8 +1001,8 @@ pub const Lexer = struct {
         self.position = i;
     }
 
-    inline fn skipSingleLineComment(self: *Lexer) !void {
-        const start = self.position;
+    inline fn skipSingleLineComment(self: *Lexer, pos: usize) LexError!usize {
+        const start = pos;
         var i = start + 2;
 
         while (i < self.source_len) {
@@ -1028,30 +1013,32 @@ pub const Lexer = struct {
             i += 1;
         }
 
-        self.position = i;
-        try self.comments.append(self.allocator, Comment{
+        self.comments.append(self.allocator, Comment{
             .content = self.source[start..i],
             .span = .{ .start = start, .end = i },
             .type = .SingleLine,
-        });
+        }) catch unreachable;
+
+        return i;
     }
 
-    inline fn skipMultiLineComment(self: *Lexer) !void {
-        const start = self.position;
+    inline fn skipMultiLineComment(self: *Lexer, pos: usize) LexError!usize {
+        const start = pos;
         var i = start + 2;
 
         while (i < self.source_len) {
             const c = self.source[i];
+
             if (c == '*' and self.source[i + 1] == '/') {
                 i += 2;
-                self.position = i;
-                try self.comments.append(self.allocator, Comment{
+                self.comments.append(self.allocator, Comment{
                     .content = self.source[start..i],
                     .span = .{ .start = start, .end = i },
                     .type = .MultiLine,
-                });
-                return;
+                }) catch unreachable;
+                return i;
             }
+
             i += 1;
         }
 
