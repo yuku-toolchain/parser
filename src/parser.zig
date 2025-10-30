@@ -63,6 +63,7 @@ pub const Parser = struct {
 
     fn parseStatement(self: *Parser) !AstNode {
         return switch (self.current_token.type) {
+            // .Var, .Const, .Let => self.scanVariableDeclaration(),
             else => unreachable,
         };
     }
