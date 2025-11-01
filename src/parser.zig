@@ -26,6 +26,11 @@ pub const Parser = struct {
     /// expects arena allocator
     allocator: std.mem.Allocator,
     errors: std.ArrayList(Error),
+
+    scratch_body: std.ArrayList(*ast.Body),
+    scratch_declarators: std.ArrayList(*ast.VariableDeclarator),
+    scratch_expressions: std.ArrayList(*ast.Expression),
+
     panic_mode: bool = false,
 
     const estimated_nodes_per_line = 2;
@@ -45,6 +50,11 @@ pub const Parser = struct {
             .peek = peek,
             .allocator = allocator,
             .errors = std.ArrayList(Error).empty,
+
+            .scratch_body = std.ArrayList(*ast.Body).empty,
+            .scratch_declarators = std.ArrayList(*ast.VariableDeclarator).empty,
+            .scratch_expressions = std.ArrayList(*ast.Expression).empty,
+
             .panic_mode = false,
         };
     }
@@ -56,15 +66,15 @@ pub const Parser = struct {
         const estimated_statements = @max(estimated_lines / 2, 16);
         const estimated_errors = @min(@max(estimated_lines / 50, 2), initial_error_capacity);
 
-        var body = std.ArrayList(*ast.Body).empty;
-        try body.ensureTotalCapacity(self.allocator, estimated_statements);
+        self.scratch_body.clearRetainingCapacity();
+        try self.scratch_body.ensureTotalCapacity(self.allocator, estimated_statements);
 
         try self.errors.ensureTotalCapacity(self.allocator, estimated_errors);
 
         while (self.current.type != .EOF) {
             if (self.parseStatement()) |stmt| {
                 const body_item = try self.createNode(ast.Body, .{ .statement = stmt });
-                body.appendAssumeCapacity(body_item);
+                self.scratch_body.appendAssumeCapacity(body_item);
                 self.panic_mode = false;
             } else {
                 if (!self.panic_mode) {
@@ -76,8 +86,10 @@ pub const Parser = struct {
 
         const end = self.current.span.end;
 
+        const body = try self.allocator.dupe(*ast.Body, self.scratch_body.items);
+
         const program = ast.Program{
-            .body = try body.toOwnedSlice(self.allocator),
+            .body = body,
             .span = .{ .start = start, .end = end },
         };
 
@@ -139,19 +151,18 @@ pub const Parser = struct {
             },
         };
 
-        var declarators = std.ArrayList(*ast.VariableDeclarator).empty;
-
-        declarators.ensureTotalCapacity(self.allocator, 4) catch {};
+        self.scratch_declarators.clearRetainingCapacity();
+        self.scratch_declarators.ensureTotalCapacity(self.allocator, 4) catch {};
 
         // first declarator
         const first_decl = self.parseVariableDeclarator(&kind) orelse return null;
-        declarators.appendAssumeCapacity(first_decl);
+        self.scratch_declarators.appendAssumeCapacity(first_decl);
 
         // additional declarators
         while (self.current.type == .Comma) {
             self.advance();
             const decl = self.parseVariableDeclarator(&kind) orelse return null;
-            declarators.append(self.allocator, decl) catch unreachable;
+            self.scratch_declarators.append(self.allocator, decl) catch unreachable;
         }
 
         if (!self.expect(.Semicolon, "Expected ';'", "Variable declarations must end with semicolon")) {
@@ -159,9 +170,12 @@ pub const Parser = struct {
         }
 
         const end = self.current.span.end;
+
+        const declarations = self.allocator.dupe(*ast.VariableDeclarator, self.scratch_declarators.items) catch unreachable;
+
         const var_decl = ast.VariableDeclaration{
             .kind = kind,
-            .declarations = declarators.toOwnedSlice(self.allocator) catch unreachable,
+            .declarations = declarations,
             .span = .{ .start = start, .end = end },
         };
 
