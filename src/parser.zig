@@ -104,38 +104,6 @@ pub const Parser = struct {
 
     fn parseVariableDeclaration(self: *Parser) ?*ast.Statement {
         const start = self.current.span.start;
-        const kind = self.parseVariableDeclarationKind() orelse return null;
-
-        var declarators = std.ArrayList(*ast.VariableDeclarator).empty;
-
-        declarators.ensureTotalCapacity(self.allocator, 3) catch {};
-
-        // first declarator
-        const first_decl = self.parseVariableDeclarator(&kind) orelse return null;
-        declarators.append(self.allocator, first_decl) catch unreachable;
-
-        // additional declarators
-        while (self.current.type == .Comma) {
-            self.advance();
-            const decl = self.parseVariableDeclarator(&kind) orelse return null;
-            declarators.append(self.allocator, decl) catch unreachable;
-        }
-
-        if (!self.expect(.Semicolon, "Expected ';'", "Variable declarations must end with semicolon")) {
-            return null;
-        }
-
-        const end = self.current.span.end;
-        const var_decl = ast.VariableDeclaration{
-            .kind = kind,
-            .declarations = declarators.toOwnedSlice(self.allocator) catch unreachable,
-            .span = .{ .start = start, .end = end },
-        };
-
-        return self.createNode(ast.Statement, .{ .variable_declaration = var_decl }) catch null;
-    }
-
-    fn parseVariableDeclarationKind(self: *Parser) ?ast.VariableDeclaration.VariableDeclarationKind {
         const kind: ast.VariableDeclaration.VariableDeclarationKind = switch (self.current.type) {
             .Await => blk: {
                 self.advance();
@@ -167,7 +135,34 @@ pub const Parser = struct {
                 return null;
             },
         };
-        return kind;
+
+        var declarators = std.ArrayList(*ast.VariableDeclarator).empty;
+
+        declarators.ensureTotalCapacity(self.allocator, 3) catch {};
+
+        // first declarator
+        const first_decl = self.parseVariableDeclarator(&kind) orelse return null;
+        declarators.append(self.allocator, first_decl) catch unreachable;
+
+        // additional declarators
+        while (self.current.type == .Comma) {
+            self.advance();
+            const decl = self.parseVariableDeclarator(&kind) orelse return null;
+            declarators.append(self.allocator, decl) catch unreachable;
+        }
+
+        if (!self.expect(.Semicolon, "Expected ';'", "Variable declarations must end with semicolon")) {
+            return null;
+        }
+
+        const end = self.current.span.end;
+        const var_decl = ast.VariableDeclaration{
+            .kind = kind,
+            .declarations = declarators.toOwnedSlice(self.allocator) catch unreachable,
+            .span = .{ .start = start, .end = end },
+        };
+
+        return self.createNode(ast.Statement, .{ .variable_declaration = var_decl }) catch null;
     }
 
     fn parseVariableDeclarator(
