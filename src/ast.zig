@@ -7,8 +7,7 @@ pub const Body = union(enum) {
 
     pub inline fn getSpan(self: *const Body) token.Span {
         return switch (self.*) {
-            .statement => |stmt| stmt.getSpan(),
-            .directive => |dir| dir.span,
+            inline else => |variant| variant.span,
         };
     }
 };

@@ -66,16 +66,11 @@ pub const Parser = struct {
             }
         }
 
-        const program = if (self.errors.items.len == 0) blk: {
-            const end = if (body.items.len > 0)
-                body.items[body.items.len - 1].getSpan().end
-            else
-                start;
+        const end = self.current.span.end;
 
-            break :blk ast.Program{
-                .body = try body.toOwnedSlice(self.allocator),
-                .span = .{ .start = start, .end = end },
-            };
+        const program = if (self.errors.items.len == 0) ast.Program{
+            .body = try body.toOwnedSlice(self.allocator),
+            .span = .{ .start = start, .end = end },
         } else null;
 
         return ParseResult{
