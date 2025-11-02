@@ -261,7 +261,7 @@ pub const Parser = struct {
         self.advance();
 
         const literal = ast.StringLiteral{
-            .value = value, // TODO: handle escape sequences
+            .value = value, // TODO: handle escape sequences and remove quotes
             .raw = value,
             .span = span,
         };
