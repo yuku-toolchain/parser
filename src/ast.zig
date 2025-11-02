@@ -63,8 +63,12 @@ pub const Declaration = union(enum) {
 // expressions
 pub const Expression = union(enum) {
     string_literal: StringLiteral,
+    boolean_literal: BooleanLiteral,
+    null_literal: NullLiteral,
+    numeric_literal: NumericLiteral,
+    bigint_literal: BigIntLiteral,
+    regex_literal: RegExpLiteral,
     identifier_reference: IdentifierReference,
-    // boolean_literal, numeric_literal, etc.
 
     pub inline fn getSpan(self: *const Expression) token.Span {
         return switch (self.*) {
@@ -108,6 +112,48 @@ pub const StringLiteral = struct {
     value: []const u8,
     raw: ?[]const u8 = null,
     span: token.Span,
+};
+
+pub const BooleanLiteral = struct {
+    type: []const u8 = "Literal",
+    value: bool,
+    raw: ?[]const u8 = null,
+    span: token.Span,
+};
+
+pub const NullLiteral = struct {
+    type: []const u8 = "Literal",
+    value: ?[]const u8 = null,
+    raw: ?[]const u8 = null,
+    span: token.Span,
+};
+
+pub const NumericLiteral = struct {
+    type: []const u8 = "Literal",
+    value: f64,
+    raw: ?[]const u8 = null,
+    span: token.Span,
+};
+
+pub const BigIntLiteral = struct {
+    type: []const u8 = "Literal",
+    value: []const u8,
+    raw: ?[]const u8 = null,
+    bigint: []const u8,
+    span: token.Span,
+};
+
+pub const RegExpLiteral = struct {
+    type: []const u8 = "Literal",
+    value: ?[]const u8 = null,
+    raw: ?[]const u8 = null,
+    regex: RegExp,
+    span: token.Span,
+
+    pub const RegExp = struct {
+        pattern: []const u8,
+        flags: []const u8,
+    };
 };
 
 pub const IdentifierReference = struct {

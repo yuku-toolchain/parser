@@ -6,10 +6,14 @@ const printError = @import("print-error.zig").printError;
 pub fn main() !void {
     const content = @embedFile("test.js");
 
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
+
+    const allocator = arena.allocator();
+
     const start = std.time.nanoTimestamp();
 
-    var parser = try Parser.init(std.heap.page_allocator, content);
-    defer parser.deinit();
+    var parser = try Parser.init(allocator, content);
 
     const result = try parser.parse();
 

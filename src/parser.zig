@@ -23,7 +23,6 @@ pub const Parser = struct {
     lexer: lexer.Lexer,
     current: token.Token,
     peek: token.Token,
-    arena: *const std.heap.ArenaAllocator,
     allocator: std.mem.Allocator,
     errors: std.ArrayList(Error),
 
@@ -37,11 +36,7 @@ pub const Parser = struct {
     const avg_chars_per_line = 40;
     const initial_error_capacity = 8;
 
-    pub fn init(child_allocator: std.mem.Allocator, source: []const u8) !Parser {
-        var arena = std.heap.ArenaAllocator.init(child_allocator);
-
-        const allocator = arena.allocator();
-
+    pub fn init(allocator: std.mem.Allocator, source: []const u8) !Parser {
         var lex = try lexer.Lexer.init(allocator, source);
 
         const current = lex.nextToken() catch token.Token.eof(0);
@@ -52,20 +47,15 @@ pub const Parser = struct {
             .lexer = lex,
             .current = current,
             .peek = peek,
-            .arena = &arena,
             .allocator = allocator,
-            .errors = .empty,
 
-            .scratch_body = std.ArrayList(*ast.Body).empty,
-            .scratch_declarators = std.ArrayList(*ast.VariableDeclarator).empty,
-            .scratch_expressions = std.ArrayList(*ast.Expression).empty,
+            .errors = .empty,
+            .scratch_body = .empty,
+            .scratch_declarators = .empty,
+            .scratch_expressions = .empty,
 
             .panic_mode = false,
         };
-    }
-
-    pub fn deinit(self: *Parser) void {
-        self.arena.deinit();
     }
 
     pub fn parse(self: *Parser) !ParseResult {
@@ -235,6 +225,11 @@ pub const Parser = struct {
         return switch (self.current.type) {
             .Identifier => self.parseIdentifierReference(),
             .StringLiteral => self.parseStringLiteral(),
+            .True, .False => self.parseBooleanLiteral(),
+            .NullLiteral => self.parseNullLiteral(),
+            .NumericLiteral, .HexLiteral, .OctalLiteral, .BinaryLiteral => self.parseNumericLiteral(),
+            .BigIntLiteral => self.parseBigIntLiteral(),
+            .RegexLiteral => self.parseRegExpLiteral(),
             else => {
                 self.recordError("Unexpected token", "Expected expression");
                 return null;
@@ -267,6 +262,116 @@ pub const Parser = struct {
         };
 
         return self.createNode(ast.Expression, .{ .string_literal = literal });
+    }
+
+    fn parseBooleanLiteral(self: *Parser) ?*ast.Expression {
+        const value = self.current.type == .True;
+        const raw = self.current.lexeme;
+        const span = self.current.span;
+        self.advance();
+
+        const literal = ast.BooleanLiteral{
+            .value = value,
+            .raw = raw,
+            .span = span,
+        };
+
+        return self.createNode(ast.Expression, .{ .boolean_literal = literal });
+    }
+
+    fn parseNullLiteral(self: *Parser) ?*ast.Expression {
+        const raw = self.current.lexeme;
+        const span = self.current.span;
+        self.advance();
+
+        const literal = ast.NullLiteral{
+            .value = null,
+            .raw = raw,
+            .span = span,
+        };
+
+        return self.createNode(ast.Expression, .{ .null_literal = literal });
+    }
+
+    fn parseNumericLiteral(self: *Parser) ?*ast.Expression {
+        const value = self.current.lexeme;
+        const span = self.current.span;
+        self.advance();
+
+        const literal = ast.NumericLiteral{
+            .value = std.fmt.parseFloat(f64, value) catch unreachable,
+            .raw = value,
+            .span = span,
+        };
+
+        return self.createNode(ast.Expression, .{ .numeric_literal = literal });
+    }
+
+    fn parseBigIntLiteral(self: *Parser) ?*ast.Expression {
+        const raw = self.current.lexeme;
+        const span = self.current.span;
+        self.advance();
+
+        const bigint = raw[0..(raw.len - 1)];
+
+        const literal = ast.BigIntLiteral{
+            .value = raw,
+            .raw = raw,
+            .bigint = bigint,
+            .span = span,
+        };
+
+        return self.createNode(ast.Expression, .{ .bigint_literal = literal });
+    }
+
+    fn parseRegExpLiteral(self: *Parser) ?*ast.Expression {
+        const raw = self.current.lexeme;
+        const span = self.current.span;
+        self.advance();
+
+        if (raw.len < 3) return null; // min /a/
+
+        var i: usize = 1; // skip first '/'
+        var in_class = false;
+
+        while (i < raw.len) {
+            const c = raw[i];
+
+            switch (c) {
+                '\\' => {
+                    // skip escaped character
+                    i += if (i + 1 < raw.len) 2 else 1;
+                },
+                '[' => {
+                    in_class = true;
+                    i += 1;
+                },
+                ']' => {
+                    in_class = false;
+                    i += 1;
+                },
+                '/' => {
+                    if (!in_class) break; // found closing delimiter
+                    i += 1;
+                },
+                else => i += 1,
+            }
+        }
+
+        const pattern = raw[1..i];
+        const flags = raw[i + 1..];
+
+        const literal = ast.RegExpLiteral{
+            .value = raw,
+            .raw = raw,
+            .regex = .{
+                .pattern = pattern,
+                .flags = flags,
+            },
+            .span = span,
+        };
+
+        return self.createNode(ast.Expression, .{ .regex_literal = literal });
     }
 
     fn parseBindingPattern(self: *Parser) ?*ast.BindingPattern {
