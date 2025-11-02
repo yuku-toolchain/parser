@@ -165,6 +165,8 @@ pub const Parser = struct {
             self.scratch_declarators.append(self.allocator, decl) catch unreachable;
         }
 
+        self.eatSemi();
+
         const end = self.current.span.end;
 
         const declarations = self.allocator.dupe(*ast.VariableDeclarator, self.scratch_declarators.items) catch unreachable;
@@ -305,6 +307,12 @@ pub const Parser = struct {
         }
         self.recordError(message, help);
         return false;
+    }
+
+    inline fn eatSemi(self: *Parser) void {
+        if(self.current.type == .Semicolon){
+            self.advance();
+        }
     }
 
     inline fn recordError(self: *Parser, message: []const u8, help: ?[]const u8) void {
