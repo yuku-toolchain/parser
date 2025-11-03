@@ -522,6 +522,11 @@ pub const Lexer = struct {
 
         while (self.cursor < self.source_len) {
             const c = self.source[self.cursor];
+
+            if (c == '\n' or c == '\r') {
+                return error.InvalidRegexLineTerminator;
+            }
+
             if (c == '\\') {
                 self.cursor += 1; // skip backslash
                 if (self.cursor < self.source_len) {
@@ -557,9 +562,7 @@ pub const Lexer = struct {
 
                 return .{ .span = .{ .start = start, .end = end }, .lexeme = self.source[start..end], .pattern = pattern, .flags = flags };
             }
-            if (c == '\n' or c == '\r') {
-                return error.InvalidRegexLineTerminator;
-            }
+
             self.cursor += 1;
         }
         return error.UnterminatedRegexLiteral;
@@ -1098,25 +1101,25 @@ pub fn getLexicalErrorMessage(error_type: LexicalError) []const u8 {
 
 pub fn getLexicalErrorHelp(error_type: LexicalError) []const u8 {
     return switch (error_type) {
-        error.InvalidHexEscape => "Use format \\xHH where HH are valid hexadecimal digits (0-9, A-F)",
-        error.UnterminatedString => "Add closing quote (' or \") to complete the string literal",
-        error.UnterminatedRegex => "Add closing delimiter (/) to complete the regular expression",
-        error.NonTerminatedTemplateLiteral => "Add closing backtick (`) to complete the template literal",
-        error.UnterminatedRegexLiteral => "Add closing slash (/) and optional flags to complete the regex",
-        error.InvalidRegexLineTerminator => "Remove line breaks or use a different regex pattern",
-        error.InvalidRegex => "Check regex syntax for invalid patterns, unclosed groups, or invalid modifiers",
-        error.InvalidIdentifierStart => "Identifiers must start with a letter (a-z, A-Z), underscore (_), or dollar sign ($)",
-        error.UnterminatedMultiLineComment => "Add closing delimiter (*/) to complete the comment",
-        error.InvalidUnicodeEscape => "Use format \\uHHHH (4 hex digits) or \\u{H+} (1-6 hex digits in braces)",
-        error.InvalidOctalEscape => "Use format \\0-7, \\00-77, or \\000-377 for octal escapes",
-        error.OctalEscapeInStrict => "Use hexadecimal (\\xHH) or Unicode (\\uHHHH) escape sequences instead",
-        error.InvalidBinaryLiteral => "Binary literals (0b) must be followed by at least one binary digit (0 or 1)",
-        error.InvalidOctalLiteralDigit => "Octal literals (0o) must be followed by at least one octal digit (0-7)",
-        error.InvalidHexLiteral => "Hexadecimal literals (0x) must be followed by at least one hex digit (0-9, A-F)",
-        error.InvalidExponentPart => "Exponent notation (e or E) must be followed by an integer",
-        error.NumericSeparatorMisuse => "Remove the trailing underscore from the numeric literal",
-        error.ConsecutiveNumericSeparators => "Separate digits with only a single underscore (_), not multiple consecutive underscores",
-        error.MultipleDecimalPoints => "Use only one decimal point in a numeric literal",
-        error.InvalidBigIntSuffix => "BigInt literals (suffix 'n') cannot contain fractional or exponential parts",
+        error.InvalidHexEscape => "Try adding two hexadecimal digits here (e.g., \\x41 for 'A')",
+        error.UnterminatedString => "Try adding a closing quote here to complete the string",
+        error.UnterminatedRegex => "Try adding a closing slash (/) here to complete the regex",
+        error.NonTerminatedTemplateLiteral => "Try adding a closing backtick (`) here to complete the template",
+        error.UnterminatedRegexLiteral => "Try adding a closing slash (/) here, optionally followed by flags (g, i, m, etc.)",
+        error.InvalidRegexLineTerminator => "Try removing the line break here or escaping it within the regex pattern",
+        error.InvalidRegex => "Try checking the regex syntax here for unclosed groups, invalid escapes, or malformed patterns",
+        error.InvalidIdentifierStart => "Try starting the identifier here with a letter (a-z, A-Z), underscore (_), or dollar sign ($)",
+        error.UnterminatedMultiLineComment => "Try adding the closing delimiter (*/) here to complete the comment",
+        error.InvalidUnicodeEscape => "Try using \\uHHHH (4 hex digits) or \\u{HHHHHH} (1-6 hex digits) here",
+        error.InvalidOctalEscape => "Try using a valid octal sequence here (\\0-7, \\00-77, or \\000-377)",
+        error.OctalEscapeInStrict => "Try replacing this octal escape with \\xHH (hex) or \\uHHHH (unicode) instead",
+        error.InvalidBinaryLiteral => "Try adding at least one binary digit (0 or 1) here after '0b'",
+        error.InvalidOctalLiteralDigit => "Try adding at least one octal digit (0-7) here after '0o'",
+        error.InvalidHexLiteral => "Try adding at least one hex digit (0-9, a-f, A-F) here after '0x'",
+        error.InvalidExponentPart => "Try adding digits here after the exponent (e.g., e10, e-5, E+2)",
+        error.NumericSeparatorMisuse => "Try removing the trailing underscore here or adding more digits after it",
+        error.ConsecutiveNumericSeparators => "Try removing one of the consecutive underscores here",
+        error.MultipleDecimalPoints => "Try removing the extra decimal point here",
+        error.InvalidBigIntSuffix => "Try removing the 'n' suffix here, or remove the decimal point/exponent from the number",
     };
 }

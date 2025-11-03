@@ -91,10 +91,11 @@ pub const Parser = struct {
                     return self.parseVariableDeclaration();
                 }
 
+                self.recordError("Expected 'using' after 'await'", "Try adding 'using' here to complete the 'await using' declaration");
                 return null;
             },
             else => {
-                self.recordError("Unexpected token", "Expected a statement");
+                self.recordError("Unexpected token in statement position", "Try starting a statement here with 'var', 'let', 'const', 'if', 'for', 'while', or a function/class declaration");
                 return null;
             },
         };
@@ -138,7 +139,6 @@ pub const Parser = struct {
             .Await => blk: {
                 self.advance();
                 if (self.current.type != .Using) {
-                    self.recordError("Expected 'using' after 'await'", null);
                     return null;
                 }
                 self.advance();
@@ -163,7 +163,7 @@ pub const Parser = struct {
                 break :blk .using;
             },
             else => {
-                self.recordError("Expected variable declaration", "Expected 'var', 'let', 'const', or 'using'");
+                self.recordError("Expected variable declaration keyword", "Try using 'var', 'let', 'const', or 'using' here to start a variable declaration");
                 return null;
             },
         };
@@ -190,7 +190,7 @@ pub const Parser = struct {
         if (init_expr == null and requires_init) {
             self.recordError(
                 "Variable declaration missing required initializer",
-                "Add '= value' after the variable name to complete the declaration",
+                "Try adding '= value' here to initialize this variable",
             );
             return null;
         }
@@ -218,7 +218,7 @@ pub const Parser = struct {
             .BigIntLiteral => self.parseBigIntLiteral(),
             .Slash => self.parseRegExpLiteral(),
             else => {
-                self.recordError("Unexpected token", "Expected expression");
+                self.recordError("Unexpected token in expression position", "Try using a valid expression here such as a variable name, literal value, operator, etc.");
                 return null;
             },
         };
@@ -355,7 +355,7 @@ pub const Parser = struct {
         return switch (self.current.type) {
             .Identifier => self.parseBindingIdentifierPattern(),
             else => {
-                self.recordError("Expected binding pattern", "Expected identifier or pattern");
+                self.recordError("Expected binding pattern", "Try using an identifier name here");
                 return null;
             },
         };
@@ -363,7 +363,7 @@ pub const Parser = struct {
 
     fn parseBindingIdentifierPattern(self: *Parser) ?*ast.BindingPattern {
         if (self.current.type != .Identifier) {
-            self.recordError("Expected identifier", "Variable name required");
+            self.recordError("Expected identifier for variable name", "Try using a valid identifier here (letters, digits, _, or $ - must start with letter, _ or $)");
             return null;
         }
 

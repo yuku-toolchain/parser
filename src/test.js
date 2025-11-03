@@ -1,1 +1,1 @@
-var hello = nice;
+const hello
