@@ -1,1 +1,1 @@
-var hello = 10ea0;
+var hello = nice;
