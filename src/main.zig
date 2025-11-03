@@ -1,7 +1,6 @@
 const std = @import("std");
 const Parser = @import("parser.zig").Parser;
 const Token = @import("token.zig").Token;
-const printError = @import("print-error.zig").printError;
 
 pub fn main() !void {
     const content = @embedFile("test.js");
@@ -25,11 +24,5 @@ pub fn main() !void {
 
     std.debug.print("{d:.3}ms\n\n", .{elapsed_ms});
 
-    if (result.hasErrors()) {
-        for (result.errors) |parse_err| {
-            printError(content, parse_err);
-        }
-    }
-
-    std.log.info("{f}", .{std.json.fmt(result.program, .{ .whitespace = .indent_2 })});
+    std.log.info("{f}", .{std.json.fmt(result, .{ .whitespace = .indent_2 })});
 }

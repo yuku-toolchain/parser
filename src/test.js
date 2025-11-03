@@ -1,1 +1,1 @@
-var hello = 12;
+var hello = 1e+-0;

@@ -229,9 +229,7 @@ pub const Parser = struct {
             .NullLiteral => self.parseNullLiteral(),
             .NumericLiteral, .HexLiteral, .OctalLiteral, .BinaryLiteral => self.parseNumericLiteral(),
             .BigIntLiteral => self.parseBigIntLiteral(),
-            // TODO: the lexer actually won't scan RegexLiteral, we need to take a flag to parseStringLiteral telling whether to scan regex
-            // If yes, we should use reScanAsRegex function from lexer to identify regex.
-            .RegexLiteral => self.parseRegExpLiteral(),
+            .Slash => self.parseRegExpLiteral(),
             else => {
                 self.recordError("Unexpected token", "Expected expression");
                 return null;
@@ -327,50 +325,40 @@ pub const Parser = struct {
     }
 
     fn parseRegExpLiteral(self: *Parser) ?*ast.Expression {
-        const raw = self.current.lexeme;
-        const span = self.current.span;
-        self.advance();
+        // we are handling regex as special, lexer won't scan regex as a standalone regex token
+        // parser decide when to scan regex, in this case, we can scanning it in the parseExpression
+        // when a slash encounters, because a expression can be a regex.
+        // so in this parseRegExpLiteral, we need to handle creating the regex token, advancing it manually
+        // unlike other tokens or nodes.
+        const regex = self.lexer.reScanAsRegex(self.current) catch |err| {
+            self.recordError(
+                lexer.getLexicalErrorMessage(err),
+                lexer.getLexicalErrorHelp(err),
+            );
 
-        if (raw.len < 3) return null; // min /a/
+            return null;
+        };
 
-        var i: usize = 1; // skip first '/'
-        var in_class = false;
+        const start = regex.span.start;
+        const end = regex.span.end;
 
-        while (i < raw.len) {
-            const c = raw[i];
+        const regex_token = self.lexer.createToken(.RegexLiteral, self.source[start..end], start, end);
 
-            switch (c) {
-                '\\' => {
-                    // skip escaped character
-                    i += if (i + 1 < raw.len) 2 else 1;
-                },
-                '[' => {
-                    in_class = true;
-                    i += 1;
-                },
-                ']' => {
-                    in_class = false;
-                    i += 1;
-                },
-                '/' => {
-                    if (!in_class) break; // found closing delimiter
-                    i += 1;
-                },
-                else => i += 1,
-            }
-        }
+        // because .advance() use peek to set current
+        self.peek = regex_token;
 
-        const pattern = raw[1..i];
-        const flags = raw[i + 1..];
+        self.advance(); // advance to make regex the current
+
+        self.advance(); // we are done, eat the regex and advance to next
 
         const literal = ast.RegExpLiteral{
-            .value = raw,
-            .raw = raw,
+            .value = regex.lexeme,
+            .raw = regex.lexeme,
             .regex = .{
-                .pattern = pattern,
-                .flags = flags,
+                .pattern = regex.pattern,
+                .flags = regex.flags,
             },
-            .span = span,
+            .span = regex.span,
         };
 
         return self.createNode(ast.Expression, .{ .regex_literal = literal });
@@ -438,7 +426,10 @@ pub const Parser = struct {
     inline fn recordError(self: *Parser, message: []const u8, help: ?[]const u8) void {
         self.appendItem(&self.errors, Error{
             .message = message,
-            .span = self.current.span,
+            .span = .{
+                .start = self.current.span.start,
+                .end = self.lexer.position
+            },
             .help = help,
         });
     }

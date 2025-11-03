@@ -1,5 +1,6 @@
 const std = @import("std");
 const Token = @import("token.zig").Token;
+const Span = @import("token.zig").Span;
 const TokenType = @import("token.zig").TokenType;
 const Comment = @import("token.zig").Comment;
 const CommentType = @import("token.zig").CommentType;
@@ -508,48 +509,58 @@ pub const Lexer = struct {
         return self.createToken(.RightBrace, self.source[start..self.position], start, self.position);
     }
 
-    pub fn reScanAsRegex(self: *Lexer, slash_token: Token) LexicalError!Token {
+    pub fn reScanAsRegex(self: *Lexer, slash_token: Token) LexicalError!struct { span: Span, pattern: []const u8, flags: []const u8, lexeme: []const u8 } {
         self.position = slash_token.span.start;
-        return self.scanRegex();
-    }
 
-    fn scanRegex(self: *Lexer) LexicalError!Token {
         const start = self.position;
-        self.position += 1; // consume '/'
+        var i = start;
+        var closing_delimeter_i: usize = 0;
+        i += 1; // consume '/'
         var in_class = false;
 
-        while (self.position < self.source_len) {
-            const c = self.source[self.position];
+        while (i < self.source_len) {
+            const c = self.source[i];
             if (c == '\\') {
-                self.position += 1; // skip backslash
-                if (self.position < self.source_len) {
-                    self.position += 1; // skip escaped char
+                i += 1; // skip backslash
+                if (i < self.source_len) {
+                    i += 1; // skip escaped char
                 }
                 continue;
             }
             if (c == '[') {
                 in_class = true;
-                self.position += 1;
+                i += 1;
                 continue;
             }
             if (c == ']' and in_class) {
                 in_class = false;
-                self.position += 1;
+                i += 1;
                 continue;
             }
             if (c == '/' and !in_class) {
-                self.position += 1;
-                while (self.position < self.source_len and
-                    std.ascii.isAlphabetic(self.source[self.position]))
+                i += 1;
+
+                closing_delimeter_i = i;
+
+                while (i < self.source_len and
+                    std.ascii.isAlphabetic(self.source[i]))
                 {
-                    self.position += 1;
+                    i += 1;
                 }
-                return self.createToken(.RegexLiteral, self.source[start..self.position], start, self.position);
+
+                const end = i;
+
+                self.position = end;
+
+                const pattern = self.source[start + 1..closing_delimeter_i - 1];
+                const flags = self.source[closing_delimeter_i..end];
+
+                return .{ .span = .{ .start = start, .end = end }, .lexeme = self.source[start..end], .pattern = pattern, .flags = flags };
             }
             if (c == '\n' or c == '\r') {
                 return error.InvalidRegexLineTerminator;
             }
-            self.position += 1;
+            i += 1;
         }
         return error.UnterminatedRegexLiteral;
     }
@@ -1077,7 +1088,7 @@ pub const Lexer = struct {
         return error.UnterminatedMultiLineComment;
     }
 
-    inline fn createToken(self: *Lexer, token_type: TokenType, lexeme: []const u8, start: usize, end: usize) Token {
+    pub inline fn createToken(self: *Lexer, token_type: TokenType, lexeme: []const u8, start: usize, end: usize) Token {
         _ = self;
         return Token{ .type = token_type, .lexeme = lexeme, .span = .{ .start = start, .end = end } };
     }
