@@ -77,7 +77,7 @@ pub const Parser = struct {
             };
 
             const body_item = self.createNode(ast.Body, .{ .statement = stmt });
-            self.appendAssumeCapacity(&self.scratch_body, body_item);
+            self.appendItem(&self.scratch_body, body_item);
             self.panic_mode = false;
         }
 
@@ -122,7 +122,7 @@ pub const Parser = struct {
 
         // first declarator
         const first_decl = self.parseVariableDeclarator(kind) orelse return null;
-        self.appendAssumeCapacity(&self.scratch_declarators, first_decl);
+        self.appendItem(&self.scratch_declarators, first_decl);
 
         // additional declarators
         while (self.current.type == .Comma) {
@@ -484,11 +484,6 @@ pub const Parser = struct {
 
     inline fn appendItem(self: *Parser, list: anytype, item: anytype) void {
         list.append(self.allocator, item) catch unreachable; // it's oom, we failed
-    }
-
-    inline fn appendAssumeCapacity(self: *Parser, list: anytype, item: anytype) void {
-        _ = self;
-        list.appendAssumeCapacity(item);
     }
 
     inline fn clearRetainingCapacity(self: *Parser, list: anytype) void {
