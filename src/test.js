@@ -1,1 +1,1 @@
-var hello = `Hello ${nice} cool`
+var hello = ``

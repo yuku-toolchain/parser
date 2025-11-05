@@ -376,8 +376,9 @@ pub const Lexer = struct {
                 continue;
             }
             if (c == '`') {
+                const end = self.cursor;
                 self.cursor += 1;
-                return self.createToken(.NoSubstitutionTemplate, self.source[start..self.cursor], start, self.cursor);
+                return self.createToken(.NoSubstitutionTemplate, self.source[start..end], start, end);
             }
             if (c == '$' and self.source[self.cursor + 1] == '{') {
                 const end = self.cursor; // end before consuming ${, because we don't need it the token

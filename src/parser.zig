@@ -331,7 +331,10 @@ pub const Parser = struct {
             const template_literal = ast.TemplateLiteral{
                 .quasis = self.dupeSlice(*ast.TemplateElement, &[_]*ast.TemplateElement{element}),
                 .expressions = self.dupeSlice(*ast.Expression, &[_]*ast.Expression{}),
-                .span = tok.span,
+                .span = .{
+                    .start = tok.span.start - 1, // -1 to include starting backtick
+                    .end = tok.span.start + 1  // +1 include closing backtick
+                },
             };
 
             return self.createNode(ast.Expression, .{ .template_literal = template_literal });
