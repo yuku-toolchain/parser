@@ -56,7 +56,10 @@ pub const Parser = struct {
             self.appendItem(&body_list, body_item);
         }
 
-        const end = self.current().span.end;
+        const end = if (body_list.items.len > 0)
+            body_list.items[body_list.items.len - 1].statement.getSpan().end
+        else
+            start;
 
         const program = ast.Program{
             .body = self.toOwnedSlice(&body_list),
