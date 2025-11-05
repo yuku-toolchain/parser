@@ -315,124 +315,85 @@ pub const Parser = struct {
     }
 
     fn parseTemplateLiteral(self: *Parser) ?*ast.Expression {
-        const start = self.current().span.start - 1; // -1 to include starting backtick since lexer won't include it in token, TemplateHead span.start starts after backtick
-        const first_token = self.current();
+        const start = self.current().span.start - 1; // -1 to include starting backtick
 
         self.clearRetainingCapacity(&self.scratch_template_elements);
         self.clearRetainingCapacity(&self.scratch_expressions);
         self.ensureCapacity(&self.scratch_template_elements, 4);
         self.ensureCapacity(&self.scratch_expressions, 4);
 
-        if (first_token.type == .NoSubstitutionTemplate) {
+        // no substitution template
+        if (self.current().type == .NoSubstitutionTemplate) {
+            const tok = self.current();
             self.advance();
 
-            const raw = first_token.lexeme;
-            const element_value = ast.TemplateElementValue{
-                .raw = raw,
-                .cooked = raw, // TODO: process escape sequences for cooked value
-            };
-
-            const element = ast.TemplateElement{
-                .value = element_value,
-                .tail = true,
-                .span = first_token.span,
-            };
-
-            const element_ptr = self.createNode(ast.TemplateElement, element);
-            const quasis = self.dupeSlice(*ast.TemplateElement, &[_]*ast.TemplateElement{element_ptr});
-            const expressions = self.dupeSlice(*ast.Expression, &[_]*ast.Expression{});
-
+            const element = self.createTemplateElement(tok, true);
             const template_literal = ast.TemplateLiteral{
-                .quasis = quasis,
-                .expressions = expressions,
-                .span = first_token.span,
+                .quasis = self.dupeSlice(*ast.TemplateElement, &[_]*ast.TemplateElement{element}),
+                .expressions = self.dupeSlice(*ast.Expression, &[_]*ast.Expression{}),
+                .span = tok.span,
             };
 
             return self.createNode(ast.Expression, .{ .template_literal = template_literal });
         }
 
+        // head element
         const head_token = self.current();
-
-        const head_raw = head_token.lexeme;
-        const head_value = ast.TemplateElementValue{
-            .raw = head_raw,
-            .cooked = head_raw, // TODO: process escape sequences for cooked value
-        };
-
-        const head_element = ast.TemplateElement{
-            .value = head_value,
-            .tail = false,
-            .span = head_token.span,
-        };
-
-        self.appendItem(&self.scratch_template_elements, self.createNode(ast.TemplateElement, head_element));
+        self.appendItem(&self.scratch_template_elements, self.createTemplateElement(head_token, false));
         self.advance();
 
         var template_literal_end: usize = undefined;
 
+        // expressions and middle/tail elements
         while (true) {
             const expr = self.parseExpression() orelse return null;
-
             self.appendItem(&self.scratch_expressions, expr);
 
-            // after parsing expression, we should get TemplateMiddle or TemplateTail
             const template_token = self.current();
+            const is_tail = template_token.type == .TemplateTail;
+
             switch (template_token.type) {
-                .TemplateMiddle => {
-                    const middle_raw = template_token.lexeme;
+                .TemplateMiddle, .TemplateTail => {
+                    self.appendItem(&self.scratch_template_elements,
+                        self.createTemplateElement(template_token, is_tail));
 
-                    const middle_value = ast.TemplateElementValue{
-                        .raw = middle_raw,
-                        .cooked = middle_raw, // TODO: process escape sequences for cooked value
-                    };
-
-                    const middle_element = ast.TemplateElement{
-                        .value = middle_value,
-                        .tail = false,
-                        .span = template_token.span,
-                    };
-
-                    self.appendItem(&self.scratch_template_elements, self.createNode(ast.TemplateElement, middle_element));
-                    self.advance();
-                    // continue to parse next expression
-                },
-                .TemplateTail => {
-                    const tail_raw = template_token.lexeme;
-                    const tail_value = ast.TemplateElementValue{
-                        .raw = tail_raw,
-                        .cooked = tail_raw, // TODO: process escape sequences for cooked value
-                    };
-
-                    const tail_element = ast.TemplateElement{
-                        .value = tail_value,
-                        .tail = true,
-                        .span = template_token.span,
-                    };
-
-                    self.appendItem(&self.scratch_template_elements, self.createNode(ast.TemplateElement, tail_element));
-
-                    template_literal_end = template_token.span.end + 1; // +1 include the closing backtick, since lexer won't include it in token
+                    if (is_tail) {
+                        template_literal_end = template_token.span.end + 1; // +1 include closing backtick
+                        self.advance();
+                        break;
+                    }
 
                     self.advance();
-                    break;
                 },
                 else => {
-                    self.recordError("Expected template middle or tail after expression", "Try adding '}' here to close the expression and continue the template");
+                    self.recordError(
+                        "Expected template middle or tail after expression",
+                        "Try adding '}' here to close the expression and continue the template"
+                    );
                     return null;
                 },
             }
         }
 
-        const quasis = self.dupeSlice(*ast.TemplateElement, self.scratch_template_elements.items);
-        const expressions = self.dupeSlice(*ast.Expression, self.scratch_expressions.items);
-
         const template_literal = ast.TemplateLiteral{
-            .quasis = quasis,
-            .expressions = expressions,
+            .quasis = self.dupeSlice(*ast.TemplateElement, self.scratch_template_elements.items),
+            .expressions = self.dupeSlice(*ast.Expression, self.scratch_expressions.items),
             .span = .{ .start = start, .end = template_literal_end },
         };
 
         return self.createNode(ast.Expression, .{ .template_literal = template_literal });
+    }
+
+    inline fn createTemplateElement(self: *Parser, tok: token.Token, is_tail: bool) *ast.TemplateElement {
+        const element = ast.TemplateElement{
+            .value = .{
+                .raw = tok.lexeme,
+                .cooked = tok.lexeme, // TODO: process escape sequences
+            },
+            .tail = is_tail,
+            .span = tok.span,
+        };
+        return self.createNode(ast.TemplateElement, element);
     }
 
     fn parseBindingPattern(self: *Parser) ?*ast.BindingPattern {
