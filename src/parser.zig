@@ -25,8 +25,8 @@ pub const Parser = struct {
     errors: std.ArrayList(Error),
 
     lookahead: [4]token.Token,
-    lookahead_start: u3,
-    lookahead_count: u3, // how many tokens buffered
+    lookahead_start: u2,
+    lookahead_count: u3,
 
     scratch_declarators: std.ArrayList(*ast.VariableDeclarator),
     scratch_expressions: std.ArrayList(*ast.Expression),
@@ -356,7 +356,6 @@ pub const Parser = struct {
             const write_pos = (self.lookahead_start + self.lookahead_count) & 3;
             self.lookahead[write_pos] = tok;
             self.lookahead_count += 1;
-            if (self.lookahead_count > 4) return null; // buffer full
         }
 
         const read_pos = (self.lookahead_start + n) & 3;
@@ -364,13 +363,13 @@ pub const Parser = struct {
     }
 
     inline fn advance(self: *Parser) void {
-        if (self.lookahead_count > 1) {
-            self.lookahead_start +%= 1; // wrapping add
-            self.lookahead_start &= 3;
-            self.lookahead_count -= 1;
-        } else {
-            self.lookahead[self.lookahead_start] = self.lexer.nextToken() catch token.Token.eof(0);
-        }
+           if (self.lookahead_count > 1) {
+               self.lookahead_start +%= 1; // safes to wrap naturally, since lookahead_start is u4 (0-4)
+               self.lookahead_count -= 1;
+           } else {
+               self.lookahead[self.lookahead_start] =
+                   self.lexer.nextToken() catch token.Token.eof(0);
+           }
     }
 
     inline fn expect(
