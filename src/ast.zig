@@ -40,7 +40,8 @@ pub const Statement = union(enum) {
 // patterns
 pub const BindingPattern = union(enum) {
     binding_identifier: BindingIdentifier,
-    // TODO: object_pattern, array_pattern, assignment_pattern
+    array_pattern: ArrayPattern,
+    // TODO: object_pattern, assignment_pattern
 
     pub inline fn getSpan(self: *const BindingPattern) token.Span {
         return switch (self.*) {
@@ -186,6 +187,23 @@ pub const BindingIdentifier = struct {
     type: []const u8 = "Identifier",
     name: []const u8,
     span: token.Span,
+};
+
+pub const BindingRestElement = struct {
+    type: []const u8 = "RestElement",
+    argument: *BindingPattern,
+    span: token.Span,
+};
+
+pub const ArrayPattern = struct {
+    type: []const u8 = "ArrayPattern",
+    elements: []?*ArrayPatternElement,
+    span: token.Span,
+};
+
+pub const ArrayPatternElement = union(enum) {
+    binding_pattern: *BindingPattern,
+    rest_element: *BindingRestElement,
 };
 
 pub const VariableDeclarator = struct {

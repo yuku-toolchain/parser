@@ -1,1 +1,1 @@
-var hello = undefined;
+var [nice, cool] = undefined;

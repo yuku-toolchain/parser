@@ -31,6 +31,7 @@ pub const Parser = struct {
     scratch_declarators: std.ArrayList(*ast.VariableDeclarator),
     scratch_expressions: std.ArrayList(*ast.Expression),
     scratch_template_elements: std.ArrayList(*ast.TemplateElement),
+    scratch_array_pattern_elements: std.ArrayList(?*ast.ArrayPatternElement),
 
     pub fn init(allocator: std.mem.Allocator, source: []const u8) !Parser {
         var lex = try lexer.Lexer.init(allocator, source);
@@ -38,7 +39,7 @@ pub const Parser = struct {
         var lookahead_buf: [4]token.Token = undefined;
         lookahead_buf[0] = lex.nextToken() catch token.Token.eof(0);
 
-        return .{ .source = source, .lexer = lex, .allocator = allocator, .lookahead = lookahead_buf, .lookahead_start = 0, .lookahead_count = 1, .errors = .empty, .scratch_declarators = .empty, .scratch_expressions = .empty, .scratch_template_elements = .empty };
+        return .{ .source = source, .lexer = lex, .allocator = allocator, .lookahead = lookahead_buf, .lookahead_start = 0, .lookahead_count = 1, .errors = .empty, .scratch_declarators = .empty, .scratch_expressions = .empty, .scratch_template_elements = .empty, .scratch_array_pattern_elements = .empty };
     }
 
     pub fn parse(self: *Parser) !ParseResult {
@@ -327,7 +328,7 @@ pub const Parser = struct {
             .expressions = self.dupeSlice(*ast.Expression, &[_]*ast.Expression{}),
             .span = .{
                 .start = tok.span.start - 1, // -1 to include starting backtick
-                .end = tok.span.start + 1  // +1 include closing backtick
+                .end = tok.span.start + 1, // +1 include closing backtick
             },
         };
 
@@ -360,8 +361,7 @@ pub const Parser = struct {
 
             switch (template_token.type) {
                 .TemplateMiddle, .TemplateTail => {
-                    self.appendItem(&self.scratch_template_elements,
-                        self.createTemplateElement(template_token, is_tail));
+                    self.appendItem(&self.scratch_template_elements, self.createTemplateElement(template_token, is_tail));
 
                     if (is_tail) {
                         template_literal_end = template_token.span.end + 1; // +1 include closing backtick
@@ -372,10 +372,7 @@ pub const Parser = struct {
                     self.advance();
                 },
                 else => {
-                    self.recordError(
-                        "Expected template middle or tail after expression",
-                        "Try adding '}' here to close the expression and continue the template"
-                    );
+                    self.recordError("Expected template middle or tail after expression", "Try adding '}' here to close the expression and continue the template");
                     return null;
                 },
             }
@@ -405,8 +402,9 @@ pub const Parser = struct {
     fn parseBindingPattern(self: *Parser) ?*ast.BindingPattern {
         return switch (self.current().type) {
             .Identifier => self.parseBindingIdentifierPattern(),
+            .LeftBracket => self.parseArrayPattern(),
             else => {
-                self.recordError("Expected binding pattern", "Try using an identifier name here");
+                self.recordError("Expected binding pattern", "Try using an identifier name or array pattern here");
                 return null;
             },
         };
@@ -428,6 +426,108 @@ pub const Parser = struct {
         };
 
         return self.createNode(ast.BindingPattern, .{ .binding_identifier = binding_id });
+    }
+
+    fn parseArrayPattern(self: *Parser) ?*ast.BindingPattern {
+        const start = self.current().span.start;
+
+        if (!self.expect(.LeftBracket, "Expected '[' to start array pattern", "Try adding '[' here to start the array pattern")) {
+            return null;
+        }
+
+        self.clearRetainingCapacity(&self.scratch_array_pattern_elements);
+        self.ensureCapacity(&self.scratch_array_pattern_elements, 4);
+
+        var last_end = start + 1; // after opening bracket
+
+        // elements
+        while (self.current().type != .RightBracket and self.current().type != .EOF) {
+            // check for rest element
+            if (self.current().type == .Spread) {
+                const rest_elem = self.parseRestElement() orelse return null;
+
+                self.appendItem(&self.scratch_array_pattern_elements, rest_elem);
+
+                last_end = switch (rest_elem.*) {
+                    .rest_element => |re| re.span.end,
+                    .binding_pattern => |bp| bp.getSpan().end,
+                };
+
+                if (self.current().type == .Comma) {
+                    self.recordError("Rest element must be last in array pattern", "Try moving the rest element to the end of the array pattern");
+                    return null;
+                }
+                break;
+            }
+
+            // parse element (can be null for empty slots like [a, , b])
+            if (self.current().type == .Comma) {
+                // empty slot
+                self.appendItem(&self.scratch_array_pattern_elements, null);
+                last_end = self.current().span.end;
+                self.advance();
+            } else {
+                const elem = self.parseArrayPatternElement() orelse return null;
+                self.appendItem(&self.scratch_array_pattern_elements, elem);
+
+                last_end = switch (elem.*) {
+                    .rest_element => |re| re.span.end,
+                    .binding_pattern => |bp| bp.getSpan().end,
+                };
+
+                if (self.current().type == .Comma) {
+                    last_end = self.current().span.end;
+                    self.advance();
+                } else {
+                    break;
+                }
+            }
+        }
+
+        const end = if (self.current().type == .RightBracket) blk: {
+            const right_bracket_end = self.current().span.end;
+            self.advance();
+            break :blk right_bracket_end;
+        } else blk: {
+            self.recordError("Expected ']' to close array pattern", "Try adding ']' here to close the array pattern");
+            break :blk last_end;
+        };
+
+        const elements = self.toOwnedSlice(&self.scratch_array_pattern_elements);
+
+        const array_pattern = ast.ArrayPattern{
+            .elements = elements,
+            .span = .{ .start = start, .end = end },
+        };
+
+        return self.createNode(ast.BindingPattern, .{ .array_pattern = array_pattern });
+    }
+
+    fn parseArrayPatternElement(self: *Parser) ?*ast.ArrayPatternElement {
+        const pattern = self.parseBindingPattern() orelse return null;
+
+        const elem = ast.ArrayPatternElement{ .binding_pattern = pattern };
+        return self.createNode(ast.ArrayPatternElement, elem);
+    }
+
+    fn parseRestElement(self: *Parser) ?*ast.ArrayPatternElement {
+        const start = self.current().span.start;
+
+        if (!self.expect(.Spread, "Expected '...' for rest element", "Try adding '...' here for the rest element")) {
+            return null;
+        }
+
+        const argument = self.parseBindingPattern() orelse return null;
+        const end = argument.getSpan().end;
+
+        const rest_elem = ast.BindingRestElement{
+            .argument = argument,
+            .span = .{ .start = start, .end = end },
+        };
+
+        const rest_elem_ptr = self.createNode(ast.BindingRestElement, rest_elem);
+        const elem = ast.ArrayPatternElement{ .rest_element = rest_elem_ptr };
+        return self.createNode(ast.ArrayPatternElement, elem);
     }
 
     inline fn current(self: *Parser) token.Token {
