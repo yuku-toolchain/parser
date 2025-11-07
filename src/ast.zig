@@ -41,7 +41,8 @@ pub const Statement = union(enum) {
 pub const BindingPattern = union(enum) {
     binding_identifier: BindingIdentifier,
     array_pattern: ArrayPattern,
-    // TODO: object_pattern, assignment_pattern
+    object_pattern: ObjectPattern,
+    // TODO: assignment_pattern
 
     pub inline fn getSpan(self: *const BindingPattern) token.Span {
         return switch (self.*) {
@@ -217,5 +218,46 @@ pub const VariableDeclarator = struct {
     type: []const u8 = "VariableDeclarator",
     id: *BindingPattern,
     init: ?*Expression = null,
+    span: token.Span,
+};
+
+pub const PropertyKey = union(enum) {
+    identifier_reference: IdentifierReference,
+    expression: *Expression,
+
+    pub inline fn getSpan(self: *const PropertyKey) token.Span {
+        return switch (self.*) {
+            .identifier_reference => |id| id.span,
+            .expression => |expr| expr.getSpan(),
+        };
+    }
+};
+
+pub const BindingProperty = struct {
+    type: []const u8 = "Property",
+    kind: []const u8 = "init",
+    key: PropertyKey,
+    value: *BindingPattern,
+    method: bool = false,
+    shorthand: bool,
+    computed: bool,
+    span: token.Span,
+};
+
+pub const ObjectPatternProperty = union(enum) {
+    binding_property: *BindingProperty,
+    rest_element: *BindingRestElement,
+
+    pub inline fn getSpan(self: *const ObjectPatternProperty) token.Span {
+        return switch (self.*) {
+            .binding_property => |prop| prop.span,
+            .rest_element => |rest| rest.span,
+        };
+    }
+};
+
+pub const ObjectPattern = struct {
+    type: []const u8 = "ObjectPattern",
+    properties: []*ObjectPatternProperty,
     span: token.Span,
 };

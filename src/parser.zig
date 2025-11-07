@@ -32,6 +32,7 @@ pub const Parser = struct {
     scratch_expressions: std.ArrayList(*ast.Expression),
     scratch_template_elements: std.ArrayList(*ast.TemplateElement),
     scratch_array_pattern_elements: std.ArrayList(?*ast.ArrayPatternElement),
+    scratch_object_pattern_properties: std.ArrayList(*ast.ObjectPatternProperty),
 
     pub fn init(allocator: std.mem.Allocator, source: []const u8) !Parser {
         var lex = try lexer.Lexer.init(allocator, source);
@@ -39,7 +40,7 @@ pub const Parser = struct {
         var lookahead_buf: [4]token.Token = undefined;
         lookahead_buf[0] = lex.nextToken() catch token.Token.eof(0);
 
-        return .{ .source = source, .lexer = lex, .allocator = allocator, .lookahead = lookahead_buf, .lookahead_start = 0, .lookahead_count = 1, .errors = .empty, .scratch_declarators = .empty, .scratch_expressions = .empty, .scratch_template_elements = .empty, .scratch_array_pattern_elements = .empty };
+        return .{ .source = source, .lexer = lex, .allocator = allocator, .lookahead = lookahead_buf, .lookahead_start = 0, .lookahead_count = 1, .errors = .empty, .scratch_declarators = .empty, .scratch_expressions = .empty, .scratch_template_elements = .empty, .scratch_array_pattern_elements = .empty, .scratch_object_pattern_properties = .empty };
     }
 
     pub fn parse(self: *Parser) !ParseResult {
@@ -403,8 +404,9 @@ pub const Parser = struct {
         return switch (self.current().type) {
             .Identifier => self.parseBindingIdentifierPattern(),
             .LeftBracket => self.parseArrayPattern(),
+            .LeftBrace => self.parseObjectPattern(),
             else => {
-                self.recordError("Expected binding pattern", "Try using an identifier name or array pattern here");
+                self.recordError("Expected binding pattern", "Try using an identifier name, array pattern, or object pattern here");
                 return null;
             },
         };
@@ -520,6 +522,163 @@ pub const Parser = struct {
         const rest_elem_ptr = self.createNode(ast.BindingRestElement, rest_elem);
         const elem = ast.ArrayPatternElement{ .rest_element = rest_elem_ptr };
         return self.createNode(ast.ArrayPatternElement, elem);
+    }
+
+    fn parseObjectPattern(self: *Parser) ?*ast.BindingPattern {
+        const start = self.current().span.start;
+
+        if (!self.expect(.LeftBrace, "Expected '{' to start object pattern", "Try adding '{' here to start the object pattern")) {
+            return null;
+        }
+
+        self.clearRetainingCapacity(&self.scratch_object_pattern_properties);
+        self.ensureCapacity(&self.scratch_object_pattern_properties, 4);
+
+        var last_end = start + 1; // after opening brace
+
+        // properties
+        while (self.current().type != .RightBrace and self.current().type != .EOF) {
+            // check for rest element
+            if (self.current().type == .Spread) {
+                const rest_prop = self.parseObjectRestElement() orelse return null;
+
+                self.appendItem(&self.scratch_object_pattern_properties, rest_prop);
+
+                last_end = rest_prop.getSpan().end;
+
+                if (self.current().type == .Comma) {
+                    self.recordError("Rest element must be last in object pattern", "Try moving the rest element to the end of the object pattern");
+                    return null;
+                }
+                break;
+            }
+
+            // parse property
+            const prop = self.parseObjectPatternProperty() orelse return null;
+            self.appendItem(&self.scratch_object_pattern_properties, prop);
+            last_end = prop.getSpan().end;
+
+            if (self.current().type == .Comma) {
+                last_end = self.current().span.end;
+                self.advance();
+            } else {
+                break;
+            }
+        }
+
+        const end = if (self.current().type == .RightBrace) blk: {
+            const right_brace_end = self.current().span.end;
+            self.advance();
+            break :blk right_brace_end;
+        } else blk: {
+            self.recordError("Expected '}' to close object pattern", "Try adding '}' here to close the object pattern");
+            break :blk last_end;
+        };
+
+        const object_pattern = ast.ObjectPattern{
+            .properties = self.dupeSlice(*ast.ObjectPatternProperty, self.scratch_object_pattern_properties.items),
+            .span = .{ .start = start, .end = end },
+        };
+
+        return self.createNode(ast.BindingPattern, .{ .object_pattern = object_pattern });
+    }
+
+    fn parseObjectPatternProperty(self: *Parser) ?*ast.ObjectPatternProperty {
+        const start = self.current().span.start;
+
+        var computed = false;
+
+        var key: ast.PropertyKey = undefined;
+        var key_span: token.Span = undefined;
+
+        // check for computed property: [expression]
+        if (self.current().type == .LeftBracket) {
+            computed = true;
+            self.advance();
+
+            const key_expr = self.parseExpression() orelse return null;
+
+            key = ast.PropertyKey{ .expression = key_expr };
+            key_span = .{ .start = start, .end = key_expr.getSpan().end };
+
+            if (!self.expect(.RightBracket, "Expected ']' to close computed property key", "Try adding ']' here to close the computed property key")) {
+                return null;
+            }
+
+            key_span.end = self.current().span.end;
+        } else if (self.current().type == .Identifier) {
+            // identifier key
+            const name = self.current().lexeme;
+            key_span = self.current().span;
+            self.advance();
+
+            const identifier = ast.IdentifierReference{
+                .name = name,
+                .span = key_span,
+            };
+
+            key = ast.PropertyKey{ .identifier_reference = identifier };
+        } else {
+            self.recordError("Expected property key in object pattern", "Try using an identifier or computed property key here");
+            return null;
+        }
+
+        // check for shorthand property: { x } is shorthand for { x: x }
+        const is_shorthand = self.current().type == .Comma or self.current().type == .RightBrace;
+        var value: *ast.BindingPattern = undefined;
+
+        if (is_shorthand) {
+            // shorthand: use the identifier as both key and value
+            const identifier_ref = switch (key) {
+                .identifier_reference => |id| id,
+                .expression => {
+                    self.recordError("Computed properties cannot be shorthand", "Try adding ': value' here to complete the property");
+                    return null;
+                },
+            };
+
+            const binding_id = ast.BindingIdentifier{
+                .name = identifier_ref.name,
+                .span = key_span,
+            };
+
+            value = self.createNode(ast.BindingPattern, .{ .binding_identifier = binding_id });
+        } else {
+            // regular property: { x: y }
+            if (!self.expect(.Colon, "Expected ':' after property key", "Try adding ':' here to separate the key from the value")) {
+                return null;
+            }
+            value = self.parseBindingPattern() orelse return null;
+        }
+
+        const end = value.getSpan().end;
+        const prop = ast.BindingProperty{
+            .key = key,
+            .value = value,
+            .shorthand = is_shorthand,
+            .computed = computed,
+            .span = .{ .start = start, .end = end },
+        };
+
+        const prop_ptr = self.createNode(ast.BindingProperty, prop);
+        return self.createNode(ast.ObjectPatternProperty, .{ .binding_property = prop_ptr });
+    }
+
+    fn parseObjectRestElement(self: *Parser) ?*ast.ObjectPatternProperty {
+        const start = self.current().span.start;
+
+        self.advance(); // consume ...
+
+        const argument = self.parseBindingPattern() orelse return null;
+        const end = argument.getSpan().end;
+
+        const rest_elem = ast.BindingRestElement{
+            .argument = argument,
+            .span = .{ .start = start, .end = end },
+        };
+
+        const rest_elem_ptr = self.createNode(ast.BindingRestElement, rest_elem);
+        return self.createNode(ast.ObjectPatternProperty, .{ .rest_element = rest_elem_ptr });
     }
 
     inline fn current(self: *Parser) token.Token {

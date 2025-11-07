@@ -1,1 +1,1 @@
-var [nice, cool] = undefined;
+var { nice, [nie]: cool, nic } = undefined;
