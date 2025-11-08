@@ -17,7 +17,7 @@
 - [x] Basic binding patterns (identifier)
 - [x] Array destructuring patterns (ArrayPattern)
 - [x] Object destructuring patterns (ObjectPattern)
-- [ ] Rest elements in destructuring
+- [x] Rest elements in destructuring
 - [ ] Default values in destructuring (AssignmentPattern)
 
 ### 1.3 Expressions

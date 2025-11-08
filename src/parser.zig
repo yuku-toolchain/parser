@@ -690,7 +690,11 @@ pub const Parser = struct {
 
             key_span.end = self.current_token.span.end;
             self.advance();
-        } else if (self.current_token.type == .Identifier) {
+        } else if (
+            // TODO: object keys are not only identifiers, can be number, strings, so add bit masking things to the tokens
+            // like is_number since there are many number tokens.
+            // so we efficienly determine is a token a number without multiple or's.
+            self.current_token.type == .Identifier) {
             // identifier key
             const name = self.current_token.lexeme;
             key_span = self.current_token.span;

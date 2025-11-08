@@ -1,1 +1,1 @@
-const nice = nice;
+const {0: nice} = nice;
