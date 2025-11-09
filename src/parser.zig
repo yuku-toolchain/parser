@@ -716,6 +716,7 @@ pub const Parser = struct {
 
             key = self.createNode(ast.PropertyKey, .{ .identifier_name = identifier });
         }
+
         // TODO: actually private identifier for object keys is invalid
         // Only identifiers, numbers and strings. So need to create bit maskings for useful conditions like is_number
         // So we avoid multiple or's in if

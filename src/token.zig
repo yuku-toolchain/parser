@@ -1,170 +1,156 @@
 const std = @import("std");
 
-pub const TokenType = enum {
-    // Numeric literals
-    NumericLiteral, // 123, 3.14, 1e5
-    HexLiteral, // 0xFF, 0x123
-    OctalLiteral, // 0o777, 0O123
-    BinaryLiteral, // 0b1010, 0B1111
-    BigIntLiteral, // 123n, 0xFFn
+pub const Mask = struct {
+    pub const IsNumericLiteral: u32 = 1 << 12;
+};
 
-    // String and regex literals
-    StringLiteral, // "hello", 'world'
-    RegexLiteral, // /pattern/flags
+pub const TokenType = enum(u32) {
+    NumericLiteral = 1 | Mask.IsNumericLiteral,
+    HexLiteral = 2 | Mask.IsNumericLiteral,
+    OctalLiteral = 3 | Mask.IsNumericLiteral,
+    BinaryLiteral = 4 | Mask.IsNumericLiteral,
+    BigIntLiteral = 5 | Mask.IsNumericLiteral,
 
-    // Template literals
-    NoSubstitutionTemplate, // `hello world`
-    TemplateHead, // `hello ${
-    TemplateMiddle, // } world ${
-    TemplateTail, // } end`
+    StringLiteral = 6,
+    RegexLiteral = 7,
 
-    // Boolean and null literals
-    True, // true
-    False, // false
-    NullLiteral, // null
+    NoSubstitutionTemplate = 8,
+    TemplateHead = 9,
+    TemplateMiddle = 10,
+    TemplateTail = 11,
 
-    // Arithmetic operators
-    Plus, // +
-    Minus, // -
-    Star, // *
-    Slash, // /
-    Percent, // %
-    Exponent, // **
+    True = 12,
+    False = 13,
+    NullLiteral = 14,
 
-    // Assignment operators
-    Assign, // =
-    PlusAssign, // +=
-    MinusAssign, // -=
-    StarAssign, // *=
-    SlashAssign, // /=
-    PercentAssign, // %=
-    ExponentAssign, // **=
+    Plus = 15, // +
+    Minus = 16, // -
+    Star = 17, // *
+    Slash = 18, // /
+    Percent = 19, // %
+    Exponent = 20, // **
 
-    // Increment/decrement operators
-    Increment, // ++
-    Decrement, // --
+    Assign = 21, // =
+    PlusAssign = 22, // +=
+    MinusAssign = 23, // -=
+    StarAssign = 24, // *=
+    SlashAssign = 25, // /=
+    PercentAssign = 26, // %=
+    ExponentAssign = 27, // **=
 
-    // Comparison operators
-    Equal, // ==
-    NotEqual, // !=
-    StrictEqual, // ===
-    StrictNotEqual, // !==
-    LessThan, // <
-    GreaterThan, // >
-    LessThanEqual, // <=
-    GreaterThanEqual, // >=
+    Increment = 28, // ++
+    Decrement = 29, // --
 
-    // Logical operators
-    LogicalAnd, // &&
-    LogicalOr, // ||
-    LogicalNot, // !
+    Equal = 30, // ==
+    NotEqual = 31, // !=
+    StrictEqual = 32, // ===
+    StrictNotEqual = 33, // !==
+    LessThan = 34, // <
+    GreaterThan = 35, // >
+    LessThanEqual = 36, // <=
+    GreaterThanEqual = 37, // >=
 
-    // Bitwise operators
-    BitwiseAnd, // &
-    BitwiseOr, // |
-    BitwiseXor, // ^
-    BitwiseNot, // ~
-    LeftShift, // <<
-    RightShift, // >>
-    UnsignedRightShift, // >>>
+    LogicalAnd = 38, // &&
+    LogicalOr = 39, // ||
+    LogicalNot = 40, // !
 
-    // Bitwise assignment operators
-    BitwiseAndAssign, // &=
-    BitwiseOrAssign, // |=
-    BitwiseXorAssign, // ^=
-    LeftShiftAssign, // <<=
-    RightShiftAssign, // >>=
-    UnsignedRightShiftAssign, // >>>=
+    BitwiseAnd = 41, // &
+    BitwiseOr = 42, // |
+    BitwiseXor = 43, // ^
+    BitwiseNot = 44, // ~
+    LeftShift = 45, // <<
+    RightShift = 46, // >>
+    UnsignedRightShift = 47, // >>>
 
-    // Modern operators
-    NullishCoalescing, // ??
-    NullishAssign, // ??=
-    LogicalAndAssign, // &&=
-    LogicalOrAssign, // ||=
-    OptionalChaining, // ?.
+    BitwiseAndAssign = 48, // &=
+    BitwiseOrAssign = 49, // |=
+    BitwiseXorAssign = 50, // ^=
+    LeftShiftAssign = 51, // <<=
+    RightShiftAssign = 52, // >>=
+    UnsignedRightShiftAssign = 53, // >>>=
 
-    // Delimiters
-    LeftParen, // (
-    RightParen, // )
-    LeftBrace, // {
-    RightBrace, // }
-    LeftBracket, // [
-    RightBracket, // ]
-    Semicolon, // ;
-    Comma, // ,
-    Dot, // .
-    Spread, // ...
-    Arrow, // =>
-    Question, // ?
-    Colon, // :
+    NullishCoalescing = 54, // ??
+    NullishAssign = 55, // ??=
+    LogicalAndAssign = 56, // &&=
+    LogicalOrAssign = 57, // ||=
+    OptionalChaining = 58, // ?.
 
-    // Control flow keywords
-    If,
-    Else,
-    Switch,
-    Case,
-    Default,
-    For,
-    While,
-    Do,
-    Break,
-    Continue,
+    LeftParen = 59, // (
+    RightParen = 60, // )
+    LeftBrace = 61, // {
+    RightBrace = 62, // }
+    LeftBracket = 63, // [
+    RightBracket = 64, // ]
+    Semicolon = 65, // ;
+    Comma = 66, // ,
+    Dot = 67, // .
+    Spread = 68, // ...
+    Arrow = 69, // =>
+    Question = 70, // ?
+    Colon = 71, // :
 
-    // Function keywords
-    Function,
-    Return,
-    Async,
-    Await,
-    Yield,
+    If = 72,
+    Else = 73,
+    Switch = 74,
+    Case = 75,
+    Default = 76,
+    For = 77,
+    While = 78,
+    Do = 79,
+    Break = 80,
+    Continue = 81,
 
-    // Variable declaration keywords
-    Var,
-    Let,
-    Const,
-    Using,
+    Function = 82,
+    Return = 83,
+    Async = 84,
+    Await = 85,
+    Yield = 86,
 
-    // Class and OOP keywords
-    Class,
-    Extends,
-    Super,
-    Static,
-    Enum,
-    Public,
-    Private,
-    Protected,
-    Interface,
-    Implements,
+    Var = 87,
+    Let = 88,
+    Const = 89,
+    Using = 90,
 
-    // Module keywords
-    Import,
-    Export,
-    From,
-    As,
+    Class = 91,
+    Extends = 92,
+    Super = 93,
+    Static = 94,
+    Enum = 95,
+    Public = 96,
+    Private = 97,
+    Protected = 98,
+    Interface = 99,
+    Implements = 100,
 
-    // Exception handling keywords
-    Try,
-    Catch,
-    Finally,
-    Throw,
+    Import = 101,
+    Export = 102,
+    From = 103,
+    As = 104,
 
-    // Other keywords
-    New,
-    This,
-    Typeof,
-    Instanceof,
-    In,
-    Of,
-    Delete,
-    Void,
-    With,
-    Debugger,
+    Try = 105,
+    Catch = 106,
+    Finally = 107,
+    Throw = 108,
 
-    // Identifiers
-    Identifier, // variableName, $$, _, $$variable
-    PrivateIdentifier, // #privateField
+    New = 109,
+    This = 110,
+    Typeof = 111,
+    Instanceof = 112,
+    In = 113,
+    Of = 114,
+    Delete = 115,
+    Void = 116,
+    With = 117,
+    Debugger = 118,
 
-    // Special tokens
-    EOF, // End of file
+    Identifier = 119,
+    PrivateIdentifier = 120,
+
+    EOF = 121, // end of file
+
+    pub fn is(self: TokenType, mask: u32) bool {
+        return (@intFromEnum(self) & mask) != 0;
+    }
 };
 
 pub const Span = struct {
