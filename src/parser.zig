@@ -130,19 +130,19 @@ pub const Parser = struct {
         const first_decl = self.parseVariableDeclarator(kind) orelse return null;
         self.append(&self.scratch_declarators, first_decl);
 
+        var end = first_decl.span.end;
+
         // parse additional declarators
         while (self.current_token.type == .Comma) {
             self.advance();
             const decl = self.parseVariableDeclarator(kind) orelse return null;
+            end = decl.span.end;
             self.append(&self.scratch_declarators, decl);
         }
 
-        self.eatSemi();
-
-        const end = if (self.scratch_declarators.items.len > 0)
-            self.scratch_declarators.items[self.scratch_declarators.items.len - 1].span.end
-        else
-            self.current_token.span.start;
+        if(self.eatSemi()) {
+            end += 1;
+        }
 
         const declarations = self.dupe(*ast.VariableDeclarator, self.scratch_declarators.items);
 
@@ -704,39 +704,27 @@ pub const Parser = struct {
 
             key_span.end = self.current_token.span.end;
             self.advance();
-        } else if (self.current_token.type == .Identifier) {
-            const name = self.current_token.lexeme;
-            key_span = self.current_token.span;
-            self.advance();
+        } else if (self.current_token.type.is(token.Mask.IsNumericLiteral)) {
+            const numeric_literal = self.parseNumericLiteral() orelse return null;
 
-            const identifier = ast.IdentifierName{
-                .name = name,
-                .span = key_span,
-            };
+            key_span = numeric_literal.getSpan();
 
-            key = self.createNode(ast.PropertyKey, .{ .identifier_name = identifier });
-        }
+            key = self.createNode(ast.PropertyKey, .{ .expression = numeric_literal });
+        } else if (self.current_token.type == .StringLiteral) {
+            const string_literal = self.parseStringLiteral() orelse return null;
 
-        // TODO: actually private identifier for object keys is invalid
-        // Only identifiers, numbers and strings. So need to create bit maskings for useful conditions like is_number
-        // So we avoid multiple or's in if
-        // Also ensure if the key is a string, the value will only be the lexeme without quotes
-        else if (self.current_token.type == .PrivateIdentifier) {
-            const name = self.current_token.lexeme;
-            key_span = self.current_token.span;
-            self.advance();
+            key_span = string_literal.getSpan();
 
-            const private_id = ast.PrivateIdentifier{
-                .name = name,
-                .span = key_span,
-            };
-
-            key = self.createNode(ast.PropertyKey, .{ .private_identifier = private_id });
-        } else {
-            const key_expr = self.parseExpression() orelse return null;
-            key = self.createNode(ast.PropertyKey, .{ .expression = key_expr });
-            key_span = key_expr.getSpan();
-        }
+            key = self.createNode(ast.PropertyKey, .{ .expression = string_literal });
+        }  else {
+           self.err(
+               self.current_token.span.start,
+               self.current_token.span.end,
+               "Expected property key",
+               "Property key must be an identifier, string, number, or computed property ([expression])",
+           );
+           return null;
+       }
 
         const is_shorthand = self.current_token.type == .Comma or self.current_token.type == .RightBrace;
         var value: *ast.BindingPattern = undefined;
@@ -791,6 +779,7 @@ pub const Parser = struct {
         }
 
         const end = value.getSpan().end;
+
         const prop = ast.BindingProperty{
             .key = key,
             .value = value,
@@ -858,10 +847,13 @@ pub const Parser = struct {
         return false;
     }
 
-    inline fn eatSemi(self: *Parser) void {
+    inline fn eatSemi(self: *Parser) bool {
         if (self.current_token.type == .Semicolon) {
             self.advance();
+            return true;
         }
+
+        return false;
     }
 
     inline fn err(
