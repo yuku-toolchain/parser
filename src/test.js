@@ -1,1 +1,1 @@
-const {[10]: nice} = nice;
+const {[10]: {}} = nice

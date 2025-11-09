@@ -69,10 +69,7 @@ pub const Parser = struct {
             self.append(&body_list, body_item);
         }
 
-        const end = if (body_list.items.len > 0)
-            body_list.items[body_list.items.len - 1].statement.getSpan().end
-        else
-            start;
+        const end = self.current_token.span.start - 1; // eof start - 1
 
         const program = ast.Program{
             .body = self.dupe(*ast.Body, body_list.items),
@@ -140,9 +137,7 @@ pub const Parser = struct {
             self.append(&self.scratch_declarators, decl);
         }
 
-        if (self.eatSemi()) {
-            end += 1;
-        }
+        self.eatSemi();
 
         const declarations = self.dupe(*ast.VariableDeclarator, self.scratch_declarators.items);
 
@@ -837,13 +832,10 @@ pub const Parser = struct {
         return false;
     }
 
-    inline fn eatSemi(self: *Parser) bool {
+    inline fn eatSemi(self: *Parser) void {
         if (self.current_token.type == .Semicolon) {
             self.advance();
-            return true;
         }
-
-        return false;
     }
 
     inline fn err(
