@@ -1,1 +1,1 @@
-const {[10]: {}} = nice
+const [y = 5] = null;

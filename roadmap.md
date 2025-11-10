@@ -18,7 +18,7 @@
 - [x] Array destructuring patterns (ArrayPattern)
 - [x] Object destructuring patterns (ObjectPattern)
 - [x] Rest elements in destructuring
-- [ ] Default values in destructuring (AssignmentPattern)
+- [x] Default values in destructuring (AssignmentPattern)
 
 ### 1.3 Expressions
 **Operators & Binary Expressions:**

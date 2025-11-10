@@ -42,7 +42,7 @@ pub const BindingPattern = union(enum) {
     binding_identifier: BindingIdentifier,
     array_pattern: ArrayPattern,
     object_pattern: ObjectPattern,
-    // TODO: assignment_pattern
+    assignment_pattern: AssignmentPattern,
 
     pub inline fn getSpan(self: *const BindingPattern) token.Span {
         return switch (self.*) {
@@ -203,6 +203,13 @@ pub const BindingIdentifier = struct {
     span: token.Span,
 };
 
+pub const AssignmentPattern = struct {
+    type: []const u8 = "AssignmentPattern",
+    left: *BindingPattern,
+    right: *Expression,
+    span: token.Span,
+};
+
 pub const BindingRestElement = struct {
     type: []const u8 = "RestElement",
     argument: *BindingPattern,
@@ -265,8 +272,7 @@ pub const ObjectPatternProperty = union(enum) {
 
     pub inline fn getSpan(self: *const ObjectPatternProperty) token.Span {
         return switch (self.*) {
-            .binding_property => |prop| prop.span,
-            .rest_element => |rest| rest.span,
+            inline else => |variant| variant.span,
         };
     }
 };

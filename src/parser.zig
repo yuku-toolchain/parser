@@ -69,7 +69,7 @@ pub const Parser = struct {
             self.append(&body_list, body_item);
         }
 
-        const end = self.current_token.span.start - 1; // eof start - 1
+        const end = self.current_token.span.start;
 
         const program = ast.Program{
             .body = self.dupe(*ast.Body, body_list.items),
@@ -137,7 +137,9 @@ pub const Parser = struct {
             self.append(&self.scratch_declarators, decl);
         }
 
-        self.eatSemi();
+        if (self.eatSemi()) {
+            end += 1;
+        }
 
         const declarations = self.dupe(*ast.VariableDeclarator, self.scratch_declarators.items);
 
@@ -516,7 +518,7 @@ pub const Parser = struct {
                 self.append(&self.scratch_array_pattern_elements, rest_elem);
                 last_end = rest_elem.getSpan().end;
 
-                // Rest element must be last
+                // rest element must be last
                 if (self.current_token.type == .Comma) {
                     const comma_token = self.current_token;
                     self.err(
@@ -575,7 +577,13 @@ pub const Parser = struct {
     fn parseArrayPatternElement(self: *Parser) ?*ast.ArrayPatternElement {
         const pattern = self.parseBindingPattern() orelse return null;
 
-        const elem = ast.ArrayPatternElement{ .binding_pattern = pattern };
+        // check for default value
+        const final_pattern = if (self.current_token.type == .Assign)
+            self.parseAssignmentPatternDefault(pattern) orelse return null
+        else
+            pattern;
+
+        const elem = ast.ArrayPatternElement{ .binding_pattern = final_pattern };
         return self.createNode(ast.ArrayPatternElement, elem);
     }
 
@@ -699,6 +707,20 @@ pub const Parser = struct {
 
             key_span.end = self.current_token.span.end;
             self.advance();
+        } else if (self.current_token.type == .Identifier) {
+            const span = self.current_token.span;
+            const name = self.current_token.lexeme;
+
+            self.advance();
+
+            const identifier_name = ast.IdentifierName{
+                .name = name,
+                .span = span,
+            };
+
+            key_span = span;
+
+            key = self.createNode(ast.PropertyKey, .{ .identifier_name = identifier_name });
         } else if (self.current_token.type.is(token.Mask.IsNumericLiteral)) {
             const numeric_literal = self.parseNumericLiteral() orelse return null;
 
@@ -721,7 +743,7 @@ pub const Parser = struct {
             return null;
         }
 
-        const is_shorthand = self.current_token.type == .Comma or self.current_token.type == .RightBrace;
+        const is_shorthand = self.current_token.type == .Comma or self.current_token.type == .RightBrace or self.current_token.type == .Assign;
         var value: *ast.BindingPattern = undefined;
 
         if (is_shorthand) {
@@ -748,6 +770,11 @@ pub const Parser = struct {
             };
 
             value = self.createNode(ast.BindingPattern, .{ .binding_identifier = binding_id });
+
+            // check for default value in shorthand: { x = 5 }
+            if (self.current_token.type == .Assign) {
+                value = self.parseAssignmentPatternDefault(value) orelse return null;
+            }
         } else {
             // regular property: { x: y }
             if (self.current_token.type != .Colon) {
@@ -761,6 +788,11 @@ pub const Parser = struct {
             }
             self.advance();
             value = self.parseBindingPattern() orelse return null;
+
+            // check for default value: { x: y = 5 }
+            if (self.current_token.type == .Assign) {
+                value = self.parseAssignmentPatternDefault(value) orelse return null;
+            }
         }
 
         const end = value.getSpan().end;
@@ -793,6 +825,30 @@ pub const Parser = struct {
 
         const rest_elem_ptr = self.createNode(ast.BindingRestElement, rest_elem);
         return self.createNode(ast.ObjectPatternProperty, .{ .rest_element = rest_elem_ptr });
+    }
+
+    fn parseAssignmentPatternDefault(self: *Parser, left: *ast.BindingPattern) ?*ast.BindingPattern {
+        const start = left.getSpan().start;
+
+        // consume '='
+        if (self.current_token.type != .Assign) {
+            return left;
+        }
+
+        self.advance();
+
+        // parse the default expression
+        const right = self.parseExpression() orelse return null;
+
+        const end = right.getSpan().end;
+
+        const assignment_pattern = ast.AssignmentPattern{
+            .left = left,
+            .right = right,
+            .span = .{ .start = start, .end = end },
+        };
+
+        return self.createNode(ast.BindingPattern, .{ .assignment_pattern = assignment_pattern });
     }
 
     fn lookAhead(self: *Parser) ?token.Token {
@@ -832,10 +888,13 @@ pub const Parser = struct {
         return false;
     }
 
-    inline fn eatSemi(self: *Parser) void {
+    inline fn eatSemi(self: *Parser) bool {
         if (self.current_token.type == .Semicolon) {
             self.advance();
+            return true;
         }
+
+        return false;
     }
 
     inline fn err(
