@@ -46,11 +46,11 @@ pub const Parser = struct {
 
             .errors = std.ArrayList(Error).empty,
 
-            .scratch_declarators = std.ArrayList(*ast.VariableDeclarator).empty,
-            .scratch_expressions = std.ArrayList(*ast.Expression).empty,
-            .scratch_template_elements = std.ArrayList(*ast.TemplateElement).empty,
-            .scratch_array_pattern_elements = std.ArrayList(?*ast.ArrayPatternElement).empty,
-            .scratch_object_pattern_properties = std.ArrayList(*ast.ObjectPatternProperty).empty,
+            .scratch_declarators = .empty,
+            .scratch_expressions = .empty,
+            .scratch_template_elements = .empty,
+            .scratch_array_pattern_elements = .empty,
+            .scratch_object_pattern_properties = .empty,
         };
     }
 
