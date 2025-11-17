@@ -12,8 +12,8 @@ pub const Body = union(enum) {
     }
 };
 
+// Program
 pub const Program = struct {
-    type: []const u8 = "Program",
     body: []*Body,
     source_type: SourceType = .script,
     span: token.Span,
@@ -25,7 +25,6 @@ pub const Program = struct {
     }
 };
 
-// statements
 pub const Statement = union(enum) {
     expression_statement: ExpressionStatement,
     variable_declaration: VariableDeclaration,
@@ -37,7 +36,6 @@ pub const Statement = union(enum) {
     }
 };
 
-// patterns
 pub const BindingPattern = union(enum) {
     binding_identifier: BindingIdentifier,
     array_pattern: ArrayPattern,
@@ -51,7 +49,6 @@ pub const BindingPattern = union(enum) {
     }
 };
 
-// declarations
 pub const Declaration = union(enum) {
     variable_declarator: VariableDeclarator,
 
@@ -62,7 +59,6 @@ pub const Declaration = union(enum) {
     }
 };
 
-// expressions
 pub const Expression = union(enum) {
     string_literal: StringLiteral,
     boolean_literal: BooleanLiteral,
@@ -85,41 +81,41 @@ pub const Expression = union(enum) {
     }
 };
 
+// ExpressionStatement
 pub const ExpressionStatement = struct {
-    type: []const u8 = "ExpressionStatement",
     expression: *Expression,
     directive: ?[]const u8 = null,
     span: token.Span,
 };
 
 pub const BinaryOperator = enum {
-    Equal, // ==
-    NotEqual, // !=
-    StrictEqual, // ===
-    StrictNotEqual, // !==
+    Equal,
+    NotEqual,
+    StrictEqual,
+    StrictNotEqual,
 
-    LessThan, // <
-    LessThanEqual, // <=
-    GreaterThan, // >
-    GreaterThanEqual, // >=
+    LessThan,
+    LessThanEqual,
+    GreaterThan,
+    GreaterThanEqual,
 
-    Plus, // +
-    Minus, // -
-    Star, // *
-    Slash, // /
-    Percent, // %
-    Exponent, // **
+    Plus,
+    Minus,
+    Star,
+    Slash,
+    Percent,
+    Exponent,
 
-    LeftShift, // <<
-    RightShift, // >>
-    UnsignedRightShift, // >>>
+    LeftShift,
+    RightShift,
+    UnsignedRightShift,
 
-    BitwiseOr, // |
-    BitwiseXor, // ^
-    BitwiseAnd, // &
+    BitwiseOr,
+    BitwiseXor,
+    BitwiseAnd,
 
-    In, // in
-    Instanceof, // instanceof
+    In,
+    Instanceof,
 
     pub fn fromToken(token_type: token.TokenType) BinaryOperator {
         return switch (token_type) {
@@ -145,34 +141,34 @@ pub const BinaryOperator = enum {
             .BitwiseAnd => .BitwiseAnd,
             .In => .In,
             .Instanceof => .Instanceof,
-            else => unreachable, // safety: we are sure we only call fromToken for binary operators
+            else => unreachable,
         };
     }
 };
 
 pub const LogicalOperator = enum {
-    LogicalOr, // ||
-    LogicalAnd, // &&
-    NullishCoalescing, // ??
+    LogicalOr,
+    LogicalAnd,
+    NullishCoalescing,
 
     pub fn fromToken(token_type: token.TokenType) LogicalOperator {
         return switch (token_type) {
             .LogicalOr => .LogicalOr,
             .LogicalAnd => .LogicalAnd,
             .NullishCoalescing => .NullishCoalescing,
-            else => unreachable, // safety: we are sure we only call fromToken for logical operators
+            else => unreachable,
         };
     }
 };
 
 pub const UnaryOperator = enum {
-    Plus, // +
-    Minus, // -
-    LogicalNot, // !
-    BitwiseNot, // ~
-    Typeof, // typeof
-    Void, // void
-    Delete, // delete
+    Plus,
+    Minus,
+    LogicalNot,
+    BitwiseNot,
+    Typeof,
+    Void,
+    Delete,
 
     pub fn fromToken(token_type: token.TokenType) UnaryOperator {
         return switch (token_type) {
@@ -183,58 +179,58 @@ pub const UnaryOperator = enum {
             .Typeof => .Typeof,
             .Void => .Void,
             .Delete => .Delete,
-            else => unreachable, // safety: we are sure we only call fromToken for unary operators
+            else => unreachable,
         };
     }
 };
 
 pub const UpdateOperator = enum {
-    Increment, // ++
-    Decrement, // --
+    Increment,
+    Decrement,
 
     pub fn fromToken(token_type: token.TokenType) UpdateOperator {
         return switch (token_type) {
             .Increment => .Increment,
             .Decrement => .Decrement,
-            else => unreachable, // safety: we are sure we only call fromToken for update operators
+            else => unreachable,
         };
     }
 };
 
+// UnaryExpression
 pub const UnaryExpression = struct {
-    type: []const u8 = "UnaryExpression",
     operator: UnaryOperator,
     argument: *Expression,
     prefix: bool = true,
     span: token.Span,
 };
 
+// UpdateExpression
 pub const UpdateExpression = struct {
-    type: []const u8 = "UpdateExpression",
     operator: UpdateOperator,
     prefix: bool,
     argument: *Expression,
     span: token.Span,
 };
 
+// BinaryExpression
 pub const BinaryExpression = struct {
-    type: []const u8 = "BinaryExpression",
     left: *Expression,
     right: *Expression,
     operator: BinaryOperator,
     span: token.Span,
 };
 
+// LogicalExpression
 pub const LogicalExpression = struct {
-    type: []const u8 = "LogicalExpression",
     left: *Expression,
     right: *Expression,
     operator: LogicalOperator,
     span: token.Span,
 };
 
+// VariableDeclaration
 pub const VariableDeclaration = struct {
-    type: []const u8 = "VariableDeclaration",
     kind: VariableDeclarationKind,
     declarations: []*VariableDeclarator,
     span: token.Span,
@@ -248,52 +244,51 @@ pub const VariableDeclaration = struct {
     };
 };
 
-// directive (like "use strict")
+// ExpressionStatement
 pub const Directive = struct {
-    type: []const u8 = "ExpressionStatement",
     expression: *StringLiteral,
     directive: []const u8,
     span: token.Span,
 };
 
+// Literal
 pub const StringLiteral = struct {
-    type: []const u8 = "Literal",
     value: []const u8,
     raw: ?[]const u8 = null,
     span: token.Span,
 };
 
+// Literal
 pub const BooleanLiteral = struct {
-    type: []const u8 = "Literal",
     value: bool,
     raw: ?[]const u8 = null,
     span: token.Span,
 };
 
+// Literal
 pub const NullLiteral = struct {
-    type: []const u8 = "Literal",
     value: ?[]const u8 = null,
     raw: ?[]const u8 = null,
     span: token.Span,
 };
 
+// Literal
 pub const NumericLiteral = struct {
-    type: []const u8 = "Literal",
     value: f64,
     raw: ?[]const u8 = null,
     span: token.Span,
 };
 
+// Literal
 pub const BigIntLiteral = struct {
-    type: []const u8 = "Literal",
     value: []const u8,
     raw: ?[]const u8 = null,
     bigint: []const u8,
     span: token.Span,
 };
 
+// Literal
 pub const RegExpLiteral = struct {
-    type: []const u8 = "Literal",
     value: ?[]const u8 = null,
     raw: ?[]const u8 = null,
     regex: RegExp,
@@ -310,59 +305,59 @@ pub const TemplateElementValue = struct {
     cooked: ?[]const u8 = null,
 };
 
+// TemplateElement
 pub const TemplateElement = struct {
-    type: []const u8 = "TemplateElement",
     value: TemplateElementValue,
     tail: bool,
     span: token.Span,
 };
 
+// TemplateLiteral
 pub const TemplateLiteral = struct {
-    type: []const u8 = "TemplateLiteral",
     quasis: []*TemplateElement,
     expressions: []*Expression,
     span: token.Span,
 };
 
+// Identifier
 pub const IdentifierReference = struct {
-    type: []const u8 = "Identifier",
     name: []const u8,
     span: token.Span,
 };
 
+// Identifier
 pub const IdentifierName = struct {
-    type: []const u8 = "Identifier",
     name: []const u8,
     span: token.Span,
 };
 
+// PrivateIdentifier
 pub const PrivateIdentifier = struct {
-    type: []const u8 = "PrivateIdentifier",
     name: []const u8,
     span: token.Span,
 };
 
+// Identifier
 pub const BindingIdentifier = struct {
-    type: []const u8 = "Identifier",
     name: []const u8,
     span: token.Span,
 };
 
+// AssignmentPattern
 pub const AssignmentPattern = struct {
-    type: []const u8 = "AssignmentPattern",
     left: *BindingPattern,
     right: *Expression,
     span: token.Span,
 };
 
+// RestElement
 pub const BindingRestElement = struct {
-    type: []const u8 = "RestElement",
     argument: *BindingPattern,
     span: token.Span,
 };
 
+// ArrayPattern
 pub const ArrayPattern = struct {
-    type: []const u8 = "ArrayPattern",
     elements: []?*ArrayPatternElement,
     span: token.Span,
 };
@@ -379,8 +374,8 @@ pub const ArrayPatternElement = union(enum) {
     }
 };
 
+// VariableDeclarator
 pub const VariableDeclarator = struct {
-    type: []const u8 = "VariableDeclarator",
     id: *BindingPattern,
     init: ?*Expression = null,
     span: token.Span,
@@ -400,8 +395,8 @@ pub const PropertyKey = union(enum) {
     }
 };
 
+// Property
 pub const BindingProperty = struct {
-    type: []const u8 = "Property",
     kind: []const u8 = "init",
     key: *PropertyKey,
     value: *BindingPattern,
@@ -422,8 +417,8 @@ pub const ObjectPatternProperty = union(enum) {
     }
 };
 
+// ObjectPattern
 pub const ObjectPattern = struct {
-    type: []const u8 = "ObjectPattern",
     properties: []*ObjectPatternProperty,
     span: token.Span,
 };
