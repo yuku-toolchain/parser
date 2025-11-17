@@ -47,7 +47,7 @@ pub fn main() !void {
         const result = try parser.parse();
         const end = std.time.nanoTimestamp();
 
-        if(i == 0){
+        if (i == 0) {
             first_result = result;
         }
 

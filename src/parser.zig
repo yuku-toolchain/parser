@@ -32,6 +32,11 @@ pub const Parser = struct {
     scratch_array_pattern_elements: std.ArrayList(?*ast.ArrayPatternElement),
     scratch_object_pattern_properties: std.ArrayList(*ast.ObjectPatternProperty),
 
+    in_async: bool = false,
+    in_generator: bool = false,
+    in_function: bool = false,
+    allow_in: bool = true,
+
     pub fn init(allocator: std.mem.Allocator, source: []const u8) !Parser {
         var lex = try lexer.Lexer.init(allocator, source);
 
@@ -188,12 +193,32 @@ pub const Parser = struct {
                 init_expr = expr;
                 end = expr.getSpan().end;
             }
-        } else if (kind == .@"const" or kind == .using or kind == .@"await using") {
+        } else if (self.isDestructuringPattern(id)) {
             const id_span = id.getSpan();
             self.err(
                 id_span.start,
                 id_span.end + 1,
-                "Missing initializer in declaration",
+                "Missing initializer in destructuring declaration",
+                "Destructuring patterns must be initialized. Add '= <value>' after the pattern",
+            );
+            return null;
+        } else if (kind == .@"const" or kind == .using or kind == .@"await using") {
+            const id_span = id.getSpan();
+
+            const kind_str = switch (kind) {
+                .@"const" => "'const'",
+                .using => "'using'",
+                .@"await using" => "'await using'",
+                else => unreachable,
+            };
+
+            self.err(
+                id_span.start,
+                id_span.end + 1,
+                self.formatMessage(
+                    "Missing initializer in {s} declaration",
+                    .{kind_str},
+                ),
                 "Add '= <value>' after the variable name to initialize it",
             );
             return null;
@@ -223,6 +248,11 @@ pub const Parser = struct {
     fn parseExpressionInfix(self: *Parser, prec: u5, left: *ast.Expression) ?*ast.Expression {
         const current_token = self.current_token;
 
+        // (x++, x--)
+        if (current_token.type == .Increment or current_token.type == .Decrement) {
+            return self.parseUpdateExpression(false, left);
+        }
+
         if (current_token.type.isBinaryOperator()) {
             return self.parseBinaryExpression(prec, left);
         }
@@ -235,6 +265,11 @@ pub const Parser = struct {
     }
 
     fn parseExpressionPrefix(self: *Parser) ?*ast.Expression {
+        // (++x, --x)
+        if (self.current_token.type == .Increment or self.current_token.type == .Decrement) {
+            return self.parseUpdateExpression(true, undefined);
+        }
+
         if (self.current_token.type.isUnaryOperator()) {
             return self.parseUnaryExpression();
         }
@@ -270,8 +305,6 @@ pub const Parser = struct {
 
         self.advance();
 
-        // parse the argument with unary precedence (14) to ensure proper binding
-        // for example, !x + y should parse as (!x) + y, not !(x + y)
         const argument = self.parseExpression(14) orelse return null;
 
         const unary_expression = ast.UnaryExpression{
@@ -284,6 +317,64 @@ pub const Parser = struct {
         };
 
         return self.createNode(ast.Expression, .{ .unary_expression = unary_expression });
+    }
+
+    // TODO: ensure no line terminator after lhs in postifx
+    fn parseUpdateExpression(self: *Parser, is_prefix: bool, left: ?*ast.Expression) ?*ast.Expression {
+        const operator_token = self.current_token;
+        const operator = ast.UpdateOperator.fromToken(operator_token.type);
+
+        const start = if (is_prefix) operator_token.span.start else left.?.getSpan().start;
+
+        self.advance();
+
+        var argument: *ast.Expression = undefined;
+        var end: u32 = undefined;
+
+        if (is_prefix) {
+            // ++x, --x
+            argument = self.parseExpression(14) orelse return null;
+            const arg_span = argument.getSpan();
+            end = arg_span.end;
+
+            if (!self.isValidAssignmentTarget(argument)) {
+                self.err(
+                    arg_span.start,
+                    arg_span.end,
+                    "Invalid left-hand side expression in prefix operation",
+                    "Prefix increment/decrement requires a variable or property, not an expression result",
+                );
+                return null;
+            }
+        } else {
+            // x++, x--
+            argument = left orelse unreachable;
+
+            end = operator_token.span.end;
+
+            if (!self.isValidAssignmentTarget(argument)) {
+                const arg_span = argument.getSpan();
+                self.err(
+                    arg_span.start,
+                    arg_span.end,
+                    "Invalid left-hand side expression in postfix operation",
+                    "Postfix increment/decrement requires a variable or property, not an expression result",
+                );
+                return null;
+            }
+        }
+
+        const update_expression = ast.UpdateExpression{
+            .span = .{
+                .start = start,
+                .end = end,
+            },
+            .operator = operator,
+            .prefix = is_prefix,
+            .argument = argument,
+        };
+
+        return self.createNode(ast.Expression, .{ .update_expression = update_expression });
     }
 
     fn parseBinaryExpression(self: *Parser, prec: u5, left: *ast.Expression) ?*ast.Expression {
@@ -948,6 +1039,33 @@ pub const Parser = struct {
         return self.createNode(ast.BindingPattern, .{ .assignment_pattern = assignment_pattern });
     }
 
+    // validators
+
+    inline fn isValidAssignmentTarget(self: *Parser, expr: *ast.Expression) bool {
+        _ = self;
+        return switch (expr.*) {
+            .identifier_reference => true,
+            // TODO: uncomment when add member_expression
+            // .member_expression => true,
+
+            else => false,
+        };
+    }
+
+    fn isDestructuringPattern(self: *Parser, pattern: *ast.BindingPattern) bool {
+        return switch (pattern.*) {
+            .array_pattern, .object_pattern => true,
+            .assignment_pattern => |ap| self.isDestructuringPattern(ap.left),
+            else => false,
+        };
+    }
+
+    // utils
+
+    fn formatMessage(self: *Parser, comptime fmt: []const u8, args: anytype) []u8 {
+        return std.fmt.allocPrint(self.allocator, fmt, args) catch unreachable;
+    }
+
     fn lookAhead(self: *Parser) ?token.Token {
         // TODO: add lookahead support, rewind etc.
         return self.current_token;
@@ -1033,6 +1151,8 @@ pub const Parser = struct {
             self.advance();
         }
     }
+
+    // memory helpers
 
     inline fn createNode(self: *Parser, comptime T: type, value: T) *T {
         const ptr = self.allocator.create(T) catch unreachable;

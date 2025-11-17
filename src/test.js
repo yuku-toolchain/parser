@@ -1,1 +1,1 @@
-const hello = void x;
+const x = !x + y;

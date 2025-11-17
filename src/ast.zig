@@ -76,6 +76,7 @@ pub const Expression = union(enum) {
     binary_expression: BinaryExpression,
     logical_expression: LogicalExpression,
     unary_expression: UnaryExpression,
+    update_expression: UpdateExpression,
 
     pub inline fn getSpan(self: *const Expression) token.Span {
         return switch (self.*) {
@@ -187,11 +188,32 @@ pub const UnaryOperator = enum {
     }
 };
 
+pub const UpdateOperator = enum {
+    Increment, // ++
+    Decrement, // --
+
+    pub fn fromToken(token_type: token.TokenType) UpdateOperator {
+        return switch (token_type) {
+            .Increment => .Increment,
+            .Decrement => .Decrement,
+            else => unreachable, // safety: we are sure we only call fromToken for update operators
+        };
+    }
+};
+
 pub const UnaryExpression = struct {
     type: []const u8 = "UnaryExpression",
     operator: UnaryOperator,
     argument: *Expression,
     prefix: bool = true,
+    span: token.Span,
+};
+
+pub const UpdateExpression = struct {
+    type: []const u8 = "UpdateExpression",
+    operator: UpdateOperator,
+    prefix: bool,
+    argument: *Expression, // SimpleAssignmentTarget: IdentifierReference or MemberExpression
     span: token.Span,
 };
 
