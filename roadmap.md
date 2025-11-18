@@ -25,7 +25,7 @@
 - [x] Binary expressions (+, -, *, /, %, etc.)
 - [x] Logical expressions (&&, ||, ??)
 - [x] Unary expressions (!, ~, +, -, typeof, void, delete)
-- [ ] Update expressions (++, --)
+- [x] Update expressions (++, --)
 - [ ] Assignment expressions (=, +=, -=, etc.)
 - [ ] Conditional expression (ternary ? :)
 - [ ] Sequence expression (comma operator)

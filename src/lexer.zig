@@ -2,8 +2,6 @@ const std = @import("std");
 const Token = @import("token.zig").Token;
 const Span = @import("token.zig").Span;
 const TokenType = @import("token.zig").TokenType;
-const Comment = @import("token.zig").Comment;
-const CommentType = @import("token.zig").CommentType;
 const unicodeJsHelpers = @import("unicode/js-helpers.zig");
 const util = @import("util.zig");
 
@@ -46,7 +44,7 @@ pub const Lexer = struct {
     template_depth: u32,
     /// expects arena allocator
     allocator: std.mem.Allocator,
-    comments: std.ArrayList(Comment),
+    has_line_terminator_before: bool,
 
     pub fn init(allocator: std.mem.Allocator, source: []const u8) !Lexer {
         const padded_buffer = try allocator.alloc(u8, source.len + padding_size);
@@ -60,7 +58,7 @@ pub const Lexer = struct {
             .cursor = 0,
             .template_depth = 0,
             .allocator = allocator,
-            .comments = .empty,
+            .has_line_terminator_before = false,
         };
     }
 
@@ -1003,24 +1001,14 @@ pub const Lexer = struct {
             if (std.ascii.isAscii(c)) {
                 @branchHint(.likely);
                 switch (c) {
-                    // simple spaces
-                    ' ', '\t', '\n', '\r', '\u{000B}', '\u{000C}' => {
+                    ' ', '\t', '\u{000B}', '\u{000C}' => {
                         self.cursor += 1;
                         continue;
                     },
-                    // handle comments, consume and push to the comments array
-                    '/' => {
-                        const c1 = self.source[self.cursor + 1];
-                        if (c1 == 0) break;
-                        if (c1 == '/') {
-                            try self.skipSingleLineComment();
-                            continue;
-                        } else if (c1 == '*') {
-                            try self.skipMultiLineComment();
-                            continue;
-                        } else {
-                            break;
-                        }
+                    '\n', '\r' => {
+                        self.has_line_terminator_before = true;
+                        self.cursor += 1;
+                        continue;
                     },
                     else => break,
                 }
@@ -1037,45 +1025,12 @@ pub const Lexer = struct {
         }
     }
 
-    inline fn skipSingleLineComment(self: *Lexer) LexicalError!void {
-        const start = self.cursor;
-        self.cursor += 2; // skip "//"
-        while (self.cursor < self.source_len) {
-            const c = self.source[self.cursor];
-            if (c == '\n' or c == '\r') {
-                break;
-            }
-            self.cursor += 1;
-        }
-        self.comments.append(self.allocator, Comment{
-            .content = self.source[start..self.cursor],
-            .span = .{ .start = start, .end = self.cursor },
-            .type = .SingleLine,
-        }) catch unreachable;
-    }
-
-    inline fn skipMultiLineComment(self: *Lexer) LexicalError!void {
-        const start = self.cursor;
-        self.cursor += 2; // skip "/*"
-        while (self.cursor < self.source_len) {
-            const c = self.source[self.cursor];
-            if (c == '*' and self.source[self.cursor + 1] == '/') {
-                self.cursor += 2;
-                self.comments.append(self.allocator, Comment{
-                    .content = self.source[start..self.cursor],
-                    .span = .{ .start = start, .end = self.cursor },
-                    .type = .MultiLine,
-                }) catch unreachable;
-                return;
-            }
-            self.cursor += 1;
-        }
-        return error.UnterminatedMultiLineComment;
-    }
-
     pub inline fn createToken(self: *Lexer, token_type: TokenType, lexeme: []const u8, start: u32, end: u32) Token {
-        _ = self;
-        return Token{ .type = token_type, .lexeme = lexeme, .span = .{ .start = start, .end = end } };
+        const token = Token{ .type = token_type, .lexeme = lexeme, .span = .{ .start = start, .end = end }, .has_line_terminator_before = self.has_line_terminator_before };
+
+        self.has_line_terminator_before = false;
+
+        return token;
     }
 };
 

@@ -323,9 +323,19 @@ pub const Parser = struct {
         return self.createNode(ast.Expression, .{ .unary_expression = unary_expression });
     }
 
-    // TODO: ensure no line terminator after lhs in postifx
     fn parseUpdateExpression(self: *Parser, is_prefix: bool, left: ?*ast.Expression) ?*ast.Expression {
         const operator_token = self.current_token;
+
+        if (!is_prefix and operator_token.has_line_terminator_before) {
+            self.err(
+                operator_token.span.start - 1,
+                operator_token.span.end,
+                "Line terminator not allowed before postfix operator",
+                self.formatMessage("Remove the line break before '{s}'", .{operator_token.lexeme}),
+            );
+            return null;
+        }
+
         const operator = ast.UpdateOperator.fromToken(operator_token.type);
 
         const start = if (is_prefix) operator_token.span.start else left.?.getSpan().start;

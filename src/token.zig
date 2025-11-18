@@ -188,19 +188,9 @@ pub const Token = struct {
     span: Span,
     type: TokenType,
     lexeme: []const u8,
+    has_line_terminator_before: bool,
 
     pub inline fn eof(pos: u32) Token {
-        return Token{ .lexeme = "", .span = .{ .start = pos, .end = pos }, .type = .EOF };
+        return Token{ .lexeme = "", .span = .{ .start = pos, .end = pos }, .type = .EOF, .has_line_terminator_before = false };
     }
-};
-
-pub const CommentType = enum {
-    SingleLine, // // comment
-    MultiLine, // /* comment */
-};
-
-pub const Comment = struct {
-    span: Span,
-    content: []const u8,
-    type: CommentType,
 };
