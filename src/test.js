@@ -1,1 +1,1 @@
-const {yie} = obj;
+const {async} = obj;

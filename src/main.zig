@@ -5,9 +5,6 @@ const Lexer = @import("lexer.zig").Lexer;
 const Token = @import("token.zig").Token;
 const printError = @import("print-error.zig").printError;
 
-const iterations = 10;
-const ns_to_ms = 1_000_000.0;
-
 fn countLines(content: []const u8) usize {
     var count: usize = 1;
     for (content) |c| {
@@ -28,36 +25,40 @@ fn formatNumber(num: f64) void {
 
 pub fn main() !void {
     const content = @embedFile("test.js");
-    const allocator = std.heap.page_allocator;
 
-    var times = try std.ArrayList(i128).initCapacity(allocator, iterations);
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
+
+    const allocator = arena.allocator();
+
+    const iterations = 10;
+    var times = std.ArrayList(i128).empty;
     defer times.deinit(allocator);
 
     std.debug.print("Running {d} iterations...\n", .{iterations});
 
-    var first_result: ?ParseResult = null;
+    var i: usize = 0;
+    var first_result: ParseResult = undefined;
 
-    for (0..iterations) |i| {
-        var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
-        defer arena.deinit();
-
-        var parser = try Parser.init(arena.allocator(), content);
+    while (i < iterations) : (i += 1) {
+        var parser = try Parser.init(allocator, content);
 
         const start = std.time.nanoTimestamp();
         const result = try parser.parse();
         const end = std.time.nanoTimestamp();
 
-        try times.append(allocator, end - start);
-
         if (i == 0) {
             first_result = result;
-            if (result.hasErrors()) {
-                std.debug.print("\nErrors found:\n", .{});
-                for (result.errors) |parse_err| {
-                    printError(content, parse_err);
-                }
-                std.debug.print("\n", .{});
+        }
+
+        try times.append(allocator, end - start);
+
+        if (i == 0 and result.hasErrors()) {
+            std.debug.print("\nErrors found:\n", .{});
+            for (result.errors) |parse_err| {
+                printError(content, parse_err);
             }
+            std.debug.print("\n", .{});
         }
     }
 
@@ -65,17 +66,17 @@ pub fn main() !void {
     var min: i128 = times.items[0];
     var max: i128 = times.items[0];
 
-    for (times.items) |time| {
-        total += time;
-        if (time < min) min = time;
-        if (time > max) max = time;
+    for (times.items) |t| {
+        total += t;
+        if (t < min) min = t;
+        if (t > max) max = t;
     }
 
     const avg = @divTrunc(total, iterations);
 
-    const avg_ms = @as(f64, @floatFromInt(avg)) / ns_to_ms;
-    const min_ms = @as(f64, @floatFromInt(min)) / ns_to_ms;
-    const max_ms = @as(f64, @floatFromInt(max)) / ns_to_ms;
+    const avg_ms = @as(f64, @floatFromInt(avg)) / 1_000_000.0;
+    const min_ms = @as(f64, @floatFromInt(min)) / 1_000_000.0;
+    const max_ms = @as(f64, @floatFromInt(max)) / 1_000_000.0;
 
     const lines = countLines(content);
     const size_kb = @as(f64, @floatFromInt(content.len)) / 1024.0;
