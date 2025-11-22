@@ -18,6 +18,11 @@ pub const ParseResult = struct {
     }
 };
 
+pub const SourceType = enum {
+    Script,
+    Module,
+};
+
 pub const Parser = struct {
     source: []const u8,
     lexer: lexer.Lexer,
@@ -35,7 +40,10 @@ pub const Parser = struct {
     in_async: bool = false,
     in_generator: bool = false,
     in_function: bool = false,
-    allow_in: bool = true,
+
+    // TODO: add logic to detect it, likely in directive parsing
+    strict_mode: bool = true,
+    source_type: SourceType = .Module,
 
     pub fn init(allocator: std.mem.Allocator, source: []const u8) !Parser {
         var lex = try lexer.Lexer.init(allocator, source);
@@ -723,8 +731,11 @@ pub const Parser = struct {
     }
 
     fn parseBindingPattern(self: *Parser) ?*ast.BindingPattern {
+        if (self.current_token.type.isIdentifierLike()) {
+            return self.parseBindingIdentifierPattern();
+        }
+
         return switch (self.current_token.type) {
-            .Identifier => self.parseBindingIdentifierPattern(),
             .LeftBracket => self.parseArrayPattern(),
             .LeftBrace => self.parseObjectPattern(),
             else => {
@@ -741,19 +752,24 @@ pub const Parser = struct {
     }
 
     fn parseBindingIdentifierPattern(self: *Parser) ?*ast.BindingPattern {
-        if (self.current_token.type != .Identifier) {
+        if (!self.current_token.type.isIdentifierLike()) {
             const bad_token = self.current_token;
             self.err(
                 bad_token.span.start,
                 bad_token.span.end,
                 "Expected identifier for variable name",
-                "Use a valid identifier (letters, digits, _, or $$ - must start with letter, _ or $$)",
+                "Use a valid identifier (letters, digits, _, or $ - must start with letter, _ or $)",
             );
             return null;
         }
 
         const name = self.current_token.lexeme;
         const span = self.current_token.span;
+
+        if (!self.validateReservedWord(self.current_token, "as an identifier", "Choose a different identifier name")) {
+            return null;
+        }
+
         self.advance();
 
         const binding_id = ast.BindingIdentifier{
@@ -781,7 +797,7 @@ pub const Parser = struct {
         while (self.current_token.type != .RightBracket and self.current_token.type != .EOF) {
             // check for rest element
             if (self.current_token.type == .Spread) {
-                const rest_elem = self.parseRestElement() orelse return null;
+                const rest_elem = self.parseArrayRestElement() orelse return null;
                 self.append(&self.scratch_array_pattern_elements, rest_elem);
                 last_end = rest_elem.getSpan().end;
 
@@ -794,6 +810,7 @@ pub const Parser = struct {
                         "Rest element must be last in array pattern",
                         "Move the rest element to the end. Example: { a, b, ...rest } instead of { ...rest, a, b }",
                     );
+                    self.advance();
                     return null;
                 }
                 break;
@@ -854,7 +871,7 @@ pub const Parser = struct {
         return self.createNode(ast.ArrayPatternElement, elem);
     }
 
-    fn parseRestElement(self: *Parser) ?*ast.ArrayPatternElement {
+    fn parseArrayRestElement(self: *Parser) ?*ast.ArrayPatternElement {
         const spread_token = self.current_token;
         const start = spread_token.span.start;
 
@@ -905,6 +922,7 @@ pub const Parser = struct {
                         "Rest element must be last in object pattern",
                         "Move the rest element to the end. Example: { a, b, ...rest } instead of { ...rest, a, b }",
                     );
+                    self.advance();
                     return null;
                 }
                 break;
@@ -952,6 +970,9 @@ pub const Parser = struct {
         var key: *ast.PropertyKey = undefined;
         var key_span: token.Span = undefined;
 
+        // token of the key if it's an identifier, otherwise undefined. used for reserved word check
+        var identifier_key_token: token.Token = undefined;
+
         // check for computed property: [expression]
         if (self.current_token.type == .LeftBracket) {
             computed = true;
@@ -974,7 +995,9 @@ pub const Parser = struct {
 
             key_span.end = self.current_token.span.end;
             self.advance();
-        } else if (self.current_token.type == .Identifier) {
+        } else if (self.current_token.type.isIdentifierLike()) {
+            identifier_key_token = self.current_token;
+
             const span = self.current_token.span;
             const name = self.current_token.lexeme;
 
@@ -1031,6 +1054,10 @@ pub const Parser = struct {
                 else => return null,
             };
 
+            if (!self.validateReservedWord(identifier_key_token, "in shorthand property", self.formatMessage("Use the full form: {{ {s}: identifier }}", .{identifier_name.name}))) {
+                return null;
+            }
+
             const binding_id = ast.BindingIdentifier{
                 .name = identifier_name.name,
                 .span = key_span,
@@ -1053,6 +1080,7 @@ pub const Parser = struct {
                 );
                 return null;
             }
+
             self.advance();
             value = self.parseBindingPattern() orelse return null;
 
@@ -1083,6 +1111,18 @@ pub const Parser = struct {
         self.advance(); // consume '...'
 
         const argument = self.parseBindingPattern() orelse return null;
+
+        if (argument.* != .binding_identifier) {
+            const arg_span = argument.getSpan();
+            self.err(
+                arg_span.start,
+                arg_span.end,
+                "Object rest property must be an identifier",
+                "Object rest properties can only be simple identifiers, not array or object patterns",
+            );
+            return null;
+        }
+
         const end = argument.getSpan().end;
 
         const rest_elem = ast.BindingRestElement{
@@ -1148,6 +1188,30 @@ pub const Parser = struct {
             .assignment_pattern => |ap| self.isDestructuringPattern(ap.left),
             else => false,
         };
+    }
+
+    fn validateReservedWord(self: *Parser, tok: token.Token, comptime as_what: []const u8, help: []const u8) bool {
+        if (self.strict_mode and tok.type.isStrictModeReserved()) {
+            self.err(tok.span.start, tok.span.end, self.formatMessage("'{s}' is reserved in strict mode and cannot be used {s}", .{ tok.lexeme, as_what }), help);
+            return false;
+        }
+
+        if (tok.type == .Await and (self.in_async or self.source_type == .Module)) {
+            self.err(tok.span.start, tok.span.end, self.formatMessage("'await' is reserved {s} and cannot be used {s}", .{ if (self.in_async) "in async functions" else "at the top level of modules", as_what }), help);
+            return false;
+        }
+
+        if (tok.type == .Yield and (self.in_generator or self.source_type == .Module)) {
+            self.err(tok.span.start, tok.span.end, self.formatMessage("'yield' is reserved {s} and cannot be used {s}", .{ if (self.in_generator) "in generator functions" else "at the top level of modules", as_what }), help);
+            return false;
+        }
+
+        if (tok.type.isStrictReserved()) {
+            self.err(tok.span.start, tok.span.end, self.formatMessage("'{s}' is a reserved word and cannot be used {s}", .{ tok.lexeme, as_what }), help);
+            return false;
+        }
+
+        return true;
     }
 
     // utils
@@ -1217,6 +1281,8 @@ pub const Parser = struct {
     }
 
     fn synchronize(self: *Parser) void {
+        self.advance();
+
         while (self.current_token.type != .EOF) {
             if (self.current_token.type == .Semicolon) {
                 self.advance();

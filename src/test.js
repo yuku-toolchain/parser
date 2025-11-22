@@ -1,1 +1,1 @@
-hello = hello
+const {yie} = obj;
