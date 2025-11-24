@@ -64,8 +64,8 @@ fn parseArrayPattern(parser: *Parser) ?*ast.BindingPattern {
         return null;
     }
 
-    parser.clear(&parser.scratch_array_pattern_elements);
-    parser.ensureCapacity(&parser.scratch_array_pattern_elements, 4);
+    var elements = std.ArrayList(?*ast.ArrayPatternElement).empty;
+    parser.ensureCapacity(&elements, 4);
 
     var last_end = parser.current_token.span.start;
 
@@ -74,7 +74,7 @@ fn parseArrayPattern(parser: *Parser) ?*ast.BindingPattern {
         // check for rest element
         if (parser.current_token.type == .Spread) {
             const rest_elem = parseArrayRestElement(parser) orelse return null;
-            parser.append(&parser.scratch_array_pattern_elements, rest_elem);
+            parser.append(&elements, rest_elem);
             last_end = rest_elem.getSpan().end;
 
             // rest element must be last
@@ -95,12 +95,12 @@ fn parseArrayPattern(parser: *Parser) ?*ast.BindingPattern {
         // parse regular element or empty slot
         if (parser.current_token.type == .Comma) {
             // empty slot: [a, , b]
-            parser.append(&parser.scratch_array_pattern_elements, null);
+            parser.append(&elements, null);
             last_end = parser.current_token.span.end;
             parser.advance();
         } else {
             const elem = parseArrayPatternElement(parser) orelse return null;
-            parser.append(&parser.scratch_array_pattern_elements, elem);
+            parser.append(&elements, elem);
             last_end = elem.getSpan().end;
 
             if (parser.current_token.type == .Comma) {
@@ -127,7 +127,7 @@ fn parseArrayPattern(parser: *Parser) ?*ast.BindingPattern {
     };
 
     const array_pattern = ast.ArrayPattern{
-        .elements = parser.dupe(?*ast.ArrayPatternElement, parser.scratch_array_pattern_elements.items),
+        .elements = parser.dupe(?*ast.ArrayPatternElement, elements.items),
         .span = .{ .start = start, .end = end },
     };
 
@@ -176,8 +176,8 @@ fn parseObjectPattern(parser: *Parser) ?*ast.BindingPattern {
         return null;
     }
 
-    parser.clear(&parser.scratch_object_pattern_properties);
-    parser.ensureCapacity(&parser.scratch_object_pattern_properties, 4);
+    var properties = std.ArrayList(*ast.ObjectPatternProperty).empty;
+    parser.ensureCapacity(&properties, 4);
 
     var last_end = parser.current_token.span.start;
 
@@ -186,7 +186,7 @@ fn parseObjectPattern(parser: *Parser) ?*ast.BindingPattern {
         // check for rest element
         if (parser.current_token.type == .Spread) {
             const rest_prop = parseObjectRestElement(parser) orelse return null;
-            parser.append(&parser.scratch_object_pattern_properties, rest_prop);
+            parser.append(&properties, rest_prop);
             last_end = rest_prop.getSpan().end;
 
             // rest element must be last
@@ -206,7 +206,7 @@ fn parseObjectPattern(parser: *Parser) ?*ast.BindingPattern {
 
         // parse regular property
         const prop = parseObjectPatternProperty(parser) orelse return null;
-        parser.append(&parser.scratch_object_pattern_properties, prop);
+        parser.append(&properties, prop);
         last_end = prop.getSpan().end;
 
         if (parser.current_token.type == .Comma) {
@@ -232,7 +232,7 @@ fn parseObjectPattern(parser: *Parser) ?*ast.BindingPattern {
     };
 
     const object_pattern = ast.ObjectPattern{
-        .properties = parser.dupe(*ast.ObjectPatternProperty, parser.scratch_object_pattern_properties.items),
+        .properties = parser.dupe(*ast.ObjectPatternProperty, properties.items),
         .span = .{ .start = start, .end = end },
     };
 

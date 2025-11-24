@@ -13,7 +13,7 @@ pub fn main() !void {
 
     const start = std.time.nanoTimestamp();
 
-    _ = try parser.parse();
+    const result = try parser.parse();
 
     const end = std.time.nanoTimestamp();
 
@@ -21,7 +21,7 @@ pub fn main() !void {
     const time_ns_float = @as(f64, @floatFromInt(time_ns));
     const time_ms = time_ns_float / 1_00_00_00.0;
 
-    // std.log.info("\n\n{f}\n\n", .{std.json.fmt(result, .{ .whitespace = .indent_2 })});
+    std.log.info("\n\n{f}\n\n", .{std.json.fmt(result, .{ .whitespace = .indent_2 })});
 
     std.debug.print("{d:.2}ms\n", .{time_ms});
 }

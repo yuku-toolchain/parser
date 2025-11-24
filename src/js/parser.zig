@@ -36,12 +36,6 @@ pub const Parser = struct {
 
     current_token: token.Token,
 
-    scratch_declarators: std.ArrayList(*ast.VariableDeclarator),
-    scratch_expressions: std.ArrayList(*ast.Expression),
-    scratch_template_elements: std.ArrayList(*ast.TemplateElement),
-    scratch_array_pattern_elements: std.ArrayList(?*ast.ArrayPatternElement),
-    scratch_object_pattern_properties: std.ArrayList(*ast.ObjectPatternProperty),
-
     in_async: bool = false,
     in_generator: bool = false,
     in_function: bool = false,
@@ -61,12 +55,6 @@ pub const Parser = struct {
             .current_token = undefined,
 
             .errors = std.ArrayList(Error).empty,
-
-            .scratch_declarators = .empty,
-            .scratch_expressions = .empty,
-            .scratch_template_elements = .empty,
-            .scratch_array_pattern_elements = .empty,
-            .scratch_object_pattern_properties = .empty,
         };
     }
 
@@ -274,11 +262,6 @@ pub const Parser = struct {
 
     pub inline fn append(self: *Parser, list: anytype, item: anytype) void {
         list.append(self.allocator, item) catch unreachable;
-    }
-
-    pub inline fn clear(self: *Parser, list: anytype) void {
-        _ = self;
-        list.items.len = 0;
     }
 
     pub inline fn dupe(self: *Parser, comptime T: type, items: []const T) []T {

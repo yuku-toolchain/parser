@@ -1005,21 +1005,10 @@
                       {
                         "binding_pattern": {
                           "binding_identifier": {
-                            "name": "d",
+                            "name": "a",
                             "span": {
-                              "start": 226,
-                              "end": 227
-                            }
-                          }
-                        }
-                      },
-                      {
-                        "binding_pattern": {
-                          "binding_identifier": {
-                            "name": "e",
-                            "span": {
-                              "start": 229,
-                              "end": 230
+                              "start": 215,
+                              "end": 216
                             }
                           }
                         }
@@ -1157,36 +1146,6 @@
                 "id": {
                   "object_pattern": {
                     "properties": [
-                      {
-                        "binding_property": {
-                          "kind": "init",
-                          "key": {
-                            "identifier_name": {
-                              "name": "c",
-                              "span": {
-                                "start": 253,
-                                "end": 254
-                              }
-                            }
-                          },
-                          "value": {
-                            "binding_identifier": {
-                              "name": "c",
-                              "span": {
-                                "start": 253,
-                                "end": 254
-                              }
-                            }
-                          },
-                          "method": false,
-                          "shorthand": true,
-                          "computed": false,
-                          "span": {
-                            "start": 253,
-                            "end": 254
-                          }
-                        }
-                      },
                       {
                         "binding_property": {
                           "kind": "init",
@@ -1341,22 +1300,34 @@
                     "elements": [
                       {
                         "binding_pattern": {
-                          "binding_identifier": {
-                            "name": "c",
+                          "array_pattern": {
+                            "elements": [
+                              {
+                                "binding_pattern": {
+                                  "binding_identifier": {
+                                    "name": "a",
+                                    "span": {
+                                      "start": 275,
+                                      "end": 276
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "binding_pattern": {
+                                  "binding_identifier": {
+                                    "name": "b",
+                                    "span": {
+                                      "start": 278,
+                                      "end": 279
+                                    }
+                                  }
+                                }
+                              }
+                            ],
                             "span": {
-                              "start": 283,
-                              "end": 284
-                            }
-                          }
-                        }
-                      },
-                      {
-                        "binding_pattern": {
-                          "binding_identifier": {
-                            "name": "d",
-                            "span": {
-                              "start": 286,
-                              "end": 287
+                              "start": 274,
+                              "end": 280
                             }
                           }
                         }
@@ -1438,10 +1409,10 @@
                           "kind": "init",
                           "key": {
                             "identifier_name": {
-                              "name": "c",
+                              "name": "a",
                               "span": {
-                                "start": 312,
-                                "end": 313
+                                "start": 301,
+                                "end": 302
                               }
                             }
                           },
@@ -1449,26 +1420,26 @@
                             "assignment_pattern": {
                               "left": {
                                 "binding_identifier": {
-                                  "name": "c",
+                                  "name": "a",
                                   "span": {
-                                    "start": 312,
-                                    "end": 313
+                                    "start": 301,
+                                    "end": 302
                                   }
                                 }
                               },
                               "right": {
                                 "numeric_literal": {
-                                  "value": 2,
-                                  "raw": "2",
+                                  "value": 1,
+                                  "raw": "1",
                                   "span": {
-                                    "start": 316,
-                                    "end": 317
+                                    "start": 305,
+                                    "end": 306
                                   }
                                 }
                               },
                               "span": {
-                                "start": 312,
-                                "end": 317
+                                "start": 301,
+                                "end": 306
                               }
                             }
                           },
@@ -1476,8 +1447,8 @@
                           "shorthand": true,
                           "computed": false,
                           "span": {
-                            "start": 312,
-                            "end": 317
+                            "start": 301,
+                            "end": 306
                           }
                         }
                       },

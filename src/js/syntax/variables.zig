@@ -10,12 +10,12 @@ pub fn parseVariableDeclaration(parser: *Parser) ?*ast.Statement {
     const start = parser.current_token.span.start;
     const kind = parseVariableDeclarationKind(parser) orelse return null;
 
-    parser.clear(&parser.scratch_declarators);
-    parser.ensureCapacity(&parser.scratch_declarators, 4);
+    var declarators = std.ArrayList(*ast.VariableDeclarator).empty;
+    parser.ensureCapacity(&declarators, 4);
 
     // parse first declarator
     const first_decl = parseVariableDeclarator(parser, kind) orelse return null;
-    parser.append(&parser.scratch_declarators, first_decl);
+    parser.append(&declarators, first_decl);
 
     var end = first_decl.span.end;
 
@@ -24,12 +24,12 @@ pub fn parseVariableDeclaration(parser: *Parser) ?*ast.Statement {
         parser.advance();
         const decl = parseVariableDeclarator(parser, kind) orelse return null;
         end = decl.span.end;
-        parser.append(&parser.scratch_declarators, decl);
+        parser.append(&declarators, decl);
     }
 
     end = parser.eatSemi(end);
 
-    const declarations = parser.dupe(*ast.VariableDeclarator, parser.scratch_declarators.items);
+    const declarations = parser.dupe(*ast.VariableDeclarator, declarators.items);
 
     const var_decl = ast.VariableDeclaration{
         .kind = kind,

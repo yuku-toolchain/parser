@@ -170,24 +170,13 @@
                 "quasis": [
                   {
                     "value": {
-                      "raw": "inner ",
-                      "cooked": "inner "
+                      "raw": "nested ",
+                      "cooked": "nested "
                     },
                     "tail": false,
                     "span": {
-                      "start": 84,
-                      "end": 90
-                    }
-                  },
-                  {
-                    "value": {
-                      "raw": "",
-                      "cooked": ""
-                    },
-                    "tail": true,
-                    "span": {
-                      "start": 94,
-                      "end": 94
+                      "start": 74,
+                      "end": 81
                     }
                   },
                   {
@@ -203,15 +192,6 @@
                   }
                 ],
                 "expressions": [
-                  {
-                    "identifier_reference": {
-                      "name": "y",
-                      "span": {
-                        "start": 92,
-                        "end": 93
-                      }
-                    }
-                  },
                   {
                     "template_literal": {
                       "quasis": [

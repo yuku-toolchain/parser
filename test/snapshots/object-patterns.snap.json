@@ -922,36 +922,6 @@
                           "kind": "init",
                           "key": {
                             "identifier_name": {
-                              "name": "b",
-                              "span": {
-                                "start": 215,
-                                "end": 216
-                              }
-                            }
-                          },
-                          "value": {
-                            "binding_identifier": {
-                              "name": "b",
-                              "span": {
-                                "start": 215,
-                                "end": 216
-                              }
-                            }
-                          },
-                          "method": false,
-                          "shorthand": true,
-                          "computed": false,
-                          "span": {
-                            "start": 215,
-                            "end": 216
-                          }
-                        }
-                      },
-                      {
-                        "binding_property": {
-                          "kind": "init",
-                          "key": {
-                            "identifier_name": {
                               "name": "a",
                               "span": {
                                 "start": 211,
@@ -1046,36 +1016,6 @@
                 "id": {
                   "object_pattern": {
                     "properties": [
-                      {
-                        "binding_property": {
-                          "kind": "init",
-                          "key": {
-                            "identifier_name": {
-                              "name": "b",
-                              "span": {
-                                "start": 234,
-                                "end": 235
-                              }
-                            }
-                          },
-                          "value": {
-                            "binding_identifier": {
-                              "name": "c",
-                              "span": {
-                                "start": 237,
-                                "end": 238
-                              }
-                            }
-                          },
-                          "method": false,
-                          "shorthand": false,
-                          "computed": false,
-                          "span": {
-                            "start": 234,
-                            "end": 238
-                          }
-                        }
-                      },
                       {
                         "binding_property": {
                           "kind": "init",
@@ -1180,19 +1120,19 @@
                           "kind": "init",
                           "key": {
                             "identifier_name": {
-                              "name": "c",
+                              "name": "a",
                               "span": {
-                                "start": 259,
-                                "end": 260
+                                "start": 252,
+                                "end": 253
                               }
                             }
                           },
                           "value": {
                             "binding_identifier": {
-                              "name": "c",
+                              "name": "a",
                               "span": {
-                                "start": 259,
-                                "end": 260
+                                "start": 252,
+                                "end": 253
                               }
                             }
                           },
@@ -1200,38 +1140,8 @@
                           "shorthand": true,
                           "computed": false,
                           "span": {
-                            "start": 259,
-                            "end": 260
-                          }
-                        }
-                      },
-                      {
-                        "binding_property": {
-                          "kind": "init",
-                          "key": {
-                            "identifier_name": {
-                              "name": "d",
-                              "span": {
-                                "start": 262,
-                                "end": 263
-                              }
-                            }
-                          },
-                          "value": {
-                            "binding_identifier": {
-                              "name": "d",
-                              "span": {
-                                "start": 262,
-                                "end": 263
-                              }
-                            }
-                          },
-                          "method": false,
-                          "shorthand": true,
-                          "computed": false,
-                          "span": {
-                            "start": 262,
-                            "end": 263
+                            "start": 252,
+                            "end": 253
                           }
                         }
                       },

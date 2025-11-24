@@ -552,17 +552,6 @@
                     "elements": [
                       {
                         "binding_pattern": {
-                          "binding_identifier": {
-                            "name": "a",
-                            "span": {
-                              "start": 179,
-                              "end": 180
-                            }
-                          }
-                        }
-                      },
-                      {
-                        "binding_pattern": {
                           "array_pattern": {
                             "elements": [
                               {
@@ -622,28 +611,6 @@
                 "id": {
                   "array_pattern": {
                     "elements": [
-                      {
-                        "binding_pattern": {
-                          "binding_identifier": {
-                            "name": "a",
-                            "span": {
-                              "start": 195,
-                              "end": 196
-                            }
-                          }
-                        }
-                      },
-                      {
-                        "binding_pattern": {
-                          "binding_identifier": {
-                            "name": "b",
-                            "span": {
-                              "start": 198,
-                              "end": 199
-                            }
-                          }
-                        }
-                      },
                       {
                         "binding_pattern": {
                           "array_pattern": {
@@ -730,21 +697,10 @@
                       {
                         "binding_pattern": {
                           "binding_identifier": {
-                            "name": "b",
+                            "name": "a",
                             "span": {
-                              "start": 220,
-                              "end": 221
-                            }
-                          }
-                        }
-                      },
-                      {
-                        "binding_pattern": {
-                          "binding_identifier": {
-                            "name": "c",
-                            "span": {
-                              "start": 223,
-                              "end": 224
+                              "start": 216,
+                              "end": 217
                             }
                           }
                         }
@@ -1062,35 +1018,6 @@
                 "id": {
                   "array_pattern": {
                     "elements": [
-                      {
-                        "binding_pattern": {
-                          "assignment_pattern": {
-                            "left": {
-                              "binding_identifier": {
-                                "name": "a",
-                                "span": {
-                                  "start": 303,
-                                  "end": 304
-                                }
-                              }
-                            },
-                            "right": {
-                              "numeric_literal": {
-                                "value": 1,
-                                "raw": "1",
-                                "span": {
-                                  "start": 307,
-                                  "end": 308
-                                }
-                              }
-                            },
-                            "span": {
-                              "start": 303,
-                              "end": 308
-                            }
-                          }
-                        }
-                      },
                       {
                         "binding_pattern": {
                           "array_pattern": {

@@ -135,15 +135,15 @@ pub fn parseNoSubstitutionTemplateLiteral(parser: *Parser) ?*ast.Expression {
 pub fn parseTemplateLiteral(parser: *Parser) ?*ast.Expression {
     const template_literal_start = parser.current_token.span.start;
 
-    parser.clear(&parser.scratch_template_elements);
-    parser.clear(&parser.scratch_expressions);
-    parser.ensureCapacity(&parser.scratch_template_elements, 4);
-    parser.ensureCapacity(&parser.scratch_expressions, 4);
+    var template_elements = std.ArrayList(*ast.TemplateElement).empty;
+    var template_expressions = std.ArrayList(*ast.Expression).empty;
+    parser.ensureCapacity(&template_elements, 4);
+    parser.ensureCapacity(&template_expressions, 4);
 
     // parse head element
     const head_token = parser.current_token;
 
-    parser.append(&parser.scratch_template_elements, createTemplateElement(parser, head_token, false));
+    parser.append(&template_elements, createTemplateElement(parser, head_token, false));
     parser.advance();
 
     var template_literal_end: u32 = undefined;
@@ -152,14 +152,14 @@ pub fn parseTemplateLiteral(parser: *Parser) ?*ast.Expression {
     while (true) {
         const expr_start = parser.current_token.span.start;
         const expr = expressions.parseExpression(parser, 0) orelse return null;
-        parser.append(&parser.scratch_expressions, expr);
+        parser.append(&template_expressions, expr);
 
         const template_token = parser.current_token;
         const is_tail = template_token.type == .TemplateTail;
 
         switch (template_token.type) {
             .TemplateMiddle, .TemplateTail => {
-                parser.append(&parser.scratch_template_elements, createTemplateElement(parser, template_token, is_tail));
+                parser.append(&template_elements, createTemplateElement(parser, template_token, is_tail));
 
                 if (is_tail) {
                     template_literal_end = template_token.span.end;
@@ -182,8 +182,8 @@ pub fn parseTemplateLiteral(parser: *Parser) ?*ast.Expression {
     }
 
     const template_literal = ast.TemplateLiteral{
-        .quasis = parser.dupe(*ast.TemplateElement, parser.scratch_template_elements.items),
-        .expressions = parser.dupe(*ast.Expression, parser.scratch_expressions.items),
+        .quasis = parser.dupe(*ast.TemplateElement, template_elements.items),
+        .expressions = parser.dupe(*ast.Expression, template_expressions.items),
         .span = .{ .start = template_literal_start, .end = template_literal_end },
     };
 
