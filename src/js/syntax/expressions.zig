@@ -97,6 +97,15 @@ fn parseUnaryExpression(parser: *Parser) ?*ast.Expression {
 
     const argument = parseExpression(parser, 14) orelse return null;
 
+    // https://tc39.es/ecma262/#sec-delete-operator-static-semantics-early-errors
+    // TODO: uncomment it when we implement MemberExpression
+    // TODO: also add parentheses check when we implement ParenthesizedExpression, recursively check for member-expression inside parentheses, for example
+    // delete (((foo))) is also an early error
+    // if (parser.strict_mode and operator == .Delete and argument.* != .member_expression) {
+    //     const argument_span = argument.getSpan();
+    //     parser.err(argument_span.start, argument_span.end, "Delete of an unqualified identifier in strict mode", "In strict mode, 'delete' can only be applied to property references, not to variable references");
+    // }
+
     const unary_expression = ast.UnaryExpression{
         .span = .{
             .start = start,
