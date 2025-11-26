@@ -103,7 +103,12 @@ pub const Parser = struct {
                     break :blk variables.parseVariableDeclaration(self);
                 }
 
-                self.err(await_token.span.start, await_token.span.end, "Expected 'using' after 'await'", null);
+                self.err(
+                    await_token.span.start,
+                    await_token.span.end,
+                    "'await' is only valid at the start of an 'await using' declaration or inside async functions",
+                    "If you intended to declare a disposable resource, use 'await using'. Otherwise, 'await' can only appear inside an async function.",
+                );
                 break :blk null;
             },
 

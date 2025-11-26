@@ -76,11 +76,29 @@ fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) ?ast.NodeInd
         }
     } else if (patterns.isDestructuringPattern(parser, id)) {
         // destructuring always requires initializer
-        parser.err(parser.getSpan(id).start, parser.getSpan(id).end, "Destructuring requires initializer", null);
+        parser.err(
+            parser.getSpan(id).start,
+            parser.getSpan(id).end,
+            "Destructuring declaration must have an initializer",
+            "Add '= value' to provide the object or array to destructure from.",
+        );
         return null;
-    } else if (kind == .Const or kind == .Using or kind == .AwaitUsing) {
-        // const/using/await using always require initializer
-        parser.err(parser.getSpan(id).start, parser.getSpan(id).end, parser.formatMessage("{s} requires initializer", .{@tagName(kind)}), null);
+    } else if (kind == .Const) {
+        parser.err(
+            parser.getSpan(id).start,
+            parser.getSpan(id).end,
+            "'const' declarations must be initialized",
+            "Add '= value' to initialize the constant, or use 'let' if you need to assign it later.",
+        );
+        return null;
+    } else if (kind == .Using or kind == .AwaitUsing) {
+        const keyword = if (kind == .Using) "using" else "await using";
+        parser.err(
+            parser.getSpan(id).start,
+            parser.getSpan(id).end,
+            parser.formatMessage("'{s}' declarations must be initialized", .{keyword}),
+            "Disposable resources require an initial value that implements the dispose protocol.",
+        );
         return null;
     }
 

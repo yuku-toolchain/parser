@@ -35,7 +35,12 @@ fn parseInfix(parser: *Parser, precedence: u5, left: ast.NodeIndex) ?ast.NodeInd
         return parseAssignmentExpression(parser, precedence, left);
     }
 
-    parser.err(current.span.start, current.span.end, parser.formatMessage("Unexpected token '{s}'", .{current.lexeme}), null);
+    parser.err(
+        current.span.start,
+        current.span.end,
+        parser.formatMessage("Unexpected token '{s}' in expression", .{current.lexeme}),
+        "This token cannot be used here. Expected an operator, semicolon, or end of expression.",
+    );
     return null;
 }
 
@@ -66,7 +71,22 @@ fn parsePrimaryExpression(parser: *Parser) ?ast.NodeIndex {
         .LeftBracket => parseArrayExpression(parser),
         .LeftBrace => parseObjectExpression(parser),
         else => {
-            parser.err(parser.current_token.span.start, parser.current_token.span.end, "Unexpected token", null);
+            const tok = parser.current_token;
+            if (tok.type == .EOF) {
+                parser.err(
+                    tok.span.start,
+                    tok.span.end,
+                    "Unexpected end of input while parsing expression",
+                    "The parser reached the end of the file but expected an expression. Check for missing values or unclosed brackets.",
+                );
+            } else {
+                parser.err(
+                    tok.span.start,
+                    tok.span.end,
+                    parser.formatMessage("Unexpected token '{s}'", .{tok.lexeme}),
+                    "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+                );
+            }
             return null;
         },
     };
@@ -100,7 +120,12 @@ fn parseUpdateExpression(parser: *Parser, prefix: bool, left: ast.NodeIndex) ?as
         const span = parser.getSpan(argument);
 
         if (!isValidAssignmentTarget(parser, argument)) {
-            parser.err(span.start, span.end, "Invalid operand", null);
+            parser.err(
+                span.start,
+                span.end,
+                "Invalid operand for increment/decrement operator",
+                "The '++' and '--' operators require a variable or property reference, not a literal or complex expression.",
+            );
             return null;
         }
 
@@ -112,7 +137,12 @@ fn parseUpdateExpression(parser: *Parser, prefix: bool, left: ast.NodeIndex) ?as
 
     if (!isValidAssignmentTarget(parser, left)) {
         const span = parser.getSpan(left);
-        parser.err(span.start, span.end, "Invalid operand", null);
+        parser.err(
+            span.start,
+            span.end,
+            "Invalid operand for increment/decrement operator",
+            "The '++' and '--' operators require a variable or property reference, not a literal or complex expression.",
+        );
         return null;
     }
 
@@ -162,14 +192,24 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u5, left: ast.NodeInde
 
     // validate that left side can be assigned to
     if (!isValidAssignmentTarget(parser, left)) {
-        parser.err(left_span.start, left_span.end, "Invalid assignment target", null);
+        parser.err(
+            left_span.start,
+            left_span.end,
+            "Invalid left-hand side in assignment",
+            "The left side of an assignment must be a variable, property access, or destructuring pattern.",
+        );
         return null;
     }
 
     // logical assignments (&&=, ||=, ??=) require simple targets
     const is_logical = operator == .LogicalAndAssign or operator == .LogicalOrAssign or operator == .NullishAssign;
     if (is_logical and !isSimpleAssignmentTarget(parser, left)) {
-        parser.err(left_span.start, left_span.end, "Invalid logical assignment target", null);
+        parser.err(
+            left_span.start,
+            left_span.end,
+            "Invalid left-hand side in logical assignment",
+            "Logical assignment operators (&&=, ||=, ??=) require a simple reference like a variable or property, not a destructuring pattern.",
+        );
         return null;
     }
 
@@ -215,7 +255,12 @@ fn parseArrayExpression(parser: *Parser) ?ast.NodeIndex {
     }
 
     if (parser.current_token.type != .RightBracket) {
-        parser.err(start, parser.current_token.span.end, "Expected ']'", null);
+        parser.err(
+            start,
+            parser.current_token.span.end,
+            "Unclosed array literal",
+            "Add a closing bracket ']' to complete the array, or check for missing commas between elements.",
+        );
         parser.scratch_a.reset(checkpoint);
         return null;
     }
@@ -259,7 +304,12 @@ fn parseObjectExpression(parser: *Parser) ?ast.NodeIndex {
     }
 
     if (parser.current_token.type != .RightBrace) {
-        parser.err(start, parser.current_token.span.end, "Expected '}'", null);
+        parser.err(
+            start,
+            parser.current_token.span.end,
+            "Unclosed object literal",
+            "Add a closing brace '}' to complete the object, or check for missing commas between properties.",
+        );
         parser.scratch_a.reset(checkpoint);
         return null;
     }
@@ -286,7 +336,12 @@ fn parseObjectProperty(parser: *Parser) ?ast.NodeIndex {
         key = parseExpression(parser, 0) orelse return null;
 
         if (parser.current_token.type != .RightBracket) {
-            parser.err(start, parser.current_token.span.end, "Expected ']'", null);
+            parser.err(
+                start,
+                parser.current_token.span.end,
+                "Unclosed computed property name",
+                "Add a closing bracket ']' after the expression used as the property name.",
+            );
             return null;
         }
         parser.advance();
@@ -307,7 +362,12 @@ fn parseObjectProperty(parser: *Parser) ?ast.NodeIndex {
     } else if (parser.current_token.type == .StringLiteral) {
         key = literals.parseStringLiteral(parser) orelse return null;
     } else {
-        parser.err(parser.current_token.span.start, parser.current_token.span.end, "Expected property key", null);
+        parser.err(
+            parser.current_token.span.start,
+            parser.current_token.span.end,
+            parser.formatMessage("Unexpected token '{s}' in object literal", .{parser.current_token.lexeme}),
+            "Object properties must start with an identifier, string, number, or computed property name ([expr]).",
+        );
         return null;
     }
 
@@ -330,7 +390,12 @@ fn parseObjectProperty(parser: *Parser) ?ast.NodeIndex {
         );
     } else {
         if (parser.current_token.type != .Colon) {
-            parser.err(parser.getSpan(key).start, parser.current_token.span.end, "Expected ':'", null);
+            parser.err(
+                parser.getSpan(key).start,
+                parser.current_token.span.end,
+                "Missing colon after property name in object literal",
+                "Use 'key: value' syntax for object properties, or just 'key' for shorthand when the variable has the same name.",
+            );
             return null;
         }
         parser.advance();

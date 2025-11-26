@@ -298,7 +298,7 @@ pub const NodeList = struct {
         const estimated_nodes = @max(256, source_len / 2);
         const estimated_extra = estimated_nodes / 3;
 
-        var nodes = std.MultiArrayList(Node);
+        var nodes: std.MultiArrayList(Node) = .empty;
         nodes.ensureTotalCapacity(allocator, estimated_nodes) catch unreachable;
 
         return .{
