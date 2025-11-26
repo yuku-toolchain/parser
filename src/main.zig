@@ -60,13 +60,3 @@ pub fn main() !void {
 
 const iterations = 10;
 const ns_to_ms = 1_000_000.0;
-
-fn formatNumber(num: f64) void {
-    if (num >= 1_000_000.0) {
-        std.debug.print("{d:.2}M", .{num / 1_000_000.0});
-    } else if (num >= 1_000.0) {
-        std.debug.print("{d:.2}K", .{num / 1_000.0});
-    } else {
-        std.debug.print("{d:.0}", .{num});
-    }
-}

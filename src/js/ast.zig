@@ -8,6 +8,7 @@ pub const Span = token.Span;
 pub const IndexRange = struct {
     start: u32,
     len: u32,
+
     pub const empty: IndexRange = .{ .start = 0, .len = 0 };
 };
 
@@ -90,37 +91,164 @@ pub const PropertyKind = enum(u8) {
     Set,
 };
 
-pub const BinaryExpression = struct { left: NodeIndex, right: NodeIndex, operator: BinaryOperator };
-pub const LogicalExpression = struct { left: NodeIndex, right: NodeIndex, operator: LogicalOperator };
-pub const UnaryExpression = struct { argument: NodeIndex, operator: UnaryOperator };
-pub const UpdateExpression = struct { argument: NodeIndex, operator: UpdateOperator, prefix: bool };
-pub const AssignmentExpression = struct { left: NodeIndex, right: NodeIndex, operator: AssignmentOperator };
-pub const VariableDeclaration = struct { declarators: IndexRange, kind: VariableKind };
-pub const VariableDeclarator = struct { id: NodeIndex, init: NodeIndex };
-pub const ExpressionStatement = struct { expression: NodeIndex };
-pub const StringLiteral = struct { raw_start: u32, raw_len: u16 };
-pub const NumericLiteral = struct { value: f64 };
-pub const BigIntLiteral = struct { raw_start: u32, raw_len: u16 };
-pub const BooleanLiteral = struct { value: bool };
-pub const RegExpLiteral = struct { pattern_start: u32, pattern_len: u16, flags_start: u32, flags_len: u8 };
-pub const TemplateLiteral = struct { quasis: IndexRange, expressions: IndexRange };
-pub const TemplateElement = struct { raw_start: u32, raw_len: u16, tail: bool };
-pub const Identifier = struct { name_start: u32, name_len: u16 };
-pub const PrivateIdentifier = struct { name_start: u32, name_len: u16 };
-pub const BindingIdentifier = struct { name_start: u32, name_len: u16 };
-pub const IdentifierName = struct { name_start: u32, name_len: u16 };
-pub const AssignmentPattern = struct { left: NodeIndex, right: NodeIndex };
-pub const RestElement = struct { argument: NodeIndex };
-pub const ArrayPattern = struct { elements: IndexRange };
-pub const ObjectPattern = struct { properties: IndexRange };
-pub const BindingProperty = struct { key: NodeIndex, value: NodeIndex, shorthand: bool, computed: bool };
-pub const ArrayExpression = struct { elements: IndexRange };
-pub const ObjectExpression = struct { properties: IndexRange };
-pub const SpreadElement = struct { argument: NodeIndex };
-pub const ObjectProperty = struct { key: NodeIndex, value: NodeIndex, kind: PropertyKind, shorthand: bool, computed: bool };
-pub const Program = struct { body: IndexRange, source_type: SourceType };
-pub const SourceType = enum(u8) { Script, Module };
-pub const Directive = struct { expression: NodeIndex, value_start: u32, value_len: u16 };
+pub const BinaryExpression = struct {
+    left: NodeIndex,
+    right: NodeIndex,
+    operator: BinaryOperator,
+};
+
+pub const LogicalExpression = struct {
+    left: NodeIndex,
+    right: NodeIndex,
+    operator: LogicalOperator,
+};
+
+pub const UnaryExpression = struct {
+    argument: NodeIndex,
+    operator: UnaryOperator,
+};
+
+pub const UpdateExpression = struct {
+    argument: NodeIndex,
+    operator: UpdateOperator,
+    prefix: bool,
+};
+
+pub const AssignmentExpression = struct {
+    left: NodeIndex,
+    right: NodeIndex,
+    operator: AssignmentOperator,
+};
+
+pub const VariableDeclaration = struct {
+    declarators: IndexRange,
+    kind: VariableKind,
+};
+
+pub const VariableDeclarator = struct {
+    id: NodeIndex,
+    init: NodeIndex,
+};
+
+pub const ExpressionStatement = struct {
+    expression: NodeIndex,
+};
+
+pub const StringLiteral = struct {
+    raw_start: u32,
+    raw_len: u16,
+};
+
+pub const NumericLiteral = struct {
+    value: f64,
+};
+
+pub const BigIntLiteral = struct {
+    raw_start: u32,
+    raw_len: u16,
+};
+
+pub const BooleanLiteral = struct {
+    value: bool,
+};
+
+pub const RegExpLiteral = struct {
+    pattern_start: u32,
+    pattern_len: u16,
+    flags_start: u32,
+    flags_len: u8,
+};
+
+pub const TemplateLiteral = struct {
+    quasis: IndexRange,
+    expressions: IndexRange,
+};
+
+pub const TemplateElement = struct {
+    raw_start: u32,
+    raw_len: u16,
+    tail: bool,
+};
+
+pub const Identifier = struct {
+    name_start: u32,
+    name_len: u16,
+};
+
+pub const PrivateIdentifier = struct {
+    name_start: u32,
+    name_len: u16,
+};
+
+pub const BindingIdentifier = struct {
+    name_start: u32,
+    name_len: u16,
+};
+
+pub const IdentifierName = struct {
+    name_start: u32,
+    name_len: u16,
+};
+
+pub const AssignmentPattern = struct {
+    left: NodeIndex,
+    right: NodeIndex,
+};
+
+pub const RestElement = struct {
+    argument: NodeIndex,
+};
+
+pub const ArrayPattern = struct {
+    elements: IndexRange,
+};
+
+pub const ObjectPattern = struct {
+    properties: IndexRange,
+};
+
+pub const BindingProperty = struct {
+    key: NodeIndex,
+    value: NodeIndex,
+    shorthand: bool,
+    computed: bool,
+};
+
+pub const ArrayExpression = struct {
+    elements: IndexRange,
+};
+
+pub const ObjectExpression = struct {
+    properties: IndexRange,
+};
+
+pub const SpreadElement = struct {
+    argument: NodeIndex,
+};
+
+pub const ObjectProperty = struct {
+    key: NodeIndex,
+    value: NodeIndex,
+    kind: PropertyKind,
+    shorthand: bool,
+    computed: bool,
+};
+
+pub const Program = struct {
+    body: IndexRange,
+    source_type: SourceType,
+};
+
+pub const SourceType = enum(u8) {
+    Script,
+    Module,
+};
+
+pub const Directive = struct {
+    expression: NodeIndex,
+    value_start: u32,
+    value_len: u16,
+};
 
 pub const NodeData = union(enum) {
     binary_expression: BinaryExpression,
