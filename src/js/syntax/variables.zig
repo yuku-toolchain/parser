@@ -12,7 +12,7 @@ pub fn parseVariableDeclaration(parser: *Parser) ?ast.NodeIndex {
     const checkpoint = parser.scratch_a.begin();
 
     const first_declarator = parseVariableDeclarator(parser, kind) orelse {
-        parser.scratch_a.rollback(checkpoint);
+        parser.scratch_a.reset(checkpoint);
         return null;
     };
     parser.scratch_a.append(first_declarator);
@@ -22,26 +22,22 @@ pub fn parseVariableDeclaration(parser: *Parser) ?ast.NodeIndex {
     while (parser.current_token.type == .Comma) {
         parser.advance();
         const declarator = parseVariableDeclarator(parser, kind) orelse {
-            parser.scratch_a.rollback(checkpoint);
+            parser.scratch_a.reset(checkpoint);
             return null;
         };
         parser.scratch_a.append(declarator);
         end = parser.getSpan(declarator).end;
     }
 
-    const declarators = parser.scratch_a.commit(checkpoint);
-    const result = parser.addNode(
+    return parser.addNode(
         .{
             .variable_declaration = .{
-                .declarators = parser.addExtra(declarators),
+                .declarators = parser.addExtra(parser.scratch_a.take(checkpoint)),
                 .kind = kind,
             },
         },
         .{ .start = start, .end = parser.eatSemicolon(end) },
     );
-
-    parser.scratch_a.rollback(checkpoint);
-    return result;
 }
 
 inline fn parseVariableKind(parser: *Parser) ?ast.VariableKind {

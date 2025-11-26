@@ -56,7 +56,7 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
         // rest element: ...rest
         if (parser.current_token.type == .Spread) {
             const rest = parseRestElement(parser) orelse {
-                parser.scratch_a.rollback(checkpoint);
+                parser.scratch_a.reset(checkpoint);
                 return null;
             };
             parser.scratch_a.append(rest);
@@ -64,7 +64,7 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
             // rest must be last element
             if (parser.current_token.type == .Comma) {
                 parser.err(parser.getSpan(rest).start, parser.current_token.span.end, "Rest must be last", null);
-                parser.scratch_a.rollback(checkpoint);
+                parser.scratch_a.reset(checkpoint);
                 return null;
             }
             break;
@@ -76,7 +76,7 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
             parser.advance();
         } else {
             const element = parseArrayPatternElement(parser) orelse {
-                parser.scratch_a.rollback(checkpoint);
+                parser.scratch_a.reset(checkpoint);
                 return null;
             };
             parser.scratch_a.append(element);
@@ -87,21 +87,17 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
 
     if (parser.current_token.type != .RightBracket) {
         parser.err(start, parser.current_token.span.end, "Expected ']'", null);
-        parser.scratch_a.rollback(checkpoint);
+        parser.scratch_a.reset(checkpoint);
         return null;
     }
 
     const end = parser.current_token.span.end;
     parser.advance();
 
-    const elements = parser.scratch_a.commit(checkpoint);
-    const result = parser.addNode(
-        .{ .array_pattern = .{ .elements = parser.addExtra(elements) } },
+    return parser.addNode(
+        .{ .array_pattern = .{ .elements = parser.addExtra(parser.scratch_a.take(checkpoint)) } },
         .{ .start = start, .end = end },
     );
-
-    parser.scratch_a.rollback(checkpoint);
-    return result;
 }
 
 fn parseArrayPatternElement(parser: *Parser) ?ast.NodeIndex {
@@ -135,7 +131,7 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
         // rest element: ...rest
         if (parser.current_token.type == .Spread) {
             const rest = parseObjectRestElement(parser) orelse {
-                parser.scratch_a.rollback(checkpoint);
+                parser.scratch_a.reset(checkpoint);
                 return null;
             };
             parser.scratch_a.append(rest);
@@ -143,14 +139,14 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
             // rest must be last property
             if (parser.current_token.type == .Comma) {
                 parser.err(parser.getSpan(rest).start, parser.current_token.span.end, "Rest must be last", null);
-                parser.scratch_a.rollback(checkpoint);
+                parser.scratch_a.reset(checkpoint);
                 return null;
             }
             break;
         }
 
         const property = parseObjectPatternProperty(parser) orelse {
-            parser.scratch_a.rollback(checkpoint);
+            parser.scratch_a.reset(checkpoint);
             return null;
         };
         parser.scratch_a.append(property);
@@ -160,21 +156,17 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
 
     if (parser.current_token.type != .RightBrace) {
         parser.err(start, parser.current_token.span.end, "Expected '}'", null);
-        parser.scratch_a.rollback(checkpoint);
+        parser.scratch_a.reset(checkpoint);
         return null;
     }
 
     const end = parser.current_token.span.end;
     parser.advance();
 
-    const properties = parser.scratch_a.commit(checkpoint);
-    const result = parser.addNode(
-        .{ .object_pattern = .{ .properties = parser.addExtra(properties) } },
+    return parser.addNode(
+        .{ .object_pattern = .{ .properties = parser.addExtra(parser.scratch_a.take(checkpoint)) } },
         .{ .start = start, .end = end },
     );
-
-    parser.scratch_a.rollback(checkpoint);
-    return result;
 }
 
 // parse object pattern property: {key: value} or {key} shorthand

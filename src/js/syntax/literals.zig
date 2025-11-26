@@ -139,27 +139,19 @@ pub fn parseTemplateLiteral(parser: *Parser) ?ast.NodeIndex {
             },
             else => {
                 parser.err(token.span.start, token.span.end, "Expected template continuation", null);
-                parser.scratch_a.rollback(quasis_checkpoint);
-                parser.scratch_b.rollback(exprs_checkpoint);
+                parser.scratch_a.reset(quasis_checkpoint);
+                parser.scratch_b.reset(exprs_checkpoint);
                 return null;
             },
         }
     }
 
-    const quasis = parser.scratch_a.commit(quasis_checkpoint);
-    const exprs = parser.scratch_b.commit(exprs_checkpoint);
-
-    const result = parser.addNode(.{
+    return parser.addNode(.{
         .template_literal = .{
-            .quasis = parser.addExtra(quasis),
-            .expressions = parser.addExtra(exprs),
+            .quasis = parser.addExtra(parser.scratch_a.take(quasis_checkpoint)),
+            .expressions = parser.addExtra(parser.scratch_b.take(exprs_checkpoint)),
         },
     }, .{ .start = start, .end = end });
-
-    parser.scratch_a.rollback(quasis_checkpoint);
-    parser.scratch_b.rollback(exprs_checkpoint);
-
-    return result;
 }
 
 inline fn getTemplateElementSpan(token: @import("../token.zig").Token) ast.Span {

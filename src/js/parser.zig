@@ -70,8 +70,7 @@ pub const Parser = struct {
             }
         }
 
-        const statements = self.scratch_a.commit(checkpoint);
-        const body = self.nodes.addExtra(self.allocator, statements);
+        const body = self.nodes.addExtra(self.allocator, self.scratch_a.take(checkpoint));
 
         const program = self.addNode(
             .{
@@ -264,12 +263,13 @@ const ScratchBuffer = struct {
         self.items.append(self.allocator, index) catch unreachable;
     }
 
-    pub inline fn commit(self: *ScratchBuffer, checkpoint: usize) []const ast.NodeIndex {
+    pub inline fn take(self: *ScratchBuffer, checkpoint: usize) []const ast.NodeIndex {
         const slice = self.items.items[checkpoint..];
+        self.items.shrinkRetainingCapacity(checkpoint);
         return slice;
     }
 
-    pub inline fn rollback(self: *ScratchBuffer, checkpoint: usize) void {
+    pub inline fn reset(self: *ScratchBuffer, checkpoint: usize) void {
         self.items.shrinkRetainingCapacity(checkpoint);
     }
 

@@ -206,7 +206,7 @@ fn parseArrayExpression(parser: *Parser) ?ast.NodeIndex {
         }
 
         const element = parseArrayElement(parser) orelse {
-            parser.scratch_a.rollback(checkpoint);
+            parser.scratch_a.reset(checkpoint);
             return null;
         };
         parser.scratch_a.append(element);
@@ -216,21 +216,17 @@ fn parseArrayExpression(parser: *Parser) ?ast.NodeIndex {
 
     if (parser.current_token.type != .RightBracket) {
         parser.err(start, parser.current_token.span.end, "Expected ']'", null);
-        parser.scratch_a.rollback(checkpoint);
+        parser.scratch_a.reset(checkpoint);
         return null;
     }
 
     const end = parser.current_token.span.end;
     parser.advance();
 
-    const elements = parser.scratch_a.commit(checkpoint);
-    const result = parser.addNode(
-        .{ .array_expression = .{ .elements = parser.addExtra(elements) } },
+    return parser.addNode(
+        .{ .array_expression = .{ .elements = parser.addExtra(parser.scratch_a.take(checkpoint)) } },
         .{ .start = start, .end = end },
     );
-
-    parser.scratch_a.rollback(checkpoint);
-    return result;
 }
 
 fn parseArrayElement(parser: *Parser) ?ast.NodeIndex {
@@ -255,7 +251,7 @@ fn parseObjectExpression(parser: *Parser) ?ast.NodeIndex {
 
     while (parser.current_token.type != .RightBrace and parser.current_token.type != .EOF) {
         const property = parseObjectProperty(parser) orelse {
-            parser.scratch_a.rollback(checkpoint);
+            parser.scratch_a.reset(checkpoint);
             return null;
         };
         parser.scratch_a.append(property);
@@ -264,19 +260,15 @@ fn parseObjectExpression(parser: *Parser) ?ast.NodeIndex {
 
     if (parser.current_token.type != .RightBrace) {
         parser.err(start, parser.current_token.span.end, "Expected '}'", null);
-        parser.scratch_a.rollback(checkpoint);
+        parser.scratch_a.reset(checkpoint);
         return null;
     }
     const end = parser.current_token.span.end;
     parser.advance();
 
-    const properties = parser.scratch_a.commit(checkpoint);
-    const result = parser.addNode(.{
-        .object_expression = .{ .properties = parser.addExtra(properties) },
+    return parser.addNode(.{
+        .object_expression = .{ .properties = parser.addExtra(parser.scratch_a.take(checkpoint)) },
     }, .{ .start = start, .end = end });
-
-    parser.scratch_a.rollback(checkpoint);
-    return result;
 }
 
 fn parseObjectProperty(parser: *Parser) ?ast.NodeIndex {
