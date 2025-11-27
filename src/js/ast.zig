@@ -12,7 +12,7 @@ pub const IndexRange = struct {
     pub const empty: IndexRange = .{ .start = 0, .len = 0 };
 };
 
-pub const BinaryOperator = enum(u8) {
+pub const BinaryOperator = enum {
     Equal, // ==
     NotEqual, // !=
     StrictEqual, // ===
@@ -37,13 +37,13 @@ pub const BinaryOperator = enum(u8) {
     Instanceof, // instanceof
 };
 
-pub const LogicalOperator = enum(u8) {
+pub const LogicalOperator = enum {
     And, // &&
     Or, // ||
     NullishCoalescing, // ??
 };
 
-pub const UnaryOperator = enum(u8) {
+pub const UnaryOperator = enum {
     Negate, // -
     Positive, // +
     LogicalNot, // !
@@ -53,12 +53,12 @@ pub const UnaryOperator = enum(u8) {
     Delete, // delete
 };
 
-pub const UpdateOperator = enum(u8) {
+pub const UpdateOperator = enum {
     Increment, // ++
     Decrement, // --
 };
 
-pub const AssignmentOperator = enum(u8) {
+pub const AssignmentOperator = enum {
     Assign, // =
     AddAssign, // +=
     SubtractAssign, // -=
@@ -77,7 +77,7 @@ pub const AssignmentOperator = enum(u8) {
     NullishAssign, // ??=
 };
 
-pub const VariableKind = enum(u8) {
+pub const VariableKind = enum {
     Var,
     Let,
     Const,
@@ -85,7 +85,7 @@ pub const VariableKind = enum(u8) {
     AwaitUsing,
 };
 
-pub const PropertyKind = enum(u8) {
+pub const PropertyKind = enum {
     Init,
     Get,
     Set,
@@ -239,7 +239,7 @@ pub const Program = struct {
     source_type: SourceType,
 };
 
-pub const SourceType = enum(u8) {
+pub const SourceType = enum {
     Script,
     Module,
 };
@@ -250,26 +250,26 @@ pub const Directive = struct {
     value_len: u16,
 };
 
-const FunctionType = enum(u8) {
+const FunctionType = enum {
     FunctionDeclaration,
     FunctionExpression
 };
 
 pub const Function = struct {
   type: FunctionType,
-  id: NodeIndex = null,
+  id: ?NodeIndex = null,
   generator: bool,
   @"async": bool,
   // FormalParameters
   params: NodeIndex,
-  body: NodeIndex = null,
+  body: ?NodeIndex = null,
 };
 
 pub const FormalParameters = struct {
     // FormalParameter[]
     items: IndexRange,
     // RestElement
-    rest: NodeIndex = null
+    rest: ?NodeIndex = null
 };
 
 pub const FormalParameter = struct {
