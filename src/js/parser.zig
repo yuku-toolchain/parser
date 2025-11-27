@@ -76,8 +76,9 @@ pub const Parser = struct {
         const program = self.addNode(
             .{
                 .program = .{
-                    .body = body,
                     .source_type = if (self.source_type == .Module) .Module else .Script,
+                    .body = body,
+                    .directives = .empty, // TODO: parse directives
                 },
             },
             .{ .start = start, .end = self.current_token.span.start },

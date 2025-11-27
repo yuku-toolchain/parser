@@ -65,6 +65,7 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
     )) return null;
 
     const checkpoint = parser.scratch_a.begin();
+    var rest: ast.NodeIndex = ast.null_node;
 
     while (true) {
         const token_type = parser.current_token.type;
@@ -72,11 +73,10 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
 
         // rest element: ...rest
         if (token_type == .Spread) {
-            const rest = parseRestElement(parser) orelse {
+            rest = parseRestElement(parser) orelse {
                 parser.scratch_a.reset(checkpoint);
                 return null;
             };
-            parser.scratch_a.append(rest);
 
             // rest must be last element
             if (parser.current_token.type == .Comma) {
@@ -122,7 +122,10 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
     parser.advance();
 
     return parser.addNode(
-        .{ .array_pattern = .{ .elements = parser.addExtra(parser.scratch_a.take(checkpoint)) } },
+        .{ .array_pattern = .{
+            .elements = parser.addExtra(parser.scratch_a.take(checkpoint)),
+            .rest = rest,
+        } },
         .{ .start = start, .end = end },
     );
 }
@@ -147,7 +150,7 @@ fn parseRestElement(parser: *Parser) ?ast.NodeIndex {
     )) return null;
     const argument = parseBindingPattern(parser) orelse return null;
     return parser.addNode(.{
-        .rest_element = .{ .argument = argument },
+        .binding_rest_element = .{ .argument = argument },
     }, .{ .start = start, .end = parser.getSpan(argument).end });
 }
 
@@ -160,6 +163,7 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
     )) return null;
 
     const checkpoint = parser.scratch_a.begin();
+    var rest: ast.NodeIndex = ast.null_node;
 
     while (true) {
         const token_type = parser.current_token.type;
@@ -167,11 +171,10 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
 
         // rest element: ...rest
         if (token_type == .Spread) {
-            const rest = parseObjectRestElement(parser) orelse {
+            rest = parseObjectRestElement(parser) orelse {
                 parser.scratch_a.reset(checkpoint);
                 return null;
             };
-            parser.scratch_a.append(rest);
 
             // rest must be last property
             if (parser.current_token.type == .Comma) {
@@ -211,7 +214,10 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
     parser.advance();
 
     return parser.addNode(
-        .{ .object_pattern = .{ .properties = parser.addExtra(parser.scratch_a.take(checkpoint)) } },
+        .{ .object_pattern = .{
+            .properties = parser.addExtra(parser.scratch_a.take(checkpoint)),
+            .rest = rest,
+        } },
         .{ .start = start, .end = end },
     );
 }
@@ -358,7 +364,7 @@ fn parseObjectRestElement(parser: *Parser) ?ast.NodeIndex {
     }
 
     return parser.addNode(
-        .{ .rest_element = .{ .argument = argument } },
+        .{ .binding_rest_element = .{ .argument = argument } },
         .{ .start = start, .end = parser.getSpan(argument).end },
     );
 }

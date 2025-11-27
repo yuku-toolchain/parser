@@ -227,11 +227,11 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u5, left: ast.NodeInde
 }
 
 pub fn isValidAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
-    return parser.getData(index) == .identifier;
+    return parser.getData(index) == .identifier_reference;
 }
 
 pub fn isSimpleAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
-    return parser.getData(index) == .identifier;
+    return parser.getData(index) == .identifier_reference;
 }
 
 fn parseArrayExpression(parser: *Parser) ?ast.NodeIndex {
@@ -390,7 +390,7 @@ fn parseObjectProperty(parser: *Parser) ?ast.NodeIndex {
 
         value = parser.addNode(
             .{
-                .identifier = .{
+                .identifier_reference = .{
                     .name_start = token.span.start,
                     .name_len = @intCast(token.lexeme.len),
                 },

@@ -177,7 +177,7 @@ pub inline fn parseIdentifier(parser: *Parser) ?ast.NodeIndex {
     const token = parser.current_token;
     parser.advance();
     return parser.addNode(.{
-        .identifier = .{
+        .identifier_reference = .{
             .name_start = token.span.start,
             .name_len = @intCast(token.lexeme.len),
         },
