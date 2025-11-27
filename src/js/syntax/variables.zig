@@ -4,7 +4,6 @@ const Parser = @import("../parser.zig").Parser;
 const expressions = @import("expressions.zig");
 const patterns = @import("patterns.zig");
 
-// parse variable declarations: var/let/const/using/await using
 pub fn parseVariableDeclaration(parser: *Parser) ?ast.NodeIndex {
     const start = parser.current_token.span.start;
     const kind = parseVariableKind(parser) orelse return null;
@@ -18,7 +17,7 @@ pub fn parseVariableDeclaration(parser: *Parser) ?ast.NodeIndex {
     parser.scratch_a.append(first_declarator);
     var end = parser.getSpan(first_declarator).end;
 
-    // parse additional declarators: let a, b, c;
+    // additional declarators: let a, b, c;
     while (parser.current_token.type == .Comma) {
         parser.advance();
         const declarator = parseVariableDeclarator(parser, kind) orelse {
@@ -50,7 +49,6 @@ inline fn parseVariableKind(parser: *Parser) ?ast.VariableKind {
         .Var => .Var,
         .Using => .Using,
 
-        // handle 'await using' for explicit resource management
         .Await => if (parser.current_token.type == .Using) blk: {
             parser.advance();
             break :blk .AwaitUsing;
@@ -67,7 +65,7 @@ fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) ?ast.NodeInd
     var init: ast.NodeIndex = ast.null_node;
     var end = parser.getSpan(id).end;
 
-    // parse initializer if present
+    // initializer if present
     if (parser.current_token.type == .Assign) {
         parser.advance();
         if (expressions.parseExpression(parser, 0)) |expression| {
@@ -75,7 +73,6 @@ fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) ?ast.NodeInd
             end = parser.getSpan(expression).end;
         }
     } else if (patterns.isDestructuringPattern(parser, id)) {
-        // destructuring always requires initializer
         parser.err(
             parser.getSpan(id).start,
             parser.getSpan(id).end,
