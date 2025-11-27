@@ -223,18 +223,81 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
 }
 
 fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
-    const start = parser.current_token.span.start;
-    var computed = false;
-    var key: ast.NodeIndex = undefined;
-    var key_span: ast.Span = undefined;
-    var identifier_token: token.Token = undefined;
+    const current = parser.current_token;
+    const start = current.span.start;
+    const token_type = current.type;
+
+    if (token_type.isIdentifierLike()) {
+        const name_start = current.span.start;
+        const name_len: u16 = @intCast(current.lexeme.len);
+        const key_span = current.span;
+
+        parser.advance();
+
+        const next_type = parser.current_token.type;
+        const is_shorthand = next_type == .Comma or next_type == .RightBrace or next_type == .Assign;
+
+        if (is_shorthand) {
+            // shorthand: {x} or {x = default}
+            if (isReserved(parser, current, "in shorthand", "Use full form", .{})) {
+                return null;
+            }
+
+            var value = parser.addNode(
+                .{ .binding_identifier = .{ .name_start = name_start, .name_len = name_len } },
+                key_span,
+            );
+
+            // default value: {x = 1}
+            if (next_type == .Assign) {
+                value = parseAssignmentPatternDefault(parser, value) orelse return null;
+            }
+
+            // for shorthand, key and value share the same identifier data
+            const key = parser.addNode(
+                .{ .identifier_name = .{ .name_start = name_start, .name_len = name_len } },
+                key_span,
+            );
+
+            return parser.addNode(
+                .{ .binding_property = .{ .key = key, .value = value, .shorthand = true, .computed = false } },
+                .{ .start = start, .end = parser.getSpan(value).end },
+            );
+        } else {
+            // non-shorthand: {x: y} or {x: y = default}
+            if (next_type != .Colon) {
+                parser.err(
+                    key_span.start,
+                    parser.current_token.span.start,
+                    "Missing colon in object destructuring property",
+                    "Use 'key: binding' to rename the variable, or just 'key' for shorthand when using the same name.",
+                );
+                return null;
+            }
+
+            const key = parser.addNode(
+                .{ .identifier_name = .{ .name_start = name_start, .name_len = name_len } },
+                key_span,
+            );
+
+            parser.advance();
+            var value = parseBindingPattern(parser) orelse return null;
+
+            if (parser.current_token.type == .Assign) {
+                value = parseAssignmentPatternDefault(parser, value) orelse return null;
+            }
+
+            return parser.addNode(
+                .{ .binding_property = .{ .key = key, .value = value, .shorthand = false, .computed = false } },
+                .{ .start = start, .end = parser.getSpan(value).end },
+            );
+        }
+    }
 
     // computed property names: [expr]
-    if (parser.current_token.type == .LeftBracket) {
-        computed = true;
+    if (token_type == .LeftBracket) {
         parser.advance();
-        key = expressions.parseExpression(parser, 0) orelse return null;
-        key_span = .{ .start = start, .end = parser.getSpan(key).end };
+        const key = expressions.parseExpression(parser, 0) orelse return null;
 
         if (parser.current_token.type != .RightBracket) {
             parser.err(
@@ -246,102 +309,69 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
             return null;
         }
 
-        key_span.end = parser.current_token.span.end;
+        const key_end = parser.current_token.span.end;
         parser.advance();
-    } else if (parser.current_token.type.isIdentifierLike()) {
-        identifier_token = parser.current_token;
-        key = parser.addNode(
-            .{
-                .identifier_name = .{
-                    .name_start = parser.current_token.span.start,
-                    .name_len = @intCast(parser.current_token.lexeme.len),
-                },
-            },
-            parser.current_token.span,
-        );
-        key_span = parser.current_token.span;
-        parser.advance();
-    } else if (parser.current_token.type.isNumericLiteral()) {
-        key = literals.parseNumericLiteral(parser) orelse return null;
-        key_span = parser.getSpan(key);
-    } else if (parser.current_token.type == .StringLiteral) {
-        key = literals.parseStringLiteral(parser) orelse return null;
-        key_span = parser.getSpan(key);
-    } else {
-        parser.err(
-            parser.current_token.span.start,
-            parser.current_token.span.end,
-            parser.formatMessage("Unexpected token '{s}' in destructuring pattern", .{parser.current_token.lexeme}),
-            "Destructuring properties must start with an identifier, string, number, or computed property name ([expr]).",
-        );
-        return null;
-    }
 
-    // check for shorthand: {x} instead of {x: x}
-    const is_shorthand = parser.current_token.type == .Comma or
-        parser.current_token.type == .RightBrace or
-        parser.current_token.type == .Assign;
-
-    var value: ast.NodeIndex = undefined;
-    if (is_shorthand) {
-        const data = parser.getData(key);
-        if (data != .identifier_name) {
+        if (parser.current_token.type != .Colon) {
             parser.err(
-                key_span.start,
-                key_span.end,
+                start,
+                key_end,
                 "Computed property names cannot use shorthand syntax",
                 "Use the full syntax with a colon: [expr]: value",
             );
             return null;
         }
 
-        if (isReserved(parser, identifier_token, "in shorthand", "Use full form", .{})) {
-            return null;
-        }
-
-        value = parser.addNode(
-            .{
-                .binding_identifier = .{
-                    .name_start = data.identifier_name.name_start,
-                    .name_len = data.identifier_name.name_len,
-                },
-            },
-            key_span,
-        );
-
-        // default value: {x = 1}
-        if (parser.current_token.type == .Assign) {
-            value = parseAssignmentPatternDefault(parser, value) orelse return null;
-        }
-    } else {
-        if (parser.current_token.type != .Colon) {
-            parser.err(
-                key_span.start,
-                parser.current_token.span.start,
-                "Missing colon in object destructuring property",
-                "Use 'key: binding' to rename the variable, or just 'key' for shorthand when using the same name.",
-            );
-            return null;
-        }
-
         parser.advance();
-        value = parseBindingPattern(parser) orelse return null;
+        var value = parseBindingPattern(parser) orelse return null;
 
-        // default value with default: {x: y = 1}
         if (parser.current_token.type == .Assign) {
             value = parseAssignmentPatternDefault(parser, value) orelse return null;
         }
+
+        return parser.addNode(
+            .{ .binding_property = .{ .key = key, .value = value, .shorthand = false, .computed = true } },
+            .{ .start = start, .end = parser.getSpan(value).end },
+        );
+    }
+
+    // numeric or string literal keys
+    var key: ast.NodeIndex = undefined;
+    if (token_type.isNumericLiteral()) {
+        key = literals.parseNumericLiteral(parser) orelse return null;
+    } else if (token_type == .StringLiteral) {
+        key = literals.parseStringLiteral(parser) orelse return null;
+    } else {
+        parser.err(
+            current.span.start,
+            current.span.end,
+            parser.formatMessage("Unexpected token '{s}' in destructuring pattern", .{current.lexeme}),
+            "Destructuring properties must start with an identifier, string, number, or computed property name ([expr]).",
+        );
+        return null;
+    }
+
+    const key_span = parser.getSpan(key);
+
+    if (parser.current_token.type != .Colon) {
+        parser.err(
+            key_span.start,
+            parser.current_token.span.start,
+            "Missing colon in object destructuring property",
+            "Use 'key: binding' to rename the variable, or just 'key' for shorthand when using the same name.",
+        );
+        return null;
+    }
+
+    parser.advance();
+    var value = parseBindingPattern(parser) orelse return null;
+
+    if (parser.current_token.type == .Assign) {
+        value = parseAssignmentPatternDefault(parser, value) orelse return null;
     }
 
     return parser.addNode(
-        .{
-            .binding_property = .{
-                .key = key,
-                .value = value,
-                .shorthand = is_shorthand,
-                .computed = computed,
-            },
-        },
+        .{ .binding_property = .{ .key = key, .value = value, .shorthand = false, .computed = false } },
         .{ .start = start, .end = parser.getSpan(value).end },
     );
 }
