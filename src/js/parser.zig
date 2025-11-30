@@ -36,7 +36,7 @@ pub const Parser = struct {
     extra: std.ArrayList(ast.NodeIndex),
     current_token: token.Token = undefined,
 
-    body_scratch: ScratchBuffer,
+    scratch_body: ScratchBuffer,
     // multiple scratches to handle multiple extras at the same time
     scratch_a: ScratchBuffer,
     scratch_b: ScratchBuffer,
@@ -67,7 +67,7 @@ pub const Parser = struct {
             .errors = errors,
             .nodes = nodes,
             .extra = extra,
-            .body_scratch = ScratchBuffer.init(allocator),
+            .scratch_body = ScratchBuffer.init(allocator),
             .scratch_a = ScratchBuffer.init(allocator),
             .scratch_b = ScratchBuffer.init(allocator),
         };
@@ -77,17 +77,17 @@ pub const Parser = struct {
         self.advance();
 
         const start = self.current_token.span.start;
-        const checkpoint = self.body_scratch.begin();
+        const checkpoint = self.scratch_body.begin();
 
         while (self.current_token.type != .EOF) {
             if (self.parseStatement()) |statement| {
-                self.body_scratch.append(statement);
+                self.scratch_body.append(statement);
             } else {
                 self.synchronize();
             }
         }
 
-        const body = self.addExtra(self.body_scratch.take(checkpoint));
+        const body = self.addExtra(self.scratch_body.take(checkpoint));
 
         const program = self.addNode(
             .{
