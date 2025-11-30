@@ -1,7 +1,9 @@
 const std = @import("std");
 const ast = @import("../ast.zig");
 const Parser = @import("../parser.zig").Parser;
+
 const literals = @import("literals.zig");
+const functions = @import("functions.zig");
 
 pub fn parseExpression(parser: *Parser, precedence: u5) ?ast.NodeIndex {
     var left = parsePrefix(parser) orelse return null;
@@ -49,6 +51,11 @@ inline fn parseInfix(parser: *Parser, precedence: u5, left: ast.NodeIndex) ?ast.
 
 inline fn parsePrefix(parser: *Parser) ?ast.NodeIndex {
     const token_type = parser.current_token.type;
+
+    // TODO: implement after declaration
+    // if(token_type == .Function) {
+    //     return functions.parseFunction();
+    // }
 
     if (token_type == .Increment or token_type == .Decrement) {
         return parseUpdateExpression(parser, true, ast.null_node);

@@ -26,7 +26,7 @@ pub inline fn parseBindingPattern(parser: *Parser) ?ast.NodeIndex {
     };
 }
 
-inline fn parseBindingIdentifier(parser: *Parser) ?ast.NodeIndex {
+pub inline fn parseBindingIdentifier(parser: *Parser) ?ast.NodeIndex {
     if (!parser.current_token.type.isIdentifierLike()) {
         parser.err(
             parser.current_token.span.start,
@@ -73,7 +73,7 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
 
         // rest element: ...rest
         if (token_type == .Spread) {
-            rest = parseRestElement(parser) orelse {
+            rest = parseBindingRestElement(parser) orelse {
                 parser.scratch_a.reset(checkpoint);
                 return null;
             };
@@ -135,13 +135,13 @@ inline fn parseArrayPatternElement(parser: *Parser) ?ast.NodeIndex {
 
     // default values: [a = 1]
     if (parser.current_token.type == .Assign) {
-        return parseAssignmentPatternDefault(parser, pattern);
+        return parseAssignmentPattern(parser, pattern);
     }
 
     return pattern;
 }
 
-fn parseRestElement(parser: *Parser) ?ast.NodeIndex {
+pub fn parseBindingRestElement(parser: *Parser) ?ast.NodeIndex {
     const start = parser.current_token.span.start;
     if (!parser.expect(
         .Spread,
@@ -250,7 +250,7 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
 
             // default value: {x = 1}
             if (next_type == .Assign) {
-                value = parseAssignmentPatternDefault(parser, value) orelse return null;
+                value = parseAssignmentPattern(parser, value) orelse return null;
             }
 
             // for shorthand, key and value share the same identifier data
@@ -284,7 +284,7 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
             var value = parseBindingPattern(parser) orelse return null;
 
             if (parser.current_token.type == .Assign) {
-                value = parseAssignmentPatternDefault(parser, value) orelse return null;
+                value = parseAssignmentPattern(parser, value) orelse return null;
             }
 
             return parser.addNode(
@@ -326,7 +326,7 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
         var value = parseBindingPattern(parser) orelse return null;
 
         if (parser.current_token.type == .Assign) {
-            value = parseAssignmentPatternDefault(parser, value) orelse return null;
+            value = parseAssignmentPattern(parser, value) orelse return null;
         }
 
         return parser.addNode(
@@ -367,7 +367,7 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
     var value = parseBindingPattern(parser) orelse return null;
 
     if (parser.current_token.type == .Assign) {
-        value = parseAssignmentPatternDefault(parser, value) orelse return null;
+        value = parseAssignmentPattern(parser, value) orelse return null;
     }
 
     return parser.addNode(
@@ -399,11 +399,12 @@ fn parseObjectRestElement(parser: *Parser) ?ast.NodeIndex {
     );
 }
 
-inline fn parseAssignmentPatternDefault(parser: *Parser, left: ast.NodeIndex) ?ast.NodeIndex {
+pub fn parseAssignmentPattern(parser: *Parser, left: ast.NodeIndex) ?ast.NodeIndex {
     const start = parser.getSpan(left).start;
     if (parser.current_token.type != .Assign) return left;
 
     parser.advance();
+
     const right = expressions.parseExpression(parser, 0) orelse return null;
 
     return parser.addNode(

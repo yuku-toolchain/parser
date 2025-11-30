@@ -1,1 +1,1 @@
-let {a} = obj
+const cool = "nce";

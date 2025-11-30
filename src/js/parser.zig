@@ -7,6 +7,7 @@ const expressions = @import("syntax/expressions.zig");
 const literals = @import("syntax/literals.zig");
 const patterns = @import("syntax/patterns.zig");
 const variables = @import("syntax/variables.zig");
+const functions = @import("syntax/functions.zig");
 
 pub const Error = struct {
     message: []const u8,
@@ -123,6 +124,8 @@ pub const Parser = struct {
     pub fn parseStatement(self: *Parser) ?ast.NodeIndex {
         return switch (self.current_token.type) {
             .Var, .Const, .Let, .Using => variables.parseVariableDeclaration(self),
+            .Function => functions.parseFunction(self, false, false),
+            .Async => functions.parseFunction(self, true, false),
 
             .Await => blk: {
                 const await_token = self.current_token;
