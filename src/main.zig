@@ -3,19 +3,34 @@ const js = @import("js");
 const printError = @import("print-error.zig").printError;
 
 pub fn main() !void {
-    const content = @embedFile("test.js");
-    const allocator = std.heap.page_allocator;
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    const allocator = gpa.allocator();
+
+    const file = try std.fs.cwd().openFile("test.js", .{});
+    defer file.close();
+
+    var buffer: [4096]u8 = undefined;
+    var reader = file.reader(&buffer);
+    const contents = try reader.interface.allocRemaining(allocator, std.Io.Limit.limited(10 * 1024 * 1024));
+
+    defer allocator.free(contents);
 
     var times = try std.ArrayList(i128).initCapacity(allocator, iterations);
     defer times.deinit(allocator);
 
-    var first_result: ?js.ParseResult = null;
+    for (0..3) |_| {
+        var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+        defer arena.deinit();
+        var parser = try js.Parser.init(arena.allocator(), contents);
+        _ = try parser.parse();
+    }
 
     for (0..iterations) |i| {
         var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
         defer arena.deinit();
 
-        var parser = try js.Parser.init(arena.allocator(), content);
+        var parser = try js.Parser.init(arena.allocator(), contents);
 
         const start = std.time.nanoTimestamp();
         const result = try parser.parse();
@@ -24,11 +39,10 @@ pub fn main() !void {
         try times.append(allocator, end - start);
 
         if (i == 0) {
-            first_result = result;
             if (result.hasErrors()) {
                 std.debug.print("\nErrors:\n", .{});
                 for (result.errors) |parse_err| {
-                    printError(content, parse_err);
+                    printError(contents, parse_err);
                 }
                 std.debug.print("\n", .{});
             }
@@ -51,11 +65,11 @@ pub fn main() !void {
     const min_ms = @as(f64, @floatFromInt(min)) / ns_to_ms;
     const max_ms = @as(f64, @floatFromInt(max)) / ns_to_ms;
 
-    const size_kb = @as(f64, @floatFromInt(content.len)) / 1024.0;
+    const size_kb = @as(f64, @floatFromInt(contents.len)) / 1024.0;
     const mb_per_sec = (size_kb / 1024.0) / (avg_ms / 1000.0);
 
     var line_count: usize = 1;
-    for (content) |c| {
+    for (contents) |c| {
         if (c == '\n') line_count += 1;
     }
     const million_lines_per_sec = (@as(f64, @floatFromInt(line_count)) / 1_000_000.0) / (avg_ms / 1000.0);

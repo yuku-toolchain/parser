@@ -32,13 +32,15 @@ pub const Parser = struct {
     lexer: lexer.Lexer,
     allocator: std.mem.Allocator,
     errors: std.ArrayList(Error),
-    nodes: std.MultiArrayList(ast.Node),
+    nodes: std.ArrayList(ast.Node),
     extra: std.ArrayList(ast.NodeIndex),
     current_token: token.Token = undefined,
 
+    body_scratch: ScratchBuffer,
     // multiple scratches to handle multiple extras at the same time
     scratch_a: ScratchBuffer,
     scratch_b: ScratchBuffer,
+    //
 
     in_async: bool = false,
     in_generator: bool = false,
@@ -51,10 +53,11 @@ pub const Parser = struct {
         const estimated_nodes = @max(1024, (source.len * 3) / 4);
         const estimated_extra = estimated_nodes / 2;
 
-        var nodes: std.MultiArrayList(ast.Node) = .empty;
-        try nodes.ensureTotalCapacity(allocator, estimated_nodes);
+        // TODO: this can be a MultiArrayList, decide it when implementing the traverse
+        const nodes = try std.ArrayList(ast.Node).initCapacity(allocator, estimated_nodes);
 
         const extra = try std.ArrayList(ast.NodeIndex).initCapacity(allocator, estimated_extra);
+
         const errors = try std.ArrayList(Error).initCapacity(allocator, 32);
 
         return .{
@@ -64,6 +67,7 @@ pub const Parser = struct {
             .errors = errors,
             .nodes = nodes,
             .extra = extra,
+            .body_scratch = ScratchBuffer.init(allocator),
             .scratch_a = ScratchBuffer.init(allocator),
             .scratch_b = ScratchBuffer.init(allocator),
         };
@@ -73,17 +77,17 @@ pub const Parser = struct {
         self.advance();
 
         const start = self.current_token.span.start;
-        const checkpoint = self.scratch_a.begin();
+        const checkpoint = self.body_scratch.begin();
 
         while (self.current_token.type != .EOF) {
             if (self.parseStatement()) |statement| {
-                self.scratch_a.append(statement);
+                self.body_scratch.append(statement);
             } else {
                 self.synchronize();
             }
         }
 
-        const body = self.addExtra(self.scratch_a.take(checkpoint));
+        const body = self.addExtra(self.body_scratch.take(checkpoint));
 
         const program = self.addNode(
             .{
@@ -121,6 +125,8 @@ pub const Parser = struct {
                 self.err(
                     await_token.span.start,
                     await_token.span.end,
+                    // TODO: message is not always right, there is top level awaits
+                    // fix it when implement that
                     "'await' is only valid at the start of an 'await using' declaration or inside async functions",
                     "If you intended to declare a disposable resource, use 'await using'. Otherwise, 'await' can only appear inside an async function.",
                 );
@@ -146,7 +152,7 @@ pub const Parser = struct {
     }
 
     pub inline fn addNode(self: *Parser, data: ast.NodeData, span: ast.Span) ast.NodeIndex {
-        const index: ast.NodeIndex = @intCast(self.nodes.len);
+        const index: ast.NodeIndex = @intCast(self.nodes.items.len);
         self.nodes.append(self.allocator, .{ .data = data, .span = span }) catch unreachable;
         return index;
     }
@@ -159,11 +165,11 @@ pub const Parser = struct {
     }
 
     pub inline fn getSpan(self: *const Parser, index: ast.NodeIndex) ast.Span {
-        return self.nodes.items(.span)[index];
+        return self.nodes.items[index].span;
     }
 
     pub inline fn getData(self: *const Parser, index: ast.NodeIndex) ast.NodeData {
-        return self.nodes.items(.data)[index];
+        return self.nodes.items[index].data;
     }
 
     pub inline fn getExtra(self: *const Parser, range: ast.IndexRange) []const ast.NodeIndex {
