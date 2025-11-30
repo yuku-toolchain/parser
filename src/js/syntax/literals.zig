@@ -101,7 +101,7 @@ pub fn parseTemplateLiteral(parser: *Parser) ?ast.NodeIndex {
     const head = parser.current_token;
     const head_span = getTemplateElementSpan(head);
 
-    parser.scratch_a.append(parser.addNode(.{
+    parser.scratch_a.append(parser.allocator(), parser.addNode(.{
         .template_element = .{
             .raw_start = head_span.start,
             .raw_len = @intCast(head_span.end - head_span.start),
@@ -114,7 +114,7 @@ pub fn parseTemplateLiteral(parser: *Parser) ?ast.NodeIndex {
     var end: u32 = undefined;
     while (true) {
         const expr = expressions.parseExpression(parser, 0) orelse return null;
-        parser.scratch_b.append(expr);
+        parser.scratch_b.append(parser.allocator(), expr);
 
         const token = parser.current_token;
         const is_tail = token.type == .TemplateTail;
@@ -122,7 +122,7 @@ pub fn parseTemplateLiteral(parser: *Parser) ?ast.NodeIndex {
         switch (token.type) {
             .TemplateMiddle, .TemplateTail => {
                 const span = getTemplateElementSpan(token);
-                parser.scratch_a.append(parser.addNode(.{
+                parser.scratch_a.append(parser.allocator(), parser.addNode(.{
                     .template_element = .{
                         .raw_start = span.start,
                         .raw_len = @intCast(span.end - span.start),

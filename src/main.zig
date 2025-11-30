@@ -20,33 +20,31 @@ pub fn main() !void {
     defer times.deinit(allocator);
 
     for (0..3) |_| {
-        var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
-        defer arena.deinit();
-        var parser = try js.Parser.init(arena.allocator(), contents);
-        _ = try parser.parse();
+        var parser = js.Parser.init(std.heap.page_allocator, contents);
+        var tree = try parser.parse();
+        defer tree.deinit();
     }
 
     for (0..iterations) |i| {
-        var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
-        defer arena.deinit();
-
-        var parser = try js.Parser.init(arena.allocator(), contents);
+        var parser = js.Parser.init(std.heap.page_allocator, contents);
 
         const start = std.time.nanoTimestamp();
-        const result = try parser.parse();
+        var tree = try parser.parse();
         const end = std.time.nanoTimestamp();
 
         try times.append(allocator, end - start);
 
         if (i == 0) {
-            if (result.hasErrors()) {
+            if (tree.hasErrors()) {
                 std.debug.print("\nErrors:\n", .{});
-                for (result.errors) |parse_err| {
+                for (tree.errors) |parse_err| {
                     printError(contents, parse_err);
                 }
                 std.debug.print("\n", .{});
             }
         }
+
+        tree.deinit();
     }
 
     var total: i128 = 0;

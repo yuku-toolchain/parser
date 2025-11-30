@@ -262,7 +262,7 @@ fn parseArrayExpression(parser: *Parser) ?ast.NodeIndex {
 
         // elision (holes in array): [1, , 3]
         if (token_type == .Comma) {
-            parser.scratch_a.append(ast.null_node);
+            parser.scratch_a.append(parser.allocator(), ast.null_node);
             parser.advance();
             continue;
         }
@@ -271,7 +271,7 @@ fn parseArrayExpression(parser: *Parser) ?ast.NodeIndex {
             parser.scratch_a.reset(checkpoint);
             return null;
         };
-        parser.scratch_a.append(element);
+        parser.scratch_a.append(parser.allocator(), element);
 
         if (parser.current_token.type == .Comma) parser.advance() else break;
     }
@@ -324,7 +324,7 @@ fn parseObjectExpression(parser: *Parser) ?ast.NodeIndex {
             parser.scratch_a.reset(checkpoint);
             return null;
         };
-        parser.scratch_a.append(property);
+        parser.scratch_a.append(parser.allocator(), property);
         if (parser.current_token.type == .Comma) parser.advance() else break;
     }
 

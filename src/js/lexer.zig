@@ -2,7 +2,7 @@ const std = @import("std");
 const token = @import("token.zig");
 const util = @import("util");
 
-const LexicalError = error{
+pub const LexicalError = error{
     UnterminatedString,
     UnterminatedRegex,
     NonTerminatedTemplateLiteral,
@@ -39,27 +39,45 @@ pub const Lexer = struct {
     /// current byte index being scanned in the source
     cursor: u32,
     template_depth: u32,
-    /// expects arena allocator
-    allocator: std.mem.Allocator,
-    has_line_terminator_before: bool,
 
-    pub fn init(allocator: std.mem.Allocator, source: []const u8) !Lexer {
-        const padded_buffer = try allocator.alloc(u8, source.len + padding_size);
-        @memcpy(padded_buffer[0..source.len], source);
-        @memset(padded_buffer[source.len..], 0);
+    arena: std.heap.ArenaAllocator,
+
+    has_line_terminator_before: bool,
+    initialized: bool = false,
+
+    _source_ref: []const u8,
+
+    pub fn init(backing_allocator: std.mem.Allocator, source: []const u8) Lexer {
         return .{
             .strict_mode = false,
-            .source = padded_buffer,
+            .source = undefined,
             .source_len = @intCast(source.len),
             .token_start = 0,
             .cursor = 0,
             .template_depth = 0,
-            .allocator = allocator,
+            .arena = std.heap.ArenaAllocator.init(backing_allocator),
             .has_line_terminator_before = false,
+            ._source_ref = source,
         };
     }
 
-    pub fn nextToken(self: *Lexer) LexicalError!token.Token {
+    fn ensureInitialized(self: *Lexer) !void {
+        if (self.initialized) return;
+
+        const alloc = self.arena.allocator();
+        const padded = try alloc.alloc(u8, self._source_ref.len + padding_size);
+        @memcpy(padded[0..self._source_ref.len], self._source_ref);
+        @memset(padded[self._source_ref.len..], 0);
+        self.source = padded;
+        self.initialized = true;
+    }
+
+    pub fn deinit(self: *Lexer) void {
+        self.arena.deinit();
+    }
+
+    pub fn nextToken(self: *Lexer) (LexicalError || error{OutOfMemory})!token.Token {
+        try self.ensureInitialized();
         try self.skipSkippable();
 
         if (self.cursor >= self.source_len) {

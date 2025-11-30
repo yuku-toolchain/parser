@@ -94,14 +94,14 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
 
         // holes: [a, , b]
         if (token_type == .Comma) {
-            parser.scratch_a.append(ast.null_node);
+            parser.scratch_a.append(parser.allocator(), ast.null_node);
             parser.advance();
         } else {
             const element = parseArrayPatternElement(parser) orelse {
                 parser.scratch_a.reset(checkpoint);
                 return null;
             };
-            parser.scratch_a.append(element);
+            parser.scratch_a.append(parser.allocator(), element);
 
             if (parser.current_token.type == .Comma) parser.advance() else break;
         }
@@ -194,7 +194,7 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
             parser.scratch_a.reset(checkpoint);
             return null;
         };
-        parser.scratch_a.append(property);
+        parser.scratch_a.append(parser.allocator(), property);
 
         if (parser.current_token.type == .Comma) parser.advance() else break;
     }

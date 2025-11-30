@@ -14,32 +14,45 @@ pub const Error = struct {
     help: ?[]const u8 = null,
 };
 
-pub const ParseResult = struct {
-    program: ast.NodeIndex,
-    parser: *Parser,
-    source: []const u8,
-    errors: []Error,
+pub const SourceType = enum { Script, Module };
 
-    pub inline fn hasErrors(self: ParseResult) bool {
+/// Must be deinitialized to free the arena-allocated memory.
+pub const ParseTree = struct {
+    /// Root node of the AST (always a Program node)
+    program: ast.NodeIndex,
+    /// Source code that was parsed
+    source: []const u8,
+    /// All nodes in the AST
+    nodes: []const ast.Node,
+    /// Extra data storage for variadic node children
+    extra: []const ast.NodeIndex,
+    /// Parse errors encountered
+    errors: []const Error,
+    /// Arena allocator owning all the memory
+    arena: std.heap.ArenaAllocator,
+
+    pub inline fn hasErrors(self: ParseTree) bool {
         return self.errors.len > 0;
     }
-};
 
-pub const SourceType = enum { Script, Module };
+    pub fn deinit(self: *ParseTree) void {
+        self.arena.deinit();
+    }
+};
 
 pub const Parser = struct {
     source: []const u8,
     lexer: lexer.Lexer,
-    allocator: std.mem.Allocator,
-    errors: std.ArrayList(Error),
-    nodes: std.ArrayList(ast.Node),
-    extra: std.ArrayList(ast.NodeIndex),
+    arena: std.heap.ArenaAllocator,
+    errors: std.ArrayList(Error) = .empty,
+    nodes: std.ArrayList(ast.Node) = .empty,
+    extra: std.ArrayList(ast.NodeIndex) = .empty,
     current_token: token.Token = undefined,
 
-    scratch_body: ScratchBuffer,
+    scratch_body: ScratchBuffer = .{},
     // multiple scratches to handle multiple extras at the same time
-    scratch_a: ScratchBuffer,
-    scratch_b: ScratchBuffer,
+    scratch_a: ScratchBuffer = .{},
+    scratch_b: ScratchBuffer = .{},
     //
 
     in_async: bool = false,
@@ -49,31 +62,24 @@ pub const Parser = struct {
     strict_mode: bool = true,
     source_type: SourceType = .Module,
 
-    pub fn init(allocator: std.mem.Allocator, source: []const u8) !Parser {
-        const estimated_nodes = @max(1024, (source.len * 3) / 4);
-        const estimated_extra = estimated_nodes / 2;
-
-        // TODO: this can be a MultiArrayList, decide it when implementing the traverse
-        const nodes = try std.ArrayList(ast.Node).initCapacity(allocator, estimated_nodes);
-
-        const extra = try std.ArrayList(ast.NodeIndex).initCapacity(allocator, estimated_extra);
-
-        const errors = try std.ArrayList(Error).initCapacity(allocator, 32);
-
+    pub fn init(backing_allocator: std.mem.Allocator, source: []const u8) Parser {
         return .{
             .source = source,
-            .lexer = try lexer.Lexer.init(allocator, source),
-            .allocator = allocator,
-            .errors = errors,
-            .nodes = nodes,
-            .extra = extra,
-            .scratch_body = ScratchBuffer.init(allocator),
-            .scratch_a = ScratchBuffer.init(allocator),
-            .scratch_b = ScratchBuffer.init(allocator),
+            .lexer = lexer.Lexer.init(backing_allocator, source),
+            .arena = std.heap.ArenaAllocator.init(backing_allocator),
         };
     }
 
-    pub fn parse(self: *Parser) !ParseResult {
+    pub inline fn allocator(self: *Parser) std.mem.Allocator {
+        return self.arena.allocator();
+    }
+
+    /// Parse the source code and return a ParseTree.
+    /// The Parser is consumed and should not be used after calling this method.
+    /// The caller owns the returned ParseTree and must call deinit() on it.
+    pub fn parse(self: *Parser) !ParseTree {
+        try self.ensureCapacity();
+
         self.advance();
 
         const start = self.current_token.span.start;
@@ -81,7 +87,7 @@ pub const Parser = struct {
 
         while (self.current_token.type != .EOF) {
             if (self.parseStatement()) |statement| {
-                self.scratch_body.append(statement);
+                self.scratch_body.append(self.allocator(), statement);
             } else {
                 self.synchronize();
             }
@@ -100,12 +106,20 @@ pub const Parser = struct {
             .{ .start = start, .end = self.current_token.span.start },
         );
 
-        return .{
+        const alloc = self.allocator();
+
+        const tree = ParseTree{
             .program = program,
-            .parser = self,
             .source = self.source,
-            .errors = try self.errors.toOwnedSlice(self.allocator),
+            .nodes = try self.nodes.toOwnedSlice(alloc),
+            .extra = try self.extra.toOwnedSlice(alloc),
+            .errors = try self.errors.toOwnedSlice(alloc),
+            .arena = self.arena,
         };
+
+        self.lexer.deinit();
+
+        return tree;
     }
 
     pub fn parseStatement(self: *Parser) ?ast.NodeIndex {
@@ -153,14 +167,14 @@ pub const Parser = struct {
 
     pub inline fn addNode(self: *Parser, data: ast.NodeData, span: ast.Span) ast.NodeIndex {
         const index: ast.NodeIndex = @intCast(self.nodes.items.len);
-        self.nodes.append(self.allocator, .{ .data = data, .span = span }) catch unreachable;
+        self.nodes.append(self.allocator(), .{ .data = data, .span = span }) catch unreachable;
         return index;
     }
 
     pub inline fn addExtra(self: *Parser, indices: []const ast.NodeIndex) ast.IndexRange {
         const start: u32 = @intCast(self.extra.items.len);
         const len: u32 = @intCast(indices.len);
-        self.extra.appendSlice(self.allocator, indices) catch unreachable;
+        self.extra.appendSlice(self.allocator(), indices) catch unreachable;
         return .{ .start = start, .len = len };
     }
 
@@ -178,11 +192,14 @@ pub const Parser = struct {
 
     pub inline fn advance(self: *Parser) void {
         self.current_token = self.lexer.nextToken() catch |e| blk: {
-            // handle lexical errors by recording and continuing with EOF
-            self.errors.append(self.allocator, .{
-                .message = lexer.getLexicalErrorMessage(e),
+            if (e == error.OutOfMemory) @panic("Out of memory");
+
+            const lex_err: lexer.LexicalError = @errorCast(e);
+
+            self.errors.append(self.allocator(), .{
+                .message = lexer.getLexicalErrorMessage(lex_err),
                 .span = .{ .start = self.lexer.token_start, .end = self.lexer.cursor },
-                .help = lexer.getLexicalErrorHelp(e),
+                .help = lexer.getLexicalErrorHelp(lex_err),
             }) catch unreachable;
 
             break :blk token.Token.eof(0);
@@ -215,7 +232,7 @@ pub const Parser = struct {
     }
 
     pub inline fn err(self: *Parser, start: u32, end: u32, message: []const u8, help: ?[]const u8) void {
-        self.errors.append(self.allocator, .{
+        self.errors.append(self.allocator(), .{
             .message = message,
             .span = .{ .start = start, .end = end },
             .help = help,
@@ -223,7 +240,7 @@ pub const Parser = struct {
     }
 
     pub fn formatMessage(self: *Parser, comptime format: []const u8, args: anytype) []u8 {
-        return std.fmt.allocPrint(self.allocator, format, args) catch unreachable;
+        return std.fmt.allocPrint(self.allocator(), format, args) catch unreachable;
     }
 
     fn synchronize(self: *Parser) void {
@@ -243,23 +260,32 @@ pub const Parser = struct {
             self.advance();
         }
     }
+
+    fn ensureCapacity(self: *Parser) !void {
+        if (self.nodes.capacity > 0) return;
+
+        const alloc = self.allocator();
+        const estimated_nodes = @max(1024, (self.source.len * 3) / 4);
+        const estimated_extra = estimated_nodes / 2;
+
+        try self.nodes.ensureTotalCapacity(alloc, estimated_nodes);
+        try self.extra.ensureTotalCapacity(alloc, estimated_extra);
+        try self.errors.ensureTotalCapacity(alloc, 32);
+        try self.scratch_body.items.ensureTotalCapacity(alloc, 256);
+        try self.scratch_a.items.ensureTotalCapacity(alloc, 128);
+        try self.scratch_b.items.ensureTotalCapacity(alloc, 128);
+    }
 };
 
 const ScratchBuffer = struct {
-    items: std.ArrayList(ast.NodeIndex),
-    allocator: std.mem.Allocator,
-
-    fn init(allocator: std.mem.Allocator) ScratchBuffer {
-        const list = std.ArrayList(ast.NodeIndex).initCapacity(allocator, 512) catch unreachable;
-        return .{ .items = list, .allocator = allocator };
-    }
+    items: std.ArrayList(ast.NodeIndex) = .empty,
 
     pub inline fn begin(self: *ScratchBuffer) usize {
         return self.items.items.len;
     }
 
-    pub inline fn append(self: *ScratchBuffer, index: ast.NodeIndex) void {
-        self.items.append(self.allocator, index) catch unreachable;
+    pub inline fn append(self: *ScratchBuffer, alloc: std.mem.Allocator, index: ast.NodeIndex) void {
+        self.items.append(alloc, index) catch unreachable;
     }
 
     pub inline fn take(self: *ScratchBuffer, checkpoint: usize) []const ast.NodeIndex {

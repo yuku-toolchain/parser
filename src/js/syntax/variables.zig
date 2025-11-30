@@ -14,7 +14,7 @@ pub fn parseVariableDeclaration(parser: *Parser) ?ast.NodeIndex {
         parser.scratch_a.reset(checkpoint);
         return null;
     };
-    parser.scratch_a.append(first_declarator);
+    parser.scratch_a.append(parser.allocator(), first_declarator);
     var end = parser.getSpan(first_declarator).end;
 
     // additional declarators: let a, b, c;
@@ -24,7 +24,7 @@ pub fn parseVariableDeclaration(parser: *Parser) ?ast.NodeIndex {
             parser.scratch_a.reset(checkpoint);
             return null;
         };
-        parser.scratch_a.append(declarator);
+        parser.scratch_a.append(parser.allocator(), declarator);
         end = parser.getSpan(declarator).end;
     }
 
