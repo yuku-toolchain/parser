@@ -58,9 +58,10 @@ pub const Lexer = struct {
     }
 
     inline fn peek(self: *const Lexer, offset: u32) u8 {
-        const pos = self.cursor + offset;
-        if (pos >= self.source_len) return 0;
-        return self.source[pos];
+        if (offset > self.source_len or self.cursor > self.source_len - offset) {
+            return 0;
+        }
+        return self.source[self.cursor + offset];
     }
 
     pub fn nextToken(self: *Lexer) LexicalError!token.Token {
