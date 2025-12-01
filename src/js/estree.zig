@@ -2,6 +2,8 @@ const std = @import("std");
 const ast = @import("ast.zig");
 const parser = @import("parser.zig");
 
+// TODO: this can be more optimized
+
 pub const Serializer = struct {
     tree: *const parser.ParseTree,
     buffer: *std.ArrayList(u8),
@@ -13,7 +15,8 @@ pub const Serializer = struct {
     const Error = error{OutOfMemory};
 
     pub fn serialize(tree: *const parser.ParseTree, allocator: std.mem.Allocator, pretty: bool) ![]u8 {
-        var buffer: std.ArrayList(u8) = .empty;
+        var buffer: std.ArrayList(u8) = try .initCapacity(allocator, tree.source.len * 3);
+
         errdefer buffer.deinit(allocator);
 
         var self = Self{
@@ -695,8 +698,13 @@ pub const Serializer = struct {
     }
 
     fn writeIndent(self: *Self) !void {
-        for (0..self.depth) |_| {
-            try self.write("  ");
+        const indent_size = self.depth * 2;
+        const spaces = "                                        "; // 40 spaces
+        var remaining = indent_size;
+        while (remaining > 0) {
+            const chunk = @min(remaining, spaces.len);
+            try self.write(spaces[0..chunk]);
+            remaining -= chunk;
         }
     }
 

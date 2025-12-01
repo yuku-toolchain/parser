@@ -1,1 +1,3 @@
-function greet(name, { nice }) {}
+function greet(name, { nice }) {
+  const hello = "nice"
+}

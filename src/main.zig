@@ -47,7 +47,10 @@ pub fn main() !void {
                 std.debug.print("\n", .{});
             }
 
+            const json_start = std.time.nanoTimestamp();
             first_json = try js.estree.toJSON(&tree, allocator);
+            const json_end = std.time.nanoTimestamp();
+            std.debug.print("{d}", .{json_end - json_start});
             first_tree = tree;
         } else {
             tree.deinit();
