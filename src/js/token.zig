@@ -211,12 +211,10 @@ pub const TokenType = enum(u32) {
 
     pub fn toString(self: TokenType) ?[]const u8 {
         return switch (self) {
-            // Literal keywords
             .True => "true",
             .False => "false",
             .NullLiteral => "null",
 
-            // Arithmetic operators
             .Plus => "+",
             .Minus => "-",
             .Star => "*",
@@ -224,7 +222,6 @@ pub const TokenType = enum(u32) {
             .Percent => "%",
             .Exponent => "**",
 
-            // Assignment operators
             .Assign => "=",
             .PlusAssign => "+=",
             .MinusAssign => "-=",
@@ -233,11 +230,9 @@ pub const TokenType = enum(u32) {
             .PercentAssign => "%=",
             .ExponentAssign => "**=",
 
-            // Update operators
             .Increment => "++",
             .Decrement => "--",
 
-            // Comparison operators
             .Equal => "==",
             .NotEqual => "!=",
             .StrictEqual => "===",
@@ -247,12 +242,10 @@ pub const TokenType = enum(u32) {
             .LessThanEqual => "<=",
             .GreaterThanEqual => ">=",
 
-            // Logical operators
             .LogicalAnd => "&&",
             .LogicalOr => "||",
             .LogicalNot => "!",
 
-            // Bitwise operators
             .BitwiseAnd => "&",
             .BitwiseOr => "|",
             .BitwiseXor => "^",
@@ -261,7 +254,6 @@ pub const TokenType = enum(u32) {
             .RightShift => ">>",
             .UnsignedRightShift => ">>>",
 
-            // Bitwise assignment operators
             .BitwiseAndAssign => "&=",
             .BitwiseOrAssign => "|=",
             .BitwiseXorAssign => "^=",
@@ -269,14 +261,12 @@ pub const TokenType = enum(u32) {
             .RightShiftAssign => ">>=",
             .UnsignedRightShiftAssign => ">>>=",
 
-            // Other operators
             .NullishCoalescing => "??",
             .NullishAssign => "??=",
             .LogicalAndAssign => "&&=",
             .LogicalOrAssign => "||=",
             .OptionalChaining => "?.",
 
-            // Punctuation
             .LeftParen => "(",
             .RightParen => ")",
             .LeftBrace => "{",
@@ -291,7 +281,6 @@ pub const TokenType = enum(u32) {
             .Question => "?",
             .Colon => ":",
 
-            // Control flow keywords
             .If => "if",
             .Else => "else",
             .Switch => "switch",
@@ -303,20 +292,17 @@ pub const TokenType = enum(u32) {
             .Break => "break",
             .Continue => "continue",
 
-            // Function keywords
             .Function => "function",
             .Return => "return",
             .Async => "async",
             .Await => "await",
             .Yield => "yield",
 
-            // Variable declaration keywords
             .Var => "var",
             .Let => "let",
             .Const => "const",
             .Using => "using",
 
-            // Class keywords
             .Class => "class",
             .Extends => "extends",
             .Super => "super",
@@ -328,19 +314,16 @@ pub const TokenType = enum(u32) {
             .Interface => "interface",
             .Implements => "implements",
 
-            // Module keywords
             .Import => "import",
             .Export => "export",
             .From => "from",
             .As => "as",
 
-            // Error handling keywords
             .Try => "try",
             .Catch => "catch",
             .Finally => "finally",
             .Throw => "throw",
 
-            // Other keywords
             .New => "new",
             .This => "this",
             .Typeof => "typeof",
@@ -352,13 +335,9 @@ pub const TokenType = enum(u32) {
             .With => "with",
             .Debugger => "debugger",
 
-            // TypeScript
             .Declare => "declare",
 
-            // EOF
-            .EOF => "EOF",
-
-            // Dynamic content tokens - return null
+            .EOF,
             .NumericLiteral,
             .HexLiteral,
             .OctalLiteral,
