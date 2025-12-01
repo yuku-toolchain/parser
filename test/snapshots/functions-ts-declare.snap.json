@@ -2,12 +2,12 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 141,
+    "end": 140,
     "sourceType": "module",
     "body": [{
         "type": "TSDeclareFunction",
         "start": 0,
-        "end": 23,
+        "end": 22,
         "id": {
           "type": "Identifier",
           "start": 17,
@@ -24,7 +24,7 @@
       },{
         "type": "TSDeclareFunction",
         "start": 23,
-        "end": 47,
+        "end": 45,
         "id": {
           "type": "Identifier",
           "start": 40,
@@ -46,7 +46,7 @@
       },{
         "type": "TSDeclareFunction",
         "start": 47,
-        "end": 74,
+        "end": 72,
         "id": {
           "type": "Identifier",
           "start": 64,
@@ -73,7 +73,7 @@
       },{
         "type": "TSDeclareFunction",
         "start": 74,
-        "end": 104,
+        "end": 102,
         "id": {
           "type": "Identifier",
           "start": 91,
@@ -100,7 +100,7 @@
       },{
         "type": "TSDeclareFunction",
         "start": 104,
-        "end": 141,
+        "end": 138,
         "id": {
           "type": "Identifier",
           "start": 121,

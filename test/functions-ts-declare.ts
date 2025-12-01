@@ -3,4 +3,3 @@ declare function bar(a)
 declare function baz(a, b)
 declare function qux(...args)
 declare function withDefault(a = 1)
-

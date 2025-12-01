@@ -59,7 +59,7 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) ?ast.NodeIndex {
         body = parseFunctionBody(parser) orelse ast.null_node;
     }
 
-    const end = if (body != ast.null_node) parser.getSpan(body).end else parser.eatSemicolon(parser.current_token.span.start);
+    const end = if (body != ast.null_node) parser.getSpan(body).end else parser.getSpan(params).end;
 
     return parser.addNode(.{
         .function = .{
