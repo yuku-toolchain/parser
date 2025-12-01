@@ -118,16 +118,17 @@ pub const Parser = struct {
 
         const start = self.current_token.span.start;
 
+        // directive
+        // can only appear at top
+        if (self.current_token.type == .StringLiteral) {
+            if (self.parseDirective()) |directive| {
+                self.scratch_directives.append(self.allocator(), directive);
+            }
+        }
+
         while (self.current_token.type != .EOF) {
             // block end
             if (self.current_token.type == .RightBrace) break;
-
-            if (self.current_token.type == .StringLiteral) {
-                if (self.parseDirective()) |directive| {
-                    self.scratch_directives.append(self.allocator(), directive);
-                    continue;
-                }
-            }
 
             if (self.parseStatement()) |statement| {
                 self.scratch_statements.append(self.allocator(), statement);
