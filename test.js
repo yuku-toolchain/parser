@@ -1,3 +1,1 @@
-function greet(name, { nice }) {
-  const hello = "nice"
-}
+hello ?? cool || nice

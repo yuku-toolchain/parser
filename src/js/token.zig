@@ -208,6 +208,173 @@ pub const TokenType = enum(u32) {
     pub fn isIdentifierLike(self: TokenType) bool {
         return self.is(Mask.IsIdentifierLike);
     }
+
+    pub fn toString(self: TokenType) ?[]const u8 {
+        return switch (self) {
+            // Literal keywords
+            .True => "true",
+            .False => "false",
+            .NullLiteral => "null",
+
+            // Arithmetic operators
+            .Plus => "+",
+            .Minus => "-",
+            .Star => "*",
+            .Slash => "/",
+            .Percent => "%",
+            .Exponent => "**",
+
+            // Assignment operators
+            .Assign => "=",
+            .PlusAssign => "+=",
+            .MinusAssign => "-=",
+            .StarAssign => "*=",
+            .SlashAssign => "/=",
+            .PercentAssign => "%=",
+            .ExponentAssign => "**=",
+
+            // Update operators
+            .Increment => "++",
+            .Decrement => "--",
+
+            // Comparison operators
+            .Equal => "==",
+            .NotEqual => "!=",
+            .StrictEqual => "===",
+            .StrictNotEqual => "!==",
+            .LessThan => "<",
+            .GreaterThan => ">",
+            .LessThanEqual => "<=",
+            .GreaterThanEqual => ">=",
+
+            // Logical operators
+            .LogicalAnd => "&&",
+            .LogicalOr => "||",
+            .LogicalNot => "!",
+
+            // Bitwise operators
+            .BitwiseAnd => "&",
+            .BitwiseOr => "|",
+            .BitwiseXor => "^",
+            .BitwiseNot => "~",
+            .LeftShift => "<<",
+            .RightShift => ">>",
+            .UnsignedRightShift => ">>>",
+
+            // Bitwise assignment operators
+            .BitwiseAndAssign => "&=",
+            .BitwiseOrAssign => "|=",
+            .BitwiseXorAssign => "^=",
+            .LeftShiftAssign => "<<=",
+            .RightShiftAssign => ">>=",
+            .UnsignedRightShiftAssign => ">>>=",
+
+            // Other operators
+            .NullishCoalescing => "??",
+            .NullishAssign => "??=",
+            .LogicalAndAssign => "&&=",
+            .LogicalOrAssign => "||=",
+            .OptionalChaining => "?.",
+
+            // Punctuation
+            .LeftParen => "(",
+            .RightParen => ")",
+            .LeftBrace => "{",
+            .RightBrace => "}",
+            .LeftBracket => "[",
+            .RightBracket => "]",
+            .Semicolon => ";",
+            .Comma => ",",
+            .Dot => ".",
+            .Spread => "...",
+            .Arrow => "=>",
+            .Question => "?",
+            .Colon => ":",
+
+            // Control flow keywords
+            .If => "if",
+            .Else => "else",
+            .Switch => "switch",
+            .Case => "case",
+            .Default => "default",
+            .For => "for",
+            .While => "while",
+            .Do => "do",
+            .Break => "break",
+            .Continue => "continue",
+
+            // Function keywords
+            .Function => "function",
+            .Return => "return",
+            .Async => "async",
+            .Await => "await",
+            .Yield => "yield",
+
+            // Variable declaration keywords
+            .Var => "var",
+            .Let => "let",
+            .Const => "const",
+            .Using => "using",
+
+            // Class keywords
+            .Class => "class",
+            .Extends => "extends",
+            .Super => "super",
+            .Static => "static",
+            .Enum => "enum",
+            .Public => "public",
+            .Private => "private",
+            .Protected => "protected",
+            .Interface => "interface",
+            .Implements => "implements",
+
+            // Module keywords
+            .Import => "import",
+            .Export => "export",
+            .From => "from",
+            .As => "as",
+
+            // Error handling keywords
+            .Try => "try",
+            .Catch => "catch",
+            .Finally => "finally",
+            .Throw => "throw",
+
+            // Other keywords
+            .New => "new",
+            .This => "this",
+            .Typeof => "typeof",
+            .Instanceof => "instanceof",
+            .In => "in",
+            .Of => "of",
+            .Delete => "delete",
+            .Void => "void",
+            .With => "with",
+            .Debugger => "debugger",
+
+            // TypeScript
+            .Declare => "declare",
+
+            // EOF
+            .EOF => "EOF",
+
+            // Dynamic content tokens - return null
+            .NumericLiteral,
+            .HexLiteral,
+            .OctalLiteral,
+            .BinaryLiteral,
+            .BigIntLiteral,
+            .StringLiteral,
+            .RegexLiteral,
+            .NoSubstitutionTemplate,
+            .TemplateHead,
+            .TemplateMiddle,
+            .TemplateTail,
+            .Identifier,
+            .PrivateIdentifier,
+            => null,
+        };
+    }
 };
 
 pub const Span = struct {

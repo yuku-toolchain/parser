@@ -21,7 +21,7 @@ pub fn parseExpression(parser: *Parser, precedence: u5) ?ast.NodeIndex {
     return left;
 }
 
-inline fn parseInfix(parser: *Parser, precedence: u5, left: ast.NodeIndex) ?ast.NodeIndex {
+fn parseInfix(parser: *Parser, precedence: u5, left: ast.NodeIndex) ?ast.NodeIndex {
     const current = parser.current_token;
 
     if (current.type == .Increment or current.type == .Decrement) {
@@ -49,7 +49,7 @@ inline fn parseInfix(parser: *Parser, precedence: u5, left: ast.NodeIndex) ?ast.
     return null;
 }
 
-inline fn parsePrefix(parser: *Parser) ?ast.NodeIndex {
+fn parsePrefix(parser: *Parser) ?ast.NodeIndex {
     const token_type = parser.current_token.type;
 
     if (token_type == .Function) {
@@ -113,7 +113,7 @@ fn parseUnaryExpression(parser: *Parser) ?ast.NodeIndex {
         .{
             .unary_expression = .{
                 .argument = argument,
-                .operator = ast.unaryOperatorFromToken(operator_token.type),
+                .operator = ast.UnaryOperator.fromToken(operator_token.type),
             },
         },
         .{ .start = operator_token.span.start, .end = parser.getSpan(argument).end },
@@ -122,7 +122,7 @@ fn parseUnaryExpression(parser: *Parser) ?ast.NodeIndex {
 
 fn parseUpdateExpression(parser: *Parser, prefix: bool, left: ast.NodeIndex) ?ast.NodeIndex {
     const operator_token = parser.current_token;
-    const operator = ast.updateOperatorFromToken(operator_token.type);
+    const operator = ast.UpdateOperator.fromToken(operator_token.type);
     parser.advance();
 
     if (prefix) {
@@ -162,9 +162,9 @@ fn parseUpdateExpression(parser: *Parser, prefix: bool, left: ast.NodeIndex) ?as
     );
 }
 
-inline fn parseBinaryExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) ?ast.NodeIndex {
+fn parseBinaryExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) ?ast.NodeIndex {
     const operator_token = parser.current_token;
-    const operator = ast.binaryOperatorFromToken(operator_token.type);
+    const operator = ast.BinaryOperator.fromToken(operator_token.type);
     parser.advance();
 
     const next_precedence = if (operator == .Exponent) precedence else precedence + 1;
@@ -176,18 +176,48 @@ inline fn parseBinaryExpression(parser: *Parser, precedence: u5, left: ast.NodeI
     );
 }
 
-inline fn parseLogicalExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) ?ast.NodeIndex {
+inline fn operatorsConflict(op1: ast.LogicalOperator, op2: ast.LogicalOperator) bool {
+    // can't mix ?? with && or ||
+    return (op1 == .NullishCoalescing) != (op2 == .NullishCoalescing);
+}
+
+inline fn operatorConflictErr(parser: *Parser, left: ast.NodeIndex, right: ast.NodeIndex) void {
+    const left_span = parser.getSpan(left);
+    const right_span = parser.getSpan(right);
+    parser.err(left_span.start, right_span.end, "Logical expressions and coalesce expressions cannot be mixed", "Wrap either expression in parentheses");
+}
+
+fn parseLogicalExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) ?ast.NodeIndex {
     const operator_token = parser.current_token;
     parser.advance();
 
     const right = parseExpression(parser, precedence + 1) orelse return null;
+    const current_operator = ast.LogicalOperator.fromToken(operator_token.type);
+
+    // check for operator mixing: can't mix ?? with && or ||
+    const left_data = parser.getData(left);
+    if (left_data == .logical_expression) {
+        if (operatorsConflict(current_operator, left_data.logical_expression.operator)) {
+            operatorConflictErr(parser, left, right);
+            return null;
+        }
+    }
+
+    const right_data = parser.getData(right);
+    if (right_data == .logical_expression) {
+        if (operatorsConflict(current_operator, right_data.logical_expression.operator)) {
+            operatorConflictErr(parser, left, right);
+            return null;
+        }
+    }
+    //
 
     return parser.addNode(
         .{
             .logical_expression = .{
                 .left = left,
                 .right = right,
-                .operator = ast.logicalOperatorFromToken(operator_token.type),
+                .operator = current_operator,
             },
         },
         .{ .start = parser.getSpan(left).start, .end = parser.getSpan(right).end },
@@ -196,7 +226,7 @@ inline fn parseLogicalExpression(parser: *Parser, precedence: u5, left: ast.Node
 
 fn parseAssignmentExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) ?ast.NodeIndex {
     const operator_token = parser.current_token;
-    const operator = ast.assignmentOperatorFromToken(operator_token.type);
+    const operator = ast.AssignmentOperator.fromToken(operator_token.type);
     const left_span = parser.getSpan(left);
 
     // validate that left side can be assigned to

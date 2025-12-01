@@ -42,12 +42,92 @@ pub const BinaryOperator = enum {
 
     In, // in
     Instanceof, // instanceof
+
+    pub fn fromToken(tok: token.TokenType) BinaryOperator {
+        return switch (tok) {
+            .Equal => .Equal,
+            .NotEqual => .NotEqual,
+            .StrictEqual => .StrictEqual,
+            .StrictNotEqual => .StrictNotEqual,
+            .LessThan => .LessThan,
+            .LessThanEqual => .LessThanOrEqual,
+            .GreaterThan => .GreaterThan,
+            .GreaterThanEqual => .GreaterThanOrEqual,
+            .Plus => .Add,
+            .Minus => .Subtract,
+            .Star => .Multiply,
+            .Slash => .Divide,
+            .Percent => .Modulo,
+            .Exponent => .Exponent,
+            .BitwiseOr => .BitwiseOr,
+            .BitwiseXor => .BitwiseXor,
+            .BitwiseAnd => .BitwiseAnd,
+            .LeftShift => .LeftShift,
+            .RightShift => .RightShift,
+            .UnsignedRightShift => .UnsignedRightShift,
+            .In => .In,
+            .Instanceof => .Instanceof,
+            else => unreachable,
+        };
+    }
+
+    pub fn toToken(self: BinaryOperator) token.TokenType {
+        return switch (self) {
+            .Equal => .Equal,
+            .NotEqual => .NotEqual,
+            .StrictEqual => .StrictEqual,
+            .StrictNotEqual => .StrictNotEqual,
+            .LessThan => .LessThan,
+            .LessThanOrEqual => .LessThanEqual,
+            .GreaterThan => .GreaterThan,
+            .GreaterThanOrEqual => .GreaterThanEqual,
+            .Add => .Plus,
+            .Subtract => .Minus,
+            .Multiply => .Star,
+            .Divide => .Slash,
+            .Modulo => .Percent,
+            .Exponent => .Exponent,
+            .BitwiseOr => .BitwiseOr,
+            .BitwiseXor => .BitwiseXor,
+            .BitwiseAnd => .BitwiseAnd,
+            .LeftShift => .LeftShift,
+            .RightShift => .RightShift,
+            .UnsignedRightShift => .UnsignedRightShift,
+            .In => .In,
+            .Instanceof => .Instanceof,
+        };
+    }
+
+    pub fn toString(self: BinaryOperator) []const u8 {
+        return self.toToken().toString().?;
+    }
 };
 
 pub const LogicalOperator = enum {
     And, // &&
     Or, // ||
     NullishCoalescing, // ??
+
+    pub fn fromToken(tok: token.TokenType) LogicalOperator {
+        return switch (tok) {
+            .LogicalAnd => .And,
+            .LogicalOr => .Or,
+            .NullishCoalescing => .NullishCoalescing,
+            else => unreachable,
+        };
+    }
+
+    pub fn toToken(self: LogicalOperator) token.TokenType {
+        return switch (self) {
+            .And => .LogicalAnd,
+            .Or => .LogicalOr,
+            .NullishCoalescing => .NullishCoalescing,
+        };
+    }
+
+    pub fn toString(self: LogicalOperator) []const u8 {
+        return self.toToken().toString().?;
+    }
 };
 
 pub const UnaryOperator = enum {
@@ -58,11 +138,59 @@ pub const UnaryOperator = enum {
     Typeof, // typeof
     Void, // void
     Delete, // delete
+
+    pub fn fromToken(tok: token.TokenType) UnaryOperator {
+        return switch (tok) {
+            .Minus => .Negate,
+            .Plus => .Positive,
+            .LogicalNot => .LogicalNot,
+            .BitwiseNot => .BitwiseNot,
+            .Typeof => .Typeof,
+            .Void => .Void,
+            .Delete => .Delete,
+            else => unreachable,
+        };
+    }
+
+    pub fn toToken(self: UnaryOperator) token.TokenType {
+        return switch (self) {
+            .Negate => .Minus,
+            .Positive => .Plus,
+            .LogicalNot => .LogicalNot,
+            .BitwiseNot => .BitwiseNot,
+            .Typeof => .Typeof,
+            .Void => .Void,
+            .Delete => .Delete,
+        };
+    }
+
+    pub fn toString(self: UnaryOperator) []const u8 {
+        return self.toToken().toString().?;
+    }
 };
 
 pub const UpdateOperator = enum {
     Increment, // ++
     Decrement, // --
+
+    pub fn fromToken(tok: token.TokenType) UpdateOperator {
+        return switch (tok) {
+            .Increment => .Increment,
+            .Decrement => .Decrement,
+            else => unreachable,
+        };
+    }
+
+    pub fn toToken(self: UpdateOperator) token.TokenType {
+        return switch (self) {
+            .Increment => .Increment,
+            .Decrement => .Decrement,
+        };
+    }
+
+    pub fn toString(self: UpdateOperator) []const u8 {
+        return self.toToken().toString().?;
+    }
 };
 
 pub const AssignmentOperator = enum {
@@ -82,6 +210,53 @@ pub const AssignmentOperator = enum {
     LogicalOrAssign, // ||=
     LogicalAndAssign, // &&=
     NullishAssign, // ??=
+
+    pub fn fromToken(tok: token.TokenType) AssignmentOperator {
+        return switch (tok) {
+            .Assign => .Assign,
+            .PlusAssign => .AddAssign,
+            .MinusAssign => .SubtractAssign,
+            .StarAssign => .MultiplyAssign,
+            .SlashAssign => .DivideAssign,
+            .PercentAssign => .ModuloAssign,
+            .ExponentAssign => .ExponentAssign,
+            .LeftShiftAssign => .LeftShiftAssign,
+            .RightShiftAssign => .RightShiftAssign,
+            .UnsignedRightShiftAssign => .UnsignedRightShiftAssign,
+            .BitwiseOrAssign => .BitwiseOrAssign,
+            .BitwiseXorAssign => .BitwiseXorAssign,
+            .BitwiseAndAssign => .BitwiseAndAssign,
+            .LogicalOrAssign => .LogicalOrAssign,
+            .LogicalAndAssign => .LogicalAndAssign,
+            .NullishAssign => .NullishAssign,
+            else => unreachable,
+        };
+    }
+
+    pub fn toToken(self: AssignmentOperator) token.TokenType {
+        return switch (self) {
+            .Assign => .Assign,
+            .AddAssign => .PlusAssign,
+            .SubtractAssign => .MinusAssign,
+            .MultiplyAssign => .StarAssign,
+            .DivideAssign => .SlashAssign,
+            .ModuloAssign => .PercentAssign,
+            .ExponentAssign => .ExponentAssign,
+            .LeftShiftAssign => .LeftShiftAssign,
+            .RightShiftAssign => .RightShiftAssign,
+            .UnsignedRightShiftAssign => .UnsignedRightShiftAssign,
+            .BitwiseOrAssign => .BitwiseOrAssign,
+            .BitwiseXorAssign => .BitwiseXorAssign,
+            .BitwiseAndAssign => .BitwiseAndAssign,
+            .LogicalOrAssign => .LogicalOrAssign,
+            .LogicalAndAssign => .LogicalAndAssign,
+            .NullishAssign => .NullishAssign,
+        };
+    }
+
+    pub fn toString(self: AssignmentOperator) []const u8 {
+        return self.toToken().toString().?;
+    }
 };
 
 pub const VariableKind = enum {
@@ -90,12 +265,30 @@ pub const VariableKind = enum {
     Const,
     Using,
     AwaitUsing,
+
+    pub fn toString(self: VariableKind) []const u8 {
+        return switch (self) {
+            .AwaitUsing => "await using",
+            .Var => "var",
+            .Let => "let",
+            .Const => "const",
+            .Using => "using",
+        };
+    }
 };
 
 pub const PropertyKind = enum {
     Init,
     Get,
     Set,
+
+    pub fn toString(self: PropertyKind) []const u8 {
+        return switch (self) {
+            .Init => "init",
+            .Get => "get",
+            .Set => "set",
+        };
+    }
 };
 
 /// `left operator right`
@@ -322,6 +515,13 @@ pub const Program = struct {
 pub const SourceType = enum {
     Script,
     Module,
+
+    pub fn toString(self: SourceType) []const u8 {
+        return switch (self) {
+            .Script => "script",
+            .Module => "module",
+        };
+    }
 };
 
 /// `"use strict";`
@@ -423,86 +623,6 @@ pub const Node = struct {
     data: NodeData,
     span: Span,
 };
-
-pub fn binaryOperatorFromToken(tok: token.TokenType) BinaryOperator {
-    return switch (tok) {
-        .Equal => .Equal,
-        .NotEqual => .NotEqual,
-        .StrictEqual => .StrictEqual,
-        .StrictNotEqual => .StrictNotEqual,
-        .LessThan => .LessThan,
-        .LessThanEqual => .LessThanOrEqual,
-        .GreaterThan => .GreaterThan,
-        .GreaterThanEqual => .GreaterThanOrEqual,
-        .Plus => .Add,
-        .Minus => .Subtract,
-        .Star => .Multiply,
-        .Slash => .Divide,
-        .Percent => .Modulo,
-        .Exponent => .Exponent,
-        .BitwiseOr => .BitwiseOr,
-        .BitwiseXor => .BitwiseXor,
-        .BitwiseAnd => .BitwiseAnd,
-        .LeftShift => .LeftShift,
-        .RightShift => .RightShift,
-        .UnsignedRightShift => .UnsignedRightShift,
-        .In => .In,
-        .Instanceof => .Instanceof,
-        else => unreachable,
-    };
-}
-
-pub fn logicalOperatorFromToken(tok: token.TokenType) LogicalOperator {
-    return switch (tok) {
-        .LogicalAnd => .And,
-        .LogicalOr => .Or,
-        .NullishCoalescing => .NullishCoalescing,
-        else => unreachable,
-    };
-}
-
-pub fn unaryOperatorFromToken(tok: token.TokenType) UnaryOperator {
-    return switch (tok) {
-        .Minus => .Negate,
-        .Plus => .Positive,
-        .LogicalNot => .LogicalNot,
-        .BitwiseNot => .BitwiseNot,
-        .Typeof => .Typeof,
-        .Void => .Void,
-        .Delete => .Delete,
-        else => unreachable,
-    };
-}
-
-pub fn updateOperatorFromToken(tok: token.TokenType) UpdateOperator {
-    return switch (tok) {
-        .Increment => .Increment,
-        .Decrement => .Decrement,
-        else => unreachable,
-    };
-}
-
-pub fn assignmentOperatorFromToken(tok: token.TokenType) AssignmentOperator {
-    return switch (tok) {
-        .Assign => .Assign,
-        .PlusAssign => .AddAssign,
-        .MinusAssign => .SubtractAssign,
-        .StarAssign => .MultiplyAssign,
-        .SlashAssign => .DivideAssign,
-        .PercentAssign => .ModuloAssign,
-        .ExponentAssign => .ExponentAssign,
-        .LeftShiftAssign => .LeftShiftAssign,
-        .RightShiftAssign => .RightShiftAssign,
-        .UnsignedRightShiftAssign => .UnsignedRightShiftAssign,
-        .BitwiseOrAssign => .BitwiseOrAssign,
-        .BitwiseXorAssign => .BitwiseXorAssign,
-        .BitwiseAndAssign => .BitwiseAndAssign,
-        .LogicalOrAssign => .LogicalOrAssign,
-        .LogicalAndAssign => .LogicalAndAssign,
-        .NullishAssign => .NullishAssign,
-        else => unreachable,
-    };
-}
 
 pub inline fn isNull(index: NodeIndex) bool {
     return index == null_node;

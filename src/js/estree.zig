@@ -230,7 +230,7 @@ pub const Serializer = struct {
         try self.writeType("VariableDeclaration");
         try self.writeSpan(span);
         try self.writeKey("kind");
-        try self.writeString(variableKindToString(data.kind));
+        try self.writeString(data.kind.toString());
         try self.writeKey("declarations");
         try self.writeNodeArray(data.declarators);
         try self.endObject();
@@ -254,7 +254,7 @@ pub const Serializer = struct {
         try self.writeKey("left");
         try self.writeNode(data.left);
         try self.writeKey("operator");
-        try self.writeString(binaryOperatorToString(data.operator));
+        try self.writeString(data.operator.toString());
         try self.writeKey("right");
         try self.writeNode(data.right);
         try self.endObject();
@@ -267,7 +267,7 @@ pub const Serializer = struct {
         try self.writeKey("left");
         try self.writeNode(data.left);
         try self.writeKey("operator");
-        try self.writeString(logicalOperatorToString(data.operator));
+        try self.writeString(data.operator.toString());
         try self.writeKey("right");
         try self.writeNode(data.right);
         try self.endObject();
@@ -278,7 +278,7 @@ pub const Serializer = struct {
         try self.writeType("UnaryExpression");
         try self.writeSpan(span);
         try self.writeKey("operator");
-        try self.writeString(unaryOperatorToString(data.operator));
+        try self.writeString(data.operator.toString());
         try self.writeKey("prefix");
         try self.writeBool(true);
         try self.writeKey("argument");
@@ -291,7 +291,7 @@ pub const Serializer = struct {
         try self.writeType("UpdateExpression");
         try self.writeSpan(span);
         try self.writeKey("operator");
-        try self.writeString(updateOperatorToString(data.operator));
+        try self.writeString(data.operator.toString());
         try self.writeKey("prefix");
         try self.writeBool(data.prefix);
         try self.writeKey("argument");
@@ -304,7 +304,7 @@ pub const Serializer = struct {
         try self.writeType("AssignmentExpression");
         try self.writeSpan(span);
         try self.writeKey("operator");
-        try self.writeString(assignmentOperatorToString(data.operator));
+        try self.writeString(data.operator.toString());
         try self.writeKey("left");
         try self.writeNode(data.left);
         try self.writeKey("right");
@@ -344,7 +344,7 @@ pub const Serializer = struct {
         try self.writeType("Property");
         try self.writeSpan(span);
         try self.writeKey("kind");
-        try self.writeString(propertyKindToString(data.kind));
+        try self.writeString(data.kind.toString());
         try self.writeKey("key");
         try self.writeNode(data.key);
         try self.writeKey("value");
@@ -729,99 +729,6 @@ pub const Serializer = struct {
         return raw;
     }
 };
-
-fn binaryOperatorToString(op: ast.BinaryOperator) []const u8 {
-    return switch (op) {
-        .Equal => "==",
-        .NotEqual => "!=",
-        .StrictEqual => "===",
-        .StrictNotEqual => "!==",
-        .LessThan => "<",
-        .LessThanOrEqual => "<=",
-        .GreaterThan => ">",
-        .GreaterThanOrEqual => ">=",
-        .Add => "+",
-        .Subtract => "-",
-        .Multiply => "*",
-        .Divide => "/",
-        .Modulo => "%",
-        .Exponent => "**",
-        .BitwiseOr => "|",
-        .BitwiseXor => "^",
-        .BitwiseAnd => "&",
-        .LeftShift => "<<",
-        .RightShift => ">>",
-        .UnsignedRightShift => ">>>",
-        .In => "in",
-        .Instanceof => "instanceof",
-    };
-}
-
-fn logicalOperatorToString(op: ast.LogicalOperator) []const u8 {
-    return switch (op) {
-        .And => "&&",
-        .Or => "||",
-        .NullishCoalescing => "??",
-    };
-}
-
-fn unaryOperatorToString(op: ast.UnaryOperator) []const u8 {
-    return switch (op) {
-        .Negate => "-",
-        .Positive => "+",
-        .LogicalNot => "!",
-        .BitwiseNot => "~",
-        .Typeof => "typeof",
-        .Void => "void",
-        .Delete => "delete",
-    };
-}
-
-fn updateOperatorToString(op: ast.UpdateOperator) []const u8 {
-    return switch (op) {
-        .Increment => "++",
-        .Decrement => "--",
-    };
-}
-
-fn assignmentOperatorToString(op: ast.AssignmentOperator) []const u8 {
-    return switch (op) {
-        .Assign => "=",
-        .AddAssign => "+=",
-        .SubtractAssign => "-=",
-        .MultiplyAssign => "*=",
-        .DivideAssign => "/=",
-        .ModuloAssign => "%=",
-        .ExponentAssign => "**=",
-        .LeftShiftAssign => "<<=",
-        .RightShiftAssign => ">>=",
-        .UnsignedRightShiftAssign => ">>>=",
-        .BitwiseOrAssign => "|=",
-        .BitwiseXorAssign => "^=",
-        .BitwiseAndAssign => "&=",
-        .LogicalOrAssign => "||=",
-        .LogicalAndAssign => "&&=",
-        .NullishAssign => "??=",
-    };
-}
-
-fn variableKindToString(kind: ast.VariableKind) []const u8 {
-    return switch (kind) {
-        .Var => "var",
-        .Let => "let",
-        .Const => "const",
-        .Using => "using",
-        .AwaitUsing => "await using",
-    };
-}
-
-fn propertyKindToString(kind: ast.PropertyKind) []const u8 {
-    return switch (kind) {
-        .Init => "init",
-        .Get => "get",
-        .Set => "set",
-    };
-}
 
 /// Serialize a ParseTree to ESTree-compatible JSON.
 /// Caller owns the returned memory and must free it.
