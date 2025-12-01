@@ -351,6 +351,12 @@ pub const Function = struct {
     body: NodeIndex,
 };
 
+/// https://tc39.es/ecma262/#prod-FunctionBody
+pub const FunctionBody = struct {
+    directives: IndexRange,
+    statements: IndexRange,
+};
+
 /// https://tc39.es/ecma262/#prod-FormalParameters
 pub const FormalParameters = struct {
     /// FormalParameter[]
@@ -366,6 +372,7 @@ pub const FormalParameter = struct {
 
 pub const NodeData = union(enum) {
     function: Function,
+    function_body: FunctionBody,
     formal_parameters: FormalParameters,
     formal_parameter: FormalParameter,
     binary_expression: BinaryExpression,

@@ -50,7 +50,9 @@ pub const Parser = struct {
     extra: std.ArrayList(ast.NodeIndex) = .empty,
     current_token: token.Token = undefined,
 
-    scratch_body: ScratchBuffer = .{},
+    scratch_statements: ScratchBuffer = .{},
+    scratch_directives: ScratchBuffer = .{},
+
     // multiple scratches to handle multiple extras at the same time
     scratch_a: ScratchBuffer = .{},
     scratch_b: ScratchBuffer = .{},
@@ -83,28 +85,17 @@ pub const Parser = struct {
 
         self.advance();
 
-        const start = self.current_token.span.start;
-        const checkpoint = self.scratch_body.begin();
-
-        while (self.current_token.type != .EOF) {
-            if (self.parseStatement()) |statement| {
-                self.scratch_body.append(self.allocator(), statement);
-            } else {
-                self.synchronize();
-            }
-        }
-
-        const body = self.addExtra(self.scratch_body.take(checkpoint));
+        const program_data = self.parseBody();
 
         const program = self.addNode(
             .{
                 .program = .{
                     .source_type = if (self.source_type == .Module) .Module else .Script,
-                    .body = body,
-                    .directives = .empty, // TODO: parse directives
+                    .body = program_data.statements,
+                    .directives = program_data.directives,
                 },
             },
-            .{ .start = start, .end = self.current_token.span.start },
+            .{ .start = program_data.span.start, .end = program_data.span.start},
         );
 
         const tree = ParseTree{
@@ -119,6 +110,54 @@ pub const Parser = struct {
         self.lexer.deinit();
 
         return tree;
+    }
+
+    pub fn parseBody(self: *Parser) struct { statements: ast.IndexRange, directives: ast.IndexRange, span: ast.Span } {
+        const statements_checkpoint = self.scratch_statements.begin();
+        const directives_checkpoint = self.scratch_directives.begin();
+
+        const start = self.current_token.span.start;
+
+        while (self.current_token.type != .EOF) {
+            // block end
+            if (self.current_token.type == .RightBrace) break;
+
+            if (self.current_token.type == .StringLiteral) {
+                if (self.parseDirective()) |directive| {
+                    self.scratch_directives.append(self.allocator(), directive);
+                    continue;
+                }
+            }
+
+            if (self.parseStatement()) |statement| {
+                self.scratch_statements.append(self.allocator(), statement);
+            } else {
+                self.synchronize();
+            }
+        }
+
+        const end = self.current_token.span.start;
+
+        return .{
+          .statements = self.addExtra(self.scratch_statements.take(statements_checkpoint)),
+          .directives = self.addExtra(self.scratch_directives.take(directives_checkpoint)),
+          .span = .{ .start = start, .end = end }
+        };
+    }
+
+    pub fn parseDirective(self: *Parser) ?ast.NodeIndex {
+        const current_token = self.current_token;
+
+        const expression = literals.parseStringLiteral(self) orelse return null;
+
+        return self.addNode(.{
+            .directive = .{
+                .expression = expression,
+                // without quotes
+                .value_start = current_token.span.start + 1,
+                .value_len = @intCast(current_token.lexeme.len - 2),
+            },
+        }, current_token.span);
     }
 
     pub fn parseStatement(self: *Parser) ?ast.NodeIndex {
@@ -272,7 +311,7 @@ pub const Parser = struct {
         try self.nodes.ensureTotalCapacity(alloc, estimated_nodes);
         try self.extra.ensureTotalCapacity(alloc, estimated_extra);
         try self.errors.ensureTotalCapacity(alloc, 32);
-        try self.scratch_body.items.ensureTotalCapacity(alloc, 256);
+        try self.scratch_statements.items.ensureTotalCapacity(alloc, 256);
         try self.scratch_a.items.ensureTotalCapacity(alloc, 128);
         try self.scratch_b.items.ensureTotalCapacity(alloc, 128);
     }

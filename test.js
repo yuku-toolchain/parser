@@ -1,1 +1,3 @@
-const cool = "nce";
+function cool(nice) {
+  "nice"
+}

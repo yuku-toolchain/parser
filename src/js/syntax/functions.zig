@@ -31,7 +31,14 @@ pub fn parseFunction(parser: *Parser, is_async: bool, is_expression: bool) ?ast.
 
     const params = parseFormalParamaters(parser) orelse return null;
 
-    // add body parsing
+    if (!parser.expect(.LeftBrace, "...", "...")) return null;
+
+    const body = parseFunctionBody(parser);
+
+    // end of right brace
+    const end = parser.current_token.span.end;
+
+    if (!parser.expect(.RightBrace, "...", "...")) return null;
 
     return parser.addNode(.{
         .function = .{
@@ -40,12 +47,18 @@ pub fn parseFunction(parser: *Parser, is_async: bool, is_expression: bool) ?ast.
             .generator = is_generator,
             .async = is_async,
             .params = params,
-            .body = 0, // implement body tomorrow xD
+            .body = body,
         },
     }, .{
         .start = start,
-        .end = 0, // add end after implementing body, which will be the end of body
+        .end = end,
     });
+}
+
+pub fn parseFunctionBody(parser: *Parser) ast.NodeIndex {
+    const body_data = parser.parseBody();
+
+    return parser.addNode(.{ .function_body = .{ .statements = body_data.statements, .directives = body_data.directives } }, body_data.span);
 }
 
 pub fn parseFormalParamaters(parser: *Parser) ?ast.NodeIndex {
