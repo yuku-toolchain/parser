@@ -6,9 +6,17 @@ const patterns = @import("patterns.zig");
 pub fn parseFunction(parser: *Parser, is_async: bool, is_expression: bool) ?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
-    if (is_async and !parser.expect(.Async, "...", "...")) return null;
+    if (is_async and !parser.expect(
+        .Async,
+        "Expected 'async' keyword",
+        "Async functions must start with the 'async' keyword.",
+    )) return null;
 
-    if (!parser.expect(.Function, "...", "...")) return null;
+    if (!parser.expect(
+        .Function,
+        "Expected 'function' keyword",
+        "Use 'function name() {}' to declare a function.",
+    )) return null;
 
     const function_type: ast.FunctionType = if (is_expression) .FunctionExpression else .FunctionDeclaration;
 
@@ -24,21 +32,34 @@ pub fn parseFunction(parser: *Parser, is_async: bool, is_expression: bool) ?ast.
     else
         ast.null_node;
 
-    if (is_expression and id == ast.null_node) {
-        parser.err(parser.current_token.span.start, parser.current_token.span.end, "...", "...");
+    if (!is_expression and id == ast.null_node) {
+        parser.err(
+            parser.current_token.span.start,
+            parser.current_token.span.end,
+            "Function declaration requires a name",
+            "Add a name after 'function', e.g. 'function myFunc() {}'.",
+        );
         return null;
     }
 
     const params = parseFormalParamaters(parser) orelse return null;
 
-    if (!parser.expect(.LeftBrace, "...", "...")) return null;
+    if (!parser.expect(
+        .LeftBrace,
+        "Expected '{' to start function body",
+        "Function bodies must be enclosed in braces: function name() { ... }",
+    )) return null;
 
     const body = parseFunctionBody(parser);
 
     // end of right brace
     const end = parser.current_token.span.end;
 
-    if (!parser.expect(.RightBrace, "...", "...")) return null;
+    if (!parser.expect(
+        .RightBrace,
+        "Expected '}' to close function body",
+        "Add a closing brace '}' to complete the function, or check for unbalanced braces inside.",
+    )) return null;
 
     return parser.addNode(.{
         .function = .{
@@ -62,7 +83,11 @@ pub fn parseFunctionBody(parser: *Parser) ast.NodeIndex {
 }
 
 pub fn parseFormalParamaters(parser: *Parser) ?ast.NodeIndex {
-    if (!parser.expect(.LeftParen, "...", "...")) return null;
+    if (!parser.expect(
+        .LeftParen,
+        "Expected '(' to start parameter list",
+        "Function parameters must be enclosed in parentheses: function name(a, b) {}",
+    )) return null;
 
     const start = parser.current_token.span.start;
     var end: u32 = parser.current_token.span.end;
@@ -72,11 +97,13 @@ pub fn parseFormalParamaters(parser: *Parser) ?ast.NodeIndex {
     var rest = ast.null_node;
 
     while (true) {
-        const current_token_type = parser.current_token.type;
+        if (parser.current_token.type == .Comma) {
+            parser.advance();
+        }
 
-        if (current_token_type == .RightParen or current_token_type == .EOF) break;
+        if (parser.current_token.type == .RightParen or parser.current_token.type == .EOF) break;
 
-        if (current_token_type == .Spread) {
+        if (parser.current_token.type == .Spread) {
             rest = patterns.parseBindingRestElement(parser) orelse ast.null_node;
             end = parser.getSpan(rest).end;
 
@@ -84,8 +111,8 @@ pub fn parseFormalParamaters(parser: *Parser) ?ast.NodeIndex {
                 parser.err(
                     parser.getSpan(rest).start,
                     parser.current_token.span.end,
-                    "...",
-                    "...",
+                    "Rest parameter must be the last parameter",
+                    "Move the '...rest' parameter to the end of the parameter list, or remove trailing parameters.",
                 );
 
                 return null;
@@ -97,13 +124,13 @@ pub fn parseFormalParamaters(parser: *Parser) ?ast.NodeIndex {
 
             parser.scratch_a.append(parser.allocator(), param);
         }
-
-        if (current_token_type == .Comma) {
-            parser.advance();
-        }
     }
 
-    if (!parser.expect(.RightParen, "...", "...")) return null;
+    if (!parser.expect(
+        .RightParen,
+        "Expected ')' to close parameter list",
+        "Add a closing parenthesis ')' after the parameters, or check for missing commas between parameters.",
+    )) return null;
 
     return parser.addNode(.{ .formal_parameters = .{ .items = parser.addExtra(parser.scratch_a.take(params_checkpoint)), .rest = rest } }, .{ .start = start, .end = end });
 }

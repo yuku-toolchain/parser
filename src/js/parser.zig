@@ -36,7 +36,7 @@ pub const ParseTree = struct {
         return self.errors.items.len > 0;
     }
 
-    pub fn deinit(self: *ParseTree) void {
+    pub fn deinit(self: *const ParseTree) void {
         self.arena.deinit();
     }
 };
@@ -95,7 +95,7 @@ pub const Parser = struct {
                     .directives = program_data.directives,
                 },
             },
-            .{ .start = program_data.span.start, .end = program_data.span.start},
+            .{ .start = program_data.span.start, .end = program_data.span.end},
         );
 
         const tree = ParseTree{
