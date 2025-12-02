@@ -48,6 +48,13 @@ pub const ParseTree = struct {
     }
 };
 
+const ParserContext = struct {
+    in_async: bool,
+    in_generator: bool,
+    /// parameters of the function currently being passed, available in function body, otherwise null
+    current_function_parameters: ?ast.NodeIndex,
+};
+
 pub const Parser = struct {
     source: []const u8,
     lexer: lexer.Lexer,
@@ -65,13 +72,7 @@ pub const Parser = struct {
     scratch_b: ScratchBuffer = .{},
     //
 
-    // context
-    in_async: bool = false,
-    in_generator: bool = false,
-    in_function: bool = false,
-    /// parameters of the function currently being passed, available in function body, otherwise null
-    current_function_parameters: ?ast.NodeIndex = null,
-    //
+    context: ParserContext,
 
     strict_mode: bool,
     source_type: SourceType,
@@ -85,6 +86,11 @@ pub const Parser = struct {
             .source_type = options.source_type,
             .lang = options.lang,
             .strict_mode = options.is_strict,
+            .context = .{
+                .in_async = true,
+                .in_generator = true,
+                .current_function_parameters = null
+            }
         };
     }
 
@@ -213,8 +219,8 @@ pub const Parser = struct {
 
         // It is a Syntax Error if FunctionBodyContainsUseStrict of FunctionBody is true and IsSimpleParameterList of FormalParameters is false.
         // https://tc39.es/ecma262/#sec-function-definitions-static-semantics-early-errors
-        if (self.current_function_parameters != null) {
-            if (self.isUseStrict(self.getSourceText(value_start, value_len)) and !functions.isSimpleParametersList(self, self.current_function_parameters.?)) {
+        if (self.context.current_function_parameters != null) {
+            if (self.isUseStrict(self.getSourceText(value_start, value_len)) and !functions.isSimpleParametersList(self, self.context.current_function_parameters.?)) {
                 self.err(start, end, "Illegal 'use strict' directive in function with non-simple parameter list", "Functions with default values, destructuring, or rest parameters cannot use 'use strict'. Move 'use strict' to the outer scope or simplify the parameters.");
                 return null;
             }

@@ -55,7 +55,7 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) ?ast.NodeIndex {
 
     const params = parseFormalParamaters(parser) orelse return null;
 
-    parser.current_function_parameters = params;
+    parser.context.current_function_parameters = params;
 
     const params_end = parser.current_token.span.end; // including )
 
@@ -80,7 +80,7 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) ?ast.NodeIndex {
 
     // reset after parsing function body, since this state it only available for function body
     // used to check the "use strict" directive early error
-    parser.current_function_parameters = null;
+    parser.context.current_function_parameters = null;
 
     const end = if (body != ast.null_node) parser.getSpan(body).end else params_end;
 

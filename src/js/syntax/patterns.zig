@@ -440,13 +440,13 @@ inline fn isReserved(
         return true;
     }
 
-    if (tok.type == .Await and (parser.in_async or parser.source_type == .Module)) {
-        parser.err(tok.span.start, tok.span.end, parser.formatMessage("'await' is reserved {s} and cannot be used {s}", .{ if (parser.in_async) "in async functions" else "at the top level of modules", as_what }), help);
+    if (tok.type == .Await and (parser.context.in_async or parser.source_type == .Module)) {
+        parser.err(tok.span.start, tok.span.end, parser.formatMessage("'await' is reserved {s} and cannot be used {s}", .{ if (parser.context.in_async) "in async functions" else "at the top level of modules", as_what }), help);
         return true;
     }
 
-    if (tok.type == .Yield and (parser.in_generator or parser.source_type == .Module)) {
-        parser.err(tok.span.start, tok.span.end, parser.formatMessage("'yield' is reserved {s} and cannot be used {s}", .{ if (parser.in_generator) "in generator functions" else "at the top level of modules", as_what }), help);
+    if (tok.type == .Yield and (parser.context.in_generator or parser.source_type == .Module)) {
+        parser.err(tok.span.start, tok.span.end, parser.formatMessage("'yield' is reserved {s} and cannot be used {s}", .{ if (parser.context.in_generator) "in generator functions" else "at the top level of modules", as_what }), help);
         return true;
     }
 
