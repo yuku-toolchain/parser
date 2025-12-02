@@ -2,21 +2,20 @@ const std = @import("std");
 const ast = @import("ast.zig");
 const parser = @import("parser.zig");
 
-// TODO: this can be more optimized
-
 pub const Serializer = struct {
     tree: *const parser.ParseTree,
     buffer: *std.ArrayList(u8),
     allocator: std.mem.Allocator,
     depth: u32 = 0,
     pretty: bool = true,
+    needs_comma: [max_depth]bool = [_]bool{false} ** max_depth,
 
     const Self = @This();
-    const Error = error{OutOfMemory};
+    const Error = error{ NoSpaceLeft, OutOfMemory };
+    const max_depth = 64;
 
     pub fn serialize(tree: *const parser.ParseTree, allocator: std.mem.Allocator, pretty: bool) ![]u8 {
         var buffer: std.ArrayList(u8) = try .initCapacity(allocator, tree.source.len * 3);
-
         errdefer buffer.deinit(allocator);
 
         var self = Self{
@@ -27,9 +26,8 @@ pub const Serializer = struct {
         };
 
         try self.beginObject();
-        try self.writeKeyFirst("program");
-        try self.writeNode(tree.program);
-        try self.writeKey("errors");
+        try self.fieldNode("program", tree.program);
+        try self.field("errors");
         try self.writeErrors();
         try self.endObject();
 
@@ -91,109 +89,62 @@ pub const Serializer = struct {
 
     fn writeProgram(self: *Self, data: ast.Program, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("Program");
-        try self.writeSpan(span);
-        try self.writeKey("sourceType");
-        try self.writeString(if (data.source_type == .Module) "module" else "script");
-
-        try self.writeKey("body");
+        try self.fieldType("Program");
+        try self.fieldSpan(span);
+        try self.fieldString("sourceType", if (data.source_type == .Module) "module" else "script");
+        try self.field("body");
         try self.beginArray();
-
-        const directives = self.getExtra(data.directives);
-        for (directives, 0..) |dir_idx, i| {
-            if (i > 0) try self.writeComma();
-            try self.writeNode(dir_idx);
-        }
-
-        const statements = self.getExtra(data.body);
-        for (statements, 0..) |stmt_idx, i| {
-            if (directives.len > 0 or i > 0) try self.writeComma();
-            try self.writeNode(stmt_idx);
-        }
-
+        for (self.getExtra(data.directives)) |idx| try self.elemNode(idx);
+        for (self.getExtra(data.body)) |idx| try self.elemNode(idx);
         try self.endArray();
         try self.endObject();
     }
 
     fn writeDirective(self: *Self, data: ast.Directive, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("ExpressionStatement");
-        try self.writeSpan(span);
-        try self.writeKey("expression");
-        try self.writeNode(data.expression);
-        try self.writeKey("directive");
-        try self.writeString(self.tree.source[data.value_start..][0..data.value_len]);
+        try self.fieldType("ExpressionStatement");
+        try self.fieldSpan(span);
+        try self.fieldNode("expression", data.expression);
+        try self.fieldString("directive", self.tree.source[data.value_start..][0..data.value_len]);
         try self.endObject();
     }
 
     fn writeFunction(self: *Self, data: ast.Function, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType(@tagName(data.type));
-        try self.writeSpan(span);
-        try self.writeKey("id");
-        try self.writeNode(data.id);
-        try self.writeKey("generator");
-        try self.writeBool(data.generator);
-        try self.writeKey("async");
-        try self.writeBool(data.async);
-        try self.writeKey("declare");
-        try self.writeBool(data.type == .TSDeclareFunction);
-        try self.writeKey("params");
+        try self.fieldType(@tagName(data.type));
+        try self.fieldSpan(span);
+        try self.fieldNode("id", data.id);
+        try self.fieldBool("generator", data.generator);
+        try self.fieldBool("async", data.async);
+        try self.fieldBool("declare", data.type == .TSDeclareFunction);
+        try self.field("params");
         try self.writeFunctionParams(data.params);
-        try self.writeKey("body");
-        try self.writeNode(data.body);
-        try self.writeKey("expression");
-        try self.writeBool(false);
+        try self.fieldNode("body", data.body);
+        try self.fieldBool("expression", false);
         try self.endObject();
     }
 
     fn writeFunctionParams(self: *Self, params_index: ast.NodeIndex) !void {
-        if (ast.isNull(params_index)) {
-            try self.beginArray();
-            try self.endArray();
-            return;
-        }
-
-        const data = self.tree.nodes.items(.data)[params_index];
-        const params = data.formal_parameters;
-
         try self.beginArray();
-
-        const items = self.getExtra(params.items);
-        for (items, 0..) |param_idx, i| {
-            if (i > 0) try self.writeComma();
-            const param_data = self.tree.nodes.items(.data)[param_idx];
-            try self.writeNode(param_data.formal_parameter.pattern);
+        if (!ast.isNull(params_index)) {
+            const params = self.tree.nodes.items(.data)[params_index].formal_parameters;
+            for (self.getExtra(params.items)) |idx| {
+                const param = self.tree.nodes.items(.data)[idx].formal_parameter;
+                try self.elemNode(param.pattern);
+            }
+            if (!ast.isNull(params.rest)) try self.elemNode(params.rest);
         }
-
-        if (!ast.isNull(params.rest)) {
-            if (items.len > 0) try self.writeComma();
-            try self.writeNode(params.rest);
-        }
-
         try self.endArray();
     }
 
     fn writeFunctionBody(self: *Self, data: ast.FunctionBody, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("BlockStatement");
-        try self.writeSpan(span);
-        try self.writeKey("body");
+        try self.fieldType("BlockStatement");
+        try self.fieldSpan(span);
+        try self.field("body");
         try self.beginArray();
-
-        const directives = self.getExtra(data.directives);
-
-        for (directives, 0..) |dir_idx, i| {
-            if (i > 0) try self.writeComma();
-            try self.writeNode(dir_idx);
-        }
-
-        const statements = self.getExtra(data.statements);
-        for (statements, 0..) |stmt_idx, i| {
-            if (directives.len > 0 or i > 0) try self.writeComma();
-            try self.writeNode(stmt_idx);
-        }
-
+        for (self.getExtra(data.directives)) |idx| try self.elemNode(idx);
+        for (self.getExtra(data.statements)) |idx| try self.elemNode(idx);
         try self.endArray();
         try self.endObject();
     }
@@ -201,19 +152,11 @@ pub const Serializer = struct {
     fn writeFormalParameters(self: *Self, data: ast.FormalParameters, span: ast.Span) !void {
         _ = span;
         try self.beginArray();
-
-        const items = self.getExtra(data.items);
-        for (items, 0..) |param_idx, i| {
-            if (i > 0) try self.writeComma();
-            const param_data = self.tree.nodes.items(.data)[param_idx];
-            try self.writeNode(param_data.formal_parameter.pattern);
+        for (self.getExtra(data.items)) |idx| {
+            const param = self.tree.nodes.items(.data)[idx].formal_parameter;
+            try self.elemNode(param.pattern);
         }
-
-        if (!ast.isNull(data.rest)) {
-            if (items.len > 0) try self.writeComma();
-            try self.writeNode(data.rest);
-        }
-
+        if (!ast.isNull(data.rest)) try self.elemNode(data.rest);
         try self.endArray();
     }
 
@@ -223,237 +166,186 @@ pub const Serializer = struct {
 
     fn writeExpressionStatement(self: *Self, data: ast.ExpressionStatement, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("ExpressionStatement");
-        try self.writeSpan(span);
-        try self.writeKey("expression");
-        try self.writeNode(data.expression);
+        try self.fieldType("ExpressionStatement");
+        try self.fieldSpan(span);
+        try self.fieldNode("expression", data.expression);
         try self.endObject();
     }
 
     fn writeVariableDeclaration(self: *Self, data: ast.VariableDeclaration, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("VariableDeclaration");
-        try self.writeSpan(span);
-        try self.writeKey("kind");
-        try self.writeString(data.kind.toString());
-        try self.writeKey("declarations");
-        try self.writeNodeArray(data.declarators);
+        try self.fieldType("VariableDeclaration");
+        try self.fieldSpan(span);
+        try self.fieldString("kind", data.kind.toString());
+        try self.fieldNodeArray("declarations", data.declarators);
         try self.endObject();
     }
 
     fn writeVariableDeclarator(self: *Self, data: ast.VariableDeclarator, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("VariableDeclarator");
-        try self.writeSpan(span);
-        try self.writeKey("id");
-        try self.writeNode(data.id);
-        try self.writeKey("init");
-        try self.writeNode(data.init);
+        try self.fieldType("VariableDeclarator");
+        try self.fieldSpan(span);
+        try self.fieldNode("id", data.id);
+        try self.fieldNode("init", data.init);
         try self.endObject();
     }
 
     fn writeBinaryExpression(self: *Self, data: ast.BinaryExpression, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("BinaryExpression");
-        try self.writeSpan(span);
-        try self.writeKey("left");
-        try self.writeNode(data.left);
-        try self.writeKey("operator");
-        try self.writeString(data.operator.toString());
-        try self.writeKey("right");
-        try self.writeNode(data.right);
+        try self.fieldType("BinaryExpression");
+        try self.fieldSpan(span);
+        try self.fieldNode("left", data.left);
+        try self.fieldString("operator", data.operator.toString());
+        try self.fieldNode("right", data.right);
         try self.endObject();
     }
 
     fn writeLogicalExpression(self: *Self, data: ast.LogicalExpression, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("LogicalExpression");
-        try self.writeSpan(span);
-        try self.writeKey("left");
-        try self.writeNode(data.left);
-        try self.writeKey("operator");
-        try self.writeString(data.operator.toString());
-        try self.writeKey("right");
-        try self.writeNode(data.right);
+        try self.fieldType("LogicalExpression");
+        try self.fieldSpan(span);
+        try self.fieldNode("left", data.left);
+        try self.fieldString("operator", data.operator.toString());
+        try self.fieldNode("right", data.right);
         try self.endObject();
     }
 
     fn writeUnaryExpression(self: *Self, data: ast.UnaryExpression, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("UnaryExpression");
-        try self.writeSpan(span);
-        try self.writeKey("operator");
-        try self.writeString(data.operator.toString());
-        try self.writeKey("prefix");
-        try self.writeBool(true);
-        try self.writeKey("argument");
-        try self.writeNode(data.argument);
+        try self.fieldType("UnaryExpression");
+        try self.fieldSpan(span);
+        try self.fieldString("operator", data.operator.toString());
+        try self.fieldBool("prefix", true);
+        try self.fieldNode("argument", data.argument);
         try self.endObject();
     }
 
     fn writeUpdateExpression(self: *Self, data: ast.UpdateExpression, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("UpdateExpression");
-        try self.writeSpan(span);
-        try self.writeKey("operator");
-        try self.writeString(data.operator.toString());
-        try self.writeKey("prefix");
-        try self.writeBool(data.prefix);
-        try self.writeKey("argument");
-        try self.writeNode(data.argument);
+        try self.fieldType("UpdateExpression");
+        try self.fieldSpan(span);
+        try self.fieldString("operator", data.operator.toString());
+        try self.fieldBool("prefix", data.prefix);
+        try self.fieldNode("argument", data.argument);
         try self.endObject();
     }
 
     fn writeAssignmentExpression(self: *Self, data: ast.AssignmentExpression, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("AssignmentExpression");
-        try self.writeSpan(span);
-        try self.writeKey("operator");
-        try self.writeString(data.operator.toString());
-        try self.writeKey("left");
-        try self.writeNode(data.left);
-        try self.writeKey("right");
-        try self.writeNode(data.right);
+        try self.fieldType("AssignmentExpression");
+        try self.fieldSpan(span);
+        try self.fieldString("operator", data.operator.toString());
+        try self.fieldNode("left", data.left);
+        try self.fieldNode("right", data.right);
         try self.endObject();
     }
 
     fn writeArrayExpression(self: *Self, data: ast.ArrayExpression, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("ArrayExpression");
-        try self.writeSpan(span);
-        try self.writeKey("elements");
-        try self.writeNodeArray(data.elements);
+        try self.fieldType("ArrayExpression");
+        try self.fieldSpan(span);
+        try self.fieldNodeArray("elements", data.elements);
         try self.endObject();
     }
 
     fn writeObjectExpression(self: *Self, data: ast.ObjectExpression, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("ObjectExpression");
-        try self.writeSpan(span);
-        try self.writeKey("properties");
-        try self.writeNodeArray(data.properties);
+        try self.fieldType("ObjectExpression");
+        try self.fieldSpan(span);
+        try self.fieldNodeArray("properties", data.properties);
         try self.endObject();
     }
 
     fn writeSpreadElement(self: *Self, data: ast.SpreadElement, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("SpreadElement");
-        try self.writeSpan(span);
-        try self.writeKey("argument");
-        try self.writeNode(data.argument);
+        try self.fieldType("SpreadElement");
+        try self.fieldSpan(span);
+        try self.fieldNode("argument", data.argument);
         try self.endObject();
     }
 
     fn writeObjectProperty(self: *Self, data: ast.ObjectProperty, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("Property");
-        try self.writeSpan(span);
-        try self.writeKey("kind");
-        try self.writeString(data.kind.toString());
-        try self.writeKey("key");
-        try self.writeNode(data.key);
-        try self.writeKey("value");
-        try self.writeNode(data.value);
-        try self.writeKey("method");
-        try self.writeBool(false); // TODO: update when methods are implemented
-        try self.writeKey("shorthand");
-        try self.writeBool(data.shorthand);
-        try self.writeKey("computed");
-        try self.writeBool(data.computed);
+        try self.fieldType("Property");
+        try self.fieldSpan(span);
+        try self.fieldString("kind", data.kind.toString());
+        try self.fieldNode("key", data.key);
+        try self.fieldNode("value", data.value);
+        try self.fieldBool("method", false); // TODO: update when methods are implemented
+        try self.fieldBool("shorthand", data.shorthand);
+        try self.fieldBool("computed", data.computed);
         try self.endObject();
     }
 
     fn writeTemplateLiteral(self: *Self, data: ast.TemplateLiteral, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("TemplateLiteral");
-        try self.writeSpan(span);
-        try self.writeKey("quasis");
-        try self.writeNodeArray(data.quasis);
-        try self.writeKey("expressions");
-        try self.writeNodeArray(data.expressions);
+        try self.fieldType("TemplateLiteral");
+        try self.fieldSpan(span);
+        try self.fieldNodeArray("quasis", data.quasis);
+        try self.fieldNodeArray("expressions", data.expressions);
         try self.endObject();
     }
 
     fn writeTemplateElement(self: *Self, data: ast.TemplateElement, span: ast.Span) !void {
         const raw = self.tree.source[data.raw_start..][0..data.raw_len];
-
         try self.beginObject();
-        try self.writeType("TemplateElement");
-        try self.writeSpan(span);
-        try self.writeKey("value");
+        try self.fieldType("TemplateElement");
+        try self.fieldSpan(span);
+        try self.field("value");
         try self.beginObject();
-        try self.writeKeyFirst("raw");
-        try self.writeString(raw);
-        try self.writeKey("cooked");
-        try self.writeString(raw); // TODO: proper escape processing
+        try self.fieldString("raw", raw);
+        try self.fieldString("cooked", raw); // TODO: proper escape processing
         try self.endObject();
-        try self.writeKey("tail");
-        try self.writeBool(data.tail);
+        try self.fieldBool("tail", data.tail);
         try self.endObject();
     }
 
     fn writeStringLiteral(self: *Self, data: ast.StringLiteral, span: ast.Span) !void {
         const raw = self.tree.source[data.raw_start..][0..data.raw_len];
-        const value = raw[1 .. raw.len - 1]; // strip quotes
-
         try self.beginObject();
-        try self.writeType("Literal");
-        try self.writeSpan(span);
-        try self.writeKey("value");
-        try self.writeString(value);
-        try self.writeKey("raw");
-        try self.writeString(raw);
+        try self.fieldType("Literal");
+        try self.fieldSpan(span);
+        try self.fieldString("value", raw[1 .. raw.len - 1]); // strip quotes
+        try self.fieldString("raw", raw);
         try self.endObject();
     }
 
     fn writeNumericLiteral(self: *Self, data: ast.NumericLiteral, span: ast.Span) !void {
         const raw = self.tree.source[data.raw_start..][0..data.raw_len];
-
         try self.beginObject();
-        try self.writeType("Literal");
-        try self.writeSpan(span);
-        try self.writeKey("value");
-        try self.writeRaw(self.parseNumericValue(raw));
-        try self.writeKey("raw");
-        try self.writeString(raw);
+        try self.fieldType("Literal");
+        try self.fieldSpan(span);
+        try self.fieldRaw("value", raw); // TODO: proper numeric parsing
+        try self.fieldString("raw", raw);
         try self.endObject();
     }
 
     fn writeBigIntLiteral(self: *Self, data: ast.BigIntLiteral, span: ast.Span) !void {
         const raw = self.tree.source[data.raw_start..][0..data.raw_len];
-        const bigint = raw[0 .. raw.len - 1]; // strip 'n' suffix
-
         try self.beginObject();
-        try self.writeType("Literal");
-        try self.writeSpan(span);
-        try self.writeKey("value");
-        try self.writeNull(); // big int can't be represented in JSON
-        try self.writeKey("raw");
-        try self.writeString(raw);
-        try self.writeKey("bigint");
-        try self.writeString(bigint);
+        try self.fieldType("Literal");
+        try self.fieldSpan(span);
+        try self.fieldNull("value"); // big int can't be represented in JSON
+        try self.fieldString("raw", raw);
+        try self.fieldString("bigint", raw[0 .. raw.len - 1]); // strip 'n' suffix
         try self.endObject();
     }
 
     fn writeBooleanLiteral(self: *Self, data: ast.BooleanLiteral, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("Literal");
-        try self.writeSpan(span);
-        try self.writeKey("value");
-        try self.writeBool(data.value);
-        try self.writeKey("raw");
-        try self.writeString(if (data.value) "true" else "false");
+        try self.fieldType("Literal");
+        try self.fieldSpan(span);
+        try self.fieldBool("value", data.value);
+        try self.fieldString("raw", if (data.value) "true" else "false");
         try self.endObject();
     }
 
     fn writeNullLiteral(self: *Self, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("Literal");
-        try self.writeSpan(span);
-        try self.writeKey("value");
-        try self.writeNull();
-        try self.writeKey("raw");
-        try self.writeString("null");
+        try self.fieldType("Literal");
+        try self.fieldSpan(span);
+        try self.fieldNull("value");
+        try self.fieldString("raw", "null");
         try self.endObject();
     }
 
@@ -462,147 +354,109 @@ pub const Serializer = struct {
         const flags = self.tree.source[data.flags_start..][0..data.flags_len];
 
         try self.beginObject();
-        try self.writeType("Literal");
-        try self.writeSpan(span);
-        try self.writeKey("value");
-        try self.writeNull(); // regex objects can't be serialized to JSON
-        try self.writeKey("raw");
+        try self.fieldType("Literal");
+        try self.fieldSpan(span);
+        try self.fieldNull("value"); // regex objects can't be serialized to JSON
+        try self.field("raw");
         try self.writeByte('"');
         try self.writeByte('/');
         try self.writeEscaped(pattern);
         try self.writeByte('/');
         try self.write(flags);
         try self.writeByte('"');
-        try self.writeKey("regex");
+        try self.field("regex");
         try self.beginObject();
-        try self.writeKeyFirst("pattern");
-        try self.writeString(pattern);
-        try self.writeKey("flags");
-        try self.writeString(flags);
+        try self.fieldString("pattern", pattern);
+        try self.fieldString("flags", flags);
         try self.endObject();
         try self.endObject();
     }
 
     fn writeIdentifier(self: *Self, data: anytype, span: ast.Span) !void {
-        const name = self.tree.source[data.name_start..][0..data.name_len];
-
         try self.beginObject();
-        try self.writeType("Identifier");
-        try self.writeSpan(span);
-        try self.writeKey("name");
-        try self.writeString(name);
+        try self.fieldType("Identifier");
+        try self.fieldSpan(span);
+        try self.fieldString("name", self.tree.source[data.name_start..][0..data.name_len]);
         try self.endObject();
     }
 
     fn writePrivateIdentifier(self: *Self, data: ast.PrivateIdentifier, span: ast.Span) !void {
         const name = self.tree.source[data.name_start..][0..data.name_len];
-
         try self.beginObject();
-        try self.writeType("PrivateIdentifier");
-        try self.writeSpan(span);
-        try self.writeKey("name");
-        try self.writeString(name[1..]); // strip '#' prefix
+        try self.fieldType("PrivateIdentifier");
+        try self.fieldSpan(span);
+        try self.fieldString("name", name[1..]); // strip '#' prefix
         try self.endObject();
     }
 
     fn writeAssignmentPattern(self: *Self, data: ast.AssignmentPattern, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("AssignmentPattern");
-        try self.writeSpan(span);
-        try self.writeKey("left");
-        try self.writeNode(data.left);
-        try self.writeKey("right");
-        try self.writeNode(data.right);
+        try self.fieldType("AssignmentPattern");
+        try self.fieldSpan(span);
+        try self.fieldNode("left", data.left);
+        try self.fieldNode("right", data.right);
         try self.endObject();
     }
 
     fn writeArrayPattern(self: *Self, data: ast.ArrayPattern, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("ArrayPattern");
-        try self.writeSpan(span);
-        try self.writeKey("elements");
-
+        try self.fieldType("ArrayPattern");
+        try self.fieldSpan(span);
+        try self.field("elements");
         try self.beginArray();
-        const elements = self.getExtra(data.elements);
-        for (elements, 0..) |elem_idx, i| {
-            if (i > 0) try self.writeComma();
-            try self.writeNode(elem_idx);
-        }
-        if (!ast.isNull(data.rest)) {
-            if (elements.len > 0) try self.writeComma();
-            try self.writeNode(data.rest);
-        }
+        for (self.getExtra(data.elements)) |idx| try self.elemNode(idx);
+        if (!ast.isNull(data.rest)) try self.elemNode(data.rest);
         try self.endArray();
-
         try self.endObject();
     }
 
     fn writeObjectPattern(self: *Self, data: ast.ObjectPattern, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("ObjectPattern");
-        try self.writeSpan(span);
-        try self.writeKey("properties");
-
+        try self.fieldType("ObjectPattern");
+        try self.fieldSpan(span);
+        try self.field("properties");
         try self.beginArray();
-        const properties = self.getExtra(data.properties);
-        for (properties, 0..) |prop_idx, i| {
-            if (i > 0) try self.writeComma();
-            try self.writeNode(prop_idx);
-        }
-        if (!ast.isNull(data.rest)) {
-            if (properties.len > 0) try self.writeComma();
-            try self.writeNode(data.rest);
-        }
+        for (self.getExtra(data.properties)) |idx| try self.elemNode(idx);
+        if (!ast.isNull(data.rest)) try self.elemNode(data.rest);
         try self.endArray();
-
         try self.endObject();
     }
 
     fn writeBindingProperty(self: *Self, data: ast.BindingProperty, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("Property");
-        try self.writeSpan(span);
-        try self.writeKey("kind");
-        try self.writeString("init");
-        try self.writeKey("key");
-        try self.writeNode(data.key);
-        try self.writeKey("value");
-        try self.writeNode(data.value);
-        try self.writeKey("method");
-        try self.writeBool(false);
-        try self.writeKey("shorthand");
-        try self.writeBool(data.shorthand);
-        try self.writeKey("computed");
-        try self.writeBool(data.computed);
+        try self.fieldType("Property");
+        try self.fieldSpan(span);
+        try self.fieldString("kind", "init");
+        try self.fieldNode("key", data.key);
+        try self.fieldNode("value", data.value);
+        try self.fieldBool("method", false);
+        try self.fieldBool("shorthand", data.shorthand);
+        try self.fieldBool("computed", data.computed);
         try self.endObject();
     }
 
     fn writeRestElement(self: *Self, data: ast.BindingRestElement, span: ast.Span) !void {
         try self.beginObject();
-        try self.writeType("RestElement");
-        try self.writeSpan(span);
-        try self.writeKey("argument");
-        try self.writeNode(data.argument);
+        try self.fieldType("RestElement");
+        try self.fieldSpan(span);
+        try self.fieldNode("argument", data.argument);
         try self.endObject();
     }
 
     fn writeErrors(self: *Self) !void {
         try self.beginArray();
-        for (self.tree.errors.items, 0..) |err, i| {
-            if (i > 0) try self.writeComma();
+        for (self.tree.errors.items) |err| {
+            try self.sep();
             try self.beginObject();
-            try self.writeKeyFirst("message");
-            try self.writeString(err.message);
-            try self.writeKey("help");
+            try self.fieldString("message", err.message);
+            try self.field("help");
             if (err.help) |help| {
                 try self.writeString(help);
             } else {
                 try self.writeNull();
             }
-            try self.writeKey("start");
-            try self.writeInt(err.span.start);
-            try self.writeKey("end");
-            try self.writeInt(err.span.end);
+            try self.fieldInt("start", err.span.start);
+            try self.fieldInt("end", err.span.end);
             try self.endObject();
         }
         try self.endArray();
@@ -616,9 +470,16 @@ pub const Serializer = struct {
         try self.buffer.append(self.allocator, byte);
     }
 
+    fn sep(self: *Self) !void {
+        if (self.needs_comma[self.depth]) try self.writeByte(',');
+        self.needs_comma[self.depth] = true;
+    }
+
     fn beginObject(self: *Self) !void {
         try self.writeByte('{');
         self.depth += 1;
+        if (self.depth >= max_depth) unreachable; // nesting too deep
+        self.needs_comma[self.depth] = false;
     }
 
     fn endObject(self: *Self) !void {
@@ -633,6 +494,8 @@ pub const Serializer = struct {
     fn beginArray(self: *Self) !void {
         try self.writeByte('[');
         self.depth += 1;
+        if (self.depth >= max_depth) unreachable; // nesting too deep
+        self.needs_comma[self.depth] = false;
     }
 
     fn endArray(self: *Self) !void {
@@ -644,16 +507,8 @@ pub const Serializer = struct {
         try self.writeByte(']');
     }
 
-    fn writeKey(self: *Self, key: []const u8) !void {
-        try self.writeComma();
-        try self.writeKeyNoComma(key);
-    }
-
-    fn writeKeyFirst(self: *Self, key: []const u8) !void {
-        try self.writeKeyNoComma(key);
-    }
-
-    fn writeKeyNoComma(self: *Self, key: []const u8) !void {
+    fn field(self: *Self, key: []const u8) !void {
+        try self.sep();
         if (self.pretty) {
             try self.writeByte('\n');
             try self.writeIndent();
@@ -664,23 +519,56 @@ pub const Serializer = struct {
         if (self.pretty) try self.writeByte(' ');
     }
 
-    fn writeType(self: *Self, type_name: []const u8) !void {
-        if (self.pretty) {
-            try self.writeByte('\n');
-            try self.writeIndent();
-        }
-        try self.write("\"type\":");
-        if (self.pretty) try self.writeByte(' ');
-        try self.writeByte('"');
-        try self.write(type_name);
-        try self.writeByte('"');
+    fn fieldType(self: *Self, type_name: []const u8) !void {
+        try self.field("type");
+        try self.writeString(type_name);
     }
 
-    fn writeSpan(self: *Self, span: ast.Span) !void {
-        try self.writeKey("start");
-        try self.writeInt(span.start);
-        try self.writeKey("end");
-        try self.writeInt(span.end);
+    fn fieldSpan(self: *Self, span: ast.Span) !void {
+        try self.fieldInt("start", span.start);
+        try self.fieldInt("end", span.end);
+    }
+
+    fn fieldNode(self: *Self, key: []const u8, node: ast.NodeIndex) !void {
+        try self.field(key);
+        try self.writeNode(node);
+    }
+
+    fn fieldBool(self: *Self, key: []const u8, value: bool) !void {
+        try self.field(key);
+        try self.writeBool(value);
+    }
+
+    fn fieldString(self: *Self, key: []const u8, value: []const u8) !void {
+        try self.field(key);
+        try self.writeString(value);
+    }
+
+    fn fieldInt(self: *Self, key: []const u8, value: u32) !void {
+        try self.field(key);
+        try self.writeInt(value);
+    }
+
+    fn fieldNull(self: *Self, key: []const u8) !void {
+        try self.field(key);
+        try self.writeNull();
+    }
+
+    fn fieldRaw(self: *Self, key: []const u8, value: []const u8) !void {
+        try self.field(key);
+        try self.write(value);
+    }
+
+    fn fieldNodeArray(self: *Self, key: []const u8, range: ast.IndexRange) !void {
+        try self.field(key);
+        try self.beginArray();
+        for (self.getExtra(range)) |idx| try self.elemNode(idx);
+        try self.endArray();
+    }
+
+    fn elemNode(self: *Self, node: ast.NodeIndex) !void {
+        try self.sep();
+        try self.writeNode(node);
     }
 
     fn writeString(self: *Self, s: []const u8) !void {
@@ -697,6 +585,8 @@ pub const Serializer = struct {
                 '\n' => try self.write("\\n"),
                 '\r' => try self.write("\\r"),
                 '\t' => try self.write("\\t"),
+                0x08 => try self.write("\\b"),
+                0x0C => try self.write("\\f"),
                 else => {
                     if (c < 0x20) {
                         var buf: [6]u8 = undefined;
@@ -724,14 +614,6 @@ pub const Serializer = struct {
         try self.write("null");
     }
 
-    fn writeRaw(self: *Self, s: []const u8) !void {
-        try self.write(s);
-    }
-
-    fn writeComma(self: *Self) !void {
-        try self.writeByte(',');
-    }
-
     fn writeIndent(self: *Self) !void {
         const indent_size = self.depth * 2;
         const spaces = "                                        "; // 40 spaces
@@ -743,25 +625,8 @@ pub const Serializer = struct {
         }
     }
 
-    fn writeNodeArray(self: *Self, range: ast.IndexRange) !void {
-        try self.beginArray();
-        const indices = self.getExtra(range);
-        for (indices, 0..) |idx, i| {
-            if (i > 0) try self.writeComma();
-            try self.writeNode(idx);
-        }
-        try self.endArray();
-    }
-
     inline fn getExtra(self: *const Self, range: ast.IndexRange) []const ast.NodeIndex {
         return self.tree.extra.items[range.start..][0..range.len];
-    }
-
-    fn parseNumericValue(self: *Self, raw: []const u8) []const u8 {
-        _ = self;
-        // remove underscores and handle prefixes for json compatibility
-        // TODO: proper numeric parsing with underscore removal
-        return raw;
     }
 };
 
