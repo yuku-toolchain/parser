@@ -32,6 +32,7 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) ?ast.NodeIndex {
 
     if (parser.current_token.type == .Star) {
         is_generator = true;
+        parser.context.in_generator = true;
         parser.advance();
     }
 
@@ -60,10 +61,10 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) ?ast.NodeIndex {
 
     parser.context.current_function_parameters = params;
 
-    // reset states
     defer {
         parser.context.current_function_parameters = null;
         parser.context.in_async = false;
+        parser.context.in_generator = false;
     }
 
     const params_end = parser.current_token.span.end; // including )
