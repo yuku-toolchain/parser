@@ -79,19 +79,7 @@ pub const Parser = struct {
     lang: Lang,
 
     pub fn init(backing_allocator: std.mem.Allocator, source: []const u8, options: Options) Parser {
-        return .{
-            .source = source,
-            .lexer = lexer.Lexer.init(backing_allocator, source),
-            .arena = std.heap.ArenaAllocator.init(backing_allocator),
-            .source_type = options.source_type,
-            .lang = options.lang,
-            .strict_mode = options.is_strict,
-            .context = .{
-                .in_async = false,
-                .in_generator = false,
-                .current_function_parameters = null
-            }
-        };
+        return .{ .source = source, .lexer = lexer.Lexer.init(backing_allocator, source), .arena = std.heap.ArenaAllocator.init(backing_allocator), .source_type = options.source_type, .lang = options.lang, .strict_mode = options.is_strict, .context = .{ .in_async = false, .in_generator = false, .current_function_parameters = null } };
     }
 
     pub inline fn allocator(self: *Parser) std.mem.Allocator {

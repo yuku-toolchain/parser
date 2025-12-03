@@ -21,5 +21,53 @@ Very fast parser for the web, written in Zig.
 - [ ] TypeScript Support
 - [ ] JSX Support
 
+```zig
+const std = @import("std");
+const yuku = @import("yuku");
+
+pub fn main() !void {
+    // Backing allocator for the internal Arena allocator
+    const allocator = std.heap.page_allocator;
+    const source = "const x = 1 + 2";
+
+    // Initialize the parser
+    // Options:
+    //   .source_type - .Module (default) or .Script
+    //   .lang        - .Js (default), .Ts, .Jsx, .Tsx, or .Dts
+    //   .is_strict   - true (default) or false
+    var parser = yuku.Parser.init(allocator, source, .{
+        .source_type = .Module,
+        .lang = .Js,
+        .is_strict = true,
+    });
+
+    // Parse the source code and get the ParseTree
+    // The parser is consumed after this call
+    const tree = try parser.parse();
+    defer tree.deinit(); // Free all arena-allocated memory
+
+    // ParseTree contains:
+    //   .program  - Root node index (always a Program node)
+    //   .source   - Original source code
+    //   .nodes    - All AST nodes
+    //   .extra    - Storage for variadic children (e.g., array elements)
+    //   .errors   - Parse errors encountered
+
+    // Check for parse errors
+    if (tree.hasErrors()) {
+        for (tree.errors.items) |err| {
+            std.debug.print("Error: {s} at {d}:{d}\n", .{
+                err.message, err.span.start, err.span.end
+            });
+            if (err.help) |help| std.debug.print("  Help: {s}\n", .{help});
+        }
+        return;
+    }
+    
+    // Coming Soon Built-in AST traverser, visitor pattern, and
+    // more utilities to work with the AST efficiently.
+}
+```
+
 </div>
 <!-- markdownlint-restore -->
