@@ -2,7 +2,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 441,
+    "end": 442,
     "sourceType": "module",
     "body": [{
         "type": "FunctionDeclaration",
