@@ -56,6 +56,10 @@ fn parsePrefix(parser: *Parser) ?ast.NodeIndex {
         return functions.parseFunction(parser, .{ .is_expression = true });
     }
 
+    if (token_type == .Async) {
+        return functions.parseFunction(parser, .{ .is_expression = true, .is_async = true });
+    }
+
     if (token_type == .Increment or token_type == .Decrement) {
         return parseUpdateExpression(parser, true, ast.null_node);
     }

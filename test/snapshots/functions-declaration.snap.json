@@ -2,7 +2,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 360,
+    "end": 557,
     "sourceType": "module",
     "body": [{
         "type": "FunctionDeclaration",
@@ -486,6 +486,190 @@
           "type": "BlockStatement",
           "start": 356,
           "end": 358,
+          "body": [
+          ]
+        },
+        "expression": false
+      },{
+        "type": "FunctionDeclaration",
+        "start": 360,
+        "end": 377,
+        "id": {
+          "type": "Identifier",
+          "start": 369,
+          "end": 372,
+          "name": "gen"
+        },
+        "generator": true,
+        "async": false,
+        "declare": false,
+        "params": [
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 375,
+          "end": 377,
+          "body": [
+          ]
+        },
+        "expression": false
+      },{
+        "type": "FunctionDeclaration",
+        "start": 378,
+        "end": 396,
+        "id": {
+          "type": "Identifier",
+          "start": 388,
+          "end": 391,
+          "name": "gen"
+        },
+        "generator": true,
+        "async": false,
+        "declare": false,
+        "params": [
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 394,
+          "end": 396,
+          "body": [
+          ]
+        },
+        "expression": false
+      },{
+        "type": "FunctionDeclaration",
+        "start": 397,
+        "end": 415,
+        "id": {
+          "type": "Identifier",
+          "start": 407,
+          "end": 410,
+          "name": "gen"
+        },
+        "generator": true,
+        "async": false,
+        "declare": false,
+        "params": [
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 413,
+          "end": 415,
+          "body": [
+          ]
+        },
+        "expression": false
+      },{
+        "type": "FunctionDeclaration",
+        "start": 416,
+        "end": 435,
+        "id": {
+          "type": "Identifier",
+          "start": 427,
+          "end": 430,
+          "name": "gen"
+        },
+        "generator": true,
+        "async": false,
+        "declare": false,
+        "params": [
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 433,
+          "end": 435,
+          "body": [
+          ]
+        },
+        "expression": false
+      },{
+        "type": "FunctionDeclaration",
+        "start": 437,
+        "end": 465,
+        "id": {
+          "type": "Identifier",
+          "start": 452,
+          "end": 460,
+          "name": "asyncGen"
+        },
+        "generator": true,
+        "async": true,
+        "declare": false,
+        "params": [
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 463,
+          "end": 465,
+          "body": [
+          ]
+        },
+        "expression": false
+      },{
+        "type": "FunctionDeclaration",
+        "start": 466,
+        "end": 495,
+        "id": {
+          "type": "Identifier",
+          "start": 482,
+          "end": 490,
+          "name": "asyncGen"
+        },
+        "generator": true,
+        "async": true,
+        "declare": false,
+        "params": [
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 493,
+          "end": 495,
+          "body": [
+          ]
+        },
+        "expression": false
+      },{
+        "type": "FunctionDeclaration",
+        "start": 496,
+        "end": 525,
+        "id": {
+          "type": "Identifier",
+          "start": 512,
+          "end": 520,
+          "name": "asyncGen"
+        },
+        "generator": true,
+        "async": true,
+        "declare": false,
+        "params": [
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 523,
+          "end": 525,
+          "body": [
+          ]
+        },
+        "expression": false
+      },{
+        "type": "FunctionDeclaration",
+        "start": 526,
+        "end": 556,
+        "id": {
+          "type": "Identifier",
+          "start": 543,
+          "end": 551,
+          "name": "asyncGen"
+        },
+        "generator": true,
+        "async": true,
+        "declare": false,
+        "params": [
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 554,
+          "end": 556,
           "body": [
           ]
         },

@@ -11,3 +11,12 @@ function withPattern([a, b]) {}
 function withObjectPattern({a, b}) {}
 function complex(a, b = 1, ...rest) {}
 
+function*gen() {}
+function *gen() {}
+function* gen() {}
+function * gen() {}
+
+async function*asyncGen() {}
+async function *asyncGen() {}
+async function* asyncGen() {}
+async function * asyncGen() {}
