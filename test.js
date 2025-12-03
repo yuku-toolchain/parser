@@ -1,3 +1,4 @@
-function nice(hello = 1) {
-  const hello = "cool"
+const hello = "nice"
+
+async function nice(hello = 1) {
 }

@@ -87,8 +87,8 @@ pub const Parser = struct {
             .lang = options.lang,
             .strict_mode = options.is_strict,
             .context = .{
-                .in_async = true,
-                .in_generator = true,
+                .in_async = false,
+                .in_generator = false,
                 .current_function_parameters = null
             }
         };

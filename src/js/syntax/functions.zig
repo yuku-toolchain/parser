@@ -14,7 +14,10 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) ?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
     if (opts.is_async or opts.is_declare) {
-        parser.advance();
+        if(opts.is_async) {
+            parser.context.in_async = true;
+        }
+        parser.advance(); // consume 'async' or 'declare'
     }
 
     if (!parser.expect(
@@ -57,6 +60,12 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) ?ast.NodeIndex {
 
     parser.context.current_function_parameters = params;
 
+    // reset states
+    defer {
+        parser.context.current_function_parameters = null;
+        parser.context.in_async = false;
+    }
+
     const params_end = parser.current_token.span.end; // including )
 
     if (!parser.expect(
@@ -78,11 +87,11 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) ?ast.NodeIndex {
         body = parseFunctionBody(parser) orelse ast.null_node;
     }
 
-    // reset after parsing function body, since this state it only available for function body
-    // used to check the "use strict" directive early error
-    parser.context.current_function_parameters = null;
-
     const end = if (body != ast.null_node) parser.getSpan(body).end else params_end;
+
+    // TODO: function body cannot have super properties or super calls
+    // so remember this to handle when implement Super expression
+    // probably handle this there.
 
     return parser.addNode(.{
         .function = .{

@@ -39,7 +39,7 @@
 
 **Modern Expressions:**
 - [ ] Arrow functions (ArrowFunctionExpression)
-- [ ] Function expressions (FunctionExpression)
+- [x] Function expressions (FunctionExpression)
 - [ ] Class expressions (ClassExpression)
 - [ ] Object expressions (ObjectExpression)
 - [x] Array expressions (ArrayExpression)
@@ -77,14 +77,14 @@
 
 ### 1.5 Functions & Classes
 **Functions:**
-- [ ] Function declarations (FunctionDeclaration)
-- [ ] Function expressions
+- [x] Function declarations (FunctionDeclaration)
+- [x] Function expressions
 - [ ] Arrow functions
-- [ ] Generator functions (function*)
-- [ ] Async functions
-- [ ] Async generator functions
-- [ ] Function parameters (simple, rest, default)
-- [ ] Parameter destructuring
+- [x] Generator functions (function*)
+- [x] Async functions
+- [x] Async generator functions
+- [x] Function parameters (simple, rest, default)
+- [x] Parameter destructuring
 
 **Classes:**
 - [ ] Class declarations (ClassDeclaration)
