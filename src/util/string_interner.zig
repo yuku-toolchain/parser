@@ -13,7 +13,7 @@ pub const String = struct {
 
 allocator: std.mem.Allocator,
 bytes: std.ArrayList(u8),
-interned: std.StringHashMap(String, void),
+interned: std.AutoHashMap(String, void),
 
 pub fn init(allocator: std.mem.Allocator) std.mem.Allocator.Error!Self {
     var self = Self{
