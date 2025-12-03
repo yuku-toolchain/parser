@@ -1,7 +1,7 @@
 const std = @import("std");
 const js = @import("js");
 
-const printError = @import("print-error.zig").printError;
+const printError = @import("print_error.zig").printError;
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};

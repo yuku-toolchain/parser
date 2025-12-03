@@ -1,6 +1,7 @@
 const std = @import("std");
 
 pub const UnicodeId = @import("unicode-id.zig");
+pub const StringInterner = @import("string_interner.zig");
 
 pub const CodePoint = struct { len: u3, value: u21 };
 
