@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Invalid operand for increment/decrement operator",
       "help": "The '++' and '--' operators require a variable or property reference, not a literal or complex expression.",
       "start": 2,
-      "end": 3
+      "end": 3,
+      "labels": [
+      ]
     }
   ]
 }

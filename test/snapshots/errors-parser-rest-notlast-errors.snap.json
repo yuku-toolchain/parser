@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Rest element must be the last element in array destructuring",
       "help": "Move the '...rest' pattern to the end, or remove trailing elements.",
       "start": 5,
-      "end": 10
+      "end": 10,
+      "labels": [
+      ]
     }
   ]
 }

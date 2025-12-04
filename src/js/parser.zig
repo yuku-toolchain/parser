@@ -9,10 +9,33 @@ const patterns = @import("syntax/patterns.zig");
 const variables = @import("syntax/variables.zig");
 const functions = @import("syntax/functions.zig");
 
-pub const Error = struct {
+pub const Severity = enum {
+    @"error",
+    warning,
+    hint,
+    info,
+
+    pub fn toString(self: Severity) []const u8 {
+        return switch (self) {
+            .@"error" => "error",
+            .warning => "warning",
+            .hint => "hint",
+            .info => "info",
+        };
+    }
+};
+
+pub const Label = struct {
+    span: ast.Span,
+    message: []const u8,
+};
+
+pub const Diagnostic = struct {
+    severity: Severity = .@"error",
     message: []const u8,
     span: ast.Span,
     help: ?[]const u8 = null,
+    labels: []const Label = &.{},
 };
 
 pub const SourceType = enum { Script, Module };
@@ -34,13 +57,20 @@ pub const ParseTree = struct {
     nodes: std.MultiArrayList(ast.Node),
     /// Extra data storage for variadic node children
     extra: std.ArrayList(ast.NodeIndex),
-    /// Parse errors encountered
-    errors: std.ArrayList(Error),
+    /// Diagnostics (errors, warnings, etc.) encountered during parsing
+    diagnostics: std.ArrayList(Diagnostic),
     /// Arena allocator owning all the memory
     arena: std.heap.ArenaAllocator,
 
     pub inline fn hasErrors(self: ParseTree) bool {
-        return self.errors.items.len > 0;
+        for (self.diagnostics.items) |d| {
+            if (d.severity == .@"error") return true;
+        }
+        return false;
+    }
+
+    pub inline fn hasDiagnostics(self: ParseTree) bool {
+        return self.diagnostics.items.len > 0;
     }
 
     pub fn deinit(self: *const ParseTree) void {
@@ -58,7 +88,7 @@ pub const Parser = struct {
     source: []const u8,
     lexer: lexer.Lexer,
     arena: std.heap.ArenaAllocator,
-    errors: std.ArrayList(Error) = .empty,
+    diagnostics: std.ArrayList(Diagnostic) = .empty,
     nodes: std.MultiArrayList(ast.Node) = .empty,
     extra: std.ArrayList(ast.NodeIndex) = .empty,
     current_token: token.Token = undefined,
@@ -115,7 +145,7 @@ pub const Parser = struct {
             .source = self.source,
             .nodes = self.nodes,
             .extra = self.extra,
-            .errors = self.errors,
+            .diagnostics = self.diagnostics,
             .arena = self.arena,
         };
 
@@ -176,13 +206,14 @@ pub const Parser = struct {
                     break :blk variables.parseVariableDeclaration(self);
                 }
 
-                self.err(
-                    await_token.span.start,
-                    await_token.span.end,
+                self.report(
+                    await_token.span,
                     // TODO: message is not always right, there is top level awaits
                     // fix it when implement that
                     "'await' is only valid at the start of an 'await using' declaration or inside async functions",
-                    "If you intended to declare a disposable resource, use 'await using'. Otherwise, 'await' can only appear inside an async function.",
+                    .{
+                        .help = "If you intended to declare a disposable resource, use 'await using'. Otherwise, 'await' can only appear inside an async function.",
+                    },
                 );
                 break :blk null;
             },
@@ -264,7 +295,7 @@ pub const Parser = struct {
 
             const lex_err: lexer.LexicalError = @errorCast(e);
 
-            self.errors.append(self.allocator(), .{
+            self.diagnostics.append(self.allocator(), .{
                 .message = lexer.getLexicalErrorMessage(lex_err),
                 .span = .{ .start = self.lexer.token_start, .end = self.lexer.cursor },
                 .help = lexer.getLexicalErrorHelp(lex_err),
@@ -285,7 +316,7 @@ pub const Parser = struct {
             return true;
         }
 
-        self.err(self.current_token.span.start, self.current_token.span.end, message, help);
+        self.report(self.current_token.span, message, .{ .help = help });
         return false;
     }
 
@@ -299,12 +330,36 @@ pub const Parser = struct {
         return end;
     }
 
-    pub inline fn err(self: *Parser, start: u32, end: u32, message: []const u8, help: ?[]const u8) void {
-        self.errors.append(self.allocator(), .{
+    pub const ReportOptions = struct {
+        severity: Severity = .@"error",
+        help: ?[]const u8 = null,
+        labels: []const Label = &.{},
+    };
+
+    pub inline fn report(self: *Parser, span: ast.Span, message: []const u8, opts: ReportOptions) void {
+        self.diagnostics.append(self.allocator(), .{
+            .severity = opts.severity,
             .message = message,
-            .span = .{ .start = start, .end = end },
-            .help = help,
+            .span = span,
+            .help = opts.help,
+            .labels = opts.labels,
         }) catch unreachable;
+    }
+
+    pub inline fn reportFmt(self: *Parser, span: ast.Span, comptime format: []const u8, args: anytype, opts: ReportOptions) void {
+        const message = std.fmt.allocPrint(self.allocator(), format, args) catch unreachable;
+        self.report(span, message, opts);
+    }
+
+    pub inline fn label(self: *Parser, span: ast.Span, message: []const u8) Label {
+        _ = self;
+        return .{ .span = span, .message = message };
+    }
+
+    pub fn makeLabels(self: *Parser, labels: []const Label) []const Label {
+        const slice = self.allocator().alloc(Label, labels.len) catch unreachable;
+        @memcpy(slice, labels);
+        return slice;
     }
 
     pub fn formatMessage(self: *Parser, comptime format: []const u8, args: anytype) []u8 {
@@ -344,7 +399,7 @@ pub const Parser = struct {
 
         try self.nodes.ensureTotalCapacity(alloc, estimated_nodes);
         try self.extra.ensureTotalCapacity(alloc, estimated_extra);
-        try self.errors.ensureTotalCapacity(alloc, 32);
+        try self.diagnostics.ensureTotalCapacity(alloc, 32);
         try self.scratch_statements.items.ensureTotalCapacity(alloc, 256);
         try self.scratch_directives.items.ensureTotalCapacity(alloc, 256);
         try self.scratch_a.items.ensureTotalCapacity(alloc, 256);

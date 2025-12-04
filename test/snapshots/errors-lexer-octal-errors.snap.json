@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Octal literal must contain at least one octal digit",
       "help": "Try adding at least one octal digit (0-7) here after '0o'",
       "start": 0,
-      "end": 2
+      "end": 2,
+      "labels": [
+      ]
     }
   ]
 }

@@ -14,7 +14,7 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) ?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
     if (opts.is_async or opts.is_declare) {
-        if(opts.is_async) {
+        if (opts.is_async) {
             parser.context.in_async = true;
         }
         parser.advance(); // consume 'async' or 'declare'
@@ -42,11 +42,10 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) ?ast.NodeIndex {
         ast.null_node;
 
     if (!opts.is_expression and ast.isNull(id)) {
-        parser.err(
-            parser.current_token.span.start,
-            parser.current_token.span.end,
+        parser.report(
+            parser.current_token.span,
             "Function declaration requires a name",
-            "Add a name after 'function', e.g. 'function myFunc() {}'.",
+            .{ .help = "Add a name after 'function', e.g. 'function myFunc() {}'." },
         );
         return null;
     }
@@ -78,7 +77,11 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) ?ast.NodeIndex {
 
     if (opts.is_declare) {
         if (parser.current_token.type == .LeftBrace) {
-            parser.err(parser.current_token.span.start, parser.current_token.span.end, "TS(1183): An implementation cannot be declared in ambient contexts.", "Remove the function body or remove the 'declare' modifier");
+            parser.report(
+                parser.current_token.span,
+                "TS(1183): An implementation cannot be declared in ambient contexts.",
+                .{ .help = "Remove the function body or remove the 'declare' modifier" },
+            );
             return null;
         }
     } else {
@@ -144,11 +147,10 @@ pub fn parseFormalParamaters(parser: *Parser) ?ast.NodeIndex {
             end = parser.getSpan(rest).end;
 
             if (parser.current_token.type == .Comma) {
-                parser.err(
-                    parser.getSpan(rest).start,
-                    parser.current_token.span.end,
+                parser.report(
+                    .{ .start = parser.getSpan(rest).start, .end = parser.current_token.span.end },
                     "Rest parameter must be the last parameter",
-                    "Move the '...rest' parameter to the end of the parameter list, or remove trailing parameters.",
+                    .{ .help = "Move the '...rest' parameter to the end of the parameter list, or remove trailing parameters." },
                 );
 
                 parser.scratch_a.reset(params_checkpoint);

@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "BigInt literal cannot contain decimal point or exponent",
       "help": "Try removing the 'n' suffix here, or remove the decimal point/exponent from the number",
       "start": 0,
-      "end": 3
+      "end": 3,
+      "labels": [
+      ]
     }
   ]
 }

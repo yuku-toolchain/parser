@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Unterminated template literal",
       "help": "Try adding a closing backtick (`) here to complete the template",
       "start": 0,
-      "end": 24
+      "end": 24,
+      "labels": [
+      ]
     }
   ]
 }

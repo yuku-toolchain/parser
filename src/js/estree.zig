@@ -27,8 +27,8 @@ pub const Serializer = struct {
 
         try self.beginObject();
         try self.fieldNode("program", tree.program);
-        try self.field("errors");
-        try self.writeErrors();
+        try self.field("diagnostics");
+        try self.writeDiagnostics();
         try self.endObject();
 
         return buffer.toOwnedSlice(allocator);
@@ -443,20 +443,32 @@ pub const Serializer = struct {
         try self.endObject();
     }
 
-    fn writeErrors(self: *Self) !void {
+    fn writeDiagnostics(self: *Self) !void {
         try self.beginArray();
-        for (self.tree.errors.items) |err| {
+        for (self.tree.diagnostics.items) |diag| {
             try self.sep();
             try self.beginObject();
-            try self.fieldString("message", err.message);
+            try self.fieldString("severity", diag.severity.toString());
+            try self.fieldString("message", diag.message);
             try self.field("help");
-            if (err.help) |help| {
+            if (diag.help) |help| {
                 try self.writeString(help);
             } else {
                 try self.writeNull();
             }
-            try self.fieldInt("start", err.span.start);
-            try self.fieldInt("end", err.span.end);
+            try self.fieldInt("start", diag.span.start);
+            try self.fieldInt("end", diag.span.end);
+            try self.field("labels");
+            try self.beginArray();
+            for (diag.labels) |lbl| {
+                try self.sep();
+                try self.beginObject();
+                try self.fieldInt("start", lbl.span.start);
+                try self.fieldInt("end", lbl.span.end);
+                try self.fieldString("message", lbl.message);
+                try self.endObject();
+            }
+            try self.endArray();
             try self.endObject();
         }
         try self.endArray();

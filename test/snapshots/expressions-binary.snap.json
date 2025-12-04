@@ -722,11 +722,14 @@
       }
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Unexpected token '('",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 225,
-      "end": 226
+      "end": 226,
+      "labels": [
+      ]
     }
   ]
 }

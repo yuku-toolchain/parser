@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Destructuring declaration must have an initializer",
       "help": "Add '= value' to provide the object or array to destructure from.",
       "start": 4,
-      "end": 10
+      "end": 10,
+      "labels": [
+      ]
     }
   ]
 }

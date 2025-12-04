@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Binary literal must contain at least one binary digit",
       "help": "Try adding at least one binary digit (0 or 1) here after '0b'",
       "start": 0,
-      "end": 2
+      "end": 2,
+      "labels": [
+      ]
     }
   ]
 }

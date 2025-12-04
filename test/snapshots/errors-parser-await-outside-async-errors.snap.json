@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "'await' is only valid at the start of an 'await using' declaration or inside async functions",
       "help": "If you intended to declare a disposable resource, use 'await using'. Otherwise, 'await' can only appear inside an async function.",
       "start": 0,
-      "end": 5
+      "end": 5,
+      "labels": [
+      ]
     }
   ]
 }

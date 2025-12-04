@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "'const' declarations must be initialized",
       "help": "Add '= value' to initialize the constant, or use 'let' if you need to assign it later.",
       "start": 6,
-      "end": 7
+      "end": 7,
+      "labels": [
+      ]
     }
   ]
 }

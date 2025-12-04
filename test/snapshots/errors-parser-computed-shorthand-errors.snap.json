@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Computed property names cannot use shorthand syntax",
       "help": "Use the full syntax with a colon: [expr]: value",
       "start": 5,
-      "end": 8
+      "end": 8,
+      "labels": [
+      ]
     }
   ]
 }

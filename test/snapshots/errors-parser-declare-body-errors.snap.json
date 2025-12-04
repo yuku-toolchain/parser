@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "TS(1183): An implementation cannot be declared in ambient contexts.",
       "help": "Remove the function body or remove the 'declare' modifier",
       "start": 23,
-      "end": 24
+      "end": 24,
+      "labels": [
+      ]
     }
   ]
 }

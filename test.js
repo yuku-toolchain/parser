@@ -1,1 +1,1 @@
-const hello = {x} = obj;
+100++

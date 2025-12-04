@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Invalid left-hand side in assignment",
       "help": "The left side of an assignment must be a variable, property access, or destructuring pattern.",
       "start": 0,
-      "end": 1
+      "end": 1,
+      "labels": [
+      ]
     }
   ]
 }

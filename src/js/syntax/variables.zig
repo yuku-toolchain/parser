@@ -75,28 +75,26 @@ fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) ?ast.NodeInd
             end = parser.getSpan(expression).end;
         }
     } else if (patterns.isDestructuringPattern(parser, id)) {
-        parser.err(
-            parser.getSpan(id).start,
-            parser.getSpan(id).end,
+        parser.report(
+            parser.getSpan(id),
             "Destructuring declaration must have an initializer",
-            "Add '= value' to provide the object or array to destructure from.",
+            .{ .help = "Add '= value' to provide the object or array to destructure from." },
         );
         return null;
     } else if (kind == .Const) {
-        parser.err(
-            parser.getSpan(id).start,
-            parser.getSpan(id).end,
+        parser.report(
+            parser.getSpan(id),
             "'const' declarations must be initialized",
-            "Add '= value' to initialize the constant, or use 'let' if you need to assign it later.",
+            .{ .help = "Add '= value' to initialize the constant, or use 'let' if you need to assign it later." },
         );
         return null;
     } else if (kind == .Using or kind == .AwaitUsing) {
         const keyword = if (kind == .Using) "using" else "await using";
-        parser.err(
-            parser.getSpan(id).start,
-            parser.getSpan(id).end,
-            parser.formatMessage("'{s}' declarations must be initialized", .{keyword}),
-            "Disposable resources require an initial value that implements the dispose protocol.",
+        parser.reportFmt(
+            parser.getSpan(id),
+            "'{s}' declarations must be initialized",
+            .{keyword},
+            .{ .help = "Disposable resources require an initial value that implements the dispose protocol." },
         );
         return null;
     }

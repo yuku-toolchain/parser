@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Unterminated string literal",
       "help": "Try adding a closing quote here to complete the string",
       "start": 0,
-      "end": 13
+      "end": 13,
+      "labels": [
+      ]
     }
   ]
 }

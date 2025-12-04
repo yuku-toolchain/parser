@@ -178,7 +178,25 @@ fn getVisualColumn(line: []const u8, byte_pos: usize) usize {
     return col;
 }
 
-pub fn printError(source: []const u8, err: js.ParseError) void {
+fn getSeverityColor(severity: js.Severity) []const u8 {
+    return switch (severity) {
+        .@"error" => "\x1b[1;31m",
+        .warning => "\x1b[1;33m",
+        .hint => "\x1b[1;36m",
+        .info => "\x1b[1;34m",
+    };
+}
+
+fn getUnderlineColor(severity: js.Severity) []const u8 {
+    return switch (severity) {
+        .@"error" => "\x1b[1;31m",
+        .warning => "\x1b[1;33m",
+        .hint => "\x1b[1;36m",
+        .info => "\x1b[1;34m",
+    };
+}
+
+pub fn printDiagnostic(source: []const u8, diag: js.Diagnostic) void {
     var line_start_positions = std.ArrayList(usize).empty;
     defer line_start_positions.deinit(std.heap.page_allocator);
     line_start_positions.append(std.heap.page_allocator, 0) catch return;
@@ -193,10 +211,10 @@ pub fn printError(source: []const u8, err: js.ParseError) void {
     var end_line: usize = 0;
 
     for (line_start_positions.items, 0..) |line_start, line_num| {
-        if (err.span.start >= line_start) {
+        if (diag.span.start >= line_start) {
             start_line = line_num;
         }
-        if (err.span.end > line_start) {
+        if (diag.span.end > line_start) {
             end_line = line_num;
         }
     }
@@ -212,7 +230,7 @@ pub fn printError(source: []const u8, err: js.ParseError) void {
     };
 
     const first_line_start = line_start_positions.items[start_line];
-    const start_col = err.span.start - first_line_start;
+    const start_col = diag.span.start - first_line_start;
     const first_line_end = if (start_line + 1 < line_start_positions.items.len)
         line_start_positions.items[start_line + 1] - 1
     else
@@ -220,7 +238,8 @@ pub fn printError(source: []const u8, err: js.ParseError) void {
     const first_line_content = source[first_line_start..first_line_end];
     const visual_start_col = getVisualColumn(first_line_content, start_col);
 
-    std.debug.print("\x1b[1;31merror\x1b[0m: {s}\n", .{err.message});
+    const severity_color = getSeverityColor(diag.severity);
+    std.debug.print("{s}{s}\x1b[0m: {s}\n", .{ severity_color, diag.severity.toString(), diag.message });
     std.debug.print("  \x1b[1;34m-->\x1b[0m test.js:{}:{}\n\n", .{ start_line + 1, visual_start_col + 1 });
 
     const display_start = if (start_line > 0) start_line - 1 else start_line;
@@ -252,9 +271,9 @@ pub fn printError(source: []const u8, err: js.ParseError) void {
             const empty_padded = empty_padding[0..line_num_width];
             std.debug.print(" \x1b[2;36m{s}\x1b[0m \x1b[2m|\x1b[0m ", .{empty_padded});
 
-            const line_error_start = if (current_line == start_line) err.span.start - line_start else 0;
+            const line_error_start = if (current_line == start_line) diag.span.start - line_start else 0;
             const line_error_end = if (current_line == end_line)
-                @min(err.span.end - line_start, line_content.len)
+                @min(diag.span.end - line_start, line_content.len)
             else
                 line_content.len;
 
@@ -266,17 +285,66 @@ pub fn printError(source: []const u8, err: js.ParseError) void {
                 std.debug.print(" ", .{});
             }
 
+            const underline_color = getUnderlineColor(diag.severity);
             while (i < visual_error_end) : (i += 1) {
-                std.debug.print("\x1b[1;31m~\x1b[0m", .{});
+                std.debug.print("{s}~\x1b[0m", .{underline_color});
             }
 
             std.debug.print("\n", .{});
         }
     }
 
+    for (diag.labels) |lbl| {
+        var label_start_line: usize = 0;
+        for (line_start_positions.items, 0..) |line_start, line_num| {
+            if (lbl.span.start >= line_start) {
+                label_start_line = line_num;
+            }
+        }
+
+        const label_line_start = line_start_positions.items[label_start_line];
+        const label_line_end = if (label_start_line + 1 < line_start_positions.items.len)
+            line_start_positions.items[label_start_line + 1] - 1
+        else
+            source.len;
+        const label_line_content = source[label_line_start..label_line_end];
+        const label_start_col = lbl.span.start - label_line_start;
+        const visual_label_col = getVisualColumn(label_line_content, label_start_col);
+
+        const label_color: []const u8 = "\x1b[1;34m";
+
+        var line_num_buf: [16]u8 = undefined;
+        const line_num_str = std.fmt.bufPrint(&line_num_buf, "{}", .{label_start_line + 1}) catch "1";
+        var padding_buf: [16]u8 = undefined;
+        const padding_len = if (line_num_str.len < line_num_width) line_num_width - line_num_str.len else 0;
+        @memset(padding_buf[0..padding_len], ' ');
+        const line_num_padded = std.fmt.bufPrint(&padding_buf, "{s}{s}", .{ padding_buf[0..padding_len], line_num_str }) catch line_num_str;
+
+        std.debug.print(" \x1b[2;36m{s}\x1b[0m \x1b[2m|\x1b[0m ", .{line_num_padded});
+        printHighlightedLine(label_line_content);
+        std.debug.print("\n", .{});
+
+        var empty_padding: [16]u8 = undefined;
+        @memset(empty_padding[0..line_num_width], ' ');
+        const empty_padded = empty_padding[0..line_num_width];
+        std.debug.print(" \x1b[2;36m{s}\x1b[0m \x1b[2m|\x1b[0m ", .{empty_padded});
+
+        var j: usize = 0;
+        while (j < visual_label_col) : (j += 1) {
+            std.debug.print(" ", .{});
+        }
+
+        const label_visual_end = getVisualColumn(label_line_content, @min(lbl.span.end - label_line_start, label_line_content.len));
+        while (j < label_visual_end) : (j += 1) {
+            std.debug.print("{s}^\x1b[0m", .{label_color});
+        }
+
+        std.debug.print(" {s}{s}\x1b[0m\n", .{ label_color, lbl.message });
+    }
+
     std.debug.print("\n", .{});
 
-    if (err.help) |help| {
+    if (diag.help) |help| {
         std.debug.print("\x1b[1;36mnote\x1b[0m: {s}\n\n", .{help});
     }
 }

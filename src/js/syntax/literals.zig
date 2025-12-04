@@ -54,7 +54,7 @@ pub inline fn parseBigIntLiteral(parser: *Parser) ?ast.NodeIndex {
 pub fn parseRegExpLiteral(parser: *Parser) ?ast.NodeIndex {
     const token = parser.current_token;
     const regex = parser.lexer.reScanAsRegex(token) catch |e| {
-        parser.err(token.span.start, token.span.end, lexer.getLexicalErrorMessage(e), lexer.getLexicalErrorHelp(e));
+        parser.report(token.span, lexer.getLexicalErrorMessage(e), .{ .help = lexer.getLexicalErrorHelp(e) });
         return null;
     };
     parser.replaceTokenAndAdvance(parser.lexer.createToken(
@@ -138,11 +138,10 @@ pub fn parseTemplateLiteral(parser: *Parser) ?ast.NodeIndex {
                 parser.advance();
             },
             else => {
-                parser.err(
-                    token.span.start,
-                    token.span.end,
+                parser.report(
+                    token.span,
                     "Unexpected token in template literal expression",
-                    "Template expressions must be followed by '}' to continue the template string. Check for unmatched braces.",
+                    .{ .help = "Template expressions must be followed by '}' to continue the template string. Check for unmatched braces." },
                 );
                 parser.scratch_a.reset(quasis_checkpoint);
                 parser.scratch_b.reset(exprs_checkpoint);

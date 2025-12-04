@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Numeric literal cannot contain consecutive separators",
       "help": "Try removing one of the consecutive underscores here",
       "start": 0,
-      "end": 2
+      "end": 2,
+      "labels": [
+      ]
     }
   ]
 }

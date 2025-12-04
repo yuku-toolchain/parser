@@ -14,11 +14,11 @@ pub inline fn parseBindingPattern(parser: *Parser) ?ast.NodeIndex {
         .LeftBracket => parseArrayPattern(parser),
         .LeftBrace => parseObjectPattern(parser),
         else => {
-            parser.err(
-                parser.current_token.span.start,
-                parser.current_token.span.end,
-                parser.formatMessage("Unexpected token '{s}' in binding pattern", .{parser.current_token.lexeme}),
-                "Expected an identifier, array pattern ([a, b]), or object pattern ({a, b}).",
+            parser.reportFmt(
+                parser.current_token.span,
+                "Unexpected token '{s}' in binding pattern",
+                .{parser.current_token.lexeme},
+                .{ .help = "Expected an identifier, array pattern ([a, b]), or object pattern ({a, b})." },
             );
             return null;
         },
@@ -27,11 +27,11 @@ pub inline fn parseBindingPattern(parser: *Parser) ?ast.NodeIndex {
 
 pub inline fn parseBindingIdentifier(parser: *Parser) ?ast.NodeIndex {
     if (!parser.current_token.type.isIdentifierLike()) {
-        parser.err(
-            parser.current_token.span.start,
-            parser.current_token.span.end,
-            parser.formatMessage("Expected identifier, found '{s}'", .{parser.current_token.lexeme}),
-            "A variable name must be a valid JavaScript identifier.",
+        parser.reportFmt(
+            parser.current_token.span,
+            "Expected identifier, found '{s}'",
+            .{parser.current_token.lexeme},
+            .{ .help = "A variable name must be a valid JavaScript identifier." },
         );
         return null;
     }
@@ -74,11 +74,10 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
 
             // rest must be last element
             if (parser.current_token.type == .Comma) {
-                parser.err(
-                    parser.getSpan(rest).start,
-                    parser.current_token.span.end,
+                parser.report(
+                    .{ .start = parser.getSpan(rest).start, .end = parser.current_token.span.end },
                     "Rest element must be the last element in array destructuring",
-                    "Move the '...rest' pattern to the end, or remove trailing elements.",
+                    .{ .help = "Move the '...rest' pattern to the end, or remove trailing elements." },
                 );
                 parser.scratch_a.reset(checkpoint);
                 return null;
@@ -102,11 +101,15 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
     }
 
     if (parser.current_token.type != .RightBracket) {
-        parser.err(
-            start,
-            parser.current_token.span.end,
+        parser.report(
+            parser.current_token.span,
             "Unclosed array destructuring pattern",
-            "Add a closing bracket ']' to complete the pattern, or check for missing commas between elements.",
+            .{
+                .help = "Add a closing bracket ']' to complete the pattern, or check for missing commas between elements.",
+                .labels = parser.makeLabels(&.{
+                    parser.label(.{ .start = start, .end = start + 1 }, "opened here"),
+                }),
+            },
         );
         parser.scratch_a.reset(checkpoint);
         return null;
@@ -172,11 +175,10 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
 
             // rest must be last property
             if (parser.current_token.type == .Comma) {
-                parser.err(
-                    parser.getSpan(rest).start,
-                    parser.current_token.span.end,
+                parser.report(
+                    .{ .start = parser.getSpan(rest).start, .end = parser.current_token.span.end },
                     "Rest element must be the last property in object destructuring",
-                    "Move the '...rest' pattern to the end, or remove trailing properties.",
+                    .{ .help = "Move the '...rest' pattern to the end, or remove trailing properties." },
                 );
                 parser.scratch_a.reset(checkpoint);
                 return null;
@@ -194,11 +196,15 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
     }
 
     if (parser.current_token.type != .RightBrace) {
-        parser.err(
-            start,
-            parser.current_token.span.end,
+        parser.report(
+            parser.current_token.span,
             "Unclosed object destructuring pattern",
-            "Add a closing brace '}' to complete the pattern, or check for missing commas between properties.",
+            .{
+                .help = "Add a closing brace '}' to complete the pattern, or check for missing commas between properties.",
+                .labels = parser.makeLabels(&.{
+                    parser.label(.{ .start = start, .end = start + 1 }, "opened here"),
+                }),
+            },
         );
         parser.scratch_a.reset(checkpoint);
         return null;
@@ -256,11 +262,10 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
         } else {
             // non-shorthand: {x: y} or {x: y = default}
             if (next_type != .Colon) {
-                parser.err(
-                    key_span.start,
-                    parser.current_token.span.start,
+                parser.report(
+                    .{ .start = key_span.start, .end = parser.current_token.span.start },
                     "Missing colon in object destructuring property",
-                    "Use 'key: binding' to rename the variable, or just 'key' for shorthand when using the same name.",
+                    .{ .help = "Use 'key: binding' to rename the variable, or just 'key' for shorthand when using the same name." },
                 );
                 return null;
             }
@@ -290,11 +295,15 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
         const key = expressions.parseExpression(parser, 0) orelse return null;
 
         if (parser.current_token.type != .RightBracket) {
-            parser.err(
-                start,
-                parser.current_token.span.start,
+            parser.report(
+                parser.current_token.span,
                 "Unclosed computed property name in destructuring",
-                "Add a closing bracket ']' after the expression used as the property name.",
+                .{
+                    .help = "Add a closing bracket ']' after the expression used as the property name.",
+                    .labels = parser.makeLabels(&.{
+                        parser.label(.{ .start = start, .end = start + 1 }, "opened here"),
+                    }),
+                },
             );
             return null;
         }
@@ -303,11 +312,10 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
         parser.advance();
 
         if (parser.current_token.type != .Colon) {
-            parser.err(
-                start,
-                key_end,
+            parser.report(
+                .{ .start = start, .end = key_end },
                 "Computed property names cannot use shorthand syntax",
-                "Use the full syntax with a colon: [expr]: value",
+                .{ .help = "Use the full syntax with a colon: [expr]: value" },
             );
             return null;
         }
@@ -332,11 +340,11 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
     } else if (token_type == .StringLiteral) {
         key = literals.parseStringLiteral(parser) orelse return null;
     } else {
-        parser.err(
-            current.span.start,
-            current.span.end,
-            parser.formatMessage("Unexpected token '{s}' in destructuring pattern", .{current.lexeme}),
-            "Destructuring properties must start with an identifier, string, number, or computed property name ([expr]).",
+        parser.reportFmt(
+            current.span,
+            "Unexpected token '{s}' in destructuring pattern",
+            .{current.lexeme},
+            .{ .help = "Destructuring properties must start with an identifier, string, number, or computed property name ([expr])." },
         );
         return null;
     }
@@ -344,11 +352,10 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
     const key_span = parser.getSpan(key);
 
     if (parser.current_token.type != .Colon) {
-        parser.err(
-            key_span.start,
-            parser.current_token.span.start,
+        parser.report(
+            .{ .start = key_span.start, .end = parser.current_token.span.start },
             "Missing colon in object destructuring property",
-            "Use 'key: binding' to rename the variable, or just 'key' for shorthand when using the same name.",
+            .{ .help = "Use 'key: binding' to rename the variable, or just 'key' for shorthand when using the same name." },
         );
         return null;
     }
@@ -374,11 +381,10 @@ fn parseObjectRestElement(parser: *Parser) ?ast.NodeIndex {
 
     // object rest can only be simple identifier
     if (parser.getData(argument) != .binding_identifier) {
-        parser.err(
-            parser.getSpan(argument).start,
-            parser.getSpan(argument).end,
+        parser.report(
+            parser.getSpan(argument),
             "Object rest element must be a simple identifier",
-            "Unlike array rest, object rest (...rest) cannot use nested destructuring patterns.",
+            .{ .help = "Unlike array rest, object rest (...rest) cannot use nested destructuring patterns." },
         );
         return null;
     }

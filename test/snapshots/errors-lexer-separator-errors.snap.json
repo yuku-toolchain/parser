@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Numeric separator cannot appear at the end of a numeric literal",
       "help": "Try removing the trailing underscore here or adding more digits after it",
       "start": 0,
-      "end": 2
+      "end": 2,
+      "labels": [
+      ]
     }
   ]
 }

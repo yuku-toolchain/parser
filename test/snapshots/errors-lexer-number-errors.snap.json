@@ -7,11 +7,14 @@
     "body": [
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Hexadecimal literal must contain at least one hex digit",
       "help": "Try adding at least one hex digit (0-9, a-f, A-F) here after '0x'",
       "start": 0,
-      "end": 2
+      "end": 2,
+      "labels": [
+      ]
     }
   ]
 }

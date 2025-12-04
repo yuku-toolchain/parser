@@ -1,7 +1,7 @@
 const std = @import("std");
 const js = @import("js");
 
-const printError = @import("print_error.zig").printError;
+const printDiagnostic = @import("print_diagnostic.zig").printDiagnostic;
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -40,10 +40,10 @@ pub fn main() !void {
         try times.append(allocator, end - start);
 
         if (i == 0) {
-            if (tree.hasErrors()) {
+            if (tree.hasDiagnostics()) {
                 std.debug.print("\n", .{});
-                for (tree.errors.items) |parse_err| {
-                    printError(contents, parse_err);
+                for (tree.diagnostics.items) |diag| {
+                    printDiagnostic(contents, diag);
                 }
                 std.debug.print("\n", .{});
             }

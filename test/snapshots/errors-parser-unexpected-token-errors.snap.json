@@ -25,16 +25,22 @@
       }
     ]
   },
-  "errors": [{
+  "diagnostics": [{
+      "severity": "error",
       "message": "Invalid character at start of identifier",
       "help": "Try starting the identifier here with a letter (a-z, A-Z), underscore (_), or dollar sign ($)",
       "start": 8,
-      "end": 8
+      "end": 8,
+      "labels": [
+      ]
     },{
+      "severity": "error",
       "message": "Unexpected end of input while parsing expression",
       "help": "The parser reached the end of the file but expected an expression. Check for missing values or unclosed brackets.",
       "start": 0,
-      "end": 0
+      "end": 0,
+      "labels": [
+      ]
     }
   ]
 }

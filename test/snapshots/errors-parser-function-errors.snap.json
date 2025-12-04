@@ -23,18 +23,37 @@
           "type": "BlockStatement",
           "start": 22,
           "end": 49,
-          "body": [
+          "body": [{
+              "type": "VariableDeclaration",
+              "start": 26,
+              "end": 47,
+              "kind": "const",
+              "declarations": [{
+                  "type": "VariableDeclarator",
+                  "start": 32,
+                  "end": 47,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 32,
+                    "end": 37,
+                    "name": "await"
+                  },
+                  "init": {
+                    "type": "Literal",
+                    "start": 40,
+                    "end": 47,
+                    "value": "hello",
+                    "raw": "\"hello\""
+                  }
+                }
+              ]
+            }
           ]
         },
         "expression": false
       }
     ]
   },
-  "errors": [{
-      "message": "'await' is reserved in async functions and cannot be used as an identifier",
-      "help": "Choose a different name",
-      "start": 32,
-      "end": 37
-    }
+  "diagnostics": [
   ]
 }
