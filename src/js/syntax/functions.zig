@@ -59,10 +59,7 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) ?ast.NodeIndex {
 
     const params = parseFormalParamaters(parser) orelse return null;
 
-    parser.context.current_function_parameters = params;
-
     defer {
-        parser.context.current_function_parameters = null;
         parser.context.in_async = false;
         parser.context.in_generator = false;
     }

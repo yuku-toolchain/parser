@@ -428,13 +428,6 @@ inline fn isReserved(
     comptime help: []const u8,
     help_args: anytype,
 ) bool {
-    if (parser.strict_mode and tok.type == .Identifier) {
-        if (std.mem.eql(u8, tok.lexeme, "eval") or std.mem.eql(u8, tok.lexeme, "arguments")) {
-            parser.err(tok.span.start, tok.span.end, parser.formatMessage("'{s}' cannot be used {s} in strict mode", .{ tok.lexeme, as_what }), help);
-            return true;
-        }
-    }
-
     if (parser.strict_mode and tok.type.isStrictModeReserved()) {
         parser.err(tok.span.start, tok.span.end, parser.formatMessage("'{s}' is reserved in strict mode and cannot be used {s}", .{ tok.lexeme, as_what }), help);
         return true;

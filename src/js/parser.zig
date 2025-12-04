@@ -51,8 +51,7 @@ pub const ParseTree = struct {
 const ParserContext = struct {
     in_async: bool,
     in_generator: bool,
-    /// parameters of the function currently being passed, available in function body, otherwise null
-    current_function_parameters: ?ast.NodeIndex,
+    allow_in: bool,
 };
 
 pub const Parser = struct {
@@ -79,7 +78,7 @@ pub const Parser = struct {
     lang: Lang,
 
     pub fn init(backing_allocator: std.mem.Allocator, source: []const u8, options: Options) Parser {
-        return .{ .source = source, .lexer = lexer.Lexer.init(backing_allocator, source), .arena = std.heap.ArenaAllocator.init(backing_allocator), .source_type = options.source_type, .lang = options.lang, .strict_mode = options.is_strict, .context = .{ .in_async = false, .in_generator = false, .current_function_parameters = null } };
+        return .{ .source = source, .lexer = lexer.Lexer.init(backing_allocator, source), .arena = std.heap.ArenaAllocator.init(backing_allocator), .source_type = options.source_type, .lang = options.lang, .strict_mode = options.is_strict, .context = .{ .in_async = false, .in_generator = false, .allow_in = false } };
     }
 
     pub inline fn allocator(self: *Parser) std.mem.Allocator {
@@ -205,15 +204,6 @@ pub const Parser = struct {
         const value_start = start + 1;
         const value_len: u16 = @intCast(current_token.lexeme.len - 2);
 
-        // It is a Syntax Error if FunctionBodyContainsUseStrict of FunctionBody is true and IsSimpleParameterList of FormalParameters is false.
-        // https://tc39.es/ecma262/#sec-function-definitions-static-semantics-early-errors
-        if (self.context.current_function_parameters != null) {
-            if (self.isUseStrict(self.getSourceText(value_start, value_len)) and !functions.isSimpleParametersList(self, self.context.current_function_parameters.?)) {
-                self.err(start, end, "Illegal 'use strict' directive in function with non-simple parameter list", "Functions with default values, destructuring, or rest parameters cannot use 'use strict'. Move 'use strict' to the outer scope or simplify the parameters.");
-                return null;
-            }
-        }
-
         return self.addNode(.{
             .directive = .{
                 .expression = expression,
@@ -266,15 +256,6 @@ pub const Parser = struct {
 
     pub inline fn getExtra(self: *const Parser, range: ast.IndexRange) []const ast.NodeIndex {
         return self.extra.items[range.start..][0..range.len];
-    }
-
-    pub inline fn getSourceText(self: *const Parser, value_start: u32, value_len: u16) []const u8 {
-        return self.source[value_start..][0..value_len];
-    }
-
-    pub inline fn isUseStrict(self: *Parser, str: []const u8) bool {
-        _ = self;
-        return std.mem.eql(u8, "use strict", str);
     }
 
     pub fn advance(self: *Parser) void {
