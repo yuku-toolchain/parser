@@ -53,19 +53,19 @@ pub fn main() !void {
     defer tree.deinit(); // Free all arena-allocated memory
 
     // ParseTree contains:
-    //   .program  - Root node index (always a Program node)
-    //   .source   - Original source code
-    //   .nodes    - All AST nodes
-    //   .extra    - Storage for variadic children (e.g., array elements)
-    //   .errors   - Parse errors encountered
+    //   .program       - Root node index (always a Program node)
+    //   .source        - Original source code
+    //   .nodes         - All AST nodes
+    //   .extra         - Storage for variadic children (e.g., array elements)
+    //   .diagnostics   - Parse errors, warnings, notes encountered
 
-    // Check for parse errors
-    if (tree.hasErrors()) {
-        for (tree.errors.items) |err| {
-            std.debug.print("Error: {s} at {d}:{d}\n", .{
-                err.message, err.span.start, err.span.end
+    // Check for parse issues
+    if (tree.hasDiagnostics()) {
+        for (tree.diagnostics.items) |diagnostic| {
+            std.debug.print("{s}: {s} at {d}:{d}\n", .{
+                diagnostic.severity.toString(), diagnostic.message, diagnostic.span.start, diagnostic.span.end
             });
-            if (err.help) |help| std.debug.print("  Help: {s}\n", .{help});
+            if (diagnostic.help) |help| std.debug.print("  Help: {s}\n", .{help});
         }
         return;
     }
