@@ -1,6 +1,5 @@
 const std = @import("std");
 const Parser = @import("../parser.zig").Parser;
-const token = @import("../token.zig");
 const ast = @import("../ast.zig");
 
 const literals = @import("literals.zig");
@@ -38,11 +37,6 @@ pub inline fn parseBindingIdentifier(parser: *Parser) ?ast.NodeIndex {
     }
 
     const current = parser.current_token;
-
-    if (isReserved(parser, current, "as an identifier", "Choose a different name", .{})) {
-        return null;
-    }
-
     parser.advance();
 
     return parser.addNode(
@@ -239,10 +233,6 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
 
         if (is_shorthand) {
             // shorthand: {x} or {x = default}
-            if (isReserved(parser, current, "in shorthand", "Use full form", .{})) {
-                return null;
-            }
-
             var value = parser.addNode(
                 .{ .binding_identifier = .{ .name_start = name_start, .name_len = name_len } },
                 key_span,
@@ -419,34 +409,4 @@ pub fn isDestructuringPattern(parser: *Parser, index: ast.NodeIndex) bool {
         .assignment_pattern => |pattern| isDestructuringPattern(parser, pattern.left),
         else => false,
     };
-}
-
-inline fn isReserved(
-    parser: *Parser,
-    tok: token.Token,
-    comptime as_what: []const u8,
-    comptime help: []const u8,
-    help_args: anytype,
-) bool {
-    if (parser.strict_mode and tok.type.isStrictModeReserved()) {
-        parser.err(tok.span.start, tok.span.end, parser.formatMessage("'{s}' is reserved in strict mode and cannot be used {s}", .{ tok.lexeme, as_what }), help);
-        return true;
-    }
-
-    if (tok.type == .Await and (parser.context.in_async or parser.source_type == .Module)) {
-        parser.err(tok.span.start, tok.span.end, parser.formatMessage("'await' is reserved {s} and cannot be used {s}", .{ if (parser.context.in_async) "in async functions" else "at the top level of modules", as_what }), help);
-        return true;
-    }
-
-    if (tok.type == .Yield and (parser.context.in_generator or parser.source_type == .Module)) {
-        parser.err(tok.span.start, tok.span.end, parser.formatMessage("'yield' is reserved {s} and cannot be used {s}", .{ if (parser.context.in_generator) "in generator functions" else "at the top level of modules", as_what }), help);
-        return true;
-    }
-
-    if (tok.type.isStrictReserved()) {
-        parser.err(tok.span.start, tok.span.end, parser.formatMessage("'{s}' is a reserved word and cannot be used {s}", .{ tok.lexeme, as_what }), parser.formatMessage(help, help_args));
-        return true;
-    }
-
-    return false;
 }

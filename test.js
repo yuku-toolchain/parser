@@ -1,1 +1,1 @@
-const a = function () { };
+const hello = {x} = obj;

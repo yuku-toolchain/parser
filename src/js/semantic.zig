@@ -13,3 +13,4 @@
 // It is a Syntax Error if FormalParameters Contains SuperCall is true.
 // It is a Syntax Error if FunctionBody Contains SuperCall is true.
 // 'evals' and 'arguments' in binding identifier and identifier reference.
+// Reserved checks: https://tc39.es/ecma262/#prod-ReservedWord

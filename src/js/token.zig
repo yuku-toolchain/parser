@@ -6,9 +6,7 @@ pub const Mask = struct {
     pub const IsLogicalOp: u32 = 1 << 14;
     pub const IsUnaryOp: u32 = 1 << 15;
     pub const IsAssignmentOp: u32 = 1 << 16;
-    pub const IsStrictReserved: u32 = 1 << 17;
-    pub const IsStrictModeReserved: u32 = 1 << 18;
-    pub const IsIdentifierLike: u32 = 1 << 19;
+    pub const IsIdentifierLike: u32 = 1 << 17;
 
     pub const PrecShift: u32 = 7;
     pub const PrecOverlap: u32 = 31;
@@ -29,9 +27,9 @@ pub const TokenType = enum(u32) {
     TemplateMiddle = 10, // e.g., "} world ${"
     TemplateTail = 11, // e.g., "} end`"
 
-    True = 12 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "true"
-    False = 13 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "false"
-    NullLiteral = 14 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "null"
+    True = 12 | Mask.IsIdentifierLike, // "true"
+    False = 13 | Mask.IsIdentifierLike, // "false"
+    NullLiteral = 14 | Mask.IsIdentifierLike, // "null"
 
     Plus = 15 | (11 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsUnaryOp, // "+"
     Minus = 16 | (11 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsUnaryOp, // "-"
@@ -99,59 +97,59 @@ pub const TokenType = enum(u32) {
     Question = 70, // "?"
     Colon = 71, // ":"
 
-    If = 72 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "if"
-    Else = 73 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "else"
-    Switch = 74 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "switch"
-    Case = 75 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "case"
-    Default = 76 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "default"
-    For = 77 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "for"
-    While = 78 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "while"
-    Do = 79 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "do"
-    Break = 80 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "break"
-    Continue = 81 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "continue"
+    If = 72 | Mask.IsIdentifierLike, // "if"
+    Else = 73 | Mask.IsIdentifierLike, // "else"
+    Switch = 74 | Mask.IsIdentifierLike, // "switch"
+    Case = 75 | Mask.IsIdentifierLike, // "case"
+    Default = 76 | Mask.IsIdentifierLike, // "default"
+    For = 77 | Mask.IsIdentifierLike, // "for"
+    While = 78 | Mask.IsIdentifierLike, // "while"
+    Do = 79 | Mask.IsIdentifierLike, // "do"
+    Break = 80 | Mask.IsIdentifierLike, // "break"
+    Continue = 81 | Mask.IsIdentifierLike, // "continue"
 
-    Function = 82 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "function"
-    Return = 83 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "return"
+    Function = 82 | Mask.IsIdentifierLike, // "function"
+    Return = 83 | Mask.IsIdentifierLike, // "return"
     Async = 84 | Mask.IsIdentifierLike, // "async"
     Await = 85 | Mask.IsIdentifierLike, // "await"
     Yield = 86 | Mask.IsIdentifierLike, // "yield"
 
-    Var = 87 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "var"
-    Let = 88 | Mask.IsStrictModeReserved | Mask.IsIdentifierLike, // "let"
-    Const = 89 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "const"
+    Var = 87 | Mask.IsIdentifierLike, // "var"
+    Let = 88 | Mask.IsIdentifierLike, // "let"
+    Const = 89 | Mask.IsIdentifierLike, // "const"
     Using = 90 | Mask.IsIdentifierLike, // "using"
 
-    Class = 91 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "class"
-    Extends = 92 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "extends"
-    Super = 93 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "super"
-    Static = 94 | Mask.IsStrictModeReserved | Mask.IsIdentifierLike, // "static"
-    Enum = 95 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "enum"
-    Public = 96 | Mask.IsStrictModeReserved | Mask.IsIdentifierLike, // "public"
-    Private = 97 | Mask.IsStrictModeReserved | Mask.IsIdentifierLike, // "private"
-    Protected = 98 | Mask.IsStrictModeReserved | Mask.IsIdentifierLike, // "protected"
-    Interface = 99 | Mask.IsStrictModeReserved | Mask.IsIdentifierLike, // "interface"
-    Implements = 100 | Mask.IsStrictModeReserved | Mask.IsIdentifierLike, // "implements"
+    Class = 91 | Mask.IsIdentifierLike, // "class"
+    Extends = 92 | Mask.IsIdentifierLike, // "extends"
+    Super = 93 | Mask.IsIdentifierLike, // "super"
+    Static = 94 | Mask.IsIdentifierLike, // "static"
+    Enum = 95 | Mask.IsIdentifierLike, // "enum"
+    Public = 96 | Mask.IsIdentifierLike, // "public"
+    Private = 97 | Mask.IsIdentifierLike, // "private"
+    Protected = 98 | Mask.IsIdentifierLike, // "protected"
+    Interface = 99 | Mask.IsIdentifierLike, // "interface"
+    Implements = 100 | Mask.IsIdentifierLike, // "implements"
 
-    Import = 101 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "import"
-    Export = 102 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "export"
+    Import = 101 | Mask.IsIdentifierLike, // "import"
+    Export = 102 | Mask.IsIdentifierLike, // "export"
     From = 103 | Mask.IsIdentifierLike, // "from"
     As = 104 | Mask.IsIdentifierLike, // "as"
 
-    Try = 105 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "try"
-    Catch = 106 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "catch"
-    Finally = 107 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "finally"
-    Throw = 108 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "throw"
+    Try = 105 | Mask.IsIdentifierLike, // "try"
+    Catch = 106 | Mask.IsIdentifierLike, // "catch"
+    Finally = 107 | Mask.IsIdentifierLike, // "finally"
+    Throw = 108 | Mask.IsIdentifierLike, // "throw"
 
-    New = 109 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "new"
-    This = 110 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "this"
-    Typeof = 111 | (14 << Mask.PrecShift) | Mask.IsUnaryOp | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "typeof"
-    Instanceof = 112 | (9 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "instanceof"
-    In = 113 | (9 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "in"
+    New = 109 | Mask.IsIdentifierLike, // "new"
+    This = 110 | Mask.IsIdentifierLike, // "this"
+    Typeof = 111 | (14 << Mask.PrecShift) | Mask.IsUnaryOp | Mask.IsIdentifierLike, // "typeof"
+    Instanceof = 112 | (9 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsIdentifierLike, // "instanceof"
+    In = 113 | (9 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsIdentifierLike, // "in"
     Of = 114 | Mask.IsIdentifierLike, // "of"
-    Delete = 115 | (14 << Mask.PrecShift) | Mask.IsUnaryOp | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "delete"
-    Void = 116 | (14 << Mask.PrecShift) | Mask.IsUnaryOp | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "void"
-    With = 117 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "with"
-    Debugger = 118 | Mask.IsStrictReserved | Mask.IsIdentifierLike, // "debugger"
+    Delete = 115 | (14 << Mask.PrecShift) | Mask.IsUnaryOp | Mask.IsIdentifierLike, // "delete"
+    Void = 116 | (14 << Mask.PrecShift) | Mask.IsUnaryOp | Mask.IsIdentifierLike, // "void"
+    With = 117 | Mask.IsIdentifierLike, // "with"
+    Debugger = 118 | Mask.IsIdentifierLike, // "debugger"
 
     Identifier = 119 | Mask.IsIdentifierLike, // e.g., "myVar", "foo", "_bar"
     PrivateIdentifier = 120, // e.g., "#privateField", "#method"
@@ -187,20 +185,6 @@ pub const TokenType = enum(u32) {
 
     pub fn isAssignmentOperator(self: TokenType) bool {
         return self.is(Mask.IsAssignmentOp);
-    }
-
-    /// returns true for unconditionally reserved keywords.
-    /// these can NEVER be used as identifiers.
-    /// excludes: await, yield (contextual), let/static/implements/etc (strict-mode-only)
-    pub fn isStrictReserved(self: TokenType) bool {
-        return self.is(Mask.IsStrictReserved);
-    }
-
-    /// returns true for keywords reserved ONLY in strict mode.
-    /// these can be identifiers in sloppy mode but not in strict mode.
-    /// includes: let, static, implements, interface, package, private, protected, public
-    pub fn isStrictModeReserved(self: TokenType) bool {
-        return self.is(Mask.IsStrictModeReserved);
     }
 
     /// returns true for identifier-like tokens.
