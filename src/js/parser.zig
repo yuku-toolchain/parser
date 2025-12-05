@@ -357,9 +357,7 @@ pub const Parser = struct {
     }
 
     pub fn makeLabels(self: *Parser, labels: []const Label) []const Label {
-        const slice = self.allocator().alloc(Label, labels.len) catch unreachable;
-        @memcpy(slice, labels);
-        return slice;
+        return self.allocator().dupe(Label, labels) catch unreachable;
     }
 
     pub fn formatMessage(self: *Parser, comptime format: []const u8, args: anytype) []u8 {
