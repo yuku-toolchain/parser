@@ -24,9 +24,9 @@ pub fn main() !void {
     const taken_ms = @as(f64, @floatFromInt(taken)) / ns_to_ms;
 
     var line_count: usize = 1;
-        for (source) |c| {
-            if (c == '\n') line_count += 1;
-        }
+    for (source) |c| {
+        if (c == '\n') line_count += 1;
+    }
 
     const million_lines_per_sec = (@as(f64, @floatFromInt(line_count)) / 1_000_000.0) / (taken_ms / 1000.0);
 
@@ -40,11 +40,7 @@ pub fn main() !void {
             const start_pos = getLineAndColumn(source, err.span.start);
             const end_pos = getLineAndColumn(source, err.span.end);
 
-            std.debug.print("Error: {s} at src/test.js:{d}:{d} to src/test.js:{d}:{d}\n", .{
-                err.message,
-                start_pos.line, start_pos.col,
-                end_pos.line, end_pos.col
-            });
+            std.debug.print("Error: {s} at src/test.js:{d}:{d} to src/test.js:{d}:{d}\n", .{ err.message, start_pos.line, start_pos.col, end_pos.line, end_pos.col });
             if (err.help) |help| std.debug.print("  Help: {s}", .{help});
         }
     }
