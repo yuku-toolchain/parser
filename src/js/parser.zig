@@ -84,6 +84,8 @@ const ParserContext = struct {
     allow_in: bool,
 };
 
+pub const Error = error{OutOfMemory};
+
 pub const Parser = struct {
     source: []const u8,
     lexer: lexer.Lexer,
@@ -108,7 +110,15 @@ pub const Parser = struct {
     lang: Lang,
 
     pub fn init(backing_allocator: std.mem.Allocator, source: []const u8, options: Options) Parser {
-        return .{ .source = source, .lexer = lexer.Lexer.init(backing_allocator, source), .arena = std.heap.ArenaAllocator.init(backing_allocator), .source_type = options.source_type, .lang = options.lang, .strict_mode = options.is_strict, .context = .{ .in_async = false, .in_generator = false, .allow_in = false } };
+        return .{
+            .source = source,
+            .lexer = lexer.Lexer.init(backing_allocator, source),
+            .arena = std.heap.ArenaAllocator.init(backing_allocator),
+            .source_type = options.source_type,
+            .lang = options.lang,
+            .strict_mode = options.is_strict,
+            .context = .{ .in_async = false, .in_generator = false, .allow_in = false },
+        };
     }
 
     pub inline fn allocator(self: *Parser) std.mem.Allocator {
@@ -118,18 +128,18 @@ pub const Parser = struct {
     /// Parse the source code and return a ParseTree.
     /// The Parser is consumed and should not be used after calling this method.
     /// The caller owns the returned ParseTree and must call deinit() on it.
-    pub fn parse(self: *Parser) !ParseTree {
+    pub fn parse(self: *Parser) Error!ParseTree {
         try self.ensureCapacity();
 
-        self.advance();
+        try self.advance();
 
         const start = self.current_token.span.start;
 
-        const program_data = self.parseBody(null);
+        const program_data = try self.parseBody(null);
 
         const end = self.current_token.span.start;
 
-        const program = self.addNode(
+        const program = try self.addNode(
             .{
                 .program = .{
                     .source_type = if (self.source_type == .Module) .Module else .Script,
@@ -154,28 +164,30 @@ pub const Parser = struct {
         return tree;
     }
 
-    pub fn parseBody(self: *Parser, terminator: ?token.TokenType) struct { statements: ast.IndexRange, directives: ast.IndexRange } {
+    const BodyResult = struct { statements: ast.IndexRange, directives: ast.IndexRange };
+
+    pub fn parseBody(self: *Parser, terminator: ?token.TokenType) Error!BodyResult {
         const statements_checkpoint = self.scratch_statements.begin();
         const directives_checkpoint = self.scratch_directives.begin();
 
         while (!self.isAtBodyEnd(terminator)) {
             if (self.current_token.type == .StringLiteral) {
-                if (self.parseDirective()) |directive| {
-                    self.scratch_directives.append(self.allocator(), directive);
+                if (try self.parseDirective()) |directive| {
+                    try self.scratch_directives.append(self.allocator(), directive);
                 }
                 continue;
             }
 
-            if (self.parseStatement()) |statement| {
-                self.scratch_statements.append(self.allocator(), statement);
+            if (try self.parseStatement()) |statement| {
+                try self.scratch_statements.append(self.allocator(), statement);
             } else {
-                self.synchronize(terminator);
+                try self.synchronize(terminator);
             }
         }
 
         return .{
-            .statements = self.addExtra(self.scratch_statements.take(statements_checkpoint)),
-            .directives = self.addExtra(self.scratch_directives.take(directives_checkpoint)),
+            .statements = try self.addExtra(self.scratch_statements.take(statements_checkpoint)),
+            .directives = try self.addExtra(self.scratch_directives.take(directives_checkpoint)),
         };
     }
 
@@ -184,14 +196,14 @@ pub const Parser = struct {
             (terminator != null and self.current_token.type == terminator.?);
     }
 
-    pub fn parseStatement(self: *Parser) ?ast.NodeIndex {
+    pub fn parseStatement(self: *Parser) Error!?ast.NodeIndex {
         return switch (self.current_token.type) {
             .Var, .Const, .Let, .Using => variables.parseVariableDeclaration(self),
             .Function => functions.parseFunction(self, .{}),
             .Async => functions.parseFunction(self, .{ .is_async = true }),
             .Declare => blk: {
                 if (!self.isTs()) {
-                    break :blk self.parseExpressionStatement();
+                    break :blk try self.parseExpressionStatement();
                 }
                 break :blk functions.parseFunction(self, .{ .is_declare = true });
             },
@@ -206,7 +218,7 @@ pub const Parser = struct {
                     break :blk variables.parseVariableDeclaration(self);
                 }
 
-                self.report(
+                try self.report(
                     await_token.span,
                     // TODO: message is not always right, there is top level awaits
                     // fix it when implement that
@@ -222,12 +234,12 @@ pub const Parser = struct {
         };
     }
 
-    pub fn parseDirective(self: *Parser) ?ast.NodeIndex {
+    pub fn parseDirective(self: *Parser) Error!?ast.NodeIndex {
         const current_token = self.current_token;
 
         const start = current_token.span.start;
 
-        const expression = literals.parseStringLiteral(self) orelse return null;
+        const expression = try literals.parseStringLiteral(self) orelse return null;
 
         const end = self.eatSemicolon(current_token.span.end);
 
@@ -235,7 +247,7 @@ pub const Parser = struct {
         const value_start = start + 1;
         const value_len: u16 = @intCast(current_token.lexeme.len - 2);
 
-        return self.addNode(.{
+        return try self.addNode(.{
             .directive = .{
                 .expression = expression,
                 .value_start = value_start,
@@ -244,11 +256,11 @@ pub const Parser = struct {
         }, .{ .start = start, .end = end });
     }
 
-    pub fn parseExpressionStatement(self: *Parser) ?ast.NodeIndex {
-        const expression = expressions.parseExpression(self, 0) orelse return null;
+    pub fn parseExpressionStatement(self: *Parser) Error!?ast.NodeIndex {
+        const expression = try expressions.parseExpression(self, 0) orelse return null;
         const span = self.getSpan(expression);
 
-        return self.addNode(
+        return try self.addNode(
             .{ .expression_statement = .{ .expression = expression } },
             .{ .start = span.start, .end = self.eatSemicolon(span.end) },
         );
@@ -264,16 +276,16 @@ pub const Parser = struct {
         return self.current_token;
     }
 
-    pub inline fn addNode(self: *Parser, data: ast.NodeData, span: ast.Span) ast.NodeIndex {
+    pub inline fn addNode(self: *Parser, data: ast.NodeData, span: ast.Span) Error!ast.NodeIndex {
         const index: ast.NodeIndex = @intCast(self.nodes.len);
-        self.nodes.append(self.allocator(), .{ .data = data, .span = span }) catch unreachable;
+        try self.nodes.append(self.allocator(), .{ .data = data, .span = span });
         return index;
     }
 
-    pub fn addExtra(self: *Parser, indices: []const ast.NodeIndex) ast.IndexRange {
+    pub fn addExtra(self: *Parser, indices: []const ast.NodeIndex) Error!ast.IndexRange {
         const start: u32 = @intCast(self.extra.items.len);
         const len: u32 = @intCast(indices.len);
-        self.extra.appendSlice(self.allocator(), indices) catch unreachable;
+        try self.extra.appendSlice(self.allocator(), indices);
         return .{ .start = start, .len = len };
     }
 
@@ -289,41 +301,41 @@ pub const Parser = struct {
         return self.extra.items[range.start..][0..range.len];
     }
 
-    pub fn advance(self: *Parser) void {
+    pub fn advance(self: *Parser) Error!void {
         self.current_token = self.lexer.nextToken() catch |e| blk: {
-            if (e == error.OutOfMemory) @panic("Out of memory");
+            if (e == error.OutOfMemory) return error.OutOfMemory;
 
             const lex_err: lexer.LexicalError = @errorCast(e);
 
-            self.diagnostics.append(self.allocator(), .{
+            try self.diagnostics.append(self.allocator(), .{
                 .message = lexer.getLexicalErrorMessage(lex_err),
                 .span = .{ .start = self.lexer.token_start, .end = self.lexer.cursor },
                 .help = lexer.getLexicalErrorHelp(lex_err),
-            }) catch unreachable;
+            });
 
             break :blk token.Token.eof(0);
         };
     }
 
-    pub inline fn replaceTokenAndAdvance(self: *Parser, tok: token.Token) void {
+    pub inline fn replaceTokenAndAdvance(self: *Parser, tok: token.Token) Error!void {
         self.current_token = tok;
-        self.advance();
+        try self.advance();
     }
 
-    pub inline fn expect(self: *Parser, token_type: token.TokenType, message: []const u8, help: ?[]const u8) bool {
+    pub inline fn expect(self: *Parser, token_type: token.TokenType, message: []const u8, help: ?[]const u8) Error!bool {
         if (self.current_token.type == token_type) {
-            self.advance();
+            try self.advance();
             return true;
         }
 
-        self.report(self.current_token.span, message, .{ .help = help });
+        try self.report(self.current_token.span, message, .{ .help = help });
         return false;
     }
 
     pub inline fn eatSemicolon(self: *Parser, end: u32) u32 {
         // consume optional semicolon and adjust span
         if (self.current_token.type == .Semicolon) {
-            self.advance();
+            self.advance() catch {};
             return end + 1;
         }
 
@@ -336,19 +348,19 @@ pub const Parser = struct {
         labels: []const Label = &.{},
     };
 
-    pub inline fn report(self: *Parser, span: ast.Span, message: []const u8, opts: ReportOptions) void {
-        self.diagnostics.append(self.allocator(), .{
+    pub inline fn report(self: *Parser, span: ast.Span, message: []const u8, opts: ReportOptions) Error!void {
+        try self.diagnostics.append(self.allocator(), .{
             .severity = opts.severity,
             .message = message,
             .span = span,
             .help = opts.help,
             .labels = opts.labels,
-        }) catch unreachable;
+        });
     }
 
-    pub inline fn reportFmt(self: *Parser, span: ast.Span, comptime format: []const u8, args: anytype, opts: ReportOptions) void {
-        const message = std.fmt.allocPrint(self.allocator(), format, args) catch unreachable;
-        self.report(span, message, opts);
+    pub inline fn reportFmt(self: *Parser, span: ast.Span, comptime format: []const u8, args: anytype, opts: ReportOptions) Error!void {
+        const message = try std.fmt.allocPrint(self.allocator(), format, args);
+        try self.report(span, message, opts);
     }
 
     pub inline fn label(self: *Parser, span: ast.Span, message: []const u8) Label {
@@ -356,17 +368,17 @@ pub const Parser = struct {
         return .{ .span = span, .message = message };
     }
 
-    pub fn makeLabels(self: *Parser, labels: []const Label) []const Label {
-        return self.allocator().dupe(Label, labels) catch unreachable;
+    pub fn makeLabels(self: *Parser, labels: []const Label) Error![]const Label {
+        return try self.allocator().dupe(Label, labels);
     }
 
-    pub fn formatMessage(self: *Parser, comptime format: []const u8, args: anytype) []u8 {
-        return std.fmt.allocPrint(self.allocator(), format, args) catch unreachable;
+    pub fn formatMessage(self: *Parser, comptime format: []const u8, args: anytype) Error![]u8 {
+        return try std.fmt.allocPrint(self.allocator(), format, args);
     }
 
     // this is very basic now
-    fn synchronize(self: *Parser, terminator: ?token.TokenType) void {
-        self.advance();
+    fn synchronize(self: *Parser, terminator: ?token.TokenType) Error!void {
+        try self.advance();
 
         while (self.current_token.type != .EOF) {
             // stop at the block terminator to avoid consuming the closing brace
@@ -375,7 +387,7 @@ pub const Parser = struct {
             }
 
             if (self.current_token.type == .Semicolon) {
-                self.advance();
+                try self.advance();
                 return;
             }
 
@@ -384,11 +396,11 @@ pub const Parser = struct {
                 else => {},
             }
 
-            self.advance();
+            try self.advance();
         }
     }
 
-    fn ensureCapacity(self: *Parser) !void {
+    fn ensureCapacity(self: *Parser) Error!void {
         if (self.nodes.capacity > 0) return;
 
         const alloc = self.allocator();
@@ -412,8 +424,8 @@ const ScratchBuffer = struct {
         return self.items.items.len;
     }
 
-    pub inline fn append(self: *ScratchBuffer, alloc: std.mem.Allocator, index: ast.NodeIndex) void {
-        self.items.append(alloc, index) catch unreachable;
+    pub inline fn append(self: *ScratchBuffer, alloc: std.mem.Allocator, index: ast.NodeIndex) Error!void {
+        try self.items.append(alloc, index);
     }
 
     pub inline fn take(self: *ScratchBuffer, checkpoint: usize) []const ast.NodeIndex {

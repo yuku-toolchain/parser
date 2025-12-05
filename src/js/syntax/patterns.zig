@@ -1,11 +1,12 @@
 const std = @import("std");
 const Parser = @import("../parser.zig").Parser;
+const Error = @import("../parser.zig").Error;
 const ast = @import("../ast.zig");
 
 const literals = @import("literals.zig");
 const expressions = @import("expressions.zig");
 
-pub inline fn parseBindingPattern(parser: *Parser) ?ast.NodeIndex {
+pub inline fn parseBindingPattern(parser: *Parser) Error!?ast.NodeIndex {
     if (parser.current_token.type.isIdentifierLike()) {
         return parseBindingIdentifier(parser);
     }
@@ -14,7 +15,7 @@ pub inline fn parseBindingPattern(parser: *Parser) ?ast.NodeIndex {
         .LeftBracket => parseArrayPattern(parser),
         .LeftBrace => parseObjectPattern(parser),
         else => {
-            parser.reportFmt(
+            try parser.reportFmt(
                 parser.current_token.span,
                 "Unexpected token '{s}' in binding pattern",
                 .{parser.current_token.lexeme},
@@ -25,9 +26,9 @@ pub inline fn parseBindingPattern(parser: *Parser) ?ast.NodeIndex {
     };
 }
 
-pub inline fn parseBindingIdentifier(parser: *Parser) ?ast.NodeIndex {
+pub inline fn parseBindingIdentifier(parser: *Parser) Error!?ast.NodeIndex {
     if (!parser.current_token.type.isIdentifierLike()) {
-        parser.reportFmt(
+        try parser.reportFmt(
             parser.current_token.span,
             "Expected identifier, found '{s}'",
             .{parser.current_token.lexeme},
@@ -37,9 +38,9 @@ pub inline fn parseBindingIdentifier(parser: *Parser) ?ast.NodeIndex {
     }
 
     const current = parser.current_token;
-    parser.advance();
+    try parser.advance();
 
-    return parser.addNode(
+    return try parser.addNode(
         .{
             .binding_identifier = .{
                 .name_start = current.span.start,
@@ -50,9 +51,9 @@ pub inline fn parseBindingIdentifier(parser: *Parser) ?ast.NodeIndex {
     );
 }
 
-fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
+fn parseArrayPattern(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    if (!parser.expect(
+    if (!try parser.expect(
         .LeftBracket,
         "Expected '[' to start array destructuring pattern",
         "Array destructuring uses bracket syntax: [a, b] = array",
@@ -67,14 +68,14 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
 
         // rest element: ...rest
         if (token_type == .Spread) {
-            rest = parseBindingRestElement(parser) orelse {
+            rest = try parseBindingRestElement(parser) orelse {
                 parser.scratch_a.reset(checkpoint);
                 return null;
             };
 
             // rest must be last element
             if (parser.current_token.type == .Comma) {
-                parser.report(
+                try parser.report(
                     .{ .start = parser.getSpan(rest).start, .end = parser.current_token.span.end },
                     "Rest element must be the last element in array destructuring",
                     .{ .help = "Move the '...rest' pattern to the end, or remove trailing elements." },
@@ -87,26 +88,26 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
 
         // holes: [a, , b]
         if (token_type == .Comma) {
-            parser.scratch_a.append(parser.allocator(), ast.null_node);
-            parser.advance();
+            try parser.scratch_a.append(parser.allocator(), ast.null_node);
+            try parser.advance();
         } else {
-            const element = parseArrayPatternElement(parser) orelse {
+            const element = try parseArrayPatternElement(parser) orelse {
                 parser.scratch_a.reset(checkpoint);
                 return null;
             };
-            parser.scratch_a.append(parser.allocator(), element);
+            try parser.scratch_a.append(parser.allocator(), element);
 
-            if (parser.current_token.type == .Comma) parser.advance() else break;
+            if (parser.current_token.type == .Comma) try parser.advance() else break;
         }
     }
 
     if (parser.current_token.type != .RightBracket) {
-        parser.report(
+        try parser.report(
             parser.current_token.span,
             "Unclosed array destructuring pattern",
             .{
                 .help = "Add a closing bracket ']' to complete the pattern, or check for missing commas between elements.",
-                .labels = parser.makeLabels(&.{
+                .labels = try parser.makeLabels(&.{
                     parser.label(.{ .start = start, .end = start + 1 }, "opened here"),
                 }),
             },
@@ -116,19 +117,19 @@ fn parseArrayPattern(parser: *Parser) ?ast.NodeIndex {
     }
 
     const end = parser.current_token.span.end;
-    parser.advance();
+    try parser.advance();
 
-    return parser.addNode(
+    return try parser.addNode(
         .{ .array_pattern = .{
-            .elements = parser.addExtra(parser.scratch_a.take(checkpoint)),
+            .elements = try parser.addExtra(parser.scratch_a.take(checkpoint)),
             .rest = rest,
         } },
         .{ .start = start, .end = end },
     );
 }
 
-inline fn parseArrayPatternElement(parser: *Parser) ?ast.NodeIndex {
-    const pattern = parseBindingPattern(parser) orelse return null;
+inline fn parseArrayPatternElement(parser: *Parser) Error!?ast.NodeIndex {
+    const pattern = try parseBindingPattern(parser) orelse return null;
 
     // default values: [a = 1]
     if (parser.current_token.type == .Assign) {
@@ -138,22 +139,22 @@ inline fn parseArrayPatternElement(parser: *Parser) ?ast.NodeIndex {
     return pattern;
 }
 
-pub fn parseBindingRestElement(parser: *Parser) ?ast.NodeIndex {
+pub fn parseBindingRestElement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    if (!parser.expect(
+    if (!try parser.expect(
         .Spread,
         "Expected '...' for rest element",
         "Use '...' followed by an identifier to collect remaining elements.",
     )) return null;
-    const argument = parseBindingPattern(parser) orelse return null;
-    return parser.addNode(.{
+    const argument = try parseBindingPattern(parser) orelse return null;
+    return try parser.addNode(.{
         .binding_rest_element = .{ .argument = argument },
     }, .{ .start = start, .end = parser.getSpan(argument).end });
 }
 
-fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
+fn parseObjectPattern(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    if (!parser.expect(
+    if (!try parser.expect(
         .LeftBrace,
         "Expected '{' to start object destructuring pattern",
         "Object destructuring uses brace syntax: {a, b} = object",
@@ -168,14 +169,14 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
 
         // rest element: ...rest
         if (token_type == .Spread) {
-            rest = parseObjectRestElement(parser) orelse {
+            rest = try parseObjectRestElement(parser) orelse {
                 parser.scratch_a.reset(checkpoint);
                 return null;
             };
 
             // rest must be last property
             if (parser.current_token.type == .Comma) {
-                parser.report(
+                try parser.report(
                     .{ .start = parser.getSpan(rest).start, .end = parser.current_token.span.end },
                     "Rest element must be the last property in object destructuring",
                     .{ .help = "Move the '...rest' pattern to the end, or remove trailing properties." },
@@ -186,22 +187,22 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
             break;
         }
 
-        const property = parseObjectPatternProperty(parser) orelse {
+        const property = try parseObjectPatternProperty(parser) orelse {
             parser.scratch_a.reset(checkpoint);
             return null;
         };
-        parser.scratch_a.append(parser.allocator(), property);
+        try parser.scratch_a.append(parser.allocator(), property);
 
-        if (parser.current_token.type == .Comma) parser.advance() else break;
+        if (parser.current_token.type == .Comma) try parser.advance() else break;
     }
 
     if (parser.current_token.type != .RightBrace) {
-        parser.report(
+        try parser.report(
             parser.current_token.span,
             "Unclosed object destructuring pattern",
             .{
                 .help = "Add a closing brace '}' to complete the pattern, or check for missing commas between properties.",
-                .labels = parser.makeLabels(&.{
+                .labels = try parser.makeLabels(&.{
                     parser.label(.{ .start = start, .end = start + 1 }, "opened here"),
                 }),
             },
@@ -211,18 +212,18 @@ fn parseObjectPattern(parser: *Parser) ?ast.NodeIndex {
     }
 
     const end = parser.current_token.span.end;
-    parser.advance();
+    try parser.advance();
 
-    return parser.addNode(
+    return try parser.addNode(
         .{ .object_pattern = .{
-            .properties = parser.addExtra(parser.scratch_a.take(checkpoint)),
+            .properties = try parser.addExtra(parser.scratch_a.take(checkpoint)),
             .rest = rest,
         } },
         .{ .start = start, .end = end },
     );
 }
 
-fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
+fn parseObjectPatternProperty(parser: *Parser) Error!?ast.NodeIndex {
     const current = parser.current_token;
     const start = current.span.start;
     const token_type = current.type;
@@ -232,37 +233,37 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
         const name_len: u16 = @intCast(current.lexeme.len);
         const key_span = current.span;
 
-        parser.advance();
+        try parser.advance();
 
         const next_type = parser.current_token.type;
         const is_shorthand = next_type == .Comma or next_type == .RightBrace or next_type == .Assign;
 
         if (is_shorthand) {
             // shorthand: {x} or {x = default}
-            var value = parser.addNode(
+            var value = try parser.addNode(
                 .{ .binding_identifier = .{ .name_start = name_start, .name_len = name_len } },
                 key_span,
             );
 
             // default value: {x = 1}
             if (next_type == .Assign) {
-                value = parseAssignmentPattern(parser, value) orelse return null;
+                value = try parseAssignmentPattern(parser, value) orelse return null;
             }
 
             // for shorthand, key and value share the same identifier data
-            const key = parser.addNode(
+            const key = try parser.addNode(
                 .{ .identifier_name = .{ .name_start = name_start, .name_len = name_len } },
                 key_span,
             );
 
-            return parser.addNode(
+            return try parser.addNode(
                 .{ .binding_property = .{ .key = key, .value = value, .shorthand = true, .computed = false } },
                 .{ .start = start, .end = parser.getSpan(value).end },
             );
         } else {
             // non-shorthand: {x: y} or {x: y = default}
             if (next_type != .Colon) {
-                parser.report(
+                try parser.report(
                     .{ .start = key_span.start, .end = parser.current_token.span.start },
                     "Missing colon in object destructuring property",
                     .{ .help = "Use 'key: binding' to rename the variable, or just 'key' for shorthand when using the same name." },
@@ -270,19 +271,19 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
                 return null;
             }
 
-            const key = parser.addNode(
+            const key = try parser.addNode(
                 .{ .identifier_name = .{ .name_start = name_start, .name_len = name_len } },
                 key_span,
             );
 
-            parser.advance();
-            var value = parseBindingPattern(parser) orelse return null;
+            try parser.advance();
+            var value = try parseBindingPattern(parser) orelse return null;
 
             if (parser.current_token.type == .Assign) {
-                value = parseAssignmentPattern(parser, value) orelse return null;
+                value = try parseAssignmentPattern(parser, value) orelse return null;
             }
 
-            return parser.addNode(
+            return try parser.addNode(
                 .{ .binding_property = .{ .key = key, .value = value, .shorthand = false, .computed = false } },
                 .{ .start = start, .end = parser.getSpan(value).end },
             );
@@ -291,16 +292,16 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
 
     // computed property names: [expr]
     if (token_type == .LeftBracket) {
-        parser.advance();
-        const key = expressions.parseExpression(parser, 0) orelse return null;
+        try parser.advance();
+        const key = try expressions.parseExpression(parser, 0) orelse return null;
 
         if (parser.current_token.type != .RightBracket) {
-            parser.report(
+            try parser.report(
                 parser.current_token.span,
                 "Unclosed computed property name in destructuring",
                 .{
                     .help = "Add a closing bracket ']' after the expression used as the property name.",
-                    .labels = parser.makeLabels(&.{
+                    .labels = try parser.makeLabels(&.{
                         parser.label(.{ .start = start, .end = start + 1 }, "opened here"),
                     }),
                 },
@@ -309,10 +310,10 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
         }
 
         const key_end = parser.current_token.span.end;
-        parser.advance();
+        try parser.advance();
 
         if (parser.current_token.type != .Colon) {
-            parser.report(
+            try parser.report(
                 .{ .start = start, .end = key_end },
                 "Computed property names cannot use shorthand syntax",
                 .{ .help = "Use the full syntax with a colon: [expr]: value" },
@@ -320,14 +321,14 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
             return null;
         }
 
-        parser.advance();
-        var value = parseBindingPattern(parser) orelse return null;
+        try parser.advance();
+        var value = try parseBindingPattern(parser) orelse return null;
 
         if (parser.current_token.type == .Assign) {
-            value = parseAssignmentPattern(parser, value) orelse return null;
+            value = try parseAssignmentPattern(parser, value) orelse return null;
         }
 
-        return parser.addNode(
+        return try parser.addNode(
             .{ .binding_property = .{ .key = key, .value = value, .shorthand = false, .computed = true } },
             .{ .start = start, .end = parser.getSpan(value).end },
         );
@@ -336,11 +337,11 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
     // numeric or string literal keys
     var key: ast.NodeIndex = undefined;
     if (token_type.isNumericLiteral()) {
-        key = literals.parseNumericLiteral(parser) orelse return null;
+        key = try literals.parseNumericLiteral(parser) orelse return null;
     } else if (token_type == .StringLiteral) {
-        key = literals.parseStringLiteral(parser) orelse return null;
+        key = try literals.parseStringLiteral(parser) orelse return null;
     } else {
-        parser.reportFmt(
+        try parser.reportFmt(
             current.span,
             "Unexpected token '{s}' in destructuring pattern",
             .{current.lexeme},
@@ -352,7 +353,7 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
     const key_span = parser.getSpan(key);
 
     if (parser.current_token.type != .Colon) {
-        parser.report(
+        try parser.report(
             .{ .start = key_span.start, .end = parser.current_token.span.start },
             "Missing colon in object destructuring property",
             .{ .help = "Use 'key: binding' to rename the variable, or just 'key' for shorthand when using the same name." },
@@ -360,28 +361,28 @@ fn parseObjectPatternProperty(parser: *Parser) ?ast.NodeIndex {
         return null;
     }
 
-    parser.advance();
-    var value = parseBindingPattern(parser) orelse return null;
+    try parser.advance();
+    var value = try parseBindingPattern(parser) orelse return null;
 
     if (parser.current_token.type == .Assign) {
-        value = parseAssignmentPattern(parser, value) orelse return null;
+        value = try parseAssignmentPattern(parser, value) orelse return null;
     }
 
-    return parser.addNode(
+    return try parser.addNode(
         .{ .binding_property = .{ .key = key, .value = value, .shorthand = false, .computed = false } },
         .{ .start = start, .end = parser.getSpan(value).end },
     );
 }
 
-fn parseObjectRestElement(parser: *Parser) ?ast.NodeIndex {
+fn parseObjectRestElement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    parser.advance();
+    try parser.advance();
 
-    const argument = parseBindingPattern(parser) orelse return null;
+    const argument = try parseBindingPattern(parser) orelse return null;
 
     // object rest can only be simple identifier
     if (parser.getData(argument) != .binding_identifier) {
-        parser.report(
+        try parser.report(
             parser.getSpan(argument),
             "Object rest element must be a simple identifier",
             .{ .help = "Unlike array rest, object rest (...rest) cannot use nested destructuring patterns." },
@@ -389,21 +390,21 @@ fn parseObjectRestElement(parser: *Parser) ?ast.NodeIndex {
         return null;
     }
 
-    return parser.addNode(
+    return try parser.addNode(
         .{ .binding_rest_element = .{ .argument = argument } },
         .{ .start = start, .end = parser.getSpan(argument).end },
     );
 }
 
-pub fn parseAssignmentPattern(parser: *Parser, left: ast.NodeIndex) ?ast.NodeIndex {
+pub fn parseAssignmentPattern(parser: *Parser, left: ast.NodeIndex) Error!?ast.NodeIndex {
     const start = parser.getSpan(left).start;
     if (parser.current_token.type != .Assign) return left;
 
-    parser.advance();
+    try parser.advance();
 
-    const right = expressions.parseExpression(parser, 0) orelse return null;
+    const right = try expressions.parseExpression(parser, 0) orelse return null;
 
-    return parser.addNode(
+    return try parser.addNode(
         .{ .assignment_pattern = .{ .left = left, .right = right } },
         .{ .start = start, .end = parser.getSpan(right).end },
     );

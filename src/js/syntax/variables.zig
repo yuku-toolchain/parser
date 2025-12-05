@@ -1,39 +1,40 @@
 const std = @import("std");
 const ast = @import("../ast.zig");
 const Parser = @import("../parser.zig").Parser;
+const Error = @import("../parser.zig").Error;
 const expressions = @import("expressions.zig");
 const patterns = @import("patterns.zig");
 
-pub fn parseVariableDeclaration(parser: *Parser) ?ast.NodeIndex {
+pub fn parseVariableDeclaration(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     const kind = parseVariableKind(parser) orelse return null;
 
     const checkpoint = parser.scratch_a.begin();
 
-    const first_declarator = parseVariableDeclarator(parser, kind) orelse {
+    const first_declarator = try parseVariableDeclarator(parser, kind) orelse {
         parser.scratch_a.reset(checkpoint);
         return null;
     };
 
-    parser.scratch_a.append(parser.allocator(), first_declarator);
+    try parser.scratch_a.append(parser.allocator(), first_declarator);
 
     var end = parser.getSpan(first_declarator).end;
 
     // additional declarators: let a, b, c;
     while (parser.current_token.type == .Comma) {
-        parser.advance();
-        const declarator = parseVariableDeclarator(parser, kind) orelse {
+        try parser.advance();
+        const declarator = try parseVariableDeclarator(parser, kind) orelse {
             parser.scratch_a.reset(checkpoint);
             return null;
         };
-        parser.scratch_a.append(parser.allocator(), declarator);
+        try parser.scratch_a.append(parser.allocator(), declarator);
         end = parser.getSpan(declarator).end;
     }
 
-    return parser.addNode(
+    return try parser.addNode(
         .{
             .variable_declaration = .{
-                .declarators = parser.addExtra(parser.scratch_a.take(checkpoint)),
+                .declarators = try parser.addExtra(parser.scratch_a.take(checkpoint)),
                 .kind = kind,
             },
         },
@@ -43,7 +44,7 @@ pub fn parseVariableDeclaration(parser: *Parser) ?ast.NodeIndex {
 
 inline fn parseVariableKind(parser: *Parser) ?ast.VariableKind {
     const token_type = parser.current_token.type;
-    parser.advance();
+    parser.advance() catch return null;
 
     return switch (token_type) {
         .Let => .Let,
@@ -52,7 +53,7 @@ inline fn parseVariableKind(parser: *Parser) ?ast.VariableKind {
         .Using => .Using,
 
         .Await => if (parser.current_token.type == .Using) blk: {
-            parser.advance();
+            parser.advance() catch return null;
             break :blk .AwaitUsing;
         } else null,
 
@@ -60,29 +61,29 @@ inline fn parseVariableKind(parser: *Parser) ?ast.VariableKind {
     };
 }
 
-fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) ?ast.NodeIndex {
+fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    const id = patterns.parseBindingPattern(parser) orelse return null;
+    const id = try patterns.parseBindingPattern(parser) orelse return null;
 
     var init: ast.NodeIndex = ast.null_node;
     var end = parser.getSpan(id).end;
 
     // initializer if present
     if (parser.current_token.type == .Assign) {
-        parser.advance();
-        if (expressions.parseExpression(parser, 0)) |expression| {
+        try parser.advance();
+        if (try expressions.parseExpression(parser, 0)) |expression| {
             init = expression;
             end = parser.getSpan(expression).end;
         }
     } else if (patterns.isDestructuringPattern(parser, id)) {
-        parser.report(
+        try parser.report(
             parser.getSpan(id),
             "Destructuring declaration must have an initializer",
             .{ .help = "Add '= value' to provide the object or array to destructure from." },
         );
         return null;
     } else if (kind == .Const) {
-        parser.report(
+        try parser.report(
             parser.getSpan(id),
             "'const' declarations must be initialized",
             .{ .help = "Add '= value' to initialize the constant, or use 'let' if you need to assign it later." },
@@ -90,7 +91,7 @@ fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) ?ast.NodeInd
         return null;
     } else if (kind == .Using or kind == .AwaitUsing) {
         const keyword = if (kind == .Using) "using" else "await using";
-        parser.reportFmt(
+        try parser.reportFmt(
             parser.getSpan(id),
             "'{s}' declarations must be initialized",
             .{keyword},
@@ -99,7 +100,7 @@ fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) ?ast.NodeInd
         return null;
     }
 
-    return parser.addNode(
+    return try parser.addNode(
         .{ .variable_declarator = .{ .id = id, .init = init } },
         .{ .start = start, .end = end },
     );
