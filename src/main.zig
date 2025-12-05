@@ -16,15 +16,9 @@ pub fn main() !void {
     const contents = try reader.interface.allocRemaining(allocator, std.Io.Limit.limited(10 * 1024 * 1024));
     defer allocator.free(contents);
 
-    var parser = js.Parser.init(std.heap.page_allocator, contents, .{
-        .source_type = .Module,
-        .lang = .Js,
-        .is_strict = true,
-    });
-
     var start = try std.time.Timer.start();
 
-    const tree = try parser.parse();
+    const tree = try js.parse(std.heap.page_allocator, contents, .{});
     defer tree.deinit();
 
     const taken = start.read();
@@ -41,7 +35,7 @@ pub fn main() !void {
     const json = try js.estree.toJSON(&tree, allocator);
     defer allocator.free(json);
 
-    // std.debug.print("\n{s}\n", .{json});
+    std.debug.print("\n{s}\n", .{json});
 
     if (tree.hasDiagnostics()) {
         for (tree.diagnostics.items) |err| {

@@ -1,10 +1,13 @@
-pub const Parser = @import("parser.zig").Parser;
-pub const ParseTree = @import("parser.zig").ParseTree;
-pub const Diagnostic = @import("parser.zig").Diagnostic;
-pub const Severity = @import("parser.zig").Severity;
-pub const Label = @import("parser.zig").Label;
-pub const SourceType = @import("parser.zig").SourceType;
-pub const Lang = @import("parser.zig").Lang;
-pub const Options = @import("parser.zig").Options;
+const parser = @import("parser.zig");
+
+pub const parse = parser.parse;
+pub const Parser = parser.Parser;
+pub const ParseTree = parser.ParseTree;
+pub const Options = parser.Options;
+pub const Diagnostic = parser.Diagnostic;
+pub const Severity = parser.Severity;
+pub const Label = parser.Label;
+pub const SourceType = parser.SourceType;
+pub const Lang = parser.Lang;
 
 pub const estree = @import("estree.zig");

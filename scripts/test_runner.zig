@@ -60,8 +60,8 @@ fn runTest(allocator: std.mem.Allocator, test_dir: std.fs.Dir, name: []const u8,
     const input = readFile(allocator, test_dir, name) catch return false;
     defer allocator.free(input);
 
-    var parser = js.Parser.init(std.heap.page_allocator, input, .{ .lang = lang });
-    const tree = parser.parse() catch return false;
+    const tree = js.parse(std.heap.page_allocator, input, .{ .lang = lang }) catch return false;
+    defer tree.deinit();
     const json = js.estree.toJSON(&tree, allocator) catch return false;
     defer allocator.free(json);
 

@@ -129,6 +129,11 @@ pub const Parser = struct {
     /// The Parser is consumed and should not be used after calling this method.
     /// The caller owns the returned ParseTree and must call deinit() on it.
     pub fn parse(self: *Parser) Error!ParseTree {
+        errdefer {
+            self.lexer.deinit();
+            self.arena.deinit();
+        }
+
         try self.ensureCapacity();
 
         try self.advance();
@@ -438,3 +443,10 @@ const ScratchBuffer = struct {
         self.items.shrinkRetainingCapacity(checkpoint);
     }
 };
+
+/// Parse JavaScript/TypeScript source code into an AST.
+/// Returns a ParseTree that must be freed with deinit().
+pub fn parse(backing_allocator: std.mem.Allocator, source: []const u8, options: Options) Error!ParseTree {
+    var parser = Parser.init(backing_allocator, source, options);
+    return parser.parse();
+}

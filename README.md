@@ -32,32 +32,24 @@ const std = @import("std");
 const yuku = @import("yuku");
 
 pub fn main() !void {
-    // Backing allocator for the internal Arena allocator
+    // The allocator passed to the parse function is used as a backing allocator for the internal arena allocator
     const allocator = std.heap.page_allocator;
     const source = "const x = 1 + 2";
 
-    // Initialize the parser
+    // Parse source code into an AST
     // Options:
     //   .source_type - .Module (default) or .Script
     //   .lang        - .Js (default), .Ts, .Jsx, .Tsx, or .Dts
     //   .is_strict   - true (default) or false
-    var parser = yuku.Parser.init(allocator, source, .{
-        .source_type = .Module,
-        .lang = .Js,
-        .is_strict = true,
-    });
-
-    // Parse the source code and get the ParseTree
-    // The parser is consumed after this call
-    const tree = try parser.parse();
-    defer tree.deinit(); // Free all arena-allocated memory
+    const tree = try yuku.parse(allocator, source, .{});
+    defer tree.deinit();
 
     // ParseTree contains:
     //   .program       - Root node index (always a Program node)
     //   .source        - Original source code
     //   .nodes         - All AST nodes
     //   .extra         - Storage for variadic children (e.g., array elements)
-    //   .diagnostics   - Parse errors, warnings, notes encountered
+    //   .diagnostics   - Parse errors, warnings, hints encountered
 
     // Check for parse issues
     if (tree.hasDiagnostics()) {
@@ -67,11 +59,7 @@ pub fn main() !void {
             });
             if (diagnostic.help) |help| std.debug.print("  Help: {s}\n", .{help});
         }
-        return;
     }
-
-    // Coming Soon Built-in AST traverser, visitor pattern, and
-    // more utilities to work with the AST efficiently.
 }
 ```
 <!-- markdownlint-restore -->
