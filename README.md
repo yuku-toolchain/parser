@@ -38,8 +38,8 @@ pub fn main() !void {
 
     // Parse source code into an AST
     // Options:
-    //   .source_type - .Module (default) or .Script
-    //   .lang        - .Js (default), .Ts, .Jsx, .Tsx, or .Dts
+    //   .source_type - .module (default) or .script
+    //   .lang        - .js (default), .ts, .jsx, .tsx, or .dts
     //   .is_strict   - true (default) or false
     const tree = try yuku.parse(allocator, source, .{});
     defer tree.deinit();

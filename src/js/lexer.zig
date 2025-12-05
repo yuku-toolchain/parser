@@ -69,7 +69,7 @@ pub const Lexer = struct {
         try self.skipSkippable();
 
         if (self.cursor >= self.source_len) {
-            return self.createToken(.EOF, "", self.cursor, self.cursor);
+            return self.createToken(.eof, "", self.cursor, self.cursor);
         }
 
         self.token_start = self.cursor;
@@ -93,15 +93,15 @@ pub const Lexer = struct {
         self.cursor += 1;
 
         const token_type: token.TokenType = switch (c) {
-            '~' => .BitwiseNot,
-            '(' => .LeftParen,
-            ')' => .RightParen,
-            '{' => .LeftBrace,
-            '[' => .LeftBracket,
-            ']' => .RightBracket,
-            ';' => .Semicolon,
-            ',' => .Comma,
-            ':' => .Colon,
+            '~' => .bitwise_not,
+            '(' => .left_paren,
+            ')' => .right_paren,
+            '{' => .left_brace,
+            '[' => .left_bracket,
+            ']' => .right_bracket,
+            ';' => .semicolon,
+            ',' => .comma,
+            ':' => .colon,
             else => unreachable,
         };
 
@@ -119,223 +119,223 @@ pub const Lexer = struct {
             '+' => switch (c1) {
                 '+' => blk: {
                     self.cursor += 2;
-                    break :blk self.createToken(.Increment, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.increment, self.source[start..self.cursor], start, self.cursor);
                 },
                 '=' => blk: {
                     self.cursor += 2;
-                    break :blk self.createToken(.PlusAssign, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.plus_assign, self.source[start..self.cursor], start, self.cursor);
                 },
                 else => blk: {
                     self.cursor += 1;
-                    break :blk self.createToken(.Plus, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.plus, self.source[start..self.cursor], start, self.cursor);
                 },
             },
             '-' => switch (c1) {
                 '-' => blk: {
                     self.cursor += 2;
-                    break :blk self.createToken(.Decrement, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.decrement, self.source[start..self.cursor], start, self.cursor);
                 },
                 '=' => blk: {
                     self.cursor += 2;
-                    break :blk self.createToken(.MinusAssign, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.minus_assign, self.source[start..self.cursor], start, self.cursor);
                 },
                 else => blk: {
                     self.cursor += 1;
-                    break :blk self.createToken(.Minus, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.minus, self.source[start..self.cursor], start, self.cursor);
                 },
             },
             '*' => blk: {
                 if (c1 == '*' and c2 == '=') {
                     self.cursor += 3;
-                    break :blk self.createToken(.ExponentAssign, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.exponent_assign, self.source[start..self.cursor], start, self.cursor);
                 }
                 break :blk switch (c1) {
                     '*' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.Exponent, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.exponent, self.source[start..self.cursor], start, self.cursor);
                     },
                     '=' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.StarAssign, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.star_assign, self.source[start..self.cursor], start, self.cursor);
                     },
                     else => blk2: {
                         self.cursor += 1;
-                        break :blk2 self.createToken(.Star, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.star, self.source[start..self.cursor], start, self.cursor);
                     },
                 };
             },
             '/' => blk: {
                 if (c1 == '=') {
                     self.cursor += 2;
-                    break :blk self.createToken(.SlashAssign, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.slash_assign, self.source[start..self.cursor], start, self.cursor);
                 }
 
                 self.cursor += 1;
 
-                break :blk self.createToken(.Slash, self.source[start..self.cursor], start, self.cursor);
+                break :blk self.createToken(.slash, self.source[start..self.cursor], start, self.cursor);
             },
             '%' => switch (c1) {
                 '=' => blk: {
                     self.cursor += 2;
-                    break :blk self.createToken(.PercentAssign, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.percent_assign, self.source[start..self.cursor], start, self.cursor);
                 },
                 else => blk: {
                     self.cursor += 1;
-                    break :blk self.createToken(.Percent, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.percent, self.source[start..self.cursor], start, self.cursor);
                 },
             },
             '<' => blk: {
                 if (c1 == '<' and c2 == '=') {
                     self.cursor += 3;
-                    break :blk self.createToken(.LeftShiftAssign, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.left_shift_assign, self.source[start..self.cursor], start, self.cursor);
                 }
                 break :blk switch (c1) {
                     '<' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.LeftShift, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.left_shift, self.source[start..self.cursor], start, self.cursor);
                     },
                     '=' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.LessThanEqual, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.less_than_equal, self.source[start..self.cursor], start, self.cursor);
                     },
                     else => blk2: {
                         self.cursor += 1;
-                        break :blk2 self.createToken(.LessThan, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.less_than, self.source[start..self.cursor], start, self.cursor);
                     },
                 };
             },
             '>' => blk: {
                 if (c1 == '>' and c2 == '=') {
                     self.cursor += 3;
-                    break :blk self.createToken(.RightShiftAssign, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.right_shift_assign, self.source[start..self.cursor], start, self.cursor);
                 }
                 if (c1 == '>' and c2 == '>') {
                     if (c3 == '=') {
                         self.cursor += 4;
-                        break :blk self.createToken(.UnsignedRightShiftAssign, self.source[start..self.cursor], start, self.cursor);
+                        break :blk self.createToken(.unsigned_right_shift_assign, self.source[start..self.cursor], start, self.cursor);
                     } else {
                         self.cursor += 3;
-                        break :blk self.createToken(.UnsignedRightShift, self.source[start..self.cursor], start, self.cursor);
+                        break :blk self.createToken(.unsigned_right_shift, self.source[start..self.cursor], start, self.cursor);
                     }
                 }
                 break :blk switch (c1) {
                     '>' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.RightShift, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.right_shift, self.source[start..self.cursor], start, self.cursor);
                     },
                     '=' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.GreaterThanEqual, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.greater_than_equal, self.source[start..self.cursor], start, self.cursor);
                     },
                     else => blk2: {
                         self.cursor += 1;
-                        break :blk2 self.createToken(.GreaterThan, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.greater_than, self.source[start..self.cursor], start, self.cursor);
                     },
                 };
             },
             '=' => blk: {
                 if (c1 == '=' and c2 == '=') {
                     self.cursor += 3;
-                    break :blk self.createToken(.StrictEqual, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.strict_equal, self.source[start..self.cursor], start, self.cursor);
                 }
                 break :blk switch (c1) {
                     '=' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.Equal, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.equal, self.source[start..self.cursor], start, self.cursor);
                     },
                     '>' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.Arrow, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.arrow, self.source[start..self.cursor], start, self.cursor);
                     },
                     else => blk2: {
                         self.cursor += 1;
-                        break :blk2 self.createToken(.Assign, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.assign, self.source[start..self.cursor], start, self.cursor);
                     },
                 };
             },
             '!' => blk: {
                 if (c1 == '=' and c2 == '=') {
                     self.cursor += 3;
-                    break :blk self.createToken(.StrictNotEqual, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.strict_not_equal, self.source[start..self.cursor], start, self.cursor);
                 }
                 break :blk switch (c1) {
                     '=' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.NotEqual, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.not_equal, self.source[start..self.cursor], start, self.cursor);
                     },
                     else => blk2: {
                         self.cursor += 1;
-                        break :blk2 self.createToken(.LogicalNot, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.logical_not, self.source[start..self.cursor], start, self.cursor);
                     },
                 };
             },
             '&' => blk: {
                 if (c1 == '&' and c2 == '=') {
                     self.cursor += 3;
-                    break :blk self.createToken(.LogicalAndAssign, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.logical_and_assign, self.source[start..self.cursor], start, self.cursor);
                 }
                 break :blk switch (c1) {
                     '&' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.LogicalAnd, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.logical_and, self.source[start..self.cursor], start, self.cursor);
                     },
                     '=' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.BitwiseAndAssign, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.bitwise_and_assign, self.source[start..self.cursor], start, self.cursor);
                     },
                     else => blk2: {
                         self.cursor += 1;
-                        break :blk2 self.createToken(.BitwiseAnd, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.bitwise_and, self.source[start..self.cursor], start, self.cursor);
                     },
                 };
             },
             '|' => blk: {
                 if (c1 == '|' and c2 == '=') {
                     self.cursor += 3;
-                    break :blk self.createToken(.LogicalOrAssign, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.logical_or_assign, self.source[start..self.cursor], start, self.cursor);
                 }
                 break :blk switch (c1) {
                     '|' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.LogicalOr, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.logical_or, self.source[start..self.cursor], start, self.cursor);
                     },
                     '=' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.BitwiseOrAssign, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.bitwise_or_assign, self.source[start..self.cursor], start, self.cursor);
                     },
                     else => blk2: {
                         self.cursor += 1;
-                        break :blk2 self.createToken(.BitwiseOr, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.bitwise_or, self.source[start..self.cursor], start, self.cursor);
                     },
                 };
             },
             '^' => switch (c1) {
                 '=' => blk: {
                     self.cursor += 2;
-                    break :blk self.createToken(.BitwiseXorAssign, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.bitwise_xor_assign, self.source[start..self.cursor], start, self.cursor);
                 },
                 else => blk: {
                     self.cursor += 1;
-                    break :blk self.createToken(.BitwiseXor, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.bitwise_xor, self.source[start..self.cursor], start, self.cursor);
                 },
             },
             '?' => blk: {
                 if (c1 == '?' and c2 == '=') {
                     self.cursor += 3;
-                    break :blk self.createToken(.NullishAssign, self.source[start..self.cursor], start, self.cursor);
+                    break :blk self.createToken(.nullish_assign, self.source[start..self.cursor], start, self.cursor);
                 }
                 break :blk switch (c1) {
                     '?' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.NullishCoalescing, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.nullish_coalescing, self.source[start..self.cursor], start, self.cursor);
                     },
                     '.' => blk2: {
                         self.cursor += 2;
-                        break :blk2 self.createToken(.OptionalChaining, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.optional_chaining, self.source[start..self.cursor], start, self.cursor);
                     },
                     else => blk2: {
                         self.cursor += 1;
-                        break :blk2 self.createToken(.Question, self.source[start..self.cursor], start, self.cursor);
+                        break :blk2 self.createToken(.question, self.source[start..self.cursor], start, self.cursor);
                     },
                 };
             },
@@ -358,7 +358,7 @@ pub const Lexer = struct {
 
             if (c == quote) {
                 self.cursor += 1;
-                return self.createToken(.StringLiteral, self.source[start..self.cursor], start, self.cursor);
+                return self.createToken(.string_literal, self.source[start..self.cursor], start, self.cursor);
             }
 
             if (c == '\n' or c == '\r' or c == '\u{2028}' or c == '\u{2029}') {
@@ -386,14 +386,14 @@ pub const Lexer = struct {
             if (c == '`') {
                 self.cursor += 1;
                 const end = self.cursor;
-                return self.createToken(.NoSubstitutionTemplate, self.source[start..end], start, end);
+                return self.createToken(.no_substitution_template, self.source[start..end], start, end);
             }
 
             if (c == '$' and self.peek(1) == '{') {
                 self.cursor += 2;
                 const end = self.cursor;
                 self.template_depth += 1;
-                return self.createToken(.TemplateHead, self.source[start..end], start, end);
+                return self.createToken(.template_head, self.source[start..end], start, end);
             }
 
             self.cursor += 1;
@@ -418,12 +418,12 @@ pub const Lexer = struct {
                 if (self.template_depth > 0) {
                     self.template_depth -= 1;
                 }
-                return self.createToken(.TemplateTail, self.source[start..end], start, end);
+                return self.createToken(.template_tail, self.source[start..end], start, end);
             }
             if (c == '$' and self.peek(1) == '{') {
                 self.cursor += 2;
                 const end = self.cursor;
-                return self.createToken(.TemplateMiddle, self.source[start..end], start, end);
+                return self.createToken(.template_middle, self.source[start..end], start, end);
             }
             self.cursor += 1;
         }
@@ -540,7 +540,7 @@ pub const Lexer = struct {
 
         const start = self.cursor;
         self.cursor += 1;
-        return self.createToken(.RightBrace, self.source[start..self.cursor], start, self.cursor);
+        return self.createToken(.right_brace, self.source[start..self.cursor], start, self.cursor);
     }
 
     pub fn reScanAsRegex(self: *Lexer, slash_token: token.Token) LexicalError!struct { span: token.Span, pattern: []const u8, flags: []const u8, lexeme: []const u8 } {
@@ -609,11 +609,11 @@ pub const Lexer = struct {
         if (c1 == '.' and c2 == '.') {
             const start = self.cursor;
             self.cursor += 3;
-            return self.createToken(.Spread, self.source[start..self.cursor], start, self.cursor);
+            return self.createToken(.spread, self.source[start..self.cursor], start, self.cursor);
         }
         const start = self.cursor;
         self.cursor += 1;
-        return self.createToken(.Dot, self.source[start..self.cursor], start, self.cursor);
+        return self.createToken(.dot, self.source[start..self.cursor], start, self.cursor);
     }
 
     inline fn scanIdentifierBody(self: *Lexer) !void {
@@ -690,7 +690,7 @@ pub const Lexer = struct {
         }
 
         const lexeme = self.source[start..self.cursor];
-        const token_type: token.TokenType = if (is_private) .PrivateIdentifier else self.getKeywordType(lexeme);
+        const token_type: token.TokenType = if (is_private) .private_identifier else self.getKeywordType(lexeme);
         return self.createToken(token_type, lexeme, start, self.cursor);
     }
 
@@ -701,39 +701,39 @@ pub const Lexer = struct {
                 switch (lexeme[1]) {
                     'f' => {
                         return switch (lexeme[0]) {
-                            'i' => .If,
-                            'o' => .Of,
-                            else => .Identifier,
+                            'i' => .@"if",
+                            'o' => .of,
+                            else => .identifier,
                         };
                     },
-                    'n' => if (lexeme[0] == 'i') return .In,
-                    'o' => if (lexeme[0] == 'd') return .Do,
-                    's' => if (lexeme[0] == 'a') return .As,
+                    'n' => if (lexeme[0] == 'i') return .in,
+                    'o' => if (lexeme[0] == 'd') return .do,
+                    's' => if (lexeme[0] == 'a') return .as,
                     else => {},
                 }
             },
             3 => {
                 switch (lexeme[0]) {
-                    'f' => if (lexeme[1] == 'o' and lexeme[2] == 'r') return .For,
-                    'l' => if (lexeme[1] == 'e' and lexeme[2] == 't') return .Let,
-                    'n' => if (lexeme[1] == 'e' and lexeme[2] == 'w') return .New,
-                    't' => if (lexeme[1] == 'r' and lexeme[2] == 'y') return .Try,
-                    'v' => if (lexeme[1] == 'a' and lexeme[2] == 'r') return .Var,
+                    'f' => if (lexeme[1] == 'o' and lexeme[2] == 'r') return .@"for",
+                    'l' => if (lexeme[1] == 'e' and lexeme[2] == 't') return .let,
+                    'n' => if (lexeme[1] == 'e' and lexeme[2] == 'w') return .new,
+                    't' => if (lexeme[1] == 'r' and lexeme[2] == 'y') return .@"try",
+                    'v' => if (lexeme[1] == 'a' and lexeme[2] == 'r') return .@"var",
                     else => {},
                 }
             },
             4 => {
                 switch (lexeme[1]) {
-                    'a' => if (lexeme[0] == 'c' and lexeme[2] == 's' and lexeme[3] == 'e') return .Case,
-                    'h' => if (lexeme[0] == 't' and lexeme[2] == 'i' and lexeme[3] == 's') return .This,
-                    'l' => if (lexeme[0] == 'e' and lexeme[2] == 's' and lexeme[3] == 'e') return .Else,
-                    'n' => if (lexeme[0] == 'e' and lexeme[2] == 'u' and lexeme[3] == 'm') return .Enum,
-                    'o' => if (lexeme[0] == 'v' and lexeme[2] == 'i' and lexeme[3] == 'd') return .Void,
-                    'i' => if (lexeme[0] == 'w' and lexeme[2] == 't' and lexeme[3] == 'h') return .With,
-                    'u' => if (lexeme[0] == 'n' and lexeme[2] == 'l' and lexeme[3] == 'l') return .NullLiteral,
+                    'a' => if (lexeme[0] == 'c' and lexeme[2] == 's' and lexeme[3] == 'e') return .case,
+                    'h' => if (lexeme[0] == 't' and lexeme[2] == 'i' and lexeme[3] == 's') return .this,
+                    'l' => if (lexeme[0] == 'e' and lexeme[2] == 's' and lexeme[3] == 'e') return .@"else",
+                    'n' => if (lexeme[0] == 'e' and lexeme[2] == 'u' and lexeme[3] == 'm') return .@"enum",
+                    'o' => if (lexeme[0] == 'v' and lexeme[2] == 'i' and lexeme[3] == 'd') return .void,
+                    'i' => if (lexeme[0] == 'w' and lexeme[2] == 't' and lexeme[3] == 'h') return .with,
+                    'u' => if (lexeme[0] == 'n' and lexeme[2] == 'l' and lexeme[3] == 'l') return .null_literal,
                     'r' => {
-                        if (lexeme[0] == 't' and lexeme[2] == 'u' and lexeme[3] == 'e') return .True;
-                        if (lexeme[0] == 'f' and lexeme[2] == 'o' and lexeme[3] == 'm') return .From;
+                        if (lexeme[0] == 't' and lexeme[2] == 'u' and lexeme[3] == 'e') return .@"true";
+                        if (lexeme[0] == 'f' and lexeme[2] == 'o' and lexeme[3] == 'm') return .from;
                     },
                     else => {},
                 }
@@ -742,102 +742,102 @@ pub const Lexer = struct {
                 switch (lexeme[0]) {
                     'a' => {
                         if (lexeme[1] == 'w' and lexeme[2] == 'a' and lexeme[3] == 'i' and lexeme[4] == 't')
-                            return .Await;
+                            return .@"await";
                         if (lexeme[1] == 's' and lexeme[2] == 'y' and lexeme[3] == 'n' and lexeme[4] == 'c')
-                            return .Async;
+                            return .@"async";
                     },
                     'b' => if (lexeme[1] == 'r' and lexeme[2] == 'e' and lexeme[3] == 'a' and lexeme[4] == 'k')
-                        return .Break,
+                        return .@"break",
                     'c' => {
                         if (lexeme[1] == 'o' and lexeme[2] == 'n' and lexeme[3] == 's' and lexeme[4] == 't')
-                            return .Const;
+                            return .@"const";
                         if (lexeme[1] == 'l' and lexeme[2] == 'a' and lexeme[3] == 's' and lexeme[4] == 's')
-                            return .Class;
+                            return .class;
                         if (lexeme[1] == 'a' and lexeme[2] == 't' and lexeme[3] == 'c' and lexeme[4] == 'h')
-                            return .Catch;
+                            return .@"catch";
                     },
                     'f' => if (lexeme[1] == 'a' and lexeme[2] == 'l' and lexeme[3] == 's' and lexeme[4] == 'e')
-                        return .False,
+                        return .@"false",
                     's' => if (lexeme[1] == 'u' and lexeme[2] == 'p' and lexeme[3] == 'e' and lexeme[4] == 'r')
-                        return .Super,
+                        return .super,
                     't' => if (lexeme[1] == 'h' and lexeme[2] == 'r' and lexeme[3] == 'o' and lexeme[4] == 'w')
-                        return .Throw,
+                        return .throw,
                     'u' => if (lexeme[1] == 's' and lexeme[2] == 'i' and lexeme[3] == 'n' and lexeme[4] == 'g')
-                        return .Using,
+                        return .using,
                     'w' => if (lexeme[1] == 'h' and lexeme[2] == 'i' and lexeme[3] == 'l' and lexeme[4] == 'e')
-                        return .While,
+                        return .@"while",
                     'y' => if (lexeme[1] == 'i' and lexeme[2] == 'e' and lexeme[3] == 'l' and lexeme[4] == 'd')
-                        return .Yield,
+                        return .yield,
                     else => {},
                 }
             },
             6 => {
                 switch (lexeme[0]) {
                     'd' => if (lexeme[1] == 'e' and lexeme[2] == 'l' and lexeme[3] == 'e' and lexeme[4] == 't' and lexeme[5] == 'e')
-                        return .Delete,
+                        return .delete,
                     'e' => if (lexeme[1] == 'x' and lexeme[2] == 'p' and lexeme[3] == 'o' and lexeme[4] == 'r' and lexeme[5] == 't')
-                        return .Export,
+                        return .@"export",
                     'i' => if (lexeme[1] == 'm' and lexeme[2] == 'p' and lexeme[3] == 'o' and lexeme[4] == 'r' and lexeme[5] == 't')
-                        return .Import,
+                        return .import,
                     'p' => if (lexeme[1] == 'u' and lexeme[2] == 'b' and lexeme[3] == 'l' and lexeme[4] == 'i' and lexeme[5] == 'c')
-                        return .Public,
+                        return .public,
                     'r' => if (lexeme[1] == 'e' and lexeme[2] == 't' and lexeme[3] == 'u' and lexeme[4] == 'r' and lexeme[5] == 'n')
-                        return .Return,
+                        return .@"return",
                     's' => {
                         if (lexeme[1] == 'w' and lexeme[2] == 'i' and lexeme[3] == 't' and lexeme[4] == 'c' and lexeme[5] == 'h')
-                            return .Switch;
+                            return .@"switch";
                         if (lexeme[1] == 't' and lexeme[2] == 'a' and lexeme[3] == 't' and lexeme[4] == 'i' and lexeme[5] == 'c')
-                            return .Static;
+                            return .static;
                     },
                     't' => if (lexeme[1] == 'y' and lexeme[2] == 'p' and lexeme[3] == 'e' and lexeme[4] == 'o' and lexeme[5] == 'f')
-                        return .Typeof,
+                        return .typeof,
                     else => {},
                 }
             },
             7 => {
                 switch (lexeme[0]) {
                     'd' => {
-                        if (std.mem.eql(u8, lexeme, "default")) return .Default;
-                        if (std.mem.eql(u8, lexeme, "declare")) return .Declare;
+                        if (std.mem.eql(u8, lexeme, "default")) return .default;
+                        if (std.mem.eql(u8, lexeme, "declare")) return .declare;
                     },
-                    'e' => if (std.mem.eql(u8, lexeme, "extends")) return .Extends,
-                    'f' => if (std.mem.eql(u8, lexeme, "finally")) return .Finally,
-                    'p' => if (std.mem.eql(u8, lexeme, "private")) return .Private,
+                    'e' => if (std.mem.eql(u8, lexeme, "extends")) return .extends,
+                    'f' => if (std.mem.eql(u8, lexeme, "finally")) return .finally,
+                    'p' => if (std.mem.eql(u8, lexeme, "private")) return .private,
                     else => {},
                 }
             },
             8 => {
                 switch (lexeme[0]) {
-                    'c' => if (std.mem.eql(u8, lexeme, "continue")) return .Continue,
-                    'd' => if (std.mem.eql(u8, lexeme, "debugger")) return .Debugger,
-                    'f' => if (std.mem.eql(u8, lexeme, "function")) return .Function,
+                    'c' => if (std.mem.eql(u8, lexeme, "continue")) return .@"continue",
+                    'd' => if (std.mem.eql(u8, lexeme, "debugger")) return .debugger,
+                    'f' => if (std.mem.eql(u8, lexeme, "function")) return .function,
                     else => {},
                 }
             },
             9 => {
                 switch (lexeme[0]) {
-                    'i' => if (std.mem.eql(u8, lexeme, "interface")) return .Interface,
-                    'p' => if (std.mem.eql(u8, lexeme, "protected")) return .Protected,
+                    'i' => if (std.mem.eql(u8, lexeme, "interface")) return .interface,
+                    'p' => if (std.mem.eql(u8, lexeme, "protected")) return .protected,
                     else => {},
                 }
             },
             10 => {
                 switch (lexeme[0]) {
                     'i' => {
-                        if (std.mem.eql(u8, lexeme, "instanceof")) return .Instanceof;
-                        if (std.mem.eql(u8, lexeme, "implements")) return .Implements;
+                        if (std.mem.eql(u8, lexeme, "instanceof")) return .instanceof;
+                        if (std.mem.eql(u8, lexeme, "implements")) return .implements;
                     },
                     else => {},
                 }
             },
             else => {},
         }
-        return .Identifier;
+        return .identifier;
     }
 
     fn scanNumber(self: *Lexer) LexicalError!token.Token {
         const start = self.cursor;
-        var token_type: token.TokenType = .NumericLiteral;
+        var token_type: token.TokenType = .numeric_literal;
 
         // handle prefixes: 0x, 0o, 0b
         if (self.source[self.cursor] == '0') {
@@ -845,21 +845,21 @@ pub const Lexer = struct {
 
             switch (prefix) {
                 'x' => {
-                    token_type = .HexLiteral;
+                    token_type = .hex_literal;
                     self.cursor += 2;
                     const hex_start = self.cursor;
                     try self.consumeHexDigits();
                     if (self.cursor == hex_start) return error.InvalidHexLiteral;
                 },
                 'o' => {
-                    token_type = .OctalLiteral;
+                    token_type = .octal_literal;
                     self.cursor += 2;
                     const oct_start = self.cursor;
                     try self.consumeOctalDigits();
                     if (self.cursor == oct_start) return error.InvalidOctalLiteralDigit;
                 },
                 'b' => {
-                    token_type = .BinaryLiteral;
+                    token_type = .binary_literal;
                     self.cursor += 2;
                     const bin_start = self.cursor;
                     try self.consumeBinaryDigits();
@@ -874,7 +874,7 @@ pub const Lexer = struct {
         }
 
         // handle decimal point (only for regular numbers)
-        if (token_type == .NumericLiteral and
+        if (token_type == .numeric_literal and
             self.cursor < self.source_len and self.source[self.cursor] == '.')
         {
             const next = self.peek(1);
@@ -886,7 +886,7 @@ pub const Lexer = struct {
         }
 
         // handle exponent (only for regular numbers)
-        if (token_type == .NumericLiteral and self.cursor < self.source_len) {
+        if (token_type == .numeric_literal and self.cursor < self.source_len) {
             const exp_char = std.ascii.toLower(self.source[self.cursor]);
             if (exp_char == 'e') {
                 try self.consumeExponent();
@@ -896,7 +896,7 @@ pub const Lexer = struct {
         // handle bigint suffix 'n'
         if (self.cursor < self.source_len and self.source[self.cursor] == 'n') {
             // bigint cannot have decimal point or exponent
-            if (token_type == .NumericLiteral) {
+            if (token_type == .numeric_literal) {
                 const lexeme = self.source[start..self.cursor];
                 for (lexeme) |c| {
                     if (c == '.' or std.ascii.toLower(c) == 'e') {
@@ -906,7 +906,7 @@ pub const Lexer = struct {
             }
 
             self.cursor += 1;
-            token_type = .BigIntLiteral;
+            token_type = .bigint_literal;
         }
 
         return self.createToken(token_type, self.source[start..self.cursor], start, self.cursor);

@@ -37,12 +37,12 @@ pub const Diagnostic = struct {
     labels: []const Label = &.{},
 };
 
-pub const SourceType = enum { Script, Module };
-pub const Lang = enum { Js, Ts, Jsx, Tsx, Dts };
+pub const SourceType = enum { script, module };
+pub const Lang = enum { js, ts, jsx, tsx, dts };
 
 pub const Options = struct {
-    source_type: SourceType = .Module,
-    lang: Lang = .Js,
+    source_type: SourceType = .module,
+    lang: Lang = .js,
     is_strict: bool = true,
 };
 
@@ -147,7 +147,7 @@ pub const Parser = struct {
         const program = try self.addNode(
             .{
                 .program = .{
-                    .source_type = if (self.source_type == .Module) .Module else .Script,
+                    .source_type = if (self.source_type == .module) .module else .script,
                     .body = program_data.statements,
                     .directives = program_data.directives,
                 },
@@ -176,7 +176,7 @@ pub const Parser = struct {
         const directives_checkpoint = self.scratch_directives.begin();
 
         while (!self.isAtBodyEnd(terminator)) {
-            if (self.current_token.type == .StringLiteral) {
+            if (self.current_token.type == .string_literal) {
                 if (try self.parseDirective()) |directive| {
                     try self.scratch_directives.append(self.allocator(), directive);
                 }
@@ -197,29 +197,29 @@ pub const Parser = struct {
     }
 
     inline fn isAtBodyEnd(self: *Parser, terminator: ?token.TokenType) bool {
-        return self.current_token.type == .EOF or
+        return self.current_token.type == .eof or
             (terminator != null and self.current_token.type == terminator.?);
     }
 
     pub fn parseStatement(self: *Parser) Error!?ast.NodeIndex {
         return switch (self.current_token.type) {
-            .Var, .Const, .Let, .Using => variables.parseVariableDeclaration(self),
-            .Function => functions.parseFunction(self, .{}),
-            .Async => functions.parseFunction(self, .{ .is_async = true }),
-            .Declare => blk: {
+            .@"var", .@"const", .let, .using => variables.parseVariableDeclaration(self),
+            .function => functions.parseFunction(self, .{}),
+            .@"async" => functions.parseFunction(self, .{ .is_async = true }),
+            .declare => blk: {
                 if (!self.isTs()) {
                     break :blk try self.parseExpressionStatement();
                 }
                 break :blk functions.parseFunction(self, .{ .is_declare = true });
             },
 
-            .Await => blk: {
+            .@"await" => blk: {
                 const await_token = self.current_token;
 
                 // TODO: remove lookahead method, and use a way without lookahead, like when we implement
                 // top level awaits
                 // leave this as is for now
-                if ((self.lookAhead() orelse break :blk null).type == .Using) {
+                if ((self.lookAhead() orelse break :blk null).type == .using) {
                     break :blk variables.parseVariableDeclaration(self);
                 }
 
@@ -272,7 +272,7 @@ pub const Parser = struct {
     }
 
     pub inline fn isTs(self: *Parser) bool {
-        return self.lang == .Ts or self.lang == .Tsx or self.lang == .Dts;
+        return self.lang == .ts or self.lang == .tsx or self.lang == .dts;
     }
 
     // utils
@@ -339,7 +339,7 @@ pub const Parser = struct {
 
     pub inline fn eatSemicolon(self: *Parser, end: u32) Error!u32 {
         // consume optional semicolon and adjust span
-        if (self.current_token.type == .Semicolon) {
+        if (self.current_token.type == .semicolon) {
             try self.advance();
             return end + 1;
         }
@@ -385,19 +385,19 @@ pub const Parser = struct {
     fn synchronize(self: *Parser, terminator: ?token.TokenType) Error!void {
         try self.advance();
 
-        while (self.current_token.type != .EOF) {
+        while (self.current_token.type != .eof) {
             // stop at the block terminator to avoid consuming the closing brace
             if (terminator) |t| {
                 if (self.current_token.type == t) return;
             }
 
-            if (self.current_token.type == .Semicolon) {
+            if (self.current_token.type == .semicolon) {
                 try self.advance();
                 return;
             }
 
             switch (self.current_token.type) {
-                .Class, .Function, .Var, .For, .If, .While, .Return, .Let, .Const, .Using => return,
+                .class, .function, .@"var", .@"for", .@"if", .@"while", .@"return", .let, .@"const", .using => return,
                 else => {},
             }
 

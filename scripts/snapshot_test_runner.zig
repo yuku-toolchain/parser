@@ -34,7 +34,7 @@ pub fn main() !void {
         defer allocator.free(name);
 
         total += 1;
-        if (runTest(allocator, test_dir, name, if (is_ts) .Ts else .Js, update)) {
+        if (runTest(allocator, test_dir, name, if (is_ts) .ts else .js, update)) {
             passed += 1;
             std.debug.print("\x1b[32m✓\x1b[0m {s}\n", .{name});
         } else {

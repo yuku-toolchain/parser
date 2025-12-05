@@ -10,7 +10,7 @@ pub fn parseExpression(parser: *Parser, precedence: u5) Error!?ast.NodeIndex {
 
     while (true) {
         const current_type = parser.current_token.type;
-        if (current_type == .EOF) break;
+        if (current_type == .eof) break;
 
         const left_binding_power = parser.current_token.leftBindingPower();
         if (precedence > left_binding_power or left_binding_power == 0) break;
@@ -24,7 +24,7 @@ pub fn parseExpression(parser: *Parser, precedence: u5) Error!?ast.NodeIndex {
 fn parseInfix(parser: *Parser, precedence: u5, left: ast.NodeIndex) Error!?ast.NodeIndex {
     const current = parser.current_token;
 
-    if (current.type == .Increment or current.type == .Decrement) {
+    if (current.type == .increment or current.type == .decrement) {
         return parseUpdateExpression(parser, false, left);
     }
 
@@ -52,15 +52,15 @@ fn parseInfix(parser: *Parser, precedence: u5, left: ast.NodeIndex) Error!?ast.N
 fn parsePrefix(parser: *Parser) Error!?ast.NodeIndex {
     const token_type = parser.current_token.type;
 
-    if (token_type == .Function) {
+    if (token_type == .function) {
         return functions.parseFunction(parser, .{ .is_expression = true });
     }
 
-    if (token_type == .Async) {
+    if (token_type == .@"async") {
         return functions.parseFunction(parser, .{ .is_expression = true, .is_async = true });
     }
 
-    if (token_type == .Increment or token_type == .Decrement) {
+    if (token_type == .increment or token_type == .decrement) {
         return parseUpdateExpression(parser, true, ast.null_node);
     }
 
@@ -73,21 +73,21 @@ fn parsePrefix(parser: *Parser) Error!?ast.NodeIndex {
 
 inline fn parsePrimaryExpression(parser: *Parser) Error!?ast.NodeIndex {
     return switch (parser.current_token.type) {
-        .Identifier => literals.parseIdentifier(parser),
-        .PrivateIdentifier => literals.parsePrivateIdentifier(parser),
-        .StringLiteral => literals.parseStringLiteral(parser),
-        .True, .False => literals.parseBooleanLiteral(parser),
-        .NullLiteral => literals.parseNullLiteral(parser),
-        .NumericLiteral, .HexLiteral, .OctalLiteral, .BinaryLiteral => literals.parseNumericLiteral(parser),
-        .BigIntLiteral => literals.parseBigIntLiteral(parser),
-        .Slash => literals.parseRegExpLiteral(parser),
-        .TemplateHead => literals.parseTemplateLiteral(parser),
-        .NoSubstitutionTemplate => literals.parseNoSubstitutionTemplate(parser),
-        .LeftBracket => parseArrayExpression(parser),
-        .LeftBrace => parseObjectExpression(parser),
+        .identifier => literals.parseIdentifier(parser),
+        .private_identifier => literals.parsePrivateIdentifier(parser),
+        .string_literal => literals.parseStringLiteral(parser),
+        .@"true", .@"false" => literals.parseBooleanLiteral(parser),
+        .null_literal => literals.parseNullLiteral(parser),
+        .numeric_literal, .hex_literal, .octal_literal, .binary_literal => literals.parseNumericLiteral(parser),
+        .bigint_literal => literals.parseBigIntLiteral(parser),
+        .slash => literals.parseRegExpLiteral(parser),
+        .template_head => literals.parseTemplateLiteral(parser),
+        .no_substitution_template => literals.parseNoSubstitutionTemplate(parser),
+        .left_bracket => parseArrayExpression(parser),
+        .left_brace => parseObjectExpression(parser),
         else => {
             const tok = parser.current_token;
-            if (tok.type == .EOF) {
+            if (tok.type == .eof) {
                 try parser.report(
                     tok.span,
                     "Unexpected end of input while parsing expression",
@@ -168,7 +168,7 @@ fn parseBinaryExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) E
     const operator = ast.BinaryOperator.fromToken(operator_token.type);
     try parser.advance();
 
-    const next_precedence = if (operator == .Exponent) precedence else precedence + 1;
+    const next_precedence = if (operator == .exponent) precedence else precedence + 1;
     const right = try parseExpression(parser, next_precedence) orelse return null;
 
     return try parser.addNode(
@@ -191,7 +191,7 @@ fn parseLogicalExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) 
     if (left_data == .logical_expression or right_data == .logical_expression) {
         const operator_to_check = if (left_data == .logical_expression) left_data.logical_expression.operator else right_data.logical_expression.operator;
 
-        if ((current_operator == .NullishCoalescing) != (operator_to_check == .NullishCoalescing)) {
+        if ((current_operator == .nullish_coalescing) != (operator_to_check == .nullish_coalescing)) {
             const left_span = parser.getSpan(left);
             try parser.report(
                 .{ .start = left_span.start, .end = parser.getSpan(right).end },
@@ -230,7 +230,7 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u5, left: ast.NodeInde
     }
 
     // logical assignments (&&=, ||=, ??=) require simple targets
-    const is_logical = operator == .LogicalAndAssign or operator == .LogicalOrAssign or operator == .NullishAssign;
+    const is_logical = operator == .logical_and_assign or operator == .logical_or_assign or operator == .nullish_assign;
     if (is_logical and !isSimpleAssignmentTarget(parser, left)) {
         try parser.report(
             left_span,
@@ -282,10 +282,10 @@ fn parseArrayExpression(parser: *Parser) Error!?ast.NodeIndex {
 
     while (true) {
         const token_type = parser.current_token.type;
-        if (token_type == .RightBracket or token_type == .EOF) break;
+        if (token_type == .right_bracket or token_type == .eof) break;
 
         // elision (holes in array): [1, , 3]
-        if (token_type == .Comma) {
+        if (token_type == .comma) {
             try parser.scratch_a.append(parser.allocator(), ast.null_node);
             try parser.advance();
             continue;
@@ -297,10 +297,10 @@ fn parseArrayExpression(parser: *Parser) Error!?ast.NodeIndex {
         };
         try parser.scratch_a.append(parser.allocator(), element);
 
-        if (parser.current_token.type == .Comma) try parser.advance() else break;
+        if (parser.current_token.type == .comma) try parser.advance() else break;
     }
 
-    if (parser.current_token.type != .RightBracket) {
+    if (parser.current_token.type != .right_bracket) {
         try parser.report(
             parser.current_token.span,
             "Unclosed array literal",
@@ -325,7 +325,7 @@ fn parseArrayExpression(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 inline fn parseArrayElement(parser: *Parser) Error!?ast.NodeIndex {
-    if (parser.current_token.type == .Spread) return parseSpreadElement(parser);
+    if (parser.current_token.type == .spread) return parseSpreadElement(parser);
     return parseExpression(parser, 0);
 }
 
@@ -346,17 +346,17 @@ fn parseObjectExpression(parser: *Parser) Error!?ast.NodeIndex {
 
     while (true) {
         const token_type = parser.current_token.type;
-        if (token_type == .RightBrace or token_type == .EOF) break;
+        if (token_type == .right_brace or token_type == .eof) break;
 
         const property = try parseObjectProperty(parser) orelse {
             parser.scratch_a.reset(checkpoint);
             return null;
         };
         try parser.scratch_a.append(parser.allocator(), property);
-        if (parser.current_token.type == .Comma) try parser.advance() else break;
+        if (parser.current_token.type == .comma) try parser.advance() else break;
     }
 
-    if (parser.current_token.type != .RightBrace) {
+    if (parser.current_token.type != .right_brace) {
         try parser.report(
             parser.current_token.span,
             "Unclosed object literal",
@@ -379,7 +379,7 @@ fn parseObjectExpression(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 fn parseObjectProperty(parser: *Parser) Error!?ast.NodeIndex {
-    if (parser.current_token.type == .Spread) return parseSpreadElement(parser);
+    if (parser.current_token.type == .spread) return parseSpreadElement(parser);
 
     const start = parser.current_token.span.start;
     var computed = false;
@@ -387,12 +387,12 @@ fn parseObjectProperty(parser: *Parser) Error!?ast.NodeIndex {
     var shorthand_token: ?@import("../token.zig").Token = null;
 
     // computed property names: [expr]
-    if (parser.current_token.type == .LeftBracket) {
+    if (parser.current_token.type == .left_bracket) {
         computed = true;
         try parser.advance();
         key = try parseExpression(parser, 0) orelse return null;
 
-        if (parser.current_token.type != .RightBracket) {
+        if (parser.current_token.type != .right_bracket) {
             try parser.report(
                 parser.current_token.span,
                 "Unclosed computed property name",
@@ -420,7 +420,7 @@ fn parseObjectProperty(parser: *Parser) Error!?ast.NodeIndex {
         try parser.advance();
     } else if (parser.current_token.type.isNumericLiteral()) {
         key = try literals.parseNumericLiteral(parser) orelse return null;
-    } else if (parser.current_token.type == .StringLiteral) {
+    } else if (parser.current_token.type == .string_literal) {
         key = try literals.parseStringLiteral(parser) orelse return null;
     } else {
         try parser.reportFmt(
@@ -434,7 +434,7 @@ fn parseObjectProperty(parser: *Parser) Error!?ast.NodeIndex {
 
     // check for shorthand property: { x } instead of { x: x }
     const is_shorthand = !computed and shorthand_token != null and
-        (parser.current_token.type == .Comma or parser.current_token.type == .RightBrace);
+        (parser.current_token.type == .comma or parser.current_token.type == .right_brace);
 
     var value: ast.NodeIndex = undefined;
     if (is_shorthand) {
@@ -450,7 +450,7 @@ fn parseObjectProperty(parser: *Parser) Error!?ast.NodeIndex {
             token.span,
         );
     } else {
-        if (parser.current_token.type != .Colon) {
+        if (parser.current_token.type != .colon) {
             try parser.report(
                 .{ .start = parser.getSpan(key).start, .end = parser.current_token.span.end },
                 "Missing colon after property name in object literal",
@@ -467,7 +467,7 @@ fn parseObjectProperty(parser: *Parser) Error!?ast.NodeIndex {
             .object_property = .{
                 .key = key,
                 .value = value,
-                .kind = .Init,
+                .kind = .init,
                 .shorthand = is_shorthand,
                 .computed = computed,
             },

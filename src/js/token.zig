@@ -11,151 +11,151 @@ pub const Mask = struct {
 };
 
 pub const TokenType = enum(u32) {
-    NumericLiteral = 1 | Mask.IsNumericLiteral, // e.g., "123", "45.67"
-    HexLiteral = 2 | Mask.IsNumericLiteral, // e.g., "0xFF", "0x1A"
-    OctalLiteral = 3 | Mask.IsNumericLiteral, // e.g., "0o777", "0o12"
-    BinaryLiteral = 4 | Mask.IsNumericLiteral, // e.g., "0b1010", "0b11"
-    BigIntLiteral = 5 | Mask.IsNumericLiteral, // e.g., "123n", "456n"
+    numeric_literal = 1 | Mask.IsNumericLiteral, // e.g., "123", "45.67"
+    hex_literal = 2 | Mask.IsNumericLiteral, // e.g., "0xFF", "0x1A"
+    octal_literal = 3 | Mask.IsNumericLiteral, // e.g., "0o777", "0o12"
+    binary_literal = 4 | Mask.IsNumericLiteral, // e.g., "0b1010", "0b11"
+    bigint_literal = 5 | Mask.IsNumericLiteral, // e.g., "123n", "456n"
 
-    StringLiteral = 6, // e.g., "'hello'", "\"world\""
-    RegexLiteral = 7, // e.g., "/abc/g", "/[0-9]+/i"
+    string_literal = 6, // e.g., "'hello'", "\"world\""
+    regex_literal = 7, // e.g., "/abc/g", "/[0-9]+/i"
 
-    NoSubstitutionTemplate = 8, // e.g., "`hello`"
-    TemplateHead = 9, // e.g., "`hello ${"
-    TemplateMiddle = 10, // e.g., "} world ${"
-    TemplateTail = 11, // e.g., "} end`"
+    no_substitution_template = 8, // e.g., "`hello`"
+    template_head = 9, // e.g., "`hello ${"
+    template_middle = 10, // e.g., "} world ${"
+    template_tail = 11, // e.g., "} end`"
 
-    True = 12 | Mask.IsIdentifierLike, // "true"
-    False = 13 | Mask.IsIdentifierLike, // "false"
-    NullLiteral = 14 | Mask.IsIdentifierLike, // "null"
+    true = 12 | Mask.IsIdentifierLike, // "true"
+    false = 13 | Mask.IsIdentifierLike, // "false"
+    null_literal = 14 | Mask.IsIdentifierLike, // "null"
 
-    Plus = 15 | (11 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsUnaryOp, // "+"
-    Minus = 16 | (11 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsUnaryOp, // "-"
-    Star = 17 | (12 << Mask.PrecShift) | Mask.IsBinaryOp, // "*"
-    Slash = 18 | (12 << Mask.PrecShift) | Mask.IsBinaryOp, // "/"
-    Percent = 19 | (12 << Mask.PrecShift) | Mask.IsBinaryOp, // "%"
-    Exponent = 20 | (13 << Mask.PrecShift) | Mask.IsBinaryOp, // "**"
+    plus = 15 | (11 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsUnaryOp, // "+"
+    minus = 16 | (11 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsUnaryOp, // "-"
+    star = 17 | (12 << Mask.PrecShift) | Mask.IsBinaryOp, // "*"
+    slash = 18 | (12 << Mask.PrecShift) | Mask.IsBinaryOp, // "/"
+    percent = 19 | (12 << Mask.PrecShift) | Mask.IsBinaryOp, // "%"
+    exponent = 20 | (13 << Mask.PrecShift) | Mask.IsBinaryOp, // "**"
 
-    Assign = 21 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "="
-    PlusAssign = 22 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "+="
-    MinusAssign = 23 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "-="
-    StarAssign = 24 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "*="
-    SlashAssign = 25 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "/="
-    PercentAssign = 26 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "%="
-    ExponentAssign = 27 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "**="
+    assign = 21 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "="
+    plus_assign = 22 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "+="
+    minus_assign = 23 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "-="
+    star_assign = 24 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "*="
+    slash_assign = 25 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "/="
+    percent_assign = 26 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "%="
+    exponent_assign = 27 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "**="
 
-    Increment = 28 | (15 << Mask.PrecShift), // "++"
-    Decrement = 29 | (15 << Mask.PrecShift), // "--"
+    increment = 28 | (15 << Mask.PrecShift), // "++"
+    decrement = 29 | (15 << Mask.PrecShift), // "--"
 
-    Equal = 30 | (8 << Mask.PrecShift) | Mask.IsBinaryOp, // "=="
-    NotEqual = 31 | (8 << Mask.PrecShift) | Mask.IsBinaryOp, // "!="
-    StrictEqual = 32 | (8 << Mask.PrecShift) | Mask.IsBinaryOp, // "==="
-    StrictNotEqual = 33 | (8 << Mask.PrecShift) | Mask.IsBinaryOp, // "!=="
-    LessThan = 34 | (9 << Mask.PrecShift) | Mask.IsBinaryOp, // "<"
-    GreaterThan = 35 | (9 << Mask.PrecShift) | Mask.IsBinaryOp, // ">"
-    LessThanEqual = 36 | (9 << Mask.PrecShift) | Mask.IsBinaryOp, // "<="
-    GreaterThanEqual = 37 | (9 << Mask.PrecShift) | Mask.IsBinaryOp, // ">="
+    equal = 30 | (8 << Mask.PrecShift) | Mask.IsBinaryOp, // "=="
+    not_equal = 31 | (8 << Mask.PrecShift) | Mask.IsBinaryOp, // "!="
+    strict_equal = 32 | (8 << Mask.PrecShift) | Mask.IsBinaryOp, // "==="
+    strict_not_equal = 33 | (8 << Mask.PrecShift) | Mask.IsBinaryOp, // "!=="
+    less_than = 34 | (9 << Mask.PrecShift) | Mask.IsBinaryOp, // "<"
+    greater_than = 35 | (9 << Mask.PrecShift) | Mask.IsBinaryOp, // ">"
+    less_than_equal = 36 | (9 << Mask.PrecShift) | Mask.IsBinaryOp, // "<="
+    greater_than_equal = 37 | (9 << Mask.PrecShift) | Mask.IsBinaryOp, // ">="
 
-    LogicalAnd = 38 | (4 << Mask.PrecShift) | Mask.IsLogicalOp, // "&&"
-    LogicalOr = 39 | (3 << Mask.PrecShift) | Mask.IsLogicalOp, // "||"
-    LogicalNot = 40 | (14 << Mask.PrecShift) | Mask.IsUnaryOp, // "!"
+    logical_and = 38 | (4 << Mask.PrecShift) | Mask.IsLogicalOp, // "&&"
+    logical_or = 39 | (3 << Mask.PrecShift) | Mask.IsLogicalOp, // "||"
+    logical_not = 40 | (14 << Mask.PrecShift) | Mask.IsUnaryOp, // "!"
 
-    BitwiseAnd = 41 | (7 << Mask.PrecShift) | Mask.IsBinaryOp, // "&"
-    BitwiseOr = 42 | (5 << Mask.PrecShift) | Mask.IsBinaryOp, // "|"
-    BitwiseXor = 43 | (6 << Mask.PrecShift) | Mask.IsBinaryOp, // "^"
-    BitwiseNot = 44 | (14 << Mask.PrecShift) | Mask.IsUnaryOp, // "~"
-    LeftShift = 45 | (10 << Mask.PrecShift) | Mask.IsBinaryOp, // "<<"
-    RightShift = 46 | (10 << Mask.PrecShift) | Mask.IsBinaryOp, // ">>"
-    UnsignedRightShift = 47 | (10 << Mask.PrecShift) | Mask.IsBinaryOp, // ">>>"
+    bitwise_and = 41 | (7 << Mask.PrecShift) | Mask.IsBinaryOp, // "&"
+    bitwise_or = 42 | (5 << Mask.PrecShift) | Mask.IsBinaryOp, // "|"
+    bitwise_xor = 43 | (6 << Mask.PrecShift) | Mask.IsBinaryOp, // "^"
+    bitwise_not = 44 | (14 << Mask.PrecShift) | Mask.IsUnaryOp, // "~"
+    left_shift = 45 | (10 << Mask.PrecShift) | Mask.IsBinaryOp, // "<<"
+    right_shift = 46 | (10 << Mask.PrecShift) | Mask.IsBinaryOp, // ">>"
+    unsigned_right_shift = 47 | (10 << Mask.PrecShift) | Mask.IsBinaryOp, // ">>>"
 
-    BitwiseAndAssign = 48 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "&="
-    BitwiseOrAssign = 49 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "|="
-    BitwiseXorAssign = 50 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "^="
-    LeftShiftAssign = 51 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "<<="
-    RightShiftAssign = 52 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // ">>="
-    UnsignedRightShiftAssign = 53 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // ">>>="
+    bitwise_and_assign = 48 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "&="
+    bitwise_or_assign = 49 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "|="
+    bitwise_xor_assign = 50 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "^="
+    left_shift_assign = 51 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "<<="
+    right_shift_assign = 52 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // ">>="
+    unsigned_right_shift_assign = 53 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // ">>>="
 
-    NullishCoalescing = 54 | (3 << Mask.PrecShift) | Mask.IsLogicalOp, // "??"
-    NullishAssign = 55 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "??="
-    LogicalAndAssign = 56 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "&&="
-    LogicalOrAssign = 57 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "||="
-    OptionalChaining = 58, // "?."
+    nullish_coalescing = 54 | (3 << Mask.PrecShift) | Mask.IsLogicalOp, // "??"
+    nullish_assign = 55 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "??="
+    logical_and_assign = 56 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "&&="
+    logical_or_assign = 57 | (2 << Mask.PrecShift) | Mask.IsAssignmentOp, // "||="
+    optional_chaining = 58, // "?."
 
-    LeftParen = 59, // "("
-    RightParen = 60, // ")"
-    LeftBrace = 61, // "{"
-    RightBrace = 62, // "}"
-    LeftBracket = 63, // "["
-    RightBracket = 64, // "]"
-    Semicolon = 65, // ";"
-    Comma = 66, // ","
-    Dot = 67, // "."
-    Spread = 68, // "..."
-    Arrow = 69, // "=>"
-    Question = 70, // "?"
-    Colon = 71, // ":"
+    left_paren = 59, // "("
+    right_paren = 60, // ")"
+    left_brace = 61, // "{"
+    right_brace = 62, // "}"
+    left_bracket = 63, // "["
+    right_bracket = 64, // "]"
+    semicolon = 65, // ";"
+    comma = 66, // ","
+    dot = 67, // "."
+    spread = 68, // "..."
+    arrow = 69, // "=>"
+    question = 70, // "?"
+    colon = 71, // ":"
 
-    If = 72 | Mask.IsIdentifierLike, // "if"
-    Else = 73 | Mask.IsIdentifierLike, // "else"
-    Switch = 74 | Mask.IsIdentifierLike, // "switch"
-    Case = 75 | Mask.IsIdentifierLike, // "case"
-    Default = 76 | Mask.IsIdentifierLike, // "default"
-    For = 77 | Mask.IsIdentifierLike, // "for"
-    While = 78 | Mask.IsIdentifierLike, // "while"
-    Do = 79 | Mask.IsIdentifierLike, // "do"
-    Break = 80 | Mask.IsIdentifierLike, // "break"
-    Continue = 81 | Mask.IsIdentifierLike, // "continue"
+    @"if" = 72 | Mask.IsIdentifierLike, // "if"
+    @"else" = 73 | Mask.IsIdentifierLike, // "else"
+    @"switch" = 74 | Mask.IsIdentifierLike, // "switch"
+    case = 75 | Mask.IsIdentifierLike, // "case"
+    default = 76 | Mask.IsIdentifierLike, // "default"
+    @"for" = 77 | Mask.IsIdentifierLike, // "for"
+    @"while" = 78 | Mask.IsIdentifierLike, // "while"
+    do = 79 | Mask.IsIdentifierLike, // "do"
+    @"break" = 80 | Mask.IsIdentifierLike, // "break"
+    @"continue" = 81 | Mask.IsIdentifierLike, // "continue"
 
-    Function = 82 | Mask.IsIdentifierLike, // "function"
-    Return = 83 | Mask.IsIdentifierLike, // "return"
-    Async = 84 | Mask.IsIdentifierLike, // "async"
-    Await = 85 | Mask.IsIdentifierLike, // "await"
-    Yield = 86 | Mask.IsIdentifierLike, // "yield"
+    function = 82 | Mask.IsIdentifierLike, // "function"
+    @"return" = 83 | Mask.IsIdentifierLike, // "return"
+    async = 84 | Mask.IsIdentifierLike, // "async"
+    await = 85 | Mask.IsIdentifierLike, // "await"
+    yield = 86 | Mask.IsIdentifierLike, // "yield"
 
-    Var = 87 | Mask.IsIdentifierLike, // "var"
-    Let = 88 | Mask.IsIdentifierLike, // "let"
-    Const = 89 | Mask.IsIdentifierLike, // "const"
-    Using = 90 | Mask.IsIdentifierLike, // "using"
+    @"var" = 87 | Mask.IsIdentifierLike, // "var"
+    let = 88 | Mask.IsIdentifierLike, // "let"
+    @"const" = 89 | Mask.IsIdentifierLike, // "const"
+    using = 90 | Mask.IsIdentifierLike, // "using"
 
-    Class = 91 | Mask.IsIdentifierLike, // "class"
-    Extends = 92 | Mask.IsIdentifierLike, // "extends"
-    Super = 93 | Mask.IsIdentifierLike, // "super"
-    Static = 94 | Mask.IsIdentifierLike, // "static"
-    Enum = 95 | Mask.IsIdentifierLike, // "enum"
-    Public = 96 | Mask.IsIdentifierLike, // "public"
-    Private = 97 | Mask.IsIdentifierLike, // "private"
-    Protected = 98 | Mask.IsIdentifierLike, // "protected"
-    Interface = 99 | Mask.IsIdentifierLike, // "interface"
-    Implements = 100 | Mask.IsIdentifierLike, // "implements"
+    class = 91 | Mask.IsIdentifierLike, // "class"
+    extends = 92 | Mask.IsIdentifierLike, // "extends"
+    super = 93 | Mask.IsIdentifierLike, // "super"
+    static = 94 | Mask.IsIdentifierLike, // "static"
+    @"enum" = 95 | Mask.IsIdentifierLike, // "enum"
+    public = 96 | Mask.IsIdentifierLike, // "public"
+    private = 97 | Mask.IsIdentifierLike, // "private"
+    protected = 98 | Mask.IsIdentifierLike, // "protected"
+    interface = 99 | Mask.IsIdentifierLike, // "interface"
+    implements = 100 | Mask.IsIdentifierLike, // "implements"
 
-    Import = 101 | Mask.IsIdentifierLike, // "import"
-    Export = 102 | Mask.IsIdentifierLike, // "export"
-    From = 103 | Mask.IsIdentifierLike, // "from"
-    As = 104 | Mask.IsIdentifierLike, // "as"
+    import = 101 | Mask.IsIdentifierLike, // "import"
+    @"export" = 102 | Mask.IsIdentifierLike, // "export"
+    from = 103 | Mask.IsIdentifierLike, // "from"
+    as = 104 | Mask.IsIdentifierLike, // "as"
 
-    Try = 105 | Mask.IsIdentifierLike, // "try"
-    Catch = 106 | Mask.IsIdentifierLike, // "catch"
-    Finally = 107 | Mask.IsIdentifierLike, // "finally"
-    Throw = 108 | Mask.IsIdentifierLike, // "throw"
+    @"try" = 105 | Mask.IsIdentifierLike, // "try"
+    @"catch" = 106 | Mask.IsIdentifierLike, // "catch"
+    finally = 107 | Mask.IsIdentifierLike, // "finally"
+    throw = 108 | Mask.IsIdentifierLike, // "throw"
 
-    New = 109 | Mask.IsIdentifierLike, // "new"
-    This = 110 | Mask.IsIdentifierLike, // "this"
-    Typeof = 111 | (14 << Mask.PrecShift) | Mask.IsUnaryOp | Mask.IsIdentifierLike, // "typeof"
-    Instanceof = 112 | (9 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsIdentifierLike, // "instanceof"
-    In = 113 | (9 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsIdentifierLike, // "in"
-    Of = 114 | Mask.IsIdentifierLike, // "of"
-    Delete = 115 | (14 << Mask.PrecShift) | Mask.IsUnaryOp | Mask.IsIdentifierLike, // "delete"
-    Void = 116 | (14 << Mask.PrecShift) | Mask.IsUnaryOp | Mask.IsIdentifierLike, // "void"
-    With = 117 | Mask.IsIdentifierLike, // "with"
-    Debugger = 118 | Mask.IsIdentifierLike, // "debugger"
+    new = 109 | Mask.IsIdentifierLike, // "new"
+    this = 110 | Mask.IsIdentifierLike, // "this"
+    typeof = 111 | (14 << Mask.PrecShift) | Mask.IsUnaryOp | Mask.IsIdentifierLike, // "typeof"
+    instanceof = 112 | (9 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsIdentifierLike, // "instanceof"
+    in = 113 | (9 << Mask.PrecShift) | Mask.IsBinaryOp | Mask.IsIdentifierLike, // "in"
+    of = 114 | Mask.IsIdentifierLike, // "of"
+    delete = 115 | (14 << Mask.PrecShift) | Mask.IsUnaryOp | Mask.IsIdentifierLike, // "delete"
+    void = 116 | (14 << Mask.PrecShift) | Mask.IsUnaryOp | Mask.IsIdentifierLike, // "void"
+    with = 117 | Mask.IsIdentifierLike, // "with"
+    debugger = 118 | Mask.IsIdentifierLike, // "debugger"
 
-    Identifier = 119 | Mask.IsIdentifierLike, // e.g., "myVar", "foo", "_bar"
-    PrivateIdentifier = 120, // e.g., "#privateField", "#method"
+    identifier = 119 | Mask.IsIdentifierLike, // e.g., "myVar", "foo", "_bar"
+    private_identifier = 120, // e.g., "#privateField", "#method"
 
     // typescript
-    Declare = 121 | Mask.IsIdentifierLike, // "declare"
+    declare = 121 | Mask.IsIdentifierLike, // "declare"
 
-    EOF = 122, // end of file
+    eof = 122, // end of file
 
     pub fn precedence(self: TokenType) u5 {
         return @intCast((@intFromEnum(self) >> Mask.PrecShift) & Mask.PrecOverlap);
@@ -193,146 +193,146 @@ pub const TokenType = enum(u32) {
 
     pub fn toString(self: TokenType) ?[]const u8 {
         return switch (self) {
-            .True => "true",
-            .False => "false",
-            .NullLiteral => "null",
+            .true => "true",
+            .false => "false",
+            .null_literal => "null",
 
-            .Plus => "+",
-            .Minus => "-",
-            .Star => "*",
-            .Slash => "/",
-            .Percent => "%",
-            .Exponent => "**",
+            .plus => "+",
+            .minus => "-",
+            .star => "*",
+            .slash => "/",
+            .percent => "%",
+            .exponent => "**",
 
-            .Assign => "=",
-            .PlusAssign => "+=",
-            .MinusAssign => "-=",
-            .StarAssign => "*=",
-            .SlashAssign => "/=",
-            .PercentAssign => "%=",
-            .ExponentAssign => "**=",
+            .assign => "=",
+            .plus_assign => "+=",
+            .minus_assign => "-=",
+            .star_assign => "*=",
+            .slash_assign => "/=",
+            .percent_assign => "%=",
+            .exponent_assign => "**=",
 
-            .Increment => "++",
-            .Decrement => "--",
+            .increment => "++",
+            .decrement => "--",
 
-            .Equal => "==",
-            .NotEqual => "!=",
-            .StrictEqual => "===",
-            .StrictNotEqual => "!==",
-            .LessThan => "<",
-            .GreaterThan => ">",
-            .LessThanEqual => "<=",
-            .GreaterThanEqual => ">=",
+            .equal => "==",
+            .not_equal => "!=",
+            .strict_equal => "===",
+            .strict_not_equal => "!==",
+            .less_than => "<",
+            .greater_than => ">",
+            .less_than_equal => "<=",
+            .greater_than_equal => ">=",
 
-            .LogicalAnd => "&&",
-            .LogicalOr => "||",
-            .LogicalNot => "!",
+            .logical_and => "&&",
+            .logical_or => "||",
+            .logical_not => "!",
 
-            .BitwiseAnd => "&",
-            .BitwiseOr => "|",
-            .BitwiseXor => "^",
-            .BitwiseNot => "~",
-            .LeftShift => "<<",
-            .RightShift => ">>",
-            .UnsignedRightShift => ">>>",
+            .bitwise_and => "&",
+            .bitwise_or => "|",
+            .bitwise_xor => "^",
+            .bitwise_not => "~",
+            .left_shift => "<<",
+            .right_shift => ">>",
+            .unsigned_right_shift => ">>>",
 
-            .BitwiseAndAssign => "&=",
-            .BitwiseOrAssign => "|=",
-            .BitwiseXorAssign => "^=",
-            .LeftShiftAssign => "<<=",
-            .RightShiftAssign => ">>=",
-            .UnsignedRightShiftAssign => ">>>=",
+            .bitwise_and_assign => "&=",
+            .bitwise_or_assign => "|=",
+            .bitwise_xor_assign => "^=",
+            .left_shift_assign => "<<=",
+            .right_shift_assign => ">>=",
+            .unsigned_right_shift_assign => ">>>=",
 
-            .NullishCoalescing => "??",
-            .NullishAssign => "??=",
-            .LogicalAndAssign => "&&=",
-            .LogicalOrAssign => "||=",
-            .OptionalChaining => "?.",
+            .nullish_coalescing => "??",
+            .nullish_assign => "??=",
+            .logical_and_assign => "&&=",
+            .logical_or_assign => "||=",
+            .optional_chaining => "?.",
 
-            .LeftParen => "(",
-            .RightParen => ")",
-            .LeftBrace => "{",
-            .RightBrace => "}",
-            .LeftBracket => "[",
-            .RightBracket => "]",
-            .Semicolon => ";",
-            .Comma => ",",
-            .Dot => ".",
-            .Spread => "...",
-            .Arrow => "=>",
-            .Question => "?",
-            .Colon => ":",
+            .left_paren => "(",
+            .right_paren => ")",
+            .left_brace => "{",
+            .right_brace => "}",
+            .left_bracket => "[",
+            .right_bracket => "]",
+            .semicolon => ";",
+            .comma => ",",
+            .dot => ".",
+            .spread => "...",
+            .arrow => "=>",
+            .question => "?",
+            .colon => ":",
 
-            .If => "if",
-            .Else => "else",
-            .Switch => "switch",
-            .Case => "case",
-            .Default => "default",
-            .For => "for",
-            .While => "while",
-            .Do => "do",
-            .Break => "break",
-            .Continue => "continue",
+            .@"if" => "if",
+            .@"else" => "else",
+            .@"switch" => "switch",
+            .case => "case",
+            .default => "default",
+            .@"for" => "for",
+            .@"while" => "while",
+            .do => "do",
+            .@"break" => "break",
+            .@"continue" => "continue",
 
-            .Function => "function",
-            .Return => "return",
-            .Async => "async",
-            .Await => "await",
-            .Yield => "yield",
+            .function => "function",
+            .@"return" => "return",
+            .async => "async",
+            .await => "await",
+            .yield => "yield",
 
-            .Var => "var",
-            .Let => "let",
-            .Const => "const",
-            .Using => "using",
+            .@"var" => "var",
+            .let => "let",
+            .@"const" => "const",
+            .using => "using",
 
-            .Class => "class",
-            .Extends => "extends",
-            .Super => "super",
-            .Static => "static",
-            .Enum => "enum",
-            .Public => "public",
-            .Private => "private",
-            .Protected => "protected",
-            .Interface => "interface",
-            .Implements => "implements",
+            .class => "class",
+            .extends => "extends",
+            .super => "super",
+            .static => "static",
+            .@"enum" => "enum",
+            .public => "public",
+            .private => "private",
+            .protected => "protected",
+            .interface => "interface",
+            .implements => "implements",
 
-            .Import => "import",
-            .Export => "export",
-            .From => "from",
-            .As => "as",
+            .import => "import",
+            .@"export" => "export",
+            .from => "from",
+            .as => "as",
 
-            .Try => "try",
-            .Catch => "catch",
-            .Finally => "finally",
-            .Throw => "throw",
+            .@"try" => "try",
+            .@"catch" => "catch",
+            .finally => "finally",
+            .throw => "throw",
 
-            .New => "new",
-            .This => "this",
-            .Typeof => "typeof",
-            .Instanceof => "instanceof",
-            .In => "in",
-            .Of => "of",
-            .Delete => "delete",
-            .Void => "void",
-            .With => "with",
-            .Debugger => "debugger",
+            .new => "new",
+            .this => "this",
+            .typeof => "typeof",
+            .instanceof => "instanceof",
+            .in => "in",
+            .of => "of",
+            .delete => "delete",
+            .void => "void",
+            .with => "with",
+            .debugger => "debugger",
 
-            .Declare => "declare",
+            .declare => "declare",
 
-            .EOF,
-            .NumericLiteral,
-            .HexLiteral,
-            .OctalLiteral,
-            .BinaryLiteral,
-            .BigIntLiteral,
-            .StringLiteral,
-            .RegexLiteral,
-            .NoSubstitutionTemplate,
-            .TemplateHead,
-            .TemplateMiddle,
-            .TemplateTail,
-            .Identifier,
-            .PrivateIdentifier,
+            .eof,
+            .numeric_literal,
+            .hex_literal,
+            .octal_literal,
+            .binary_literal,
+            .bigint_literal,
+            .string_literal,
+            .regex_literal,
+            .no_substitution_template,
+            .template_head,
+            .template_middle,
+            .template_tail,
+            .identifier,
+            .private_identifier,
             => null,
         };
     }
@@ -350,18 +350,18 @@ pub const Token = struct {
     has_line_terminator_before: bool,
 
     pub inline fn eof(pos: u32) Token {
-        return Token{ .lexeme = "", .span = .{ .start = pos, .end = pos }, .type = .EOF, .has_line_terminator_before = false };
+        return Token{ .lexeme = "", .span = .{ .start = pos, .end = pos }, .type = .eof, .has_line_terminator_before = false };
     }
 
     // used for pratt parsing in expressions
     pub fn leftBindingPower(self: *const Token) u5 {
         // handle: [no LineTerminator here] ++ --
-        if ((self.type == .Increment or self.type == .Decrement) and self.has_line_terminator_before) {
+        if ((self.type == .increment or self.type == .decrement) and self.has_line_terminator_before) {
             return 0; // can't be infix, start new expression
         }
 
         if (self.type.isBinaryOperator() or self.type.isLogicalOperator() or
-            self.type.isAssignmentOperator() or self.type == .Increment or self.type == .Decrement)
+            self.type.isAssignmentOperator() or self.type == .increment or self.type == .decrement)
         {
             return self.type.precedence();
         }

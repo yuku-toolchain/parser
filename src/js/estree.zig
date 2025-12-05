@@ -91,7 +91,7 @@ pub const Serializer = struct {
         try self.beginObject();
         try self.fieldType("Program");
         try self.fieldSpan(span);
-        try self.fieldString("sourceType", if (data.source_type == .Module) "module" else "script");
+        try self.fieldString("sourceType", if (data.source_type == .module) "module" else "script");
         try self.field("body");
         try self.beginArray();
         for (self.getExtra(data.directives)) |idx| try self.elemNode(idx);
@@ -111,17 +111,26 @@ pub const Serializer = struct {
 
     fn writeFunction(self: *Self, data: ast.Function, span: ast.Span) !void {
         try self.beginObject();
-        try self.fieldType(@tagName(data.type));
+        try self.fieldType(functionTypeToString(data.type));
         try self.fieldSpan(span);
         try self.fieldNode("id", data.id);
         try self.fieldBool("generator", data.generator);
         try self.fieldBool("async", data.async);
-        try self.fieldBool("declare", data.type == .TSDeclareFunction);
+        try self.fieldBool("declare", data.type == .ts_declare_function);
         try self.field("params");
         try self.writeFunctionParams(data.params);
         try self.fieldNode("body", data.body);
         try self.fieldBool("expression", false);
         try self.endObject();
+    }
+
+    fn functionTypeToString(ft: ast.FunctionType) []const u8 {
+        return switch (ft) {
+            .function_declaration => "FunctionDeclaration",
+            .function_expression => "FunctionExpression",
+            .ts_declare_function => "TSDeclareFunction",
+            .ts_empty_body_function_expression => "TSEmptyBodyFunctionExpression",
+        };
     }
 
     fn writeFunctionParams(self: *Self, params_index: ast.NodeIndex) !void {

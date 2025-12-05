@@ -19,7 +19,7 @@ pub inline fn parseBooleanLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
     try parser.advance();
     return try parser.addNode(.{
-        .boolean_literal = .{ .value = token.type == .True },
+        .boolean_literal = .{ .value = token.type == .@"true" },
     }, token.span);
 }
 
@@ -58,7 +58,7 @@ pub fn parseRegExpLiteral(parser: *Parser) Error!?ast.NodeIndex {
         return null;
     };
     try parser.replaceTokenAndAdvance(parser.lexer.createToken(
-        .RegexLiteral,
+        .regex_literal,
         parser.source[regex.span.start..regex.span.end],
         regex.span.start,
         regex.span.end,
@@ -117,10 +117,10 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
         try parser.scratch_b.append(parser.allocator(), expr);
 
         const token = parser.current_token;
-        const is_tail = token.type == .TemplateTail;
+        const is_tail = token.type == .template_tail;
 
         switch (token.type) {
-            .TemplateMiddle, .TemplateTail => {
+            .template_middle, .template_tail => {
                 const span = getTemplateElementSpan(token);
                 try parser.scratch_a.append(parser.allocator(), try parser.addNode(.{
                     .template_element = .{
@@ -160,11 +160,11 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
 
 inline fn getTemplateElementSpan(token: @import("../token.zig").Token) ast.Span {
     return switch (token.type) {
-        .TemplateHead, .TemplateMiddle => .{
+        .template_head, .template_middle => .{
             .start = token.span.start + 1,
             .end = token.span.end - 2,
         },
-        .TemplateTail, .NoSubstitutionTemplate => .{
+        .template_tail, .no_substitution_template => .{
             .start = token.span.start + 1,
             .end = token.span.end - 1,
         },

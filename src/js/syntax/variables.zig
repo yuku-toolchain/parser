@@ -20,7 +20,7 @@ pub fn parseVariableDeclaration(parser: *Parser) Error!?ast.NodeIndex {
     var end = parser.getSpan(first_declarator).end;
 
     // additional declarators: let a, b, c;
-    while (parser.current_token.type == .Comma) {
+    while (parser.current_token.type == .comma) {
         try parser.advance();
         const declarator = try parseVariableDeclarator(parser, kind) orelse {
             parser.scratch_a.reset(checkpoint);
@@ -46,14 +46,14 @@ inline fn parseVariableKind(parser: *Parser) ?ast.VariableKind {
     parser.advance() catch return null;
 
     return switch (token_type) {
-        .Let => .Let,
-        .Const => .Const,
-        .Var => .Var,
-        .Using => .Using,
+        .let => .let,
+        .@"const" => .@"const",
+        .@"var" => .@"var",
+        .using => .using,
 
-        .Await => if (parser.current_token.type == .Using) blk: {
+        .await => if (parser.current_token.type == .using) blk: {
             parser.advance() catch return null;
-            break :blk .AwaitUsing;
+            break :blk .await_using;
         } else null,
 
         else => null,
@@ -68,7 +68,7 @@ fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) Error!?ast.N
     var end = parser.getSpan(id).end;
 
     // initializer if present
-    if (parser.current_token.type == .Assign) {
+    if (parser.current_token.type == .assign) {
         try parser.advance();
         if (try expressions.parseExpression(parser, 0)) |expression| {
             init = expression;
@@ -81,15 +81,15 @@ fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) Error!?ast.N
             .{ .help = "Add '= value' to provide the object or array to destructure from." },
         );
         return null;
-    } else if (kind == .Const) {
+    } else if (kind == .@"const") {
         try parser.report(
             parser.getSpan(id),
             "'const' declarations must be initialized",
             .{ .help = "Add '= value' to initialize the constant, or use 'let' if you need to assign it later." },
         );
         return null;
-    } else if (kind == .Using or kind == .AwaitUsing) {
-        const keyword = if (kind == .Using) "using" else "await using";
+    } else if (kind == .using or kind == .await_using) {
+        const keyword = if (kind == .using) "using" else "await using";
         try parser.reportFmt(
             parser.getSpan(id),
             "'{s}' declarations must be initialized",

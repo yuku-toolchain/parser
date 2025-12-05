@@ -22,16 +22,16 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) Error!?ast.NodeIn
     }
 
     if (!try parser.expect(
-        .Function,
+        .function,
         "Expected 'function' keyword",
         null,
     )) return null;
 
-    const function_type: ast.FunctionType = if (opts.is_expression) .FunctionExpression else if (opts.is_declare) .TSDeclareFunction else .FunctionDeclaration;
+    const function_type: ast.FunctionType = if (opts.is_expression) .function_expression else if (opts.is_declare) .ts_declare_function else .function_declaration;
 
     var is_generator = false;
 
-    if (parser.current_token.type == .Star) {
+    if (parser.current_token.type == .star) {
         is_generator = true;
         parser.context.in_generator = true;
         try parser.advance();
@@ -52,7 +52,7 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) Error!?ast.NodeIn
     }
 
     if (!try parser.expect(
-        .LeftParen,
+        .left_paren,
         "Expected '(' to start parameter list",
         "Function parameters must be enclosed in parentheses: function name(a, b) {}",
     )) return null;
@@ -67,7 +67,7 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) Error!?ast.NodeIn
     const params_end = parser.current_token.span.end; // including )
 
     if (!try parser.expect(
-        .RightParen,
+        .right_paren,
         "Expected ')' to close parameter list",
         "Add a closing parenthesis ')' after the parameters, or check for missing commas between parameters.",
     )) {
@@ -77,7 +77,7 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) Error!?ast.NodeIn
     var body = ast.null_node;
 
     if (opts.is_declare) {
-        if (parser.current_token.type == .LeftBrace) {
+        if (parser.current_token.type == .left_brace) {
             try parser.report(
                 parser.current_token.span,
                 "TS(1183): An implementation cannot be declared in ambient contexts.",
@@ -114,17 +114,17 @@ pub fn parseFunctionBody(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
     if (!try parser.expect(
-        .LeftBrace,
+        .left_brace,
         "Expected '{' to start function body",
         "Function bodies must be enclosed in braces: function name() { ... }",
     )) return null;
 
-    const body_data = try parser.parseBody(.RightBrace);
+    const body_data = try parser.parseBody(.right_brace);
 
     const end = parser.current_token.span.end;
 
     if (!try parser.expect(
-        .RightBrace,
+        .right_brace,
         "Expected '}' to close function body",
         "Add a closing brace '}' to complete the function, or check for unbalanced braces inside.",
     )) return null;
@@ -141,15 +141,15 @@ pub fn parseFormalParamaters(parser: *Parser) Error!?ast.NodeIndex {
     var rest = ast.null_node;
 
     while (true) {
-        if (parser.current_token.type == .RightParen or parser.current_token.type == .EOF) break;
+        if (parser.current_token.type == .right_paren or parser.current_token.type == .eof) break;
 
-        if (parser.current_token.type == .Spread) {
+        if (parser.current_token.type == .spread) {
             rest = try patterns.parseBindingRestElement(parser) orelse ast.null_node;
             if (!ast.isNull(rest)) {
                 end = parser.getSpan(rest).end;
             }
 
-            if (parser.current_token.type == .Comma and !ast.isNull(rest)) {
+            if (parser.current_token.type == .comma and !ast.isNull(rest)) {
                 try parser.report(
                     .{ .start = parser.getSpan(rest).start, .end = parser.current_token.span.end },
                     "Rest parameter must be the last parameter",
@@ -168,7 +168,7 @@ pub fn parseFormalParamaters(parser: *Parser) Error!?ast.NodeIndex {
             try parser.scratch_a.append(parser.allocator(), param);
         }
 
-        if (parser.current_token.type == .Comma) {
+        if (parser.current_token.type == .comma) {
             try parser.advance();
         } else break;
     }
@@ -179,7 +179,7 @@ pub fn parseFormalParamaters(parser: *Parser) Error!?ast.NodeIndex {
 pub fn parseFormalParamater(parser: *Parser) Error!?ast.NodeIndex {
     var pattern = try patterns.parseBindingPattern(parser) orelse return null;
 
-    if (parser.current_token.type == .Assign) {
+    if (parser.current_token.type == .assign) {
         pattern = try patterns.parseAssignmentPattern(parser, pattern) orelse return null;
     }
 
