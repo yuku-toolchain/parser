@@ -213,7 +213,7 @@ pub fn fetchUnicodeData(alloc: std.mem.Allocator) !void {
 
     const zip_file = try std.fs.createFileAbsolute(temp_zip_path, .{});
     defer zip_file.close();
-    defer std.fs.deleteFileAbsolute(temp_zip_path) catch {};
+    defer std.fs.deleteFileAbsolute(temp_zip_path) catch @panic("Zip deletion filed");
 
     var zip_file_writer = zip_file.writer(&.{});
     const zip_writer = &zip_file_writer.interface;

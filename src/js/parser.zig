@@ -5,7 +5,6 @@ const ast = @import("ast.zig");
 
 const expressions = @import("syntax/expressions.zig");
 const literals = @import("syntax/literals.zig");
-const patterns = @import("syntax/patterns.zig");
 const variables = @import("syntax/variables.zig");
 const functions = @import("syntax/functions.zig");
 
@@ -93,7 +92,7 @@ pub const Parser = struct {
     diagnostics: std.ArrayList(Diagnostic) = .empty,
     nodes: std.MultiArrayList(ast.Node) = .empty,
     extra: std.ArrayList(ast.NodeIndex) = .empty,
-    current_token: token.Token = undefined,
+    current_token: token.Token,
 
     scratch_statements: ScratchBuffer = .{},
     scratch_directives: ScratchBuffer = .{},
@@ -117,6 +116,7 @@ pub const Parser = struct {
             .source_type = options.source_type,
             .lang = options.lang,
             .strict_mode = options.is_strict,
+            .current_token = undefined,
             .context = .{ .in_async = false, .in_generator = false, .allow_in = false },
         };
     }
@@ -241,7 +241,7 @@ pub const Parser = struct {
 
         const expression = try literals.parseStringLiteral(self) orelse return null;
 
-        const end = self.eatSemicolon(current_token.span.end);
+        const end = try self.eatSemicolon(current_token.span.end);
 
         // without quotes
         const value_start = start + 1;
@@ -262,7 +262,7 @@ pub const Parser = struct {
 
         return try self.addNode(
             .{ .expression_statement = .{ .expression = expression } },
-            .{ .start = span.start, .end = self.eatSemicolon(span.end) },
+            .{ .start = span.start, .end = try self.eatSemicolon(span.end) },
         );
     }
 
@@ -332,10 +332,10 @@ pub const Parser = struct {
         return false;
     }
 
-    pub inline fn eatSemicolon(self: *Parser, end: u32) u32 {
+    pub inline fn eatSemicolon(self: *Parser, end: u32) Error!u32 {
         // consume optional semicolon and adjust span
         if (self.current_token.type == .Semicolon) {
-            self.advance() catch {};
+            try self.advance();
             return end + 1;
         }
 

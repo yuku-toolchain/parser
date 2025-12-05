@@ -3,8 +3,6 @@
 
 // inspired by https://github.com/dtolnay/unicode-ident
 
-const std = @import("std");
-
 pub fn canStartIdentifier(cp: u32) bool {
     if (cp < 128) {
         return (cp >= 'a' and cp <= 'z') or

@@ -1,5 +1,3 @@
-const std = @import("std");
-
 pub const Mask = struct {
     pub const IsNumericLiteral: u32 = 1 << 12;
     pub const IsBinaryOp: u32 = 1 << 13;

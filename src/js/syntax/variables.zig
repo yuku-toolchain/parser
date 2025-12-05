@@ -1,4 +1,3 @@
-const std = @import("std");
 const ast = @import("../ast.zig");
 const Parser = @import("../parser.zig").Parser;
 const Error = @import("../parser.zig").Error;
@@ -38,7 +37,7 @@ pub fn parseVariableDeclaration(parser: *Parser) Error!?ast.NodeIndex {
                 .kind = kind,
             },
         },
-        .{ .start = start, .end = parser.eatSemicolon(end) },
+        .{ .start = start, .end = try parser.eatSemicolon(end) },
     );
 }
 
