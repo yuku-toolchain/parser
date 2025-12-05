@@ -27,8 +27,6 @@ A very fast JavaScript/TypeScript parser written in Zig to enable JavaScript too
 
 <br/>
 
-<br/>
-
 ```zig
 const std = @import("std");
 const yuku = @import("yuku");
