@@ -12,16 +12,18 @@
 
 A very fast JavaScript/TypeScript parser written in Zig to enable JavaScript tooling in Zig.
 
-<br/>
-
-<br/>
-
-- [x] Javascript Lexer
-- [ ] Javascript Parser
-- [ ] TypeScript Support
-- [ ] JSX Support
-
 </div>
+
+<br/>
+
+<br/>
+
+- **Full ECMAScript spec compliance** — Adheres strictly to the latest ECMAScript specification
+- **Blazing fast** — Built with performance in mind from day one; competitive with established parsers like Oxc
+- **Robust error recovery** — Produces partial ASTs on recoverable errors, keeping your tooling functional
+- **Rich feature set** — First-class JSX and TypeScript support out of the box
+- **Flexible AST output** — Uses a performance-optimized AST internally, with optional 100% ESTree + TypeScript-ESTree compatible output when needed
+- **Comprehensive test coverage** — Targeting full Test262 and Babel test suite compliance *(in progress)*
 
 <br/>
 
