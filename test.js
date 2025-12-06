@@ -1,1 +1,1 @@
-const hello = { ...nice, cool } = nice
+let { nice, ...cool } = x

@@ -13,6 +13,7 @@ pub const ArrayCover = struct {
     elements: []const ast.NodeIndex,
     start: u32,
     end: u32,
+
 };
 
 /// result from parsing object cover grammar {a, b: c, ...d}
@@ -36,14 +37,14 @@ pub fn parseArrayCover(parser: *Parser) Error!?ArrayCover {
     var end = start + 1;
 
     while (parser.current_token.type != .right_bracket and parser.current_token.type != .eof) {
-        // Handle elision (holes): [,,,]
+        // elision (holes): [,,,]
         if (parser.current_token.type == .comma) {
             try parser.scratch_a.append(parser.allocator(), ast.null_node);
             try parser.advance();
             continue;
         }
 
-        // Handle spread: [...x]
+        // spread: [...x]
         if (parser.current_token.type == .spread) {
             const spread_start = parser.current_token.span.start;
             try parser.advance();
@@ -59,7 +60,7 @@ pub fn parseArrayCover(parser: *Parser) Error!?ArrayCover {
             try parser.scratch_a.append(parser.allocator(), spread);
             end = spread_end;
         } else {
-            // Regular element - parse as assignment expression (precedence 2)
+            // regular element - parse as assignment expression
             const element = try expressions.parseExpression(parser, 2) orelse {
                 parser.scratch_a.reset(checkpoint);
                 return null;
@@ -68,7 +69,7 @@ pub fn parseArrayCover(parser: *Parser) Error!?ArrayCover {
             end = parser.getSpan(element).end;
         }
 
-        // Handle comma or end
+        // comma or end
         if (parser.current_token.type == .comma) {
             try parser.advance();
         } else if (parser.current_token.type != .right_bracket) {
@@ -85,7 +86,7 @@ pub fn parseArrayCover(parser: *Parser) Error!?ArrayCover {
     if (parser.current_token.type != .right_bracket) {
         try parser.report(
             .{ .start = start, .end = end },
-            "Unterminated array literal",
+            "Unterminated array",
             .{ .help = "Add a closing ']' to complete the array." },
         );
         parser.scratch_a.reset(checkpoint);
@@ -156,7 +157,7 @@ pub fn parseObjectCover(parser: *Parser) Error!?ObjectCover {
     if (parser.current_token.type != .right_brace) {
         try parser.report(
             .{ .start = start, .end = end },
-            "Unterminated object literal",
+            "Unterminated object",
             .{ .help = "Add a closing '}' to complete the object." },
         );
         parser.scratch_a.reset(checkpoint);
@@ -312,24 +313,7 @@ pub fn arrayCoverToExpression(parser: *Parser, cover: ArrayCover) Error!?ast.Nod
 }
 
 /// convert object cover to ObjectExpression.
-/// validates that no CoverInitializedName syntax is used ({a = 1} is invalid in expression).
 pub fn objectCoverToExpression(parser: *Parser, cover: ObjectCover) Error!?ast.NodeIndex {
-    // validate: CoverInitializedName ({a = 1}) is only valid in patterns, not expressions
-    for (cover.properties) |prop| {
-        const data = parser.getData(prop);
-        if (data == .object_property and data.object_property.shorthand) {
-            const value_data = parser.getData(data.object_property.value);
-            if (value_data == .assignment_expression and value_data.assignment_expression.operator == .assign) {
-                try parser.report(
-                    parser.getSpan(prop),
-                    "Shorthand property cannot have a default value in object expression",
-                    .{ .help = "Use '{ a: a = 1 }' syntax or this is only valid in destructuring patterns." },
-                );
-                return null;
-            }
-        }
-    }
-
     return try parser.addNode(
         .{ .object_expression = .{ .properties = try parser.addExtra(cover.properties) } },
         .{ .start = cover.start, .end = cover.end },
@@ -338,12 +322,12 @@ pub fn objectCoverToExpression(parser: *Parser, cover: ObjectCover) Error!?ast.N
 
 /// convert array cover to ArrayPattern.
 pub fn arrayCoverToPattern(parser: *Parser, cover: ArrayCover) Error!?ast.NodeIndex {
-    return elementsToArrayPattern(parser, cover.elements, .{ .start = cover.start, .end = cover.end });
+    return toArrayPattern(parser, cover.elements, .{ .start = cover.start, .end = cover.end });
 }
 
 /// convert object cover to ObjectPattern.
 pub fn objectCoverToPattern(parser: *Parser, cover: ObjectCover) Error!?ast.NodeIndex {
-    return propertiesToObjectPattern(parser, cover.properties, .{ .start = cover.start, .end = cover.end });
+    return toObjectPattern(parser, cover.properties, .{ .start = cover.start, .end = cover.end });
 }
 
 /// convert an expression node to a binding pattern.
@@ -381,15 +365,15 @@ pub fn expressionToPattern(parser: *Parser, expr: ast.NodeIndex) Error!?ast.Node
 
         // ArrayExpression → ArrayPattern (recursive)
         .array_expression => |arr| {
-            return try arrayExpressionToPattern(parser, arr, span);
+            return toArrayPattern(parser, parser.getExtra(arr.elements), span);
         },
 
         // ObjectExpression → ObjectPattern (recursive)
         .object_expression => |obj| {
-            return try objectExpressionToPattern(parser, obj, span);
+            return toObjectPattern(parser, parser.getExtra(obj.properties), span);
         },
 
-        // Already a pattern (can happen with nested patterns)
+        // already a pattern (can happen with nested patterns)
         .binding_identifier, .array_pattern, .object_pattern, .assignment_pattern => {
             return expr;
         },
@@ -405,13 +389,8 @@ pub fn expressionToPattern(parser: *Parser, expr: ast.NodeIndex) Error!?ast.Node
     }
 }
 
-/// convert ArrayExpression data to ArrayPattern.
-pub fn arrayExpressionToPattern(parser: *Parser, arr: ast.ArrayExpression, span: ast.Span) Error!?ast.NodeIndex {
-    return elementsToArrayPattern(parser, parser.getExtra(arr.elements), span);
-}
-
 /// core logic for converting elements to ArrayPattern.
-fn elementsToArrayPattern(parser: *Parser, elements: []const ast.NodeIndex, span: ast.Span) Error!?ast.NodeIndex {
+fn toArrayPattern(parser: *Parser, elements: []const ast.NodeIndex, span: ast.Span) Error!?ast.NodeIndex {
     const checkpoint = parser.scratch_b.begin();
     errdefer parser.scratch_b.reset(checkpoint);
 
@@ -431,10 +410,10 @@ fn elementsToArrayPattern(parser: *Parser, elements: []const ast.NodeIndex, span
             continue;
         }
 
-        const data = parser.getData(elem);
+        const elem_data = parser.getData(elem);
         const elem_span = parser.getSpan(elem);
 
-        if (data == .spread_element) {
+        if (elem_data == .spread_element) {
             if (found_rest) {
                 try parser.report(elem_span, "Only one rest element is allowed in array pattern", .{});
                 parser.scratch_b.reset(checkpoint);
@@ -454,7 +433,7 @@ fn elementsToArrayPattern(parser: *Parser, elements: []const ast.NodeIndex, span
                 return null;
             }
 
-            const pattern = try expressionToPattern(parser, data.spread_element.argument) orelse {
+            const pattern = try expressionToPattern(parser, elem_data.spread_element.argument) orelse {
                 parser.scratch_b.reset(checkpoint);
                 return null;
             };
@@ -485,13 +464,8 @@ fn elementsToArrayPattern(parser: *Parser, elements: []const ast.NodeIndex, span
     );
 }
 
-/// convert ObjectExpression data to ObjectPattern.
-pub fn objectExpressionToPattern(parser: *Parser, obj: ast.ObjectExpression, span: ast.Span) Error!?ast.NodeIndex {
-    return propertiesToObjectPattern(parser, parser.getExtra(obj.properties), span);
-}
-
 /// core logic for converting properties to ObjectPattern.
-fn propertiesToObjectPattern(parser: *Parser, properties: []const ast.NodeIndex, span: ast.Span) Error!?ast.NodeIndex {
+fn toObjectPattern(parser: *Parser, properties: []const ast.NodeIndex, span: ast.Span) Error!?ast.NodeIndex {
     const checkpoint = parser.scratch_b.begin();
     errdefer parser.scratch_b.reset(checkpoint);
 
@@ -499,10 +473,10 @@ fn propertiesToObjectPattern(parser: *Parser, properties: []const ast.NodeIndex,
     var found_rest = false;
 
     for (properties, 0..) |prop, i| {
-        const data = parser.getData(prop);
+        const prop_data = parser.getData(prop);
         const prop_span = parser.getSpan(prop);
 
-        if (data == .spread_element) {
+        if (prop_data == .spread_element) {
             if (found_rest) {
                 try parser.report(prop_span, "Only one rest element is allowed in object pattern", .{});
                 parser.scratch_b.reset(checkpoint);
@@ -518,7 +492,7 @@ fn propertiesToObjectPattern(parser: *Parser, properties: []const ast.NodeIndex,
             }
 
             // rest argument must be a simple identifier
-            const arg = data.spread_element.argument;
+            const arg = prop_data.spread_element.argument;
             const arg_data = parser.getData(arg);
             if (arg_data != .identifier_reference) {
                 try parser.report(parser.getSpan(arg), "Rest element argument must be an identifier", .{
@@ -544,13 +518,16 @@ fn propertiesToObjectPattern(parser: *Parser, properties: []const ast.NodeIndex,
             return null;
         }
 
-        if (data != .object_property) {
+        if (prop_data != .object_property) {
             try parser.report(prop_span, "Invalid property in object pattern", .{});
             parser.scratch_b.reset(checkpoint);
             return null;
         }
 
-        const obj_prop = data.object_property;
+        const obj_prop = prop_data.object_property;
+
+        // TODO: validate: obj_prop.method=true and non .init kind are not allowed
+        // validate it after implmenting property key method
 
         const value_pattern = try expressionToPattern(parser, obj_prop.value) orelse {
             parser.scratch_b.reset(checkpoint);
