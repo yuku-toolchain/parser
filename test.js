@@ -1,1 +1,1 @@
-let { nice, ...cool } = x
+let nice = [ nice = 10 ]

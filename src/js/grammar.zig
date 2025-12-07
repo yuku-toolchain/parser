@@ -13,7 +13,6 @@ pub const ArrayCover = struct {
     elements: []const ast.NodeIndex,
     start: u32,
     end: u32,
-
 };
 
 /// result from parsing object cover grammar {a, b: c, ...d}
@@ -227,7 +226,7 @@ fn parseObjectCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     if (parser.current_token.type == .assign) {
-        // CoverInitializedName: a = default (for destructuring patterns)
+        // CoverInitializedName: a = default (for destructuring patterns, we are permissive here, validated in objectCoverToExpression)
         // store as object_property with shorthand + assignment expression for the value
         if (computed) {
             try parser.report(
@@ -395,17 +394,9 @@ fn toArrayPattern(parser: *Parser, elements: []const ast.NodeIndex, span: ast.Sp
     errdefer parser.scratch_b.reset(checkpoint);
 
     var rest: ast.NodeIndex = ast.null_node;
-    var found_rest = false;
 
     for (elements, 0..) |elem, i| {
         if (ast.isNull(elem)) {
-            if (found_rest) {
-                try parser.report(span, "Rest element must be the last element", .{
-                    .help = "No elements (including holes) can follow the rest element.",
-                });
-                parser.scratch_b.reset(checkpoint);
-                return null;
-            }
             try parser.scratch_b.append(parser.allocator(), ast.null_node);
             continue;
         }
@@ -414,12 +405,6 @@ fn toArrayPattern(parser: *Parser, elements: []const ast.NodeIndex, span: ast.Sp
         const elem_span = parser.getSpan(elem);
 
         if (elem_data == .spread_element) {
-            if (found_rest) {
-                try parser.report(elem_span, "Only one rest element is allowed in array pattern", .{});
-                parser.scratch_b.reset(checkpoint);
-                return null;
-            }
-
             // rest must be last (no non-hole elements after)
             const has_more = for (elements[i + 1 ..]) |next| {
                 if (!ast.isNull(next)) break true;
@@ -439,16 +424,7 @@ fn toArrayPattern(parser: *Parser, elements: []const ast.NodeIndex, span: ast.Sp
             };
 
             rest = try parser.addNode(.{ .binding_rest_element = .{ .argument = pattern } }, elem_span);
-            found_rest = true;
             continue;
-        }
-
-        if (found_rest) {
-            try parser.report(elem_span, "Rest element must be the last element", .{
-                .help = "No elements can follow the rest element.",
-            });
-            parser.scratch_b.reset(checkpoint);
-            return null;
         }
 
         const pattern = try expressionToPattern(parser, elem) orelse {
@@ -470,19 +446,12 @@ fn toObjectPattern(parser: *Parser, properties: []const ast.NodeIndex, span: ast
     errdefer parser.scratch_b.reset(checkpoint);
 
     var rest: ast.NodeIndex = ast.null_node;
-    var found_rest = false;
 
     for (properties, 0..) |prop, i| {
         const prop_data = parser.getData(prop);
         const prop_span = parser.getSpan(prop);
 
         if (prop_data == .spread_element) {
-            if (found_rest) {
-                try parser.report(prop_span, "Only one rest element is allowed in object pattern", .{});
-                parser.scratch_b.reset(checkpoint);
-                return null;
-            }
-
             if (i != properties.len - 1) {
                 try parser.report(prop_span, "Rest element must be the last property", .{
                     .help = "No properties can follow the rest element in a destructuring pattern.",
@@ -508,14 +477,7 @@ fn toObjectPattern(parser: *Parser, properties: []const ast.NodeIndex, span: ast
             );
 
             rest = try parser.addNode(.{ .binding_rest_element = .{ .argument = binding_id } }, prop_span);
-            found_rest = true;
             continue;
-        }
-
-        if (found_rest) {
-            try parser.report(prop_span, "Rest element must be the last property", .{});
-            parser.scratch_b.reset(checkpoint);
-            return null;
         }
 
         if (prop_data != .object_property) {
