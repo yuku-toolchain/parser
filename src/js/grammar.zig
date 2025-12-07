@@ -51,6 +51,7 @@ fn parseCoverElement(parser: *Parser) Error!?ast.NodeIndex {
 
 /// parse array literal permissively using cover grammar: [a, b, ...c]
 /// returns raw elements for later conversion to ArrayExpression or ArrayPattern.
+/// https://tc39.es/ecma262/#sec-array-initializer (covers ArrayAssignmentPattern)
 pub fn parseArrayCover(parser: *Parser) Error!?ArrayCover {
     const start = parser.current_token.span.start;
     try parser.advance(); // consume [
@@ -129,6 +130,7 @@ pub fn parseArrayCover(parser: *Parser) Error!?ArrayCover {
 
 /// parse object literal permissively using cover grammar: {a, b: c, ...d}
 /// returns raw properties for later conversion to ObjectExpression or ObjectPattern.
+/// https://tc39.es/ecma262/#sec-object-initializer (covers ObjectAssignmentPattern)
 pub fn parseObjectCover(parser: *Parser) Error!?ObjectCover {
     const start = parser.current_token.span.start;
     try parser.advance(); // consume {
