@@ -2,7 +2,8 @@ const Parser = @import("../parser.zig").Parser;
 const Error = @import("../parser.zig").Error;
 const ast = @import("../ast.zig");
 
-const grammar = @import("../grammar.zig");
+const array = @import("array.zig");
+const object = @import("object.zig");
 const literals = @import("literals.zig");
 const expressions = @import("expressions.zig");
 
@@ -52,13 +53,13 @@ pub inline fn parseBindingIdentifier(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 fn parseArrayPattern(parser: *Parser) Error!?ast.NodeIndex {
-    const cover = try grammar.parseArrayCover(parser) orelse return null;
-    return grammar.arrayCoverToPattern(parser, cover);
+    const cover = try array.parseCover(parser) orelse return null;
+    return array.coverToPattern(parser, cover);
 }
 
 fn parseObjectPattern(parser: *Parser) Error!?ast.NodeIndex {
-    const cover = try grammar.parseObjectCover(parser) orelse return null;
-    return grammar.objectCoverToPattern(parser, cover);
+    const cover = try object.parseCover(parser) orelse return null;
+    return object.coverToPattern(parser, cover);
 }
 
 pub fn parseAssignmentPattern(parser: *Parser, left: ast.NodeIndex) Error!?ast.NodeIndex {

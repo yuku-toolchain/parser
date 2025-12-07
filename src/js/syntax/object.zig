@@ -1,22 +1,9 @@
 const std = @import("std");
-const Parser = @import("parser.zig").Parser;
-const Error = @import("parser.zig").Error;
-const ast = @import("ast.zig");
-const token = @import("token.zig");
+const Parser = @import("../parser.zig").Parser;
+const Error = @import("../parser.zig").Error;
+const ast = @import("../ast.zig");
 
-const expressions = @import("syntax/expressions.zig");
-const literals = @import("syntax/literals.zig");
-
-/// result from parsing array cover grammar: [a, b, ...c]
-///
-/// elements are stored in parser scratch and can later be converted to:
-/// - ArrayExpression (for regular array literals)
-/// - ArrayPattern (for destructuring)
-pub const ArrayCover = struct {
-    elements: []const ast.NodeIndex,
-    start: u32,
-    end: u32,
-};
+const literals = @import("literals.zig");
 
 /// result from parsing object cover grammar: {a, b: c, ...d}
 ///
@@ -29,109 +16,11 @@ pub const ObjectCover = struct {
     end: u32,
 };
 
-/// parse an element within a cover grammar context (used for nested arrays/objects).
-///
-/// keeps nested arrays/objects as "covers" by converting them to expressions
-/// without validation. validation is deferred until the top-level context is known:
-/// - if parent becomes an expression -> validate at top level
-/// - if parent becomes a pattern -> no validation needed
-fn parseCoverElement(parser: *Parser) Error!?ast.NodeIndex {
-    return switch (parser.current_token.type) {
-        .left_bracket => blk: {
-            const cover = try parseArrayCover(parser) orelse return null;
-            break :blk arrayCoverToExpressionUnchecked(parser, cover);
-        },
-        .left_brace => blk: {
-            const cover = try parseObjectCover(parser) orelse return null;
-            break :blk objectCoverToExpressionUnchecked(parser, cover);
-        },
-        else => expressions.parseExpression(parser, 2),
-    };
-}
-
-/// parse array literal permissively using cover grammar: [a, b, ...c]
-/// returns raw elements for later conversion to ArrayExpression or ArrayPattern.
-/// https://tc39.es/ecma262/#sec-array-initializer (covers ArrayAssignmentPattern)
-pub fn parseArrayCover(parser: *Parser) Error!?ArrayCover {
-    const start = parser.current_token.span.start;
-    try parser.advance(); // consume [
-
-    const checkpoint = parser.scratch_a.begin();
-    errdefer parser.scratch_a.reset(checkpoint);
-
-    var end = start + 1;
-
-    while (parser.current_token.type != .right_bracket and parser.current_token.type != .eof) {
-        // elision (holes): [,,,]
-        if (parser.current_token.type == .comma) {
-            try parser.scratch_a.append(parser.allocator(), ast.null_node);
-            try parser.advance();
-            continue;
-        }
-
-        // spread: [...x]
-        if (parser.current_token.type == .spread) {
-            const spread_start = parser.current_token.span.start;
-            try parser.advance();
-            const argument = try parseCoverElement(parser) orelse {
-                parser.scratch_a.reset(checkpoint);
-                return null;
-            };
-            const spread_end = parser.getSpan(argument).end;
-            const spread = try parser.addNode(
-                .{ .spread_element = .{ .argument = argument } },
-                .{ .start = spread_start, .end = spread_end },
-            );
-            try parser.scratch_a.append(parser.allocator(), spread);
-            end = spread_end;
-        } else {
-            // regular element - parse as cover element
-            const element = try parseCoverElement(parser) orelse {
-                parser.scratch_a.reset(checkpoint);
-                return null;
-            };
-            try parser.scratch_a.append(parser.allocator(), element);
-            end = parser.getSpan(element).end;
-        }
-
-        // comma or end
-        if (parser.current_token.type == .comma) {
-            try parser.advance();
-        } else if (parser.current_token.type != .right_bracket) {
-            try parser.report(
-                parser.current_token.span,
-                "Expected ',' or ']' in array",
-                .{ .help = "Add a comma between elements or close the array with ']'." },
-            );
-            parser.scratch_a.reset(checkpoint);
-            return null;
-        }
-    }
-
-    if (parser.current_token.type != .right_bracket) {
-        try parser.report(
-            .{ .start = start, .end = end },
-            "Unterminated array",
-            .{ .help = "Add a closing ']' to complete the array." },
-        );
-        parser.scratch_a.reset(checkpoint);
-        return null;
-    }
-
-    end = parser.current_token.span.end;
-    try parser.advance(); // consume ]
-
-    return .{
-        .elements = parser.scratch_a.take(checkpoint),
-        .start = start,
-        .end = end,
-    };
-}
-
 /// parse object literal permissively using cover grammar: {a, b: c, ...d}
 /// returns raw properties for later conversion to ObjectExpression or ObjectPattern.
 /// https://tc39.es/ecma262/#sec-object-initializer (covers ObjectAssignmentPattern)
-pub fn parseObjectCover(parser: *Parser) Error!?ObjectCover {
+pub fn parseCover(parser: *Parser) Error!?ObjectCover {
+    const array = @import("array.zig");
     const start = parser.current_token.span.start;
     try parser.advance(); // consume {
 
@@ -145,7 +34,7 @@ pub fn parseObjectCover(parser: *Parser) Error!?ObjectCover {
         if (parser.current_token.type == .spread) {
             const spread_start = parser.current_token.span.start;
             try parser.advance();
-            const argument = try parseCoverElement(parser) orelse {
+            const argument = try array.parseCoverElement(parser) orelse {
                 parser.scratch_a.reset(checkpoint);
                 return null;
             };
@@ -158,7 +47,7 @@ pub fn parseObjectCover(parser: *Parser) Error!?ObjectCover {
             end = spread_end;
         } else {
             // property
-            const prop = try parseObjectCoverProperty(parser) orelse {
+            const prop = try parseCoverProperty(parser) orelse {
                 parser.scratch_a.reset(checkpoint);
                 return null;
             };
@@ -201,7 +90,8 @@ pub fn parseObjectCover(parser: *Parser) Error!?ObjectCover {
 }
 
 /// parse a single property in object cover grammar.
-fn parseObjectCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
+fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
+    const array = @import("array.zig");
     const prop_start = parser.current_token.span.start;
     var computed = false;
 
@@ -212,7 +102,7 @@ fn parseObjectCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
         // computed property: [expr]: value
         computed = true;
         try parser.advance();
-        key = try parseCoverElement(parser) orelse return null;
+        key = try array.parseCoverElement(parser) orelse return null;
         if (!try parser.expect(.right_bracket, "Expected ']' after computed property key", null)) {
             return null;
         }
@@ -244,7 +134,7 @@ fn parseObjectCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
     if (parser.current_token.type == .colon) {
         // key: value
         try parser.advance();
-        const value = try parseCoverElement(parser) orelse return null;
+        const value = try array.parseCoverElement(parser) orelse return null;
         return try parser.addNode(
             .{ .object_property = .{ .key = key, .value = value, .kind = .init, .shorthand = false, .computed = computed } },
             .{ .start = prop_start, .end = parser.getSpan(value).end },
@@ -275,7 +165,7 @@ fn parseObjectCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
         }
 
         try parser.advance();
-        const default_value = try parseCoverElement(parser) orelse return null;
+        const default_value = try array.parseCoverElement(parser) orelse return null;
 
         // create identifier reference from the key for the left side
         const id_ref = try parser.addNode(
@@ -328,38 +218,17 @@ fn parseObjectCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
     );
 }
 
-/// convert array cover to ArrayExpression with validation (top-level use).
-///
-/// validates recursively that no nested objects contain CoverInitializedName.
-/// call this when you know the array is definitely an expression, not a pattern.
-pub fn arrayCoverToExpression(parser: *Parser, cover: ArrayCover) Error!?ast.NodeIndex {
-    for (cover.elements) |elem| {
-        if (ast.isNull(elem)) continue;
-        if (!try validateNoInvalidCoverSyntax(parser, elem)) return null;
-    }
-    return arrayCoverToExpressionUnchecked(parser, cover);
-}
-
-/// convert array cover to ArrayExpression without validation (nested use).
-/// used for nested arrays that might later become patterns when parent converts.
-fn arrayCoverToExpressionUnchecked(parser: *Parser, cover: ArrayCover) Error!?ast.NodeIndex {
-    return try parser.addNode(
-        .{ .array_expression = .{ .elements = try parser.addExtra(cover.elements) } },
-        .{ .start = cover.start, .end = cover.end },
-    );
-}
-
 /// convert object cover to ObjectExpression with validation (top-level use).
-/// validation is done separately via validateObjectCoverForExpression.
+/// validation is done separately via validateCoverForExpression.
 /// call this when you know the object is definitely an expression, not a pattern.
-pub fn objectCoverToExpression(parser: *Parser, cover: ObjectCover) Error!?ast.NodeIndex {
-    return objectCoverToExpressionUnchecked(parser, cover);
+pub fn coverToExpression(parser: *Parser, cover: ObjectCover) Error!?ast.NodeIndex {
+    return coverToExpressionUnchecked(parser, cover);
 }
 
 /// convert object cover to ObjectExpression without validation (nested use).
 ///
 /// used for nested objects that might later become patterns when parent converts.
-fn objectCoverToExpressionUnchecked(parser: *Parser, cover: ObjectCover) Error!?ast.NodeIndex {
+pub fn coverToExpressionUnchecked(parser: *Parser, cover: ObjectCover) Error!?ast.NodeIndex {
     return try parser.addNode(
         .{ .object_expression = .{ .properties = try parser.addExtra(cover.properties) } },
         .{ .start = cover.start, .end = cover.end },
@@ -367,7 +236,7 @@ fn objectCoverToExpressionUnchecked(parser: *Parser, cover: ObjectCover) Error!?
 }
 
 /// validate that object cover doesn't contain CoverInitializedName.
-pub fn validateObjectCoverForExpression(parser: *Parser, cover: ObjectCover) Error!bool {
+pub fn validateCoverForExpression(parser: *Parser, cover: ObjectCover) Error!bool {
     for (cover.properties) |prop| {
         if (ast.isNull(prop)) continue;
 
@@ -399,7 +268,7 @@ pub fn validateObjectCoverForExpression(parser: *Parser, cover: ObjectCover) Err
 ///
 /// this walks the entire expression tree looking for object expressions with
 /// the invalid shorthand property syntax ({ a = 1 }).
-fn validateNoInvalidCoverSyntax(parser: *Parser, expr: ast.NodeIndex) Error!bool {
+pub fn validateNoInvalidCoverSyntax(parser: *Parser, expr: ast.NodeIndex) Error!bool {
     const data = parser.getData(expr);
 
     switch (data) {
@@ -464,140 +333,17 @@ inline fn reportCoverInitializedNameError(parser: *Parser, node: ast.NodeIndex) 
     );
 }
 
-/// convert array cover to ArrayPattern.
-///
-/// recursively converts all elements from expressions to patterns.
-/// CoverInitializedName ({ a = 1 }) becomes valid AssignmentPattern here.
-pub fn arrayCoverToPattern(parser: *Parser, cover: ArrayCover) Error!?ast.NodeIndex {
-    return toArrayPattern(parser, cover.elements, .{ .start = cover.start, .end = cover.end });
-}
-
 /// convert object cover to ObjectPattern.
 ///
 /// recursively converts all properties from expressions to patterns.
 /// CoverInitializedName ({ a = 1 }) becomes valid AssignmentPattern here.
-pub fn objectCoverToPattern(parser: *Parser, cover: ObjectCover) Error!?ast.NodeIndex {
+pub fn coverToPattern(parser: *Parser, cover: ObjectCover) Error!?ast.NodeIndex {
     return toObjectPattern(parser, cover.properties, .{ .start = cover.start, .end = cover.end });
 }
 
-/// Convert an expression node to a binding pattern.
-///
-/// transformations:
-/// - IdentifierReference -> BindingIdentifier
-/// - ArrayExpression -> ArrayPattern (recursive)
-/// - ObjectExpression -> ObjectPattern (recursive)
-/// - AssignmentExpression -> AssignmentPattern (for defaults)
-pub fn expressionToPattern(parser: *Parser, expr: ast.NodeIndex) Error!?ast.NodeIndex {
-    const data = parser.getData(expr);
-    const span = parser.getSpan(expr);
-
-    switch (data) {
-        // Identifier → BindingIdentifier
-        .identifier_reference => |id| {
-            return try parser.addNode(
-                .{ .binding_identifier = .{ .name_start = id.name_start, .name_len = id.name_len } },
-                span,
-            );
-        },
-
-        // AssignmentExpression → AssignmentPattern
-        .assignment_expression => |assign| {
-            if (assign.operator != .assign) {
-                try parser.report(
-                    span,
-                    "Invalid assignment operator in destructuring pattern",
-                    .{ .help = "Only '=' is allowed in destructuring defaults, not compound operators like '+='." },
-                );
-                return null;
-            }
-
-            const left_pattern = try expressionToPattern(parser, assign.left) orelse return null;
-            return try parser.addNode(
-                .{ .assignment_pattern = .{ .left = left_pattern, .right = assign.right } },
-                span,
-            );
-        },
-
-        // ArrayExpression → ArrayPattern (recursive)
-        .array_expression => |arr| {
-            return toArrayPattern(parser, parser.getExtra(arr.elements), span);
-        },
-
-        // ObjectExpression → ObjectPattern (recursive)
-        .object_expression => |obj| {
-            return toObjectPattern(parser, parser.getExtra(obj.properties), span);
-        },
-
-        // already a pattern (can happen with nested patterns)
-        .binding_identifier, .array_pattern, .object_pattern, .assignment_pattern => {
-            return expr;
-        },
-
-        else => {
-            try parser.report(
-                span,
-                "Invalid element in destructuring pattern",
-                .{ .help = "Expected an identifier, array pattern, object pattern, or assignment pattern." },
-            );
-            return null;
-        },
-    }
-}
-
-/// for converting array elements to ArrayPattern.
-fn toArrayPattern(parser: *Parser, elements: []const ast.NodeIndex, span: ast.Span) Error!?ast.NodeIndex {
-    const checkpoint = parser.scratch_b.begin();
-    errdefer parser.scratch_b.reset(checkpoint);
-
-    var rest: ast.NodeIndex = ast.null_node;
-
-    for (elements, 0..) |elem, i| {
-        if (ast.isNull(elem)) {
-            try parser.scratch_b.append(parser.allocator(), ast.null_node);
-            continue;
-        }
-
-        const elem_data = parser.getData(elem);
-        const elem_span = parser.getSpan(elem);
-
-        if (elem_data == .spread_element) {
-            // rest must be last (no non-hole elements after)
-            const has_more = for (elements[i + 1 ..]) |next| {
-                if (!ast.isNull(next)) break true;
-            } else false;
-
-            if (has_more) {
-                try parser.report(elem_span, "Rest element must be the last element", .{
-                    .help = "No elements can follow the rest element in a destructuring pattern.",
-                });
-                parser.scratch_b.reset(checkpoint);
-                return null;
-            }
-
-            const pattern = try expressionToPattern(parser, elem_data.spread_element.argument) orelse {
-                parser.scratch_b.reset(checkpoint);
-                return null;
-            };
-
-            rest = try parser.addNode(.{ .binding_rest_element = .{ .argument = pattern } }, elem_span);
-            continue;
-        }
-
-        const pattern = try expressionToPattern(parser, elem) orelse {
-            parser.scratch_b.reset(checkpoint);
-            return null;
-        };
-        try parser.scratch_b.append(parser.allocator(), pattern);
-    }
-
-    return try parser.addNode(
-        .{ .array_pattern = .{ .elements = try parser.addExtra(parser.scratch_b.take(checkpoint)), .rest = rest } },
-        span,
-    );
-}
-
 /// for converting object properties to ObjectPattern.
-fn toObjectPattern(parser: *Parser, properties: []const ast.NodeIndex, span: ast.Span) Error!?ast.NodeIndex {
+pub fn toObjectPattern(parser: *Parser, properties: []const ast.NodeIndex, span: ast.Span) Error!?ast.NodeIndex {
+    const array = @import("array.zig");
     const checkpoint = parser.scratch_b.begin();
     errdefer parser.scratch_b.reset(checkpoint);
 
@@ -647,7 +393,7 @@ fn toObjectPattern(parser: *Parser, properties: []const ast.NodeIndex, span: ast
         // TODO: validate: obj_prop.method=true and non .init kind are not allowed
         // validate it after implmenting property key method
 
-        const value_pattern = try expressionToPattern(parser, obj_prop.value) orelse {
+        const value_pattern = try array.expressionToPattern(parser, obj_prop.value) orelse {
             parser.scratch_b.reset(checkpoint);
             return null;
         };

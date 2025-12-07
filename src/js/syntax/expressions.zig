@@ -2,7 +2,8 @@ const ast = @import("../ast.zig");
 const Parser = @import("../parser.zig").Parser;
 const Error = @import("../parser.zig").Error;
 
-const grammar = @import("../grammar.zig");
+const array = @import("array.zig");
+const object = @import("object.zig");
 const literals = @import("literals.zig");
 const functions = @import("functions.zig");
 
@@ -107,7 +108,7 @@ inline fn parsePrimaryExpression(parser: *Parser) Error!?ast.NodeIndex {
 
 fn parseParenthesizedOrArrowFunctionExpression(parser: *Parser) Error!?ast.NodeIndex {
     parser.advance(); // (
-    // const cover_list = try grammar.coverParenthesizedExpressionAndArrowParameterList(parser) orelse return null;
+    // TODO: implement cover grammar for parenthesized expressions and arrow functions
     // parser.advance(); // )
 
     // const checkpoint = parser.scratch_a.begin();
@@ -290,29 +291,29 @@ pub fn isSimpleAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
 }
 
 fn parseArrayExpression(parser: *Parser) Error!?ast.NodeIndex {
-    const cover = try grammar.parseArrayCover(parser) orelse return null;
+    const cover = try array.parseCover(parser) orelse return null;
 
     if (parser.current_token.type == .assign) {
         // Destructuring: [a, b] = expr
-        return try grammar.arrayCoverToPattern(parser, cover) orelse return null;
+        return try array.coverToPattern(parser, cover) orelse return null;
     }
 
     // Regular array expression (validates nested CoverInitializedName)
-    return grammar.arrayCoverToExpression(parser, cover);
+    return array.coverToExpression(parser, cover);
 }
 
 fn parseObjectExpression(parser: *Parser) Error!?ast.NodeIndex {
-    const cover = try grammar.parseObjectCover(parser) orelse return null;
+    const cover = try object.parseCover(parser) orelse return null;
 
     if (parser.current_token.type == .assign) {
         // destructuring: { a, b } = expr
-        return try grammar.objectCoverToPattern(parser, cover) orelse return null;
+        return try object.coverToPattern(parser, cover) orelse return null;
     }
 
     // regular object expression, validate no CoverInitializedName ({ a = 1 })
-    if (!try grammar.validateObjectCoverForExpression(parser, cover)) {
+    if (!try object.validateCoverForExpression(parser, cover)) {
         return null;
     }
 
-    return grammar.objectCoverToExpression(parser, cover);
+    return object.coverToExpression(parser, cover);
 }
