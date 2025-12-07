@@ -1,1 +1,1 @@
-const nice = [{hello = 10}] = cool
+let [[...a, ...b]] = x
