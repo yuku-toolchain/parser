@@ -54,12 +54,12 @@ pub inline fn parseBindingIdentifier(parser: *Parser) Error!?ast.NodeIndex {
 
 fn parseArrayPattern(parser: *Parser) Error!?ast.NodeIndex {
     const cover = try array.parseCover(parser) orelse return null;
-    return array.coverToPattern(parser, cover);
+    return try array.coverToPattern(parser, cover);
 }
 
 fn parseObjectPattern(parser: *Parser) Error!?ast.NodeIndex {
     const cover = try object.parseCover(parser) orelse return null;
-    return object.coverToPattern(parser, cover);
+    return try object.coverToPattern(parser, cover);
 }
 
 pub fn parseAssignmentPattern(parser: *Parser, left: ast.NodeIndex) Error!?ast.NodeIndex {

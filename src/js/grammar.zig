@@ -97,22 +97,20 @@ pub inline fn reportCoverInitializedNameError(parser: *Parser, node: ast.NodeInd
 /// - AssignmentExpression -> AssignmentPattern
 pub fn expressionToPattern(parser: *Parser, expr: ast.NodeIndex) Error!?ast.NodeIndex {
     const data = parser.getData(expr);
-    const span = parser.getSpan(expr);
 
     switch (data) {
-        // Identifier -> BindingIdentifier
         .identifier_reference => |id| {
-            return try parser.addNode(
-                .{ .binding_identifier = .{ .name_start = id.name_start, .name_len = id.name_len } },
-                span,
-            );
+            parser.setData(expr, .{ .binding_identifier = .{
+                .name_start = id.name_start,
+                .name_len = id.name_len,
+            } });
+            return expr;
         },
 
-        // AssignmentExpression -> AssignmentPattern
         .assignment_expression => |assign| {
             if (assign.operator != .assign) {
                 try parser.report(
-                    span,
+                    parser.getSpan(expr),
                     "Invalid assignment operator in destructuring pattern",
                     .{ .help = "Only '=' is allowed in destructuring defaults, not compound operators like '+='." },
                 );
@@ -120,30 +118,28 @@ pub fn expressionToPattern(parser: *Parser, expr: ast.NodeIndex) Error!?ast.Node
             }
 
             const left_pattern = try expressionToPattern(parser, assign.left) orelse return null;
-            return try parser.addNode(
-                .{ .assignment_pattern = .{ .left = left_pattern, .right = assign.right } },
-                span,
-            );
+            parser.setData(expr, .{ .assignment_pattern = .{
+                .left = left_pattern,
+                .right = assign.right,
+            } });
+            return expr;
         },
 
-        // ArrayExpression -> ArrayPattern
         .array_expression => |arr| {
-            return array.toArrayPattern(parser, parser.getExtra(arr.elements), span);
+            return array.toArrayPattern(parser, expr, arr.elements);
         },
 
-        // ObjectExpression -> ObjectPattern (recursive)
         .object_expression => |obj| {
-            return object.toObjectPattern(parser, parser.getExtra(obj.properties), span);
+            return object.toObjectPattern(parser, expr, obj.properties);
         },
 
-        // already a pattern (can happen with nested patterns)
         .binding_identifier, .array_pattern, .object_pattern, .assignment_pattern => {
             return expr;
         },
 
         else => {
             try parser.report(
-                span,
+                parser.getSpan(expr),
                 "Invalid element in destructuring pattern",
                 .{ .help = "Expected an identifier, array pattern, object pattern, or assignment pattern." },
             );

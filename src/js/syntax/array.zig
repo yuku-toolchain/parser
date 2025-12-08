@@ -111,60 +111,60 @@ pub fn coverToExpressionUnchecked(parser: *Parser, cover: ArrayCover) Error!?ast
 }
 
 /// convert array cover to ArrayPattern.
-/// converts all elements from expressions to patterns.
-/// CoverInitializedName ({ a = 1 }) becomes valid AssignmentPattern here.
 pub fn coverToPattern(parser: *Parser, cover: ArrayCover) Error!?ast.NodeIndex {
-    return toArrayPattern(parser, cover.elements, .{ .start = cover.start, .end = cover.end });
+    const elements_range = try parser.addExtra(cover.elements);
+    return toArrayPatternImpl(parser, null, elements_range, .{ .start = cover.start, .end = cover.end });
 }
 
-/// for converting array elements to ArrayPattern.
-pub fn toArrayPattern(parser: *Parser, elements: []const ast.NodeIndex, span: ast.Span) Error!?ast.NodeIndex {
-    const checkpoint = parser.scratch_b.begin();
-    errdefer parser.scratch_b.reset(checkpoint);
+/// convert ArrayExpression to ArrayPattern (mutates in-place).
+pub fn toArrayPattern(parser: *Parser, expr_node: ast.NodeIndex, elements_range: ast.IndexRange) Error!?ast.NodeIndex {
+    return toArrayPatternImpl(parser, expr_node, elements_range, undefined);
+}
+
+fn toArrayPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, elements_range: ast.IndexRange, span: ast.Span) Error!?ast.NodeIndex {
+    const elements = parser.getExtra(elements_range);
 
     var rest: ast.NodeIndex = ast.null_node;
+    var elements_len = elements_range.len;
 
     for (elements, 0..) |elem, i| {
-        if (ast.isNull(elem)) {
-            try parser.scratch_b.append(parser.allocator(), ast.null_node);
-            continue;
-        }
+        if (ast.isNull(elem)) continue;
 
         const elem_data = parser.getData(elem);
-        const elem_span = parser.getSpan(elem);
-
         if (elem_data == .spread_element) {
-            // rest must be last (no non-hole elements after)
             const has_more = for (elements[i + 1 ..]) |next| {
                 if (!ast.isNull(next)) break true;
             } else false;
 
             if (has_more) {
-                try parser.report(elem_span, "Rest element must be the last element", .{
+                try parser.report(parser.getSpan(elem), "Rest element must be the last element", .{
                     .help = "No elements can follow the rest element in a destructuring pattern.",
                 });
-                parser.scratch_b.reset(checkpoint);
                 return null;
             }
 
-            const pattern = try grammar.expressionToPattern(parser, elem_data.spread_element.argument) orelse {
-                parser.scratch_b.reset(checkpoint);
-                return null;
-            };
-
-            rest = try parser.addNode(.{ .binding_rest_element = .{ .argument = pattern } }, elem_span);
-            continue;
+            const pattern = try grammar.expressionToPattern(parser, elem_data.spread_element.argument) orelse return null;
+            parser.setData(elem, .{ .binding_rest_element = .{ .argument = pattern } });
+            rest = elem;
+            elements_len = @intCast(i);
+            break;
         }
-
-        const pattern = try grammar.expressionToPattern(parser, elem) orelse {
-            parser.scratch_b.reset(checkpoint);
-            return null;
-        };
-        try parser.scratch_b.append(parser.allocator(), pattern);
     }
 
-    return try parser.addNode(
-        .{ .array_pattern = .{ .elements = try parser.addExtra(parser.scratch_b.take(checkpoint)), .rest = rest } },
-        span,
-    );
+    for (elements[0..elements_len]) |elem| {
+        if (ast.isNull(elem)) continue;
+        _ = try grammar.expressionToPattern(parser, elem) orelse return null;
+    }
+
+    const pattern_data: ast.NodeData = .{ .array_pattern = .{
+        .elements = .{ .start = elements_range.start, .len = elements_len },
+        .rest = rest,
+    } };
+
+    if (mutate_node) |node| {
+        parser.setData(node, pattern_data);
+        return node;
+    }
+
+    return try parser.addNode(pattern_data, span);
 }

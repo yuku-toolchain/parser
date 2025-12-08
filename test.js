@@ -1,1 +1,1 @@
-let [[...a, ...b]] = x
+const hello = { nice: {nice} } = cool;

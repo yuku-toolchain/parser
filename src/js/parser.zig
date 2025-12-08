@@ -302,6 +302,10 @@ pub const Parser = struct {
         return self.nodes.items(.data)[index];
     }
 
+    pub inline fn setData(self: *Parser, index: ast.NodeIndex, data: ast.NodeData) void {
+        self.nodes.items(.data)[index] = data;
+    }
+
     pub inline fn getExtra(self: *const Parser, range: ast.IndexRange) []const ast.NodeIndex {
         return self.extra.items[range.start..][0..range.len];
     }

@@ -214,8 +214,6 @@ fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 /// convert object cover to ObjectExpression.
-/// currently there are no checks, we can add in future if needed
-/// for no checks, use coverToExpressionUnchecked
 pub fn coverToExpression(parser: *Parser, cover: ObjectCover) Error!?ast.NodeIndex {
     return try parser.addNode(
         .{ .object_expression = .{ .properties = try parser.addExtra(cover.properties) } },
@@ -262,76 +260,84 @@ pub fn validateCoverForExpression(parser: *Parser, cover: ObjectCover) Error!boo
 }
 
 /// convert object cover to ObjectPattern.
-/// CoverInitializedName ({ a = 1 }) becomes valid AssignmentPattern here.
 pub fn coverToPattern(parser: *Parser, cover: ObjectCover) Error!?ast.NodeIndex {
-    return toObjectPattern(parser, cover.properties, .{ .start = cover.start, .end = cover.end });
+    const properties_range = try parser.addExtra(cover.properties);
+    return toObjectPatternImpl(parser, null, properties_range, .{ .start = cover.start, .end = cover.end });
 }
 
-/// for converting object properties to ObjectPattern.
-pub fn toObjectPattern(parser: *Parser, properties: []const ast.NodeIndex, span: ast.Span) Error!?ast.NodeIndex {
-    const checkpoint = parser.scratch_b.begin();
-    errdefer parser.scratch_b.reset(checkpoint);
+/// convert ObjectExpression to ObjectPattern (mutates in-place).
+pub fn toObjectPattern(parser: *Parser, expr_node: ast.NodeIndex, properties_range: ast.IndexRange) Error!?ast.NodeIndex {
+    return toObjectPatternImpl(parser, expr_node, properties_range, undefined);
+}
+
+fn toObjectPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, properties_range: ast.IndexRange, span: ast.Span) Error!?ast.NodeIndex {
+    const properties = parser.getExtra(properties_range);
 
     var rest: ast.NodeIndex = ast.null_node;
+    var properties_len = properties_range.len;
 
-    for (properties, 0..) |prop, i| {
-        const prop_data = parser.getData(prop);
-        const prop_span = parser.getSpan(prop);
+    if (properties.len > 0) {
+        const last = properties[properties.len - 1];
+        const last_data = parser.getData(last);
 
-        if (prop_data == .spread_element) {
-            if (i != properties.len - 1) {
-                try parser.report(prop_span, "Rest element must be the last property", .{
-                    .help = "No properties can follow the rest element in a destructuring pattern.",
-                });
-                parser.scratch_b.reset(checkpoint);
-                return null;
-            }
-
-            // rest argument must be a simple identifier
-            const arg = prop_data.spread_element.argument;
+        if (last_data == .spread_element) {
+            const arg = last_data.spread_element.argument;
             const arg_data = parser.getData(arg);
             if (arg_data != .identifier_reference) {
                 try parser.report(parser.getSpan(arg), "Rest element argument must be an identifier", .{
                     .help = "Object rest patterns only accept simple identifiers, not nested patterns.",
                 });
-                parser.scratch_b.reset(checkpoint);
                 return null;
             }
 
-            const binding_id = try parser.addNode(
-                .{ .binding_identifier = .{ .name_start = arg_data.identifier_reference.name_start, .name_len = arg_data.identifier_reference.name_len } },
-                parser.getSpan(arg),
-            );
+            parser.setData(arg, .{ .binding_identifier = .{
+                .name_start = arg_data.identifier_reference.name_start,
+                .name_len = arg_data.identifier_reference.name_len,
+            } });
 
-            rest = try parser.addNode(.{ .binding_rest_element = .{ .argument = binding_id } }, prop_span);
-            continue;
+            parser.setData(last, .{ .binding_rest_element = .{ .argument = arg } });
+            rest = last;
+            properties_len -= 1;
+        }
+    }
+
+    for (properties[0..properties_len]) |prop| {
+        const prop_data = parser.getData(prop);
+
+        if (prop_data == .spread_element) {
+            try parser.report(parser.getSpan(prop), "Rest element must be the last property", .{
+                .help = "No properties can follow the rest element in a destructuring pattern.",
+            });
+            return null;
         }
 
         if (prop_data != .object_property) {
-            try parser.report(prop_span, "Invalid property in object pattern", .{});
-            parser.scratch_b.reset(checkpoint);
+            try parser.report(parser.getSpan(prop), "Invalid property in object pattern", .{});
             return null;
         }
 
         const obj_prop = prop_data.object_property;
 
-        // TODO: validate: obj_prop.method=true and non .init kind are not allowed
-        // validate it after implmenting property key method
+        // TODO: validate obj_prop.method and non .init kind after implementing methods
 
-        const value_pattern = try grammar.expressionToPattern(parser, obj_prop.value) orelse {
-            parser.scratch_b.reset(checkpoint);
-            return null;
-        };
+        const value_pattern = try grammar.expressionToPattern(parser, obj_prop.value) orelse return null;
 
-        const binding_prop = try parser.addNode(
-            .{ .binding_property = .{ .key = obj_prop.key, .value = value_pattern, .shorthand = obj_prop.shorthand, .computed = obj_prop.computed } },
-            prop_span,
-        );
-        try parser.scratch_b.append(parser.allocator(), binding_prop);
+        parser.setData(prop, .{ .binding_property = .{
+            .key = obj_prop.key,
+            .value = value_pattern,
+            .shorthand = obj_prop.shorthand,
+            .computed = obj_prop.computed,
+        } });
     }
 
-    return try parser.addNode(
-        .{ .object_pattern = .{ .properties = try parser.addExtra(parser.scratch_b.take(checkpoint)), .rest = rest } },
-        span,
-    );
+    const pattern_data: ast.NodeData = .{ .object_pattern = .{
+        .properties = .{ .start = properties_range.start, .len = properties_len },
+        .rest = rest,
+    } };
+
+    if (mutate_node) |node| {
+        parser.setData(node, pattern_data);
+        return node;
+    }
+    return try parser.addNode(pattern_data, span);
 }
