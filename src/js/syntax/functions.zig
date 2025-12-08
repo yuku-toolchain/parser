@@ -88,10 +88,6 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts, start_from_param:
 
     const end = if (!ast.isNull(body)) parser.getSpan(body).end else params_end;
 
-    // TODO: function body cannot have super properties or super calls
-    // so remember this to handle when implement Super expression
-    // probably handle this there.
-
     return try parser.addNode(.{
         .function = .{
             .type = function_type,
