@@ -2,7 +2,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 238,
+    "end": 237,
     "sourceType": "module",
     "body": [{
         "type": "ExpressionStatement",
@@ -719,17 +719,48 @@
             }
           }
         }
+      },{
+        "type": "ExpressionStatement",
+        "start": 225,
+        "end": 236,
+        "expression": {
+          "type": "BinaryExpression",
+          "start": 225,
+          "end": 236,
+          "left": {
+            "type": "ParenthesizedExpression",
+            "start": 225,
+            "end": 232,
+            "expression": {
+              "type": "BinaryExpression",
+              "start": 226,
+              "end": 231,
+              "left": {
+                "type": "Identifier",
+                "start": 226,
+                "end": 227,
+                "name": "a"
+              },
+              "operator": "+",
+              "right": {
+                "type": "Identifier",
+                "start": 230,
+                "end": 231,
+                "name": "b"
+              }
+            }
+          },
+          "operator": "*",
+          "right": {
+            "type": "Identifier",
+            "start": 235,
+            "end": 236,
+            "name": "c"
+          }
+        }
       }
     ]
   },
-  "diagnostics": [{
-      "severity": "error",
-      "message": "Unexpected token '('",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 225,
-      "end": 226,
-      "labels": [
-      ]
-    }
+  "diagnostics": [
   ]
 }

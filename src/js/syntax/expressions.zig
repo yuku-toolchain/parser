@@ -84,7 +84,7 @@ inline fn parsePrimaryExpression(parser: *Parser) Error!?ast.NodeIndex {
         .no_substitution_template => literals.parseNoSubstitutionTemplate(parser),
         .left_bracket => parseArrayExpression(parser),
         .left_brace => parseObjectExpression(parser),
-        .function => functions.parseFunction(parser, .{ .is_expression = true }),
+        .function => functions.parseFunction(parser, .{ .is_expression = true }, null),
         .async => parseAsyncFunctionOrArrow(parser),
         else => {
             const tok = parser.current_token;
@@ -143,8 +143,7 @@ fn parseAsyncFunctionOrArrow(parser: *Parser) Error!?ast.NodeIndex {
 
     // async function ...
     if (parser.current_token.type == .function) {
-        parser.context.in_async = true;
-        return functions.parseFunction(parser, .{ .is_expression = true, .is_async = true });
+        return functions.parseFunction(parser, .{ .is_expression = true, .is_async = true }, start);
     }
 
     // async (params) => ...

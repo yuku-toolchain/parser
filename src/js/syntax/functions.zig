@@ -11,14 +11,11 @@ const ParseFunctionOpts = packed struct {
     is_declare: bool = false,
 };
 
-pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts) Error!?ast.NodeIndex {
-    const start = parser.current_token.span.start;
+pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts, start_from_param: ?u32) Error!?ast.NodeIndex {
+    const start = start_from_param orelse parser.current_token.span.start;
 
-    if (opts.is_async or opts.is_declare) {
-        if (opts.is_async) {
-            parser.context.in_async = true;
-        }
-        try parser.advance(); // consume 'async' or 'declare'
+    if (opts.is_async) {
+        parser.context.in_async = true;
     }
 
     if (!try parser.expect(

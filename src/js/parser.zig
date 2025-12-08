@@ -210,13 +210,19 @@ pub const Parser = struct {
     pub fn parseStatement(self: *Parser) Error!?ast.NodeIndex {
         return switch (self.current_token.type) {
             .@"var", .@"const", .let, .using => variables.parseVariableDeclaration(self),
-            .function => functions.parseFunction(self, .{}),
-            .async => functions.parseFunction(self, .{ .is_async = true }),
+            .function => functions.parseFunction(self, .{}, null),
+            .async => blk: {
+                const start = self.current_token.span.start;
+                try self.advance(); // consume 'async'
+                break :blk try functions.parseFunction(self, .{ .is_async = true }, start);
+            },
             .declare => blk: {
                 if (!self.isTs()) {
                     break :blk try self.parseExpressionStatement();
                 }
-                break :blk functions.parseFunction(self, .{ .is_declare = true });
+                const start = self.current_token.span.start;
+                try self.advance(); // consume 'declare'
+                break :blk try functions.parseFunction(self, .{ .is_declare = true }, start);
             },
 
             .await => blk: {
