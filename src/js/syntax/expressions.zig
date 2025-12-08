@@ -294,26 +294,18 @@ fn parseArrayExpression(parser: *Parser) Error!?ast.NodeIndex {
     const cover = try array.parseCover(parser) orelse return null;
 
     if (parser.current_token.type == .assign) {
-        // destructuring: [a, b] = expr
-        return try array.coverToPattern(parser, cover) orelse return null;
+        return try array.coverToPattern(parser, cover);
     }
 
-    // regular array expression (validates nested CoverInitializedName)
-    return array.coverToExpression(parser, cover);
+    return array.coverToExpression(parser, cover, true);
 }
 
 fn parseObjectExpression(parser: *Parser) Error!?ast.NodeIndex {
     const cover = try object.parseCover(parser) orelse return null;
 
     if (parser.current_token.type == .assign) {
-        // destructuring: { a, b } = expr
-        return try object.coverToPattern(parser, cover) orelse return null;
+        return try object.coverToPattern(parser, cover);
     }
 
-    // regular object expression, validate no CoverInitializedName ({ a = 1 })
-    if (!try object.validateCoverForExpression(parser, cover)) {
-        return null;
-    }
-
-    return object.coverToExpression(parser, cover);
+    return object.coverToExpression(parser, cover, true);
 }

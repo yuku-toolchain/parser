@@ -91,19 +91,15 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
     };
 }
 
-/// convert array cover to ArrayExpression with validation (top-level use).
-/// validates that does not contain CoverInitializedName.
-pub fn coverToExpression(parser: *Parser, cover: ArrayCover) Error!?ast.NodeIndex {
-    for (cover.elements) |elem| {
-        if (ast.isNull(elem)) continue;
-        if (!try grammar.validateNoInvalidCoverSyntax(parser, elem)) return null;
+/// convert array cover to ArrayExpression.
+/// validates that does not contain CoverInitializedName when validate=true.
+pub fn coverToExpression(parser: *Parser, cover: ArrayCover, validate: bool) Error!?ast.NodeIndex {
+    if (validate) {
+        for (cover.elements) |elem| {
+            if (ast.isNull(elem)) continue;
+            if (!try grammar.validateNoInvalidCoverSyntax(parser, elem)) return null;
+        }
     }
-    return coverToExpressionUnchecked(parser, cover);
-}
-
-/// convert array cover to ArrayExpression without validation (nested use).
-/// used for nested arrays that might later become patterns when parent converts.
-pub fn coverToExpressionUnchecked(parser: *Parser, cover: ArrayCover) Error!?ast.NodeIndex {
     return try parser.addNode(
         .{ .array_expression = .{ .elements = try parser.addExtra(cover.elements) } },
         .{ .start = cover.start, .end = cover.end },

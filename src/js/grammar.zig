@@ -16,11 +16,11 @@ pub fn parseCoverElement(parser: *Parser) Error!?ast.NodeIndex {
     return switch (parser.current_token.type) {
         .left_bracket => blk: {
             const cover = try array.parseCover(parser) orelse return null;
-            break :blk array.coverToExpressionUnchecked(parser, cover);
+            break :blk array.coverToExpression(parser, cover, false);
         },
         .left_brace => blk: {
             const cover = try object.parseCover(parser) orelse return null;
-            break :blk object.coverToExpressionUnchecked(parser, cover);
+            break :blk object.coverToExpression(parser, cover, false);
         },
         else => expressions.parseExpression(parser, 2),
     };

@@ -214,49 +214,37 @@ fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 /// convert object cover to ObjectExpression.
-pub fn coverToExpression(parser: *Parser, cover: ObjectCover) Error!?ast.NodeIndex {
-    return try parser.addNode(
-        .{ .object_expression = .{ .properties = try parser.addExtra(cover.properties) } },
-        .{ .start = cover.start, .end = cover.end },
-    );
-}
+/// validates that does not contain CoverInitializedName when validate=true.
+pub fn coverToExpression(parser: *Parser, cover: ObjectCover, validate: bool) Error!?ast.NodeIndex {
+    if (validate) {
+        for (cover.properties) |prop| {
+            if (ast.isNull(prop)) continue;
 
-/// convert object cover to ObjectExpression without validation (nested use).
-/// used for nested objects that might later become patterns when parent converts.
-pub fn coverToExpressionUnchecked(parser: *Parser, cover: ObjectCover) Error!?ast.NodeIndex {
-    return try parser.addNode(
-        .{ .object_expression = .{ .properties = try parser.addExtra(cover.properties) } },
-        .{ .start = cover.start, .end = cover.end },
-    );
-}
-
-/// validate that object cover doesn't contain CoverInitializedName.
-pub fn validateCoverForExpression(parser: *Parser, cover: ObjectCover) Error!bool {
-    for (cover.properties) |prop| {
-        if (ast.isNull(prop)) continue;
-
-        const prop_data = parser.getData(prop);
-        switch (prop_data) {
-            .object_property => |obj_prop| {
-                // check for CoverInitializedName: { a = 1 }
-                if (obj_prop.shorthand and grammar.isCoverInitializedName(parser, obj_prop.value)) {
-                    try grammar.reportCoverInitializedNameError(parser, prop);
-                    return false;
-                }
-                // recursively validate nested structures
-                if (!try grammar.validateNoInvalidCoverSyntax(parser, obj_prop.value)) {
-                    return false;
-                }
-            },
-            .spread_element => |spread| {
-                if (!try grammar.validateNoInvalidCoverSyntax(parser, spread.argument)) {
-                    return false;
-                }
-            },
-            else => {},
+            const prop_data = parser.getData(prop);
+            switch (prop_data) {
+                .object_property => |obj_prop| {
+                    if (obj_prop.shorthand and grammar.isCoverInitializedName(parser, obj_prop.value)) {
+                        try grammar.reportCoverInitializedNameError(parser, prop);
+                        return null;
+                    }
+                    if (!try grammar.validateNoInvalidCoverSyntax(parser, obj_prop.value)) {
+                        return null;
+                    }
+                },
+                .spread_element => |spread| {
+                    if (!try grammar.validateNoInvalidCoverSyntax(parser, spread.argument)) {
+                        return null;
+                    }
+                },
+                else => {},
+            }
         }
     }
-    return true;
+
+    return try parser.addNode(
+        .{ .object_expression = .{ .properties = try parser.addExtra(cover.properties) } },
+        .{ .start = cover.start, .end = cover.end },
+    );
 }
 
 /// convert object cover to ObjectPattern.
