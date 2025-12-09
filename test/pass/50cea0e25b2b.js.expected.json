@@ -1,0 +1,164 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "name": "b",
+            "start": 11,
+            "end": 12
+          },
+          {
+            "type": "Identifier",
+            "name": "c",
+            "start": 14,
+            "end": 15
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "kind": "var",
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "id": {
+                    "type": "Identifier",
+                    "name": "d",
+                    "start": 27,
+                    "end": 28
+                  },
+                  "init": {
+                    "type": "Literal",
+                    "value": 1,
+                    "raw": "1",
+                    "start": 31,
+                    "end": 32
+                  },
+                  "start": 27,
+                  "end": 32
+                },
+                {
+                  "type": "VariableDeclarator",
+                  "id": {
+                    "type": "Identifier",
+                    "name": "e",
+                    "start": 34,
+                    "end": 35
+                  },
+                  "init": {
+                    "type": "Identifier",
+                    "name": "f",
+                    "start": 38,
+                    "end": 39
+                  },
+                  "start": 34,
+                  "end": 39
+                },
+                {
+                  "type": "VariableDeclarator",
+                  "id": {
+                    "type": "Identifier",
+                    "name": "f",
+                    "start": 41,
+                    "end": 42
+                  },
+                  "init": {
+                    "type": "BinaryExpression",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "d",
+                      "start": 45,
+                      "end": 46
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "Identifier",
+                      "name": "e",
+                      "start": 49,
+                      "end": 50
+                    },
+                    "start": 45,
+                    "end": 50
+                  },
+                  "start": 41,
+                  "end": 50
+                },
+                {
+                  "type": "VariableDeclarator",
+                  "id": {
+                    "type": "Identifier",
+                    "name": "g",
+                    "start": 52,
+                    "end": 53
+                  },
+                  "init": {
+                    "type": "CallExpression",
+                    "callee": {
+                      "type": "Identifier",
+                      "name": "h",
+                      "start": 56,
+                      "end": 57
+                    },
+                    "arguments": [],
+                    "start": 56,
+                    "end": 59
+                  },
+                  "start": 52,
+                  "end": 59
+                }
+              ],
+              "start": 23,
+              "end": 60
+            },
+            {
+              "type": "ReturnStatement",
+              "argument": {
+                "type": "BinaryExpression",
+                "left": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 72,
+                  "end": 73
+                },
+                "operator": "+",
+                "right": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 76,
+                  "end": 77
+                },
+                "start": 72,
+                "end": 77
+              },
+              "start": 65,
+              "end": 78
+            }
+          ],
+          "start": 17,
+          "end": 80
+        },
+        "expression": false,
+        "start": 0,
+        "end": 80
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 80
+  },
+  "errors": []
+}

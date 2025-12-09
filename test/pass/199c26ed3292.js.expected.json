@@ -1,0 +1,83 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "DoWhileStatement",
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "UpdateExpression",
+                "operator": "++",
+                "prefix": false,
+                "argument": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 7,
+                  "end": 8
+                },
+                "start": 7,
+                "end": 10
+              },
+              "start": 7,
+              "end": 11
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "UpdateExpression",
+                "operator": "--",
+                "prefix": false,
+                "argument": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 14,
+                  "end": 15
+                },
+                "start": 14,
+                "end": 17
+              },
+              "start": 14,
+              "end": 18
+            }
+          ],
+          "start": 3,
+          "end": 20
+        },
+        "test": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 28,
+            "end": 29
+          },
+          "operator": "<",
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 33,
+              "end": 34
+            },
+            "start": 32,
+            "end": 35
+          },
+          "start": 28,
+          "end": 35
+        },
+        "start": 0,
+        "end": 37
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 38
+  },
+  "errors": []
+}

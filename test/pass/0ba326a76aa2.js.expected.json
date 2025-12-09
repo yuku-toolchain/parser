@@ -1,0 +1,59 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "let",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 5,
+                    "end": 6
+                  },
+                  "value": {
+                    "type": "ObjectPattern",
+                    "properties": [],
+                    "start": 7,
+                    "end": 9
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false,
+                  "start": 5,
+                  "end": 9
+                }
+              ],
+              "start": 4,
+              "end": 10
+            },
+            "init": {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 13,
+              "end": 14
+            },
+            "start": 4,
+            "end": 14
+          }
+        ],
+        "start": 0,
+        "end": 14
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 15
+  },
+  "errors": []
+}

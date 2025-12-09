@@ -1,0 +1,35 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "MemberExpression",
+          "object": {
+            "type": "Literal",
+            "value": 0,
+            "raw": "0.0",
+            "start": 0,
+            "end": 3
+          },
+          "property": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 4,
+            "end": 5
+          },
+          "computed": false,
+          "start": 0,
+          "end": 5
+        },
+        "start": 0,
+        "end": 5
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 5
+  },
+  "errors": []
+}

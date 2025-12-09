@@ -1,0 +1,27 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": {},
+          "raw": "/[a-z]/gim",
+          "regex": {
+            "pattern": "[a-z]",
+            "flags": "gim"
+          },
+          "start": 0,
+          "end": 10
+        },
+        "start": 0,
+        "end": 10
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 10
+  },
+  "errors": []
+}

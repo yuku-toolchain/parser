@@ -1,0 +1,40 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "TryStatement",
+        "block": {
+          "type": "BlockStatement",
+          "body": [],
+          "start": 3,
+          "end": 5
+        },
+        "handler": {
+          "type": "CatchClause",
+          "param": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 11,
+            "end": 12
+          },
+          "body": {
+            "type": "BlockStatement",
+            "body": [],
+            "start": 13,
+            "end": 15
+          },
+          "start": 5,
+          "end": 15
+        },
+        "finalizer": null,
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 15
+  },
+  "errors": []
+}

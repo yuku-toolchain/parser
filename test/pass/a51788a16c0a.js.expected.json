@@ -1,0 +1,77 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": "use strict",
+          "raw": "\"use strict\"",
+          "start": 0,
+          "end": 12
+        },
+        "directive": "use strict",
+        "start": 0,
+        "end": 13
+      },
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 18,
+              "end": 19
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "ObjectExpression",
+                "properties": [
+                  {
+                    "type": "Property",
+                    "kind": "init",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "delete",
+                      "start": 24,
+                      "end": 30
+                    },
+                    "value": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 32,
+                      "end": 33
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "start": 24,
+                    "end": 33
+                  }
+                ],
+                "start": 23,
+                "end": 34
+              },
+              "start": 22,
+              "end": 35
+            },
+            "start": 18,
+            "end": 35
+          }
+        ],
+        "start": 14,
+        "end": 36
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 37
+  },
+  "errors": []
+}

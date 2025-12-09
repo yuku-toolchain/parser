@@ -1,0 +1,37 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "let",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "ObjectPattern",
+              "properties": [],
+              "start": 4,
+              "end": 6
+            },
+            "init": {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 9,
+              "end": 10
+            },
+            "start": 4,
+            "end": 10
+          }
+        ],
+        "start": 0,
+        "end": 10
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 11
+  },
+  "errors": []
+}

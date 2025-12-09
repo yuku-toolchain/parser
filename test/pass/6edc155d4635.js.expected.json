@@ -1,0 +1,96 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "FunctionExpression",
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "expression": {
+                    "type": "Literal",
+                    "value": "use strict",
+                    "raw": "'use strict'",
+                    "start": 19,
+                    "end": 31
+                  },
+                  "directive": "use strict",
+                  "start": 19,
+                  "end": 32
+                },
+                {
+                  "type": "ExpressionStatement",
+                  "expression": {
+                    "type": "AssignmentExpression",
+                    "operator": "=",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 38,
+                      "end": 39
+                    },
+                    "right": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 42,
+                      "end": 43
+                    },
+                    "start": 38,
+                    "end": 43
+                  },
+                  "start": 38,
+                  "end": 44
+                },
+                {
+                  "type": "FunctionDeclaration",
+                  "id": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 58,
+                    "end": 59
+                  },
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [],
+                    "start": 62,
+                    "end": 69
+                  },
+                  "expression": false,
+                  "start": 49,
+                  "end": 69
+                }
+              ],
+              "start": 13,
+              "end": 71
+            },
+            "expression": false,
+            "start": 1,
+            "end": 71
+          },
+          "start": 0,
+          "end": 72
+        },
+        "start": 0,
+        "end": 73
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 74
+  },
+  "errors": []
+}

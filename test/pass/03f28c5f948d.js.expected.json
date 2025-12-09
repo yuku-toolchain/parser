@@ -1,0 +1,41 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "decorators": [],
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 6,
+          "end": 7
+        },
+        "superClass": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "Literal",
+            "value": 1,
+            "raw": "1",
+            "start": 17,
+            "end": 18
+          },
+          "start": 16,
+          "end": 19
+        },
+        "body": {
+          "type": "ClassBody",
+          "body": [],
+          "start": 20,
+          "end": 22
+        },
+        "start": 0,
+        "end": 22
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 23
+  },
+  "errors": []
+}

@@ -1,0 +1,263 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 0,
+              "end": 1
+            },
+            "property": {
+              "type": "Literal",
+              "value": "b",
+              "raw": "\"b\"",
+              "start": 2,
+              "end": 5
+            },
+            "computed": true,
+            "start": 0,
+            "end": 6
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": "c",
+              "raw": "\"c\"",
+              "start": 10,
+              "end": 13
+            },
+            "start": 9,
+            "end": 14
+          },
+          "start": 0,
+          "end": 14
+        },
+        "start": 0,
+        "end": 15
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 16,
+              "end": 17
+            },
+            "property": {
+              "type": "Literal",
+              "value": "if",
+              "raw": "\"if\"",
+              "start": 18,
+              "end": 22
+            },
+            "computed": true,
+            "start": 16,
+            "end": 23
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": "if",
+              "raw": "\"if\"",
+              "start": 27,
+              "end": 31
+            },
+            "start": 26,
+            "end": 32
+          },
+          "start": 16,
+          "end": 32
+        },
+        "start": 16,
+        "end": 33
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 34,
+              "end": 35
+            },
+            "property": {
+              "type": "Literal",
+              "value": "*",
+              "raw": "\"*\"",
+              "start": 36,
+              "end": 39
+            },
+            "computed": true,
+            "start": 34,
+            "end": 40
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": "d",
+              "raw": "\"d\"",
+              "start": 44,
+              "end": 47
+            },
+            "start": 43,
+            "end": 48
+          },
+          "start": 34,
+          "end": 48
+        },
+        "start": 34,
+        "end": 49
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 50,
+              "end": 51
+            },
+            "property": {
+              "type": "Literal",
+              "value": "ຳ",
+              "raw": "\"ຳ\"",
+              "start": 52,
+              "end": 55
+            },
+            "computed": true,
+            "start": 50,
+            "end": 56
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": "e",
+              "raw": "\"e\"",
+              "start": 60,
+              "end": 63
+            },
+            "start": 59,
+            "end": 64
+          },
+          "start": 50,
+          "end": 64
+        },
+        "start": 50,
+        "end": 65
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 66,
+              "end": 67
+            },
+            "property": {
+              "type": "Literal",
+              "value": "",
+              "raw": "\"\"",
+              "start": 68,
+              "end": 70
+            },
+            "computed": true,
+            "start": 66,
+            "end": 71
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": "f",
+              "raw": "\"f\"",
+              "start": 75,
+              "end": 78
+            },
+            "start": 74,
+            "end": 79
+          },
+          "start": 66,
+          "end": 79
+        },
+        "start": 66,
+        "end": 80
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 81,
+              "end": 82
+            },
+            "property": {
+              "type": "Literal",
+              "value": "1_1",
+              "raw": "\"1_1\"",
+              "start": 83,
+              "end": 88
+            },
+            "computed": true,
+            "start": 81,
+            "end": 89
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": "b",
+              "raw": "\"b\"",
+              "start": 93,
+              "end": 96
+            },
+            "start": 92,
+            "end": 97
+          },
+          "start": 81,
+          "end": 97
+        },
+        "start": 81,
+        "end": 98
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 99
+  },
+  "errors": []
+}

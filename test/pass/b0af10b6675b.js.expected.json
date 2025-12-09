@@ -1,0 +1,45 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ReturnStatement",
+              "argument": {
+                "type": "Literal",
+                "value": "<!--HTML-->comment in<!--string literal-->",
+                "raw": "\"<!--HTML-->comment in<!--string literal-->\"",
+                "start": 24,
+                "end": 68
+              },
+              "start": 17,
+              "end": 69
+            }
+          ],
+          "start": 13,
+          "end": 71
+        },
+        "expression": false,
+        "start": 0,
+        "end": 71
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 72
+  },
+  "errors": []
+}

@@ -1,0 +1,43 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "ArrayPattern",
+              "elements": [
+                {
+                  "type": "Identifier",
+                  "name": "let",
+                  "start": 5,
+                  "end": 8
+                }
+              ],
+              "start": 4,
+              "end": 9
+            },
+            "init": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 12,
+              "end": 13
+            },
+            "start": 4,
+            "end": 13
+          }
+        ],
+        "start": 0,
+        "end": 14
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 15
+  },
+  "errors": []
+}

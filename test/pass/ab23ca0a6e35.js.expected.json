@@ -1,0 +1,64 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "DoWhileStatement",
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 9,
+                  "end": 10
+                },
+                "arguments": [],
+                "start": 9,
+                "end": 12
+              },
+              "start": 9,
+              "end": 13
+            }
+          ],
+          "start": 3,
+          "end": 15
+        },
+        "test": {
+          "type": "Literal",
+          "value": false,
+          "raw": "false",
+          "start": 23,
+          "end": 28
+        },
+        "start": 0,
+        "end": 30
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "b",
+            "start": 30,
+            "end": 31
+          },
+          "arguments": [],
+          "start": 30,
+          "end": 33
+        },
+        "start": 30,
+        "end": 33
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 33
+  },
+  "errors": []
+}

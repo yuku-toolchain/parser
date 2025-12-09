@@ -1,0 +1,34 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "await": false,
+        "left": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 5,
+          "end": 6
+        },
+        "right": {
+          "type": "Identifier",
+          "name": "b",
+          "start": 10,
+          "end": 11
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 12,
+          "end": 13
+        },
+        "start": 0,
+        "end": 13
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 14
+  },
+  "errors": []
+}

@@ -1,0 +1,69 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "kind": "let",
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "id": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 23,
+                    "end": 24
+                  },
+                  "init": {
+                    "type": "MetaProperty",
+                    "meta": {
+                      "type": "Identifier",
+                      "name": "new",
+                      "start": 27,
+                      "end": 30
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "name": "target",
+                      "start": 31,
+                      "end": 37
+                    },
+                    "start": 27,
+                    "end": 37
+                  },
+                  "start": 23,
+                  "end": 37
+                }
+              ],
+              "start": 19,
+              "end": 38
+            }
+          ],
+          "start": 13,
+          "end": 40
+        },
+        "expression": false,
+        "start": 0,
+        "end": 40
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 41
+  },
+  "errors": []
+}

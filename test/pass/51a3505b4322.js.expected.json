@@ -1,0 +1,34 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 4,
+          "end": 5
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [],
+          "start": 7,
+          "end": 10
+        },
+        "alternate": {
+          "type": "BlockStatement",
+          "body": [],
+          "start": 16,
+          "end": 19
+        },
+        "start": 0,
+        "end": 19
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 20
+  },
+  "errors": []
+}

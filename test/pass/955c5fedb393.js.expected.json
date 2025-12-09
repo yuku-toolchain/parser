@@ -1,0 +1,36 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "Literal",
+            "value": "a",
+            "raw": "'a'",
+            "start": 0,
+            "end": 3
+          },
+          "operator": "+",
+          "right": {
+            "type": "Literal",
+            "value": "a",
+            "raw": "'a'",
+            "start": 6,
+            "end": 9
+          },
+          "start": 0,
+          "end": 9
+        },
+        "start": 0,
+        "end": 9
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 10
+  },
+  "errors": []
+}

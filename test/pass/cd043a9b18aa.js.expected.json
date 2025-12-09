@@ -1,0 +1,148 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "expression": true,
+          "async": false,
+          "params": [
+            {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 2,
+                    "end": 3
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 2,
+                    "end": 3
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 2,
+                  "end": 3
+                },
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 5,
+                    "end": 6
+                  },
+                  "value": {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 5,
+                      "end": 6
+                    },
+                    "right": {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 9,
+                      "end": 10
+                    },
+                    "start": 5,
+                    "end": 10
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 5,
+                  "end": 10
+                },
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 12,
+                    "end": 13
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 15,
+                    "end": 16
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false,
+                  "start": 12,
+                  "end": 16
+                },
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 19,
+                    "end": 20
+                  },
+                  "value": {
+                    "type": "ArrayPattern",
+                    "elements": [
+                      {
+                        "type": "Identifier",
+                        "name": "d",
+                        "start": 24,
+                        "end": 25
+                      }
+                    ],
+                    "start": 23,
+                    "end": 26
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": true,
+                  "start": 18,
+                  "end": 26
+                }
+              ],
+              "start": 1,
+              "end": 27
+            }
+          ],
+          "body": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 33,
+              "end": 34
+            },
+            "start": 32,
+            "end": 35
+          },
+          "id": null,
+          "generator": false,
+          "start": 0,
+          "end": 35
+        },
+        "start": 0,
+        "end": 36
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 37
+  },
+  "errors": []
+}

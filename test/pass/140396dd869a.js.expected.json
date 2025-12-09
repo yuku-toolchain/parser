@@ -1,0 +1,24 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 9,
+          "end": 10
+        },
+        "start": 0,
+        "end": 10
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 11
+  },
+  "errors": []
+}

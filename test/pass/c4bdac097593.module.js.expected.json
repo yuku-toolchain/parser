@@ -1,0 +1,43 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "declaration": {
+          "type": "ClassDeclaration",
+          "decorators": [],
+          "id": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 13,
+            "end": 14
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "body": [],
+            "start": 15,
+            "end": 17
+          },
+          "start": 7,
+          "end": 17
+        },
+        "specifiers": [],
+        "source": null,
+        "attributes": [],
+        "start": 0,
+        "end": 17
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 18,
+        "end": 19
+      }
+    ],
+    "sourceType": "module",
+    "start": 0,
+    "end": 20
+  },
+  "errors": []
+}

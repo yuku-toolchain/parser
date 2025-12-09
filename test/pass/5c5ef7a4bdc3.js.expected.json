@@ -1,0 +1,117 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": null,
+            "start": 4,
+            "end": 5
+          }
+        ],
+        "start": 0,
+        "end": 6
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "b",
+          "start": 70,
+          "end": 71
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "AssignmentExpression",
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 79,
+                  "end": 80
+                },
+                "right": {
+                  "type": "BinaryExpression",
+                  "left": {
+                    "type": "Literal",
+                    "value": 1,
+                    "raw": "1",
+                    "start": 83,
+                    "end": 84
+                  },
+                  "operator": "+",
+                  "right": {
+                    "type": "Literal",
+                    "value": 2,
+                    "raw": "2",
+                    "start": 85,
+                    "end": 86
+                  },
+                  "start": 83,
+                  "end": 86
+                },
+                "start": 79,
+                "end": 86
+              },
+              "start": 79,
+              "end": 87
+            }
+          ],
+          "start": 73,
+          "end": 89
+        },
+        "alternate": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "AssignmentExpression",
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 101,
+                  "end": 102
+                },
+                "right": {
+                  "type": "Literal",
+                  "value": 3,
+                  "raw": "3",
+                  "start": 105,
+                  "end": 106
+                },
+                "start": 101,
+                "end": 106
+              },
+              "start": 101,
+              "end": 107
+            }
+          ],
+          "start": 95,
+          "end": 109
+        },
+        "start": 66,
+        "end": 109
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 109
+  },
+  "errors": []
+}

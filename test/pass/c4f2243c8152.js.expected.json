@@ -1,0 +1,55 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "BinaryExpression",
+                "left": {
+                  "type": "Literal",
+                  "value": 1,
+                  "raw": "1",
+                  "start": 9,
+                  "end": 10
+                },
+                "operator": "+",
+                "right": {
+                  "type": "Literal",
+                  "value": 2,
+                  "raw": "2",
+                  "start": 13,
+                  "end": 14
+                },
+                "start": 9,
+                "end": 14
+              },
+              "start": 8,
+              "end": 15
+            },
+            "start": 4,
+            "end": 15
+          }
+        ],
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 15
+  },
+  "errors": []
+}

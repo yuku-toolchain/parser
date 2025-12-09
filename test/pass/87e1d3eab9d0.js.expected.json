@@ -1,0 +1,45 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "WhileStatement",
+        "test": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 7,
+            "end": 8
+          },
+          "arguments": [],
+          "start": 7,
+          "end": 10
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 12,
+              "end": 13
+            },
+            "arguments": [],
+            "start": 12,
+            "end": 15
+          },
+          "start": 12,
+          "end": 16
+        },
+        "start": 0,
+        "end": 16
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 16
+  },
+  "errors": []
+}

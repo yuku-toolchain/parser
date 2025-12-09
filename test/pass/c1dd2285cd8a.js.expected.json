@@ -1,0 +1,53 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "await": false,
+        "left": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 4,
+          "end": 5
+        },
+        "right": {
+          "type": "Identifier",
+          "name": "b",
+          "start": 9,
+          "end": 10
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "c",
+              "start": 12,
+              "end": 13
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "a",
+                "start": 14,
+                "end": 15
+              }
+            ],
+            "start": 12,
+            "end": 16
+          },
+          "start": 12,
+          "end": 17
+        },
+        "start": 0,
+        "end": 17
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 17
+  },
+  "errors": []
+}

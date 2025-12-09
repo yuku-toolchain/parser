@@ -1,0 +1,96 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "id": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 28,
+                "end": 29
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [],
+                "start": 32,
+                "end": 39
+              },
+              "expression": false,
+              "start": 19,
+              "end": 39
+            },
+            {
+              "type": "FunctionDeclaration",
+              "id": {
+                "type": "Identifier",
+                "name": "c",
+                "start": 53,
+                "end": 54
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [],
+                "start": 57,
+                "end": 64
+              },
+              "expression": false,
+              "start": 44,
+              "end": 64
+            },
+            {
+              "type": "FunctionDeclaration",
+              "id": {
+                "type": "Identifier",
+                "name": "d",
+                "start": 78,
+                "end": 79
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [],
+                "start": 82,
+                "end": 89
+              },
+              "expression": false,
+              "start": 69,
+              "end": 89
+            }
+          ],
+          "start": 13,
+          "end": 91
+        },
+        "expression": false,
+        "start": 0,
+        "end": 91
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 92
+  },
+  "errors": []
+}

@@ -1,0 +1,96 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "TaggedTemplateExpression",
+          "tag": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "MemberExpression",
+              "object": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 1,
+                "end": 2
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 3,
+                "end": 4
+              },
+              "computed": false,
+              "start": 1,
+              "end": 4
+            },
+            "start": 0,
+            "end": 5
+          },
+          "quasi": {
+            "type": "TemplateLiteral",
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "value": {
+                  "raw": "foo",
+                  "cooked": "foo"
+                },
+                "tail": true,
+                "start": 6,
+                "end": 9
+              }
+            ],
+            "expressions": [],
+            "start": 5,
+            "end": 10
+          },
+          "start": 0,
+          "end": 10
+        },
+        "start": 0,
+        "end": 11
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "TaggedTemplateExpression",
+          "tag": {
+            "type": "Identifier",
+            "name": "c",
+            "start": 12,
+            "end": 13
+          },
+          "quasi": {
+            "type": "TemplateLiteral",
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "value": {
+                  "raw": "bar",
+                  "cooked": "bar"
+                },
+                "tail": true,
+                "start": 14,
+                "end": 17
+              }
+            ],
+            "expressions": [],
+            "start": 13,
+            "end": 18
+          },
+          "start": 12,
+          "end": 18
+        },
+        "start": 12,
+        "end": 19
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 20
+  },
+  "errors": []
+}

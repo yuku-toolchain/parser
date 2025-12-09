@@ -1,0 +1,24 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": "𠮷野家",
+          "raw": "\"\\u{20BB7}\\u{91CE}\\u{5BB6}\"",
+          "start": 0,
+          "end": 27
+        },
+        "directive": "\\u{20BB7}\\u{91CE}\\u{5BB6}",
+        "start": 0,
+        "end": 27
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 27
+  },
+  "errors": []
+}

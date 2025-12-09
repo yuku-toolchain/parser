@@ -1,0 +1,95 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "label": {
+          "type": "Identifier",
+          "name": "d",
+          "start": 0,
+          "end": 1
+        },
+        "body": {
+          "type": "ForInStatement",
+          "left": {
+            "type": "VariableDeclaration",
+            "kind": "var",
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "id": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 12,
+                  "end": 13
+                },
+                "init": null,
+                "start": 12,
+                "end": 13
+              }
+            ],
+            "start": 8,
+            "end": 13
+          },
+          "right": {
+            "type": "Identifier",
+            "name": "b",
+            "start": 17,
+            "end": 18
+          },
+          "body": {
+            "type": "ForInStatement",
+            "left": {
+              "type": "VariableDeclaration",
+              "kind": "var",
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "id": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 29,
+                    "end": 30
+                  },
+                  "init": null,
+                  "start": 29,
+                  "end": 30
+                }
+              ],
+              "start": 25,
+              "end": 30
+            },
+            "right": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 34,
+              "end": 35
+            },
+            "body": {
+              "type": "ContinueStatement",
+              "label": {
+                "type": "Identifier",
+                "name": "d",
+                "start": 46,
+                "end": 47
+              },
+              "start": 37,
+              "end": 48
+            },
+            "start": 20,
+            "end": 48
+          },
+          "start": 3,
+          "end": 48
+        },
+        "start": 0,
+        "end": 48
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 49
+  },
+  "errors": []
+}

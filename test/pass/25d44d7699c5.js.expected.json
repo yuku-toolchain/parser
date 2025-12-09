@@ -1,0 +1,65 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Literal",
+          "value": 1,
+          "raw": "1",
+          "start": 4,
+          "end": 5
+        },
+        "consequent": {
+          "type": "FunctionDeclaration",
+          "id": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 16,
+            "end": 17
+          },
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "body": [],
+            "start": 20,
+            "end": 22
+          },
+          "expression": false,
+          "start": 7,
+          "end": 22
+        },
+        "alternate": {
+          "type": "FunctionDeclaration",
+          "id": {
+            "type": "Identifier",
+            "name": "b",
+            "start": 37,
+            "end": 38
+          },
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "body": [],
+            "start": 41,
+            "end": 43
+          },
+          "expression": false,
+          "start": 28,
+          "end": 43
+        },
+        "start": 0,
+        "end": 43
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 44
+  },
+  "errors": []
+}

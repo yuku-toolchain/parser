@@ -1,0 +1,53 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "BlockStatement",
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "ArrayExpression",
+              "elements": [
+                {
+                  "type": "Literal",
+                  "value": 1,
+                  "raw": "1",
+                  "start": 2,
+                  "end": 3
+                }
+              ],
+              "start": 1,
+              "end": 4
+            },
+            "start": 1,
+            "end": 4
+          }
+        ],
+        "start": 0,
+        "end": 5
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": {},
+          "raw": "/foo/",
+          "regex": {
+            "pattern": "foo",
+            "flags": ""
+          },
+          "start": 6,
+          "end": 11
+        },
+        "start": 6,
+        "end": 11
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 11
+  },
+  "errors": []
+}

@@ -1,0 +1,179 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "TryStatement",
+        "block": {
+          "type": "BlockStatement",
+          "body": [],
+          "start": 4,
+          "end": 6
+        },
+        "handler": {
+          "type": "CatchClause",
+          "param": {
+            "type": "ArrayPattern",
+            "elements": [
+              {
+                "type": "Identifier",
+                "name": "a",
+                "start": 15,
+                "end": 16
+              },
+              {
+                "type": "Identifier",
+                "name": "b",
+                "start": 17,
+                "end": 18
+              },
+              {
+                "type": "ObjectPattern",
+                "properties": [
+                  {
+                    "type": "Property",
+                    "kind": "init",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "c",
+                      "start": 21,
+                      "end": 22
+                    },
+                    "value": {
+                      "type": "Identifier",
+                      "name": "c",
+                      "start": 21,
+                      "end": 22
+                    },
+                    "method": false,
+                    "shorthand": true,
+                    "computed": false,
+                    "start": 21,
+                    "end": 22
+                  },
+                  {
+                    "type": "Property",
+                    "kind": "init",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "d",
+                      "start": 24,
+                      "end": 25
+                    },
+                    "value": {
+                      "type": "AssignmentPattern",
+                      "left": {
+                        "type": "Identifier",
+                        "name": "e",
+                        "start": 26,
+                        "end": 27
+                      },
+                      "right": {
+                        "type": "Literal",
+                        "value": 1,
+                        "raw": "1",
+                        "start": 28,
+                        "end": 29
+                      },
+                      "start": 26,
+                      "end": 29
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "start": 24,
+                    "end": 29
+                  },
+                  {
+                    "type": "Property",
+                    "kind": "init",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "f",
+                      "start": 32,
+                      "end": 33
+                    },
+                    "value": {
+                      "type": "AssignmentPattern",
+                      "left": {
+                        "type": "Identifier",
+                        "name": "g",
+                        "start": 35,
+                        "end": 36
+                      },
+                      "right": {
+                        "type": "Literal",
+                        "value": 2,
+                        "raw": "2",
+                        "start": 37,
+                        "end": 38
+                      },
+                      "start": 35,
+                      "end": 38
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": true,
+                    "start": 31,
+                    "end": 38
+                  },
+                  {
+                    "type": "Property",
+                    "kind": "init",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "h",
+                      "start": 40,
+                      "end": 41
+                    },
+                    "value": {
+                      "type": "AssignmentPattern",
+                      "left": {
+                        "type": "Identifier",
+                        "name": "h",
+                        "start": 40,
+                        "end": 41
+                      },
+                      "right": {
+                        "type": "Identifier",
+                        "name": "i",
+                        "start": 42,
+                        "end": 43
+                      },
+                      "start": 40,
+                      "end": 43
+                    },
+                    "method": false,
+                    "shorthand": true,
+                    "computed": false,
+                    "start": 40,
+                    "end": 43
+                  }
+                ],
+                "start": 20,
+                "end": 44
+              }
+            ],
+            "start": 14,
+            "end": 45
+          },
+          "body": {
+            "type": "BlockStatement",
+            "body": [],
+            "start": 47,
+            "end": 49
+          },
+          "start": 7,
+          "end": 49
+        },
+        "finalizer": null,
+        "start": 0,
+        "end": 49
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 50
+  },
+  "errors": []
+}

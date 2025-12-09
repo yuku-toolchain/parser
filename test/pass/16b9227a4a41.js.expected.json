@@ -1,0 +1,101 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "kind": "var",
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "id": {
+                    "type": "ObjectPattern",
+                    "properties": [
+                      {
+                        "type": "Property",
+                        "kind": "init",
+                        "key": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 88,
+                          "end": 89
+                        },
+                        "value": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 88,
+                          "end": 89
+                        },
+                        "method": false,
+                        "shorthand": true,
+                        "computed": false,
+                        "start": 88,
+                        "end": 89
+                      },
+                      {
+                        "type": "Property",
+                        "kind": "init",
+                        "key": {
+                          "type": "Identifier",
+                          "name": "b",
+                          "start": 90,
+                          "end": 91
+                        },
+                        "value": {
+                          "type": "Identifier",
+                          "name": "b",
+                          "start": 90,
+                          "end": 91
+                        },
+                        "method": false,
+                        "shorthand": true,
+                        "computed": false,
+                        "start": 90,
+                        "end": 91
+                      }
+                    ],
+                    "start": 87,
+                    "end": 92
+                  },
+                  "init": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 95,
+                    "end": 96
+                  },
+                  "start": 87,
+                  "end": 96
+                }
+              ],
+              "start": 83,
+              "end": 97
+            }
+          ],
+          "start": 13,
+          "end": 99
+        },
+        "expression": false,
+        "start": 0,
+        "end": 99
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 99
+  },
+  "errors": []
+}

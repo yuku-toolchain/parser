@@ -1,0 +1,25 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "BlockStatement",
+          "body": [],
+          "start": 7,
+          "end": 9
+        },
+        "start": 0,
+        "end": 9
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 9
+  },
+  "errors": []
+}

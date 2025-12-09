@@ -1,0 +1,62 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "AssignmentExpression",
+            "operator": "=",
+            "left": {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 2,
+                    "end": 3
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "yield",
+                    "start": 4,
+                    "end": 9
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false,
+                  "start": 2,
+                  "end": 9
+                }
+              ],
+              "start": 1,
+              "end": 10
+            },
+            "right": {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 13,
+              "end": 14
+            },
+            "start": 1,
+            "end": 14
+          },
+          "start": 0,
+          "end": 15
+        },
+        "start": 0,
+        "end": 16
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 16
+  },
+  "errors": []
+}

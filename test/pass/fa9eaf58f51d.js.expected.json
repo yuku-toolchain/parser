@@ -1,0 +1,37 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "FunctionExpression",
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "body": [],
+              "start": 11,
+              "end": 13
+            },
+            "expression": false,
+            "start": 1,
+            "end": 13
+          },
+          "start": 0,
+          "end": 14
+        },
+        "start": 0,
+        "end": 14
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 14
+  },
+  "errors": []
+}

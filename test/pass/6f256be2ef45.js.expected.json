@@ -1,0 +1,52 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "label": {
+          "type": "Identifier",
+          "name": "__proto__",
+          "start": 0,
+          "end": 9
+        },
+        "body": {
+          "type": "WhileStatement",
+          "test": {
+            "type": "Literal",
+            "value": true,
+            "raw": "true",
+            "start": 18,
+            "end": 22
+          },
+          "body": {
+            "type": "BlockStatement",
+            "body": [
+              {
+                "type": "BreakStatement",
+                "label": {
+                  "type": "Identifier",
+                  "name": "__proto__",
+                  "start": 32,
+                  "end": 41
+                },
+                "start": 26,
+                "end": 42
+              }
+            ],
+            "start": 24,
+            "end": 44
+          },
+          "start": 11,
+          "end": 44
+        },
+        "start": 0,
+        "end": 44
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 44
+  },
+  "errors": []
+}

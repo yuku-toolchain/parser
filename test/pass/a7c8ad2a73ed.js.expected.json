@@ -1,0 +1,61 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "await": false,
+        "left": {
+          "type": "VariableDeclaration",
+          "kind": "let",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "ArrayPattern",
+                "elements": [
+                  {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 10,
+                    "end": 11
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 13,
+                    "end": 14
+                  }
+                ],
+                "start": 9,
+                "end": 15
+              },
+              "init": null,
+              "start": 9,
+              "end": 15
+            }
+          ],
+          "start": 5,
+          "end": 15
+        },
+        "right": {
+          "type": "Identifier",
+          "name": "c",
+          "start": 19,
+          "end": 20
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 21,
+          "end": 22
+        },
+        "start": 0,
+        "end": 22
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 23
+  },
+  "errors": []
+}

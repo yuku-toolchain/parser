@@ -1,0 +1,63 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "Literal",
+                "value": "use strict",
+                "raw": "'use strict'",
+                "start": 14,
+                "end": 26
+              },
+              "directive": "use strict",
+              "start": 14,
+              "end": 27
+            },
+            {
+              "type": "ReturnStatement",
+              "argument": {
+                "type": "Literal",
+                "value": 1,
+                "raw": "1",
+                "start": 34,
+                "end": 35
+              },
+              "start": 27,
+              "end": 36
+            }
+          ],
+          "start": 13,
+          "end": 37
+        },
+        "expression": false,
+        "start": 0,
+        "end": 37
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 37,
+        "end": 38
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 38
+  },
+  "errors": []
+}

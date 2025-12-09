@@ -1,0 +1,228 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "SwitchStatement",
+        "discriminant": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 9,
+              "end": 10
+            },
+            "start": 8,
+            "end": 11
+          },
+          "operator": "+",
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": 2,
+              "raw": "2",
+              "start": 15,
+              "end": 16
+            },
+            "start": 14,
+            "end": 17
+          },
+          "start": 8,
+          "end": 17
+        },
+        "cases": [
+          {
+            "type": "SwitchCase",
+            "test": {
+              "type": "Literal",
+              "value": 3,
+              "raw": "3",
+              "start": 28,
+              "end": 29
+            },
+            "consequent": [
+              {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 35,
+                    "end": 36
+                  },
+                  "arguments": [],
+                  "start": 35,
+                  "end": 38
+                },
+                "start": 35,
+                "end": 39
+              },
+              {
+                "type": "BreakStatement",
+                "label": null,
+                "start": 44,
+                "end": 50
+              }
+            ],
+            "start": 23,
+            "end": 50
+          },
+          {
+            "type": "SwitchCase",
+            "test": {
+              "type": "BinaryExpression",
+              "left": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "Literal",
+                  "value": 4,
+                  "raw": "4",
+                  "start": 59,
+                  "end": 60
+                },
+                "start": 58,
+                "end": 61
+              },
+              "operator": "+",
+              "right": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "Literal",
+                  "value": 5,
+                  "raw": "5",
+                  "start": 65,
+                  "end": 66
+                },
+                "start": 64,
+                "end": 67
+              },
+              "start": 58,
+              "end": 67
+            },
+            "consequent": [
+              {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 73,
+                    "end": 74
+                  },
+                  "arguments": [],
+                  "start": 73,
+                  "end": 76
+                },
+                "start": 73,
+                "end": 77
+              },
+              {
+                "type": "BreakStatement",
+                "label": null,
+                "start": 82,
+                "end": 88
+              }
+            ],
+            "start": 53,
+            "end": 88
+          },
+          {
+            "type": "SwitchCase",
+            "test": {
+              "type": "BinaryExpression",
+              "left": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "BinaryExpression",
+                  "left": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": 6,
+                      "raw": "6",
+                      "start": 98,
+                      "end": 99
+                    },
+                    "start": 97,
+                    "end": 100
+                  },
+                  "operator": "+",
+                  "right": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": 7,
+                      "raw": "7",
+                      "start": 104,
+                      "end": 105
+                    },
+                    "start": 103,
+                    "end": 106
+                  },
+                  "start": 97,
+                  "end": 106
+                },
+                "start": 96,
+                "end": 107
+              },
+              "operator": "+",
+              "right": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "Literal",
+                  "value": 8,
+                  "raw": "8",
+                  "start": 111,
+                  "end": 112
+                },
+                "start": 110,
+                "end": 113
+              },
+              "start": 96,
+              "end": 113
+            },
+            "consequent": [
+              {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 119,
+                    "end": 120
+                  },
+                  "arguments": [],
+                  "start": 119,
+                  "end": 122
+                },
+                "start": 119,
+                "end": 123
+              },
+              {
+                "type": "BreakStatement",
+                "label": null,
+                "start": 128,
+                "end": 134
+              }
+            ],
+            "start": 91,
+            "end": 134
+          }
+        ],
+        "start": 0,
+        "end": 136
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 137
+  },
+  "errors": []
+}

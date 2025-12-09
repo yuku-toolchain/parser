@@ -1,0 +1,52 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 4,
+          "end": 5
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [],
+          "start": 7,
+          "end": 9
+        },
+        "alternate": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 19,
+                  "end": 20
+                },
+                "arguments": [],
+                "start": 19,
+                "end": 22
+              },
+              "start": 19,
+              "end": 23
+            }
+          ],
+          "start": 15,
+          "end": 25
+        },
+        "start": 0,
+        "end": 25
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 26
+  },
+  "errors": []
+}

@@ -1,0 +1,44 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "expression": false,
+          "async": false,
+          "params": [
+            {
+              "type": "RestElement",
+              "argument": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 4,
+                "end": 5
+              },
+              "start": 1,
+              "end": 5
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "body": [],
+            "start": 10,
+            "end": 12
+          },
+          "id": null,
+          "generator": false,
+          "start": 0,
+          "end": 12
+        },
+        "start": 0,
+        "end": 12
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 12
+  },
+  "errors": []
+}

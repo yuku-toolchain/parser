@@ -1,0 +1,191 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "TemplateLiteral",
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "value": {
+                "raw": "",
+                "cooked": ""
+              },
+              "tail": true,
+              "start": 1,
+              "end": 1
+            }
+          ],
+          "expressions": [],
+          "start": 0,
+          "end": 2
+        },
+        "start": 0,
+        "end": 3
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "TemplateLiteral",
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "value": {
+                "raw": "xx\\`x",
+                "cooked": "xx`x"
+              },
+              "tail": true,
+              "start": 5,
+              "end": 10
+            }
+          ],
+          "expressions": [],
+          "start": 4,
+          "end": 11
+        },
+        "start": 4,
+        "end": 12
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "TemplateLiteral",
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "value": {
+                "raw": "",
+                "cooked": ""
+              },
+              "tail": false,
+              "start": 14,
+              "end": 14
+            },
+            {
+              "type": "TemplateElement",
+              "value": {
+                "raw": "",
+                "cooked": ""
+              },
+              "tail": true,
+              "start": 24,
+              "end": 24
+            }
+          ],
+          "expressions": [
+            {
+              "type": "BinaryExpression",
+              "left": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 17,
+                "end": 18
+              },
+              "operator": "+",
+              "right": {
+                "type": "Literal",
+                "value": 1,
+                "raw": "1",
+                "start": 21,
+                "end": 22
+              },
+              "start": 17,
+              "end": 22
+            }
+          ],
+          "start": 13,
+          "end": 25
+        },
+        "start": 13,
+        "end": 26
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "TemplateLiteral",
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "value": {
+                "raw": " foo ",
+                "cooked": " foo "
+              },
+              "tail": false,
+              "start": 28,
+              "end": 33
+            },
+            {
+              "type": "TemplateElement",
+              "value": {
+                "raw": "",
+                "cooked": ""
+              },
+              "tail": true,
+              "start": 54,
+              "end": 54
+            }
+          ],
+          "expressions": [
+            {
+              "type": "BinaryExpression",
+              "left": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 36,
+                "end": 37
+              },
+              "operator": "+",
+              "right": {
+                "type": "TemplateLiteral",
+                "quasis": [
+                  {
+                    "type": "TemplateElement",
+                    "value": {
+                      "raw": "baz ",
+                      "cooked": "baz "
+                    },
+                    "tail": false,
+                    "start": 41,
+                    "end": 45
+                  },
+                  {
+                    "type": "TemplateElement",
+                    "value": {
+                      "raw": "",
+                      "cooked": ""
+                    },
+                    "tail": true,
+                    "start": 51,
+                    "end": 51
+                  }
+                ],
+                "expressions": [
+                  {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 48,
+                    "end": 49
+                  }
+                ],
+                "start": 40,
+                "end": 52
+              },
+              "start": 36,
+              "end": 52
+            }
+          ],
+          "start": 27,
+          "end": 55
+        },
+        "start": 27,
+        "end": 56
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 56
+  },
+  "errors": []
+}

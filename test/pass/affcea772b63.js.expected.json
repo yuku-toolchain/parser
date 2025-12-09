@@ -1,0 +1,103 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 18,
+                          "end": 19
+                        },
+                        "arguments": [
+                          {
+                            "type": "Literal",
+                            "value": "b",
+                            "raw": "\"b\"",
+                            "start": 20,
+                            "end": 23
+                          }
+                        ],
+                        "start": 18,
+                        "end": 24
+                      },
+                      "start": 18,
+                      "end": 25
+                    }
+                  ],
+                  "start": 14,
+                  "end": 27
+                },
+                "expression": false,
+                "start": 2,
+                "end": 27
+              },
+              "start": 1,
+              "end": 28
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 30
+          },
+          "start": 0,
+          "end": 31
+        },
+        "start": 0,
+        "end": 32
+      },
+      {
+        "type": "TryStatement",
+        "block": {
+          "type": "BlockStatement",
+          "body": [],
+          "start": 37,
+          "end": 39
+        },
+        "handler": {
+          "type": "CatchClause",
+          "param": {
+            "type": "Identifier",
+            "name": "c",
+            "start": 47,
+            "end": 48
+          },
+          "body": {
+            "type": "BlockStatement",
+            "body": [],
+            "start": 50,
+            "end": 52
+          },
+          "start": 40,
+          "end": 52
+        },
+        "finalizer": null,
+        "start": 33,
+        "end": 52
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 53
+  },
+  "errors": []
+}

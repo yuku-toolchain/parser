@@ -1,0 +1,113 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "TryStatement",
+        "block": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 6,
+                  "end": 7
+                },
+                "arguments": [],
+                "start": 6,
+                "end": 9
+              },
+              "start": 6,
+              "end": 10
+            }
+          ],
+          "start": 4,
+          "end": 12
+        },
+        "handler": {
+          "type": "CatchClause",
+          "param": {
+            "type": "Identifier",
+            "name": "b",
+            "start": 20,
+            "end": 21
+          },
+          "body": {
+            "type": "BlockStatement",
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 25,
+                    "end": 26
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 27,
+                      "end": 28
+                    }
+                  ],
+                  "start": 25,
+                  "end": 29
+                },
+                "start": 25,
+                "end": 29
+              }
+            ],
+            "start": 23,
+            "end": 31
+          },
+          "start": 13,
+          "end": 31
+        },
+        "finalizer": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "d",
+                  "start": 42,
+                  "end": 43
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "e",
+                    "start": 44,
+                    "end": 45
+                  }
+                ],
+                "start": 42,
+                "end": 46
+              },
+              "start": 42,
+              "end": 46
+            }
+          ],
+          "start": 40,
+          "end": 48
+        },
+        "start": 0,
+        "end": 48
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 48
+  },
+  "errors": []
+}

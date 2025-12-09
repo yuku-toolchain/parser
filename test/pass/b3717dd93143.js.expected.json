@@ -1,0 +1,27 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": {},
+          "raw": "/(?!.){0,}?/",
+          "regex": {
+            "pattern": "(?!.){0,}?",
+            "flags": ""
+          },
+          "start": 0,
+          "end": 12
+        },
+        "start": 0,
+        "end": 13
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 13
+  },
+  "errors": []
+}

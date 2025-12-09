@@ -1,0 +1,123 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "VariableDeclaration",
+                    "kind": "var",
+                    "declarations": [
+                      {
+                        "type": "VariableDeclarator",
+                        "id": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 23,
+                          "end": 24
+                        },
+                        "init": {
+                          "type": "ObjectExpression",
+                          "properties": [],
+                          "start": 27,
+                          "end": 30
+                        },
+                        "start": 23,
+                        "end": 30
+                      }
+                    ],
+                    "start": 19,
+                    "end": 31
+                  },
+                  {
+                    "type": "WithStatement",
+                    "object": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 42,
+                      "end": 43
+                    },
+                    "body": {
+                      "type": "BlockStatement",
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                              "type": "ParenthesizedExpression",
+                              "expression": {
+                                "type": "SequenceExpression",
+                                "expressions": [
+                                  {
+                                    "type": "Literal",
+                                    "value": 1,
+                                    "raw": "1",
+                                    "start": 56,
+                                    "end": 57
+                                  },
+                                  {
+                                    "type": "Identifier",
+                                    "name": "b",
+                                    "start": 59,
+                                    "end": 60
+                                  }
+                                ],
+                                "start": 56,
+                                "end": 60
+                              },
+                              "start": 55,
+                              "end": 61
+                            },
+                            "arguments": [],
+                            "start": 55,
+                            "end": 63
+                          },
+                          "start": 55,
+                          "end": 64
+                        }
+                      ],
+                      "start": 45,
+                      "end": 103
+                    },
+                    "start": 36,
+                    "end": 103
+                  }
+                ],
+                "start": 13,
+                "end": 263
+              },
+              "expression": false,
+              "start": 1,
+              "end": 263
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 265
+          },
+          "start": 0,
+          "end": 266
+        },
+        "start": 0,
+        "end": 267
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 268
+  },
+  "errors": []
+}

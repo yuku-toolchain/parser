@@ -1,0 +1,44 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 1,
+              "end": 2
+            },
+            "start": 0,
+            "end": 3
+          },
+          "operator": "+",
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 7,
+              "end": 8
+            },
+            "start": 6,
+            "end": 9
+          },
+          "start": 0,
+          "end": 9
+        },
+        "start": 0,
+        "end": 9
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 9
+  },
+  "errors": []
+}

@@ -1,0 +1,79 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "MemberExpression",
+              "object": {
+                "type": "Identifier",
+                "name": "Infinity",
+                "start": 1,
+                "end": 9
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 10,
+                "end": 11
+              },
+              "computed": false,
+              "start": 1,
+              "end": 11
+            },
+            "start": 0,
+            "end": 12
+          },
+          "arguments": [],
+          "start": 0,
+          "end": 14
+        },
+        "start": 0,
+        "end": 15
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "MemberExpression",
+              "object": {
+                "type": "Identifier",
+                "name": "NaN",
+                "start": 17,
+                "end": 20
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 21,
+                "end": 22
+              },
+              "computed": false,
+              "start": 17,
+              "end": 22
+            },
+            "start": 16,
+            "end": 23
+          },
+          "arguments": [],
+          "start": 16,
+          "end": 25
+        },
+        "start": 16,
+        "end": 26
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 27
+  },
+  "errors": []
+}

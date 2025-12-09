@@ -1,0 +1,48 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "UnaryExpression",
+          "operator": "void",
+          "argument": {
+            "type": "UnaryExpression",
+            "operator": "void",
+            "argument": {
+              "type": "UnaryExpression",
+              "operator": "void",
+              "argument": {
+                "type": "Literal",
+                "value": {},
+                "raw": "/test/",
+                "regex": {
+                  "pattern": "test",
+                  "flags": ""
+                },
+                "start": 15,
+                "end": 21
+              },
+              "prefix": true,
+              "start": 10,
+              "end": 21
+            },
+            "prefix": true,
+            "start": 5,
+            "end": 21
+          },
+          "prefix": true,
+          "start": 0,
+          "end": 21
+        },
+        "start": 0,
+        "end": 21
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 22
+  },
+  "errors": []
+}

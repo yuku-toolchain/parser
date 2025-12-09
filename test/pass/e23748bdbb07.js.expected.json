@@ -1,0 +1,169 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "FunctionDeclaration",
+                    "id": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 28,
+                      "end": 29
+                    },
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                              "type": "MemberExpression",
+                              "object": {
+                                "type": "Identifier",
+                                "name": "b",
+                                "start": 42,
+                                "end": 43
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "name": "c",
+                                "start": 44,
+                                "end": 45
+                              },
+                              "computed": false,
+                              "start": 42,
+                              "end": 45
+                            },
+                            "arguments": [
+                              {
+                                "type": "Literal",
+                                "value": "d",
+                                "raw": "'d'",
+                                "start": 46,
+                                "end": 49
+                              }
+                            ],
+                            "start": 42,
+                            "end": 50
+                          },
+                          "start": 42,
+                          "end": 51
+                        }
+                      ],
+                      "start": 32,
+                      "end": 57
+                    },
+                    "expression": false,
+                    "start": 19,
+                    "end": 57
+                  },
+                  {
+                    "type": "BlockStatement",
+                    "body": [
+                      {
+                        "type": "FunctionDeclaration",
+                        "id": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 81,
+                          "end": 82
+                        },
+                        "generator": false,
+                        "async": false,
+                        "params": [],
+                        "body": {
+                          "type": "BlockStatement",
+                          "body": [
+                            {
+                              "type": "ExpressionStatement",
+                              "expression": {
+                                "type": "CallExpression",
+                                "callee": {
+                                  "type": "MemberExpression",
+                                  "object": {
+                                    "type": "Identifier",
+                                    "name": "b",
+                                    "start": 99,
+                                    "end": 100
+                                  },
+                                  "property": {
+                                    "type": "Identifier",
+                                    "name": "c",
+                                    "start": 101,
+                                    "end": 102
+                                  },
+                                  "computed": false,
+                                  "start": 99,
+                                  "end": 102
+                                },
+                                "arguments": [
+                                  {
+                                    "type": "Literal",
+                                    "value": "e",
+                                    "raw": "'e'",
+                                    "start": 103,
+                                    "end": 106
+                                  }
+                                ],
+                                "start": 99,
+                                "end": 107
+                              },
+                              "start": 99,
+                              "end": 108
+                            }
+                          ],
+                          "start": 85,
+                          "end": 118
+                        },
+                        "expression": false,
+                        "start": 72,
+                        "end": 118
+                      }
+                    ],
+                    "start": 62,
+                    "end": 124
+                  }
+                ],
+                "start": 13,
+                "end": 126
+              },
+              "expression": false,
+              "start": 1,
+              "end": 126
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 128
+          },
+          "start": 0,
+          "end": 129
+        },
+        "start": 0,
+        "end": 130
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 131
+  },
+  "errors": []
+}

@@ -1,0 +1,29 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "DoWhileStatement",
+        "body": {
+          "type": "ContinueStatement",
+          "label": null,
+          "start": 3,
+          "end": 12
+        },
+        "test": {
+          "type": "Literal",
+          "value": true,
+          "raw": "true",
+          "start": 20,
+          "end": 24
+        },
+        "start": 0,
+        "end": 26
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 27
+  },
+  "errors": []
+}

@@ -1,0 +1,103 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "SwitchStatement",
+                    "discriminant": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 27,
+                      "end": 28
+                    },
+                    "cases": [
+                      {
+                        "type": "SwitchCase",
+                        "test": {
+                          "type": "Literal",
+                          "value": 1,
+                          "raw": "1",
+                          "start": 45,
+                          "end": 46
+                        },
+                        "consequent": [
+                          {
+                            "type": "ExpressionStatement",
+                            "expression": {
+                              "type": "CallExpression",
+                              "callee": {
+                                "type": "Identifier",
+                                "name": "b",
+                                "start": 60,
+                                "end": 61
+                              },
+                              "arguments": [
+                                {
+                                  "type": "Literal",
+                                  "value": "c",
+                                  "raw": "\"c\"",
+                                  "start": 62,
+                                  "end": 65
+                                }
+                              ],
+                              "start": 60,
+                              "end": 66
+                            },
+                            "start": 60,
+                            "end": 67
+                          }
+                        ],
+                        "start": 40,
+                        "end": 67
+                      },
+                      {
+                        "type": "SwitchCase",
+                        "test": null,
+                        "consequent": [],
+                        "start": 76,
+                        "end": 84
+                      }
+                    ],
+                    "start": 19,
+                    "end": 192
+                  }
+                ],
+                "start": 13,
+                "end": 194
+              },
+              "expression": false,
+              "start": 1,
+              "end": 194
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 196
+          },
+          "start": 0,
+          "end": 197
+        },
+        "start": 0,
+        "end": 198
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 199
+  },
+  "errors": []
+}

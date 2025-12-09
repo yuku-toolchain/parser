@@ -1,0 +1,225 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 0,
+            "end": 1
+          },
+          "right": {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "init",
+                "key": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 10,
+                  "end": 11
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "name": "c",
+                      "start": 12,
+                      "end": 13
+                    },
+                    {
+                      "type": "Identifier",
+                      "name": "d",
+                      "start": 15,
+                      "end": 16
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [
+                      {
+                        "type": "ReturnStatement",
+                        "argument": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 35,
+                          "end": 36
+                        },
+                        "start": 28,
+                        "end": 37
+                      }
+                    ],
+                    "start": 18,
+                    "end": 43
+                  },
+                  "expression": false,
+                  "start": 11,
+                  "end": 43
+                },
+                "method": true,
+                "shorthand": false,
+                "computed": false,
+                "start": 10,
+                "end": 43
+              }
+            ],
+            "start": 4,
+            "end": 45
+          },
+          "start": 0,
+          "end": 45
+        },
+        "start": 0,
+        "end": 45
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "name": "e",
+            "start": 46,
+            "end": 47
+          },
+          "right": {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "init",
+                "key": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 56,
+                  "end": 57
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "ArrayPattern",
+                      "elements": [
+                        {
+                          "type": "ObjectPattern",
+                          "properties": [
+                            {
+                              "type": "Property",
+                              "kind": "init",
+                              "key": {
+                                "type": "Identifier",
+                                "name": "c",
+                                "start": 60,
+                                "end": 61
+                              },
+                              "value": {
+                                "type": "Identifier",
+                                "name": "c",
+                                "start": 60,
+                                "end": 61
+                              },
+                              "method": false,
+                              "shorthand": true,
+                              "computed": false,
+                              "start": 60,
+                              "end": 61
+                            }
+                          ],
+                          "start": 59,
+                          "end": 62
+                        }
+                      ],
+                      "start": 58,
+                      "end": 63
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [
+                      {
+                        "type": "ReturnStatement",
+                        "argument": {
+                          "type": "Identifier",
+                          "name": "c",
+                          "start": 82,
+                          "end": 83
+                        },
+                        "start": 75,
+                        "end": 84
+                      }
+                    ],
+                    "start": 65,
+                    "end": 90
+                  },
+                  "expression": false,
+                  "start": 57,
+                  "end": 90
+                },
+                "method": true,
+                "shorthand": false,
+                "computed": false,
+                "start": 56,
+                "end": 90
+              },
+              {
+                "type": "Property",
+                "kind": "init",
+                "key": {
+                  "type": "Identifier",
+                  "name": "f",
+                  "start": 96,
+                  "end": 97
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [],
+                    "start": 99,
+                    "end": 101
+                  },
+                  "expression": false,
+                  "start": 97,
+                  "end": 101
+                },
+                "method": true,
+                "shorthand": false,
+                "computed": false,
+                "start": 96,
+                "end": 101
+              }
+            ],
+            "start": 50,
+            "end": 103
+          },
+          "start": 46,
+          "end": 103
+        },
+        "start": 46,
+        "end": 103
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 103
+  },
+  "errors": []
+}

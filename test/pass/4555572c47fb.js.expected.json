@@ -1,0 +1,45 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "label": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 0,
+          "end": 1
+        },
+        "body": {
+          "type": "DoWhileStatement",
+          "body": {
+            "type": "ContinueStatement",
+            "label": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 15,
+              "end": 16
+            },
+            "start": 6,
+            "end": 17
+          },
+          "test": {
+            "type": "Literal",
+            "value": true,
+            "raw": "true",
+            "start": 25,
+            "end": 29
+          },
+          "start": 3,
+          "end": 31
+        },
+        "start": 0,
+        "end": 31
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 32
+  },
+  "errors": []
+}

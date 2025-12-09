@@ -1,0 +1,92 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "ArrayPattern",
+              "elements": [
+                {
+                  "type": "ObjectPattern",
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "kind": "init",
+                      "key": {
+                        "type": "Identifier",
+                        "name": "__proto__",
+                        "start": 6,
+                        "end": 15
+                      },
+                      "value": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 17,
+                        "end": 18
+                      },
+                      "method": false,
+                      "shorthand": false,
+                      "computed": false,
+                      "start": 6,
+                      "end": 18
+                    },
+                    {
+                      "type": "Property",
+                      "kind": "init",
+                      "key": {
+                        "type": "Identifier",
+                        "name": "__proto__",
+                        "start": 20,
+                        "end": 29
+                      },
+                      "value": {
+                        "type": "Identifier",
+                        "name": "b",
+                        "start": 31,
+                        "end": 32
+                      },
+                      "method": false,
+                      "shorthand": false,
+                      "computed": false,
+                      "start": 20,
+                      "end": 32
+                    }
+                  ],
+                  "start": 5,
+                  "end": 33
+                }
+              ],
+              "start": 4,
+              "end": 34
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "Literal",
+                "value": 1,
+                "raw": "1",
+                "start": 38,
+                "end": 39
+              },
+              "start": 37,
+              "end": 40
+            },
+            "start": 4,
+            "end": 40
+          }
+        ],
+        "start": 0,
+        "end": 41
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 42
+  },
+  "errors": []
+}

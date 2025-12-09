@@ -1,0 +1,73 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "MemberExpression",
+                        "object": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 18,
+                          "end": 19
+                        },
+                        "property": {
+                          "type": "Literal",
+                          "value": "b",
+                          "raw": "\"b\"",
+                          "start": 20,
+                          "end": 23
+                        },
+                        "computed": true,
+                        "start": 18,
+                        "end": 24
+                      },
+                      "start": 18,
+                      "end": 25
+                    }
+                  ],
+                  "start": 14,
+                  "end": 27
+                },
+                "expression": false,
+                "start": 2,
+                "end": 27
+              },
+              "start": 1,
+              "end": 28
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 30
+          },
+          "start": 0,
+          "end": 31
+        },
+        "start": 0,
+        "end": 32
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 33
+  },
+  "errors": []
+}

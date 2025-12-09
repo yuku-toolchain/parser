@@ -1,0 +1,88 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "SequenceExpression",
+              "expressions": [
+                {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "SequenceExpression",
+                    "expressions": [
+                      {
+                        "type": "ParenthesizedExpression",
+                        "expression": {
+                          "type": "SequenceExpression",
+                          "expressions": [
+                            {
+                              "type": "Identifier",
+                              "name": "a",
+                              "start": 3,
+                              "end": 4
+                            },
+                            {
+                              "type": "Identifier",
+                              "name": "b",
+                              "start": 6,
+                              "end": 7
+                            }
+                          ],
+                          "start": 3,
+                          "end": 7
+                        },
+                        "start": 2,
+                        "end": 8
+                      },
+                      {
+                        "type": "Identifier",
+                        "name": "c",
+                        "start": 10,
+                        "end": 11
+                      }
+                    ],
+                    "start": 2,
+                    "end": 11
+                  },
+                  "start": 1,
+                  "end": 12
+                },
+                {
+                  "type": "Identifier",
+                  "name": "d",
+                  "start": 14,
+                  "end": 15
+                }
+              ],
+              "start": 1,
+              "end": 15
+            },
+            "start": 0,
+            "end": 16
+          },
+          "operator": "+",
+          "right": {
+            "type": "Identifier",
+            "name": "e",
+            "start": 19,
+            "end": 20
+          },
+          "start": 0,
+          "end": 20
+        },
+        "start": 0,
+        "end": 21
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 22
+  },
+  "errors": []
+}

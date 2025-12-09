@@ -1,0 +1,109 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "SequenceExpression",
+          "expressions": [
+            {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "AssignmentExpression",
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 1,
+                  "end": 2
+                },
+                "right": {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "BinaryExpression",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 6,
+                      "end": 7
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "ParenthesizedExpression",
+                      "expression": {
+                        "type": "Literal",
+                        "value": 1,
+                        "raw": "1",
+                        "start": 11,
+                        "end": 12
+                      },
+                      "start": 10,
+                      "end": 13
+                    },
+                    "start": 6,
+                    "end": 13
+                  },
+                  "start": 5,
+                  "end": 14
+                },
+                "start": 1,
+                "end": 14
+              },
+              "start": 0,
+              "end": 15
+            },
+            {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "AssignmentExpression",
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 18,
+                  "end": 19
+                },
+                "right": {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "BinaryExpression",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 23,
+                      "end": 24
+                    },
+                    "operator": "in",
+                    "right": {
+                      "type": "Identifier",
+                      "name": "c",
+                      "start": 28,
+                      "end": 29
+                    },
+                    "start": 23,
+                    "end": 29
+                  },
+                  "start": 22,
+                  "end": 30
+                },
+                "start": 18,
+                "end": 30
+              },
+              "start": 17,
+              "end": 31
+            }
+          ],
+          "start": 0,
+          "end": 31
+        },
+        "start": 0,
+        "end": 32
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 33
+  },
+  "errors": []
+}

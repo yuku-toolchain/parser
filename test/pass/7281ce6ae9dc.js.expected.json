@@ -1,0 +1,39 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "UnaryExpression",
+          "operator": "+",
+          "argument": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": {},
+              "raw": "/test/",
+              "regex": {
+                "pattern": "test",
+                "flags": ""
+              },
+              "start": 2,
+              "end": 8
+            },
+            "start": 1,
+            "end": 9
+          },
+          "prefix": true,
+          "start": 0,
+          "end": 9
+        },
+        "start": 0,
+        "end": 10
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 11
+  },
+  "errors": []
+}

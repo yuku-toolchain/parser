@@ -1,0 +1,145 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "get",
+                "key": {
+                  "type": "BinaryExpression",
+                  "left": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 8,
+                      "end": 9
+                    },
+                    "start": 7,
+                    "end": 10
+                  },
+                  "operator": "+",
+                  "right": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": 2,
+                      "raw": "2",
+                      "start": 14,
+                      "end": 15
+                    },
+                    "start": 13,
+                    "end": 16
+                  },
+                  "start": 7,
+                  "end": 16
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [],
+                    "start": 20,
+                    "end": 22
+                  },
+                  "expression": false,
+                  "start": 17,
+                  "end": 22
+                },
+                "method": false,
+                "shorthand": false,
+                "computed": true,
+                "start": 2,
+                "end": 22
+              },
+              {
+                "type": "Property",
+                "kind": "set",
+                "key": {
+                  "type": "BinaryExpression",
+                  "left": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": 3,
+                      "raw": "3",
+                      "start": 30,
+                      "end": 31
+                    },
+                    "start": 29,
+                    "end": 32
+                  },
+                  "operator": "/",
+                  "right": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": 4,
+                      "raw": "4",
+                      "start": 36,
+                      "end": 37
+                    },
+                    "start": 35,
+                    "end": 38
+                  },
+                  "start": 29,
+                  "end": 38
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 41,
+                      "end": 42
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [],
+                    "start": 44,
+                    "end": 46
+                  },
+                  "expression": false,
+                  "start": 40,
+                  "end": 46
+                },
+                "method": false,
+                "shorthand": false,
+                "computed": true,
+                "start": 24,
+                "end": 46
+              }
+            ],
+            "start": 1,
+            "end": 47
+          },
+          "start": 0,
+          "end": 48
+        },
+        "start": 0,
+        "end": 49
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 50
+  },
+  "errors": []
+}

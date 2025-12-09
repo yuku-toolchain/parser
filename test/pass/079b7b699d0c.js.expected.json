@@ -1,0 +1,107 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "AssignmentExpression",
+                      "operator": "=",
+                      "left": {
+                        "type": "MemberExpression",
+                        "object": {
+                          "type": "Identifier",
+                          "name": "arguments",
+                          "start": 19,
+                          "end": 28
+                        },
+                        "property": {
+                          "type": "Literal",
+                          "value": 1,
+                          "raw": "1",
+                          "start": 29,
+                          "end": 30
+                        },
+                        "computed": true,
+                        "start": 19,
+                        "end": 31
+                      },
+                      "right": {
+                        "type": "Literal",
+                        "value": 2,
+                        "raw": "2",
+                        "start": 34,
+                        "end": 35
+                      },
+                      "start": 19,
+                      "end": 35
+                    },
+                    "start": 19,
+                    "end": 36
+                  },
+                  {
+                    "type": "VariableDeclaration",
+                    "kind": "var",
+                    "declarations": [
+                      {
+                        "type": "VariableDeclarator",
+                        "id": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 45,
+                          "end": 46
+                        },
+                        "init": {
+                          "type": "Literal",
+                          "value": 3,
+                          "raw": "3",
+                          "start": 48,
+                          "end": 49
+                        },
+                        "start": 45,
+                        "end": 49
+                      }
+                    ],
+                    "start": 41,
+                    "end": 50
+                  }
+                ],
+                "start": 13,
+                "end": 86
+              },
+              "expression": false,
+              "start": 1,
+              "end": 86
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 88
+          },
+          "start": 0,
+          "end": 89
+        },
+        "start": 0,
+        "end": 90
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 91
+  },
+  "errors": []
+}

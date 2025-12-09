@@ -1,0 +1,30 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "BlockStatement",
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "Literal",
+              "value": "use strict",
+              "raw": "\"use strict\"",
+              "start": 4,
+              "end": 16
+            },
+            "start": 4,
+            "end": 17
+          }
+        ],
+        "start": 0,
+        "end": 19
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 20
+  },
+  "errors": []
+}

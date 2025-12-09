@@ -1,0 +1,34 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "UnaryExpression",
+            "operator": "void",
+            "argument": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 6,
+              "end": 7
+            },
+            "prefix": true,
+            "start": 1,
+            "end": 7
+          },
+          "start": 0,
+          "end": 8
+        },
+        "start": 0,
+        "end": 8
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 8
+  },
+  "errors": []
+}

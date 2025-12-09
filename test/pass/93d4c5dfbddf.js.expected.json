@@ -1,0 +1,241 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 4,
+          "end": 5
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 13,
+                "end": 14
+              },
+              "consequent": {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 16,
+                  "end": 17
+                },
+                "start": 16,
+                "end": 18
+              },
+              "alternate": null,
+              "start": 9,
+              "end": 18
+            }
+          ],
+          "start": 7,
+          "end": 20
+        },
+        "alternate": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 26,
+            "end": 27
+          },
+          "start": 26,
+          "end": 28
+        },
+        "start": 0,
+        "end": 28
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 33,
+          "end": 34
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 42,
+                "end": 43
+              },
+              "consequent": {
+                "type": "ThrowStatement",
+                "argument": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 51,
+                  "end": 52
+                },
+                "start": 45,
+                "end": 53
+              },
+              "alternate": null,
+              "start": 38,
+              "end": 53
+            }
+          ],
+          "start": 36,
+          "end": 55
+        },
+        "alternate": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 61,
+            "end": 62
+          },
+          "start": 61,
+          "end": 63
+        },
+        "start": 29,
+        "end": 63
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 68,
+          "end": 69
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "WithStatement",
+              "object": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 79,
+                "end": 80
+              },
+              "body": {
+                "type": "IfStatement",
+                "test": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 86,
+                  "end": 87
+                },
+                "consequent": {
+                  "type": "ThrowStatement",
+                  "argument": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 95,
+                    "end": 96
+                  },
+                  "start": 89,
+                  "end": 97
+                },
+                "alternate": null,
+                "start": 82,
+                "end": 97
+              },
+              "start": 73,
+              "end": 97
+            }
+          ],
+          "start": 71,
+          "end": 99
+        },
+        "alternate": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 105,
+            "end": 106
+          },
+          "start": 105,
+          "end": 107
+        },
+        "start": 64,
+        "end": 107
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 112,
+          "end": 113
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "DoWhileStatement",
+              "body": {
+                "type": "IfStatement",
+                "test": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 124,
+                  "end": 125
+                },
+                "consequent": {
+                  "type": "ThrowStatement",
+                  "argument": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 133,
+                    "end": 134
+                  },
+                  "start": 127,
+                  "end": 135
+                },
+                "alternate": null,
+                "start": 120,
+                "end": 135
+              },
+              "test": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 143,
+                "end": 144
+              },
+              "start": 117,
+              "end": 145
+            }
+          ],
+          "start": 115,
+          "end": 147
+        },
+        "alternate": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 153,
+            "end": 154
+          },
+          "start": 153,
+          "end": 155
+        },
+        "start": 108,
+        "end": 155
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 156
+  },
+  "errors": []
+}

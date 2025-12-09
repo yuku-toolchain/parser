@@ -1,0 +1,33 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "BlockStatement",
+        "body": [],
+        "start": 0,
+        "end": 2
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": {},
+          "raw": "/=/",
+          "regex": {
+            "pattern": "=",
+            "flags": ""
+          },
+          "start": 2,
+          "end": 5
+        },
+        "start": 2,
+        "end": 5
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 5
+  },
+  "errors": []
+}

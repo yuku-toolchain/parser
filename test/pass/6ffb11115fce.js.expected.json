@@ -1,0 +1,119 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "label": {
+          "type": "Identifier",
+          "name": "c",
+          "start": 31,
+          "end": 32
+        },
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 46,
+                  "end": 47
+                },
+                "arguments": [
+                  {
+                    "type": "Literal",
+                    "value": "b",
+                    "raw": "\"b\"",
+                    "start": 48,
+                    "end": 51
+                  }
+                ],
+                "start": 46,
+                "end": 52
+              },
+              "start": 46,
+              "end": 53
+            },
+            {
+              "type": "BreakStatement",
+              "label": {
+                "type": "Identifier",
+                "name": "c",
+                "start": 70,
+                "end": 71
+              },
+              "start": 64,
+              "end": 72
+            }
+          ],
+          "start": 34,
+          "end": 74
+        },
+        "start": 31,
+        "end": 74
+      },
+      {
+        "type": "LabeledStatement",
+        "label": {
+          "type": "Identifier",
+          "name": "c",
+          "start": 75,
+          "end": 76
+        },
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 90,
+                  "end": 91
+                },
+                "arguments": [
+                  {
+                    "type": "Literal",
+                    "value": "b",
+                    "raw": "\"b\"",
+                    "start": 92,
+                    "end": 95
+                  }
+                ],
+                "start": 90,
+                "end": 96
+              },
+              "start": 90,
+              "end": 97
+            },
+            {
+              "type": "BreakStatement",
+              "label": {
+                "type": "Identifier",
+                "name": "c",
+                "start": 114,
+                "end": 115
+              },
+              "start": 108,
+              "end": 116
+            }
+          ],
+          "start": 78,
+          "end": 118
+        },
+        "start": 75,
+        "end": 118
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 119
+  },
+  "errors": []
+}

@@ -1,0 +1,44 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "LogicalExpression",
+          "left": {
+            "type": "Literal",
+            "value": {},
+            "raw": "/test/",
+            "regex": {
+              "pattern": "test",
+              "flags": ""
+            },
+            "start": 0,
+            "end": 6
+          },
+          "operator": "&&",
+          "right": {
+            "type": "Literal",
+            "value": {},
+            "raw": "/test/",
+            "regex": {
+              "pattern": "test",
+              "flags": ""
+            },
+            "start": 10,
+            "end": 16
+          },
+          "start": 0,
+          "end": 16
+        },
+        "start": 0,
+        "end": 16
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 17
+  },
+  "errors": []
+}

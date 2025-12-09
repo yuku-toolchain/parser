@@ -1,0 +1,49 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ArrayExpression",
+          "elements": [
+            null,
+            null,
+            {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 3,
+              "end": 4
+            },
+            null,
+            null,
+            {
+              "type": "Literal",
+              "value": 2,
+              "raw": "2",
+              "start": 7,
+              "end": 8
+            },
+            {
+              "type": "Literal",
+              "value": 3,
+              "raw": "3",
+              "start": 9,
+              "end": 10
+            },
+            null
+          ],
+          "start": 0,
+          "end": 13
+        },
+        "start": 0,
+        "end": 13
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 13
+  },
+  "errors": []
+}

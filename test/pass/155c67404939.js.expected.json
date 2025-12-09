@@ -1,0 +1,24 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": "Hello\u0001World",
+          "raw": "\"Hello\\1World\"",
+          "start": 0,
+          "end": 14
+        },
+        "directive": "Hello\\1World",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 16
+  },
+  "errors": []
+}

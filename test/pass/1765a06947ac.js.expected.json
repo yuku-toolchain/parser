@@ -1,0 +1,72 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": "use strict",
+          "raw": "\"use strict\"",
+          "start": 0,
+          "end": 12
+        },
+        "directive": "use strict",
+        "start": 0,
+        "end": 13
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "init",
+                "key": {
+                  "type": "Identifier",
+                  "name": "yield",
+                  "start": 16,
+                  "end": 21
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [],
+                    "start": 24,
+                    "end": 26
+                  },
+                  "expression": false,
+                  "start": 21,
+                  "end": 26
+                },
+                "method": true,
+                "shorthand": false,
+                "computed": false,
+                "start": 16,
+                "end": 26
+              }
+            ],
+            "start": 15,
+            "end": 27
+          },
+          "start": 14,
+          "end": 28
+        },
+        "start": 14,
+        "end": 29
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 30
+  },
+  "errors": []
+}

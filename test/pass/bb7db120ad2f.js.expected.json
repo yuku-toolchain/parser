@@ -1,0 +1,122 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "init",
+                "key": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 2,
+                  "end": 3
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "AssignmentPattern",
+                      "left": {
+                        "type": "ObjectPattern",
+                        "properties": [
+                          {
+                            "type": "Property",
+                            "kind": "init",
+                            "key": {
+                              "type": "Identifier",
+                              "name": "b",
+                              "start": 15,
+                              "end": 16
+                            },
+                            "value": {
+                              "type": "Identifier",
+                              "name": "b",
+                              "start": 15,
+                              "end": 16
+                            },
+                            "method": false,
+                            "shorthand": true,
+                            "computed": false,
+                            "start": 15,
+                            "end": 16
+                          }
+                        ],
+                        "start": 14,
+                        "end": 17
+                      },
+                      "right": {
+                        "type": "ObjectExpression",
+                        "properties": [
+                          {
+                            "type": "Property",
+                            "kind": "init",
+                            "key": {
+                              "type": "Identifier",
+                              "name": "b",
+                              "start": 21,
+                              "end": 22
+                            },
+                            "value": {
+                              "type": "Literal",
+                              "value": 1,
+                              "raw": "1",
+                              "start": 24,
+                              "end": 25
+                            },
+                            "method": false,
+                            "shorthand": false,
+                            "computed": false,
+                            "start": 21,
+                            "end": 25
+                          }
+                        ],
+                        "start": 20,
+                        "end": 26
+                      },
+                      "start": 14,
+                      "end": 26
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [],
+                    "start": 28,
+                    "end": 30
+                  },
+                  "expression": false,
+                  "start": 5,
+                  "end": 30
+                },
+                "method": false,
+                "shorthand": false,
+                "computed": false,
+                "start": 2,
+                "end": 30
+              }
+            ],
+            "start": 1,
+            "end": 31
+          },
+          "start": 0,
+          "end": 32
+        },
+        "start": 0,
+        "end": 32
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 32
+  },
+  "errors": []
+}

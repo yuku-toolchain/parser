@@ -1,0 +1,45 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "TaggedTemplateExpression",
+          "tag": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 0,
+            "end": 1
+          },
+          "quasi": {
+            "type": "TemplateLiteral",
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "value": {
+                  "raw": "",
+                  "cooked": ""
+                },
+                "tail": true,
+                "start": 2,
+                "end": 2
+              }
+            ],
+            "expressions": [],
+            "start": 1,
+            "end": 3
+          },
+          "start": 0,
+          "end": 3
+        },
+        "start": 0,
+        "end": 3
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 3
+  },
+  "errors": []
+}

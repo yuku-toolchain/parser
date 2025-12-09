@@ -1,0 +1,60 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 4,
+            "end": 5
+          },
+          "right": {
+            "type": "Literal",
+            "value": 1,
+            "raw": "1",
+            "start": 8,
+            "end": 9
+          },
+          "start": 4,
+          "end": 9
+        },
+        "test": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 11,
+            "end": 12
+          },
+          "operator": "<",
+          "right": {
+            "type": "Literal",
+            "value": 2,
+            "raw": "2",
+            "start": 15,
+            "end": 16
+          },
+          "start": 11,
+          "end": 16
+        },
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 18,
+          "end": 19
+        },
+        "start": 0,
+        "end": 19
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 19
+  },
+  "errors": []
+}

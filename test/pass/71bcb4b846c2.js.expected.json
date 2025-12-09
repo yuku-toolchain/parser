@@ -1,0 +1,107 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "MemberExpression",
+          "object": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 0,
+            "end": 1
+          },
+          "property": {
+            "type": "Literal",
+            "value": "0",
+            "raw": "'0'",
+            "start": 2,
+            "end": 5
+          },
+          "computed": true,
+          "start": 0,
+          "end": 6
+        },
+        "start": 0,
+        "end": 7
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "MemberExpression",
+          "object": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 8,
+            "end": 9
+          },
+          "property": {
+            "type": "Literal",
+            "value": "1",
+            "raw": "'1'",
+            "start": 10,
+            "end": 13
+          },
+          "computed": true,
+          "start": 8,
+          "end": 14
+        },
+        "start": 8,
+        "end": 15
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "MemberExpression",
+          "object": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 16,
+            "end": 17
+          },
+          "property": {
+            "type": "Literal",
+            "value": "00",
+            "raw": "'00'",
+            "start": 18,
+            "end": 22
+          },
+          "computed": true,
+          "start": 16,
+          "end": 23
+        },
+        "start": 16,
+        "end": 24
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "MemberExpression",
+          "object": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 25,
+            "end": 26
+          },
+          "property": {
+            "type": "Literal",
+            "value": "0x20",
+            "raw": "'0x20'",
+            "start": 27,
+            "end": 33
+          },
+          "computed": true,
+          "start": 25,
+          "end": 34
+        },
+        "start": 25,
+        "end": 35
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 36
+  },
+  "errors": []
+}

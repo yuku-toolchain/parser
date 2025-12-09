@@ -1,0 +1,41 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": {
+              "type": "Literal",
+              "value": {},
+              "raw": "/[\\uD834\\uDF06-\\uD834\\uDF08a-z]/u",
+              "regex": {
+                "pattern": "[\\uD834\\uDF06-\\uD834\\uDF08a-z]",
+                "flags": "u"
+              },
+              "start": 8,
+              "end": 41
+            },
+            "start": 4,
+            "end": 41
+          }
+        ],
+        "start": 0,
+        "end": 41
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 42
+  },
+  "errors": []
+}

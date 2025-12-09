@@ -1,0 +1,101 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "get",
+                "key": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 6,
+                  "end": 7
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "expression": {
+                          "type": "AssignmentExpression",
+                          "operator": "=",
+                          "left": {
+                            "type": "MemberExpression",
+                            "object": {
+                              "type": "Super",
+                              "start": 14,
+                              "end": 19
+                            },
+                            "property": {
+                              "type": "Literal",
+                              "value": 1,
+                              "raw": "1",
+                              "start": 20,
+                              "end": 21
+                            },
+                            "computed": true,
+                            "start": 14,
+                            "end": 22
+                          },
+                          "right": {
+                            "type": "ParenthesizedExpression",
+                            "expression": {
+                              "type": "Literal",
+                              "value": 2,
+                              "raw": "2",
+                              "start": 26,
+                              "end": 27
+                            },
+                            "start": 25,
+                            "end": 28
+                          },
+                          "start": 14,
+                          "end": 28
+                        },
+                        "start": 14,
+                        "end": 29
+                      }
+                    ],
+                    "start": 10,
+                    "end": 31
+                  },
+                  "expression": false,
+                  "start": 7,
+                  "end": 31
+                },
+                "method": false,
+                "shorthand": false,
+                "computed": false,
+                "start": 2,
+                "end": 31
+              }
+            ],
+            "start": 1,
+            "end": 32
+          },
+          "start": 0,
+          "end": 33
+        },
+        "start": 0,
+        "end": 34
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 35
+  },
+  "errors": []
+}

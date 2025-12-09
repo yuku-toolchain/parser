@@ -1,0 +1,143 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "expression": true,
+          "async": false,
+          "params": [
+            {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 2,
+                    "end": 3
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 2,
+                    "end": 3
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 2,
+                  "end": 3
+                },
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 4,
+                    "end": 5
+                  },
+                  "value": {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 4,
+                      "end": 5
+                    },
+                    "right": {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 6,
+                      "end": 7
+                    },
+                    "start": 4,
+                    "end": 7
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 4,
+                  "end": 7
+                },
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 8,
+                    "end": 9
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 10,
+                    "end": 11
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false,
+                  "start": 8,
+                  "end": 11
+                },
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 13,
+                    "end": 14
+                  },
+                  "value": {
+                    "type": "ArrayPattern",
+                    "elements": [
+                      {
+                        "type": "Identifier",
+                        "name": "d",
+                        "start": 17,
+                        "end": 18
+                      }
+                    ],
+                    "start": 16,
+                    "end": 19
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": true,
+                  "start": 12,
+                  "end": 19
+                }
+              ],
+              "start": 1,
+              "end": 20
+            }
+          ],
+          "body": {
+            "type": "Literal",
+            "value": 1,
+            "raw": "1",
+            "start": 23,
+            "end": 24
+          },
+          "id": null,
+          "generator": false,
+          "start": 0,
+          "end": 24
+        },
+        "start": 0,
+        "end": 25
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 26
+  },
+  "errors": []
+}

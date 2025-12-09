@@ -1,0 +1,224 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForInStatement",
+        "left": {
+          "type": "ArrayPattern",
+          "elements": [
+            {
+              "type": "Identifier",
+              "name": "a",
+              "start": 6,
+              "end": 7
+            },
+            {
+              "type": "MemberExpression",
+              "object": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 9,
+                "end": 10
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 11,
+                "end": 12
+              },
+              "computed": true,
+              "start": 9,
+              "end": 13
+            },
+            {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 16,
+                    "end": 17
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 16,
+                    "end": 17
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 16,
+                  "end": 17
+                },
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "d",
+                    "start": 19,
+                    "end": 20
+                  },
+                  "value": {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "d",
+                      "start": 19,
+                      "end": 20
+                    },
+                    "right": {
+                      "type": "Identifier",
+                      "name": "e",
+                      "start": 23,
+                      "end": 24
+                    },
+                    "start": 19,
+                    "end": 24
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 19,
+                  "end": 24
+                },
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "f",
+                    "start": 27,
+                    "end": 28
+                  },
+                  "value": {
+                    "type": "ArrayPattern",
+                    "elements": [
+                      {
+                        "type": "Identifier",
+                        "name": "g",
+                        "start": 32,
+                        "end": 33
+                      },
+                      {
+                        "type": "MemberExpression",
+                        "object": {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                              "type": "Identifier",
+                              "name": "h",
+                              "start": 36,
+                              "end": 37
+                            },
+                            "arguments": [],
+                            "start": 36,
+                            "end": 39
+                          },
+                          "start": 35,
+                          "end": 40
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 41,
+                          "end": 42
+                        },
+                        "computed": false,
+                        "start": 35,
+                        "end": 42
+                      },
+                      {
+                        "type": "MemberExpression",
+                        "object": {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "Literal",
+                            "value": 1,
+                            "raw": "1",
+                            "start": 45,
+                            "end": 46
+                          },
+                          "start": 44,
+                          "end": 47
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "i",
+                          "start": 48,
+                          "end": 49
+                        },
+                        "computed": false,
+                        "start": 44,
+                        "end": 49
+                      },
+                      {
+                        "type": "RestElement",
+                        "argument": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "Identifier",
+                            "name": "j",
+                            "start": 54,
+                            "end": 55
+                          },
+                          "property": {
+                            "type": "Literal",
+                            "value": 2,
+                            "raw": "2",
+                            "start": 56,
+                            "end": 57
+                          },
+                          "computed": true,
+                          "start": 54,
+                          "end": 58
+                        },
+                        "start": 51,
+                        "end": 58
+                      }
+                    ],
+                    "start": 31,
+                    "end": 59
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": true,
+                  "start": 26,
+                  "end": 59
+                }
+              ],
+              "start": 15,
+              "end": 60
+            }
+          ],
+          "start": 5,
+          "end": 61
+        },
+        "right": {
+          "type": "Literal",
+          "value": 3,
+          "raw": "3",
+          "start": 65,
+          "end": 66
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 68,
+          "end": 69
+        },
+        "start": 0,
+        "end": 69
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 70
+  },
+  "errors": []
+}

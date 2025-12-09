@@ -1,0 +1,61 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ConditionalExpression",
+          "test": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "ConditionalExpression",
+              "test": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 1,
+                "end": 2
+              },
+              "consequent": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 5,
+                "end": 6
+              },
+              "alternate": {
+                "type": "Identifier",
+                "name": "c",
+                "start": 9,
+                "end": 10
+              },
+              "start": 1,
+              "end": 10
+            },
+            "start": 0,
+            "end": 11
+          },
+          "consequent": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 14,
+            "end": 15
+          },
+          "alternate": {
+            "type": "Identifier",
+            "name": "e",
+            "start": 18,
+            "end": 19
+          },
+          "start": 0,
+          "end": 19
+        },
+        "start": 0,
+        "end": 20
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 21
+  },
+  "errors": []
+}

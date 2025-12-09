@@ -1,0 +1,129 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": {
+          "type": "VariableDeclaration",
+          "kind": "var",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 9,
+                "end": 10
+              },
+              "init": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "BinaryExpression",
+                  "left": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": "b",
+                      "raw": "\"b\"",
+                      "start": 15,
+                      "end": 18
+                    },
+                    "start": 14,
+                    "end": 19
+                  },
+                  "operator": "in",
+                  "right": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 23,
+                    "end": 24
+                  },
+                  "start": 14,
+                  "end": 24
+                },
+                "start": 13,
+                "end": 25
+              },
+              "start": 9,
+              "end": 25
+            },
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "d",
+                "start": 27,
+                "end": 28
+              },
+              "init": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "Literal",
+                  "value": 1,
+                  "raw": "1",
+                  "start": 32,
+                  "end": 33
+                },
+                "start": 31,
+                "end": 34
+              },
+              "start": 27,
+              "end": 34
+            }
+          ],
+          "start": 5,
+          "end": 34
+        },
+        "test": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 36,
+            "end": 37
+          },
+          "operator": "<",
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": 2,
+              "raw": "2",
+              "start": 41,
+              "end": 42
+            },
+            "start": 40,
+            "end": 43
+          },
+          "start": 36,
+          "end": 43
+        },
+        "update": {
+          "type": "UpdateExpression",
+          "operator": "++",
+          "prefix": true,
+          "argument": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 47,
+            "end": 48
+          },
+          "start": 45,
+          "end": 48
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 50,
+          "end": 51
+        },
+        "start": 0,
+        "end": 51
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 52
+  },
+  "errors": []
+}

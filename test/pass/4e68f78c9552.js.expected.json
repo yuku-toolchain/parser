@@ -1,0 +1,27 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": {},
+          "raw": "/[\\w-\\s]/",
+          "regex": {
+            "pattern": "[\\w-\\s]",
+            "flags": ""
+          },
+          "start": 0,
+          "end": 9
+        },
+        "start": 0,
+        "end": 10
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 11
+  },
+  "errors": []
+}

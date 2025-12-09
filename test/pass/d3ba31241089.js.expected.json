@@ -1,0 +1,97 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": "use strict",
+          "raw": "\"use strict\"",
+          "start": 0,
+          "end": 12
+        },
+        "directive": "use strict",
+        "start": 0,
+        "end": 13
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 14,
+            "end": 15
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "ObjectExpression",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 20,
+                    "end": 21
+                  },
+                  "value": {
+                    "type": "Literal",
+                    "value": 1,
+                    "raw": "1",
+                    "start": 23,
+                    "end": 24
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false,
+                  "start": 20,
+                  "end": 24
+                },
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 26,
+                    "end": 27
+                  },
+                  "value": {
+                    "type": "Literal",
+                    "value": 2,
+                    "raw": "2",
+                    "start": 29,
+                    "end": 30
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false,
+                  "start": 26,
+                  "end": 30
+                }
+              ],
+              "start": 19,
+              "end": 31
+            },
+            "start": 18,
+            "end": 32
+          },
+          "start": 14,
+          "end": 32
+        },
+        "start": 14,
+        "end": 33
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 34
+  },
+  "errors": []
+}

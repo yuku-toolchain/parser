@@ -1,0 +1,63 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "get",
+                    "start": 5,
+                    "end": 8
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "get",
+                    "start": 5,
+                    "end": 8
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 5,
+                  "end": 8
+                }
+              ],
+              "start": 4,
+              "end": 9
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 13,
+                "end": 14
+              },
+              "start": 12,
+              "end": 15
+            },
+            "start": 4,
+            "end": 15
+          }
+        ],
+        "start": 0,
+        "end": 16
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 17
+  },
+  "errors": []
+}

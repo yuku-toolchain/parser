@@ -1,0 +1,54 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "TryStatement",
+        "block": {
+          "type": "BlockStatement",
+          "body": [],
+          "start": 4,
+          "end": 6
+        },
+        "handler": null,
+        "finalizer": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 19,
+                  "end": 20
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 21,
+                    "end": 22
+                  }
+                ],
+                "start": 19,
+                "end": 23
+              },
+              "start": 19,
+              "end": 24
+            }
+          ],
+          "start": 15,
+          "end": 26
+        },
+        "start": 0,
+        "end": 26
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 27
+  },
+  "errors": []
+}

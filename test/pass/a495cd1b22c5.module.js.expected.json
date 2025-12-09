@@ -1,0 +1,30 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "declaration": {
+          "type": "ClassDeclaration",
+          "decorators": [],
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "body": [],
+            "start": 21,
+            "end": 23
+          },
+          "start": 15,
+          "end": 23
+        },
+        "start": 0,
+        "end": 23
+      }
+    ],
+    "sourceType": "module",
+    "start": 0,
+    "end": 24
+  },
+  "errors": []
+}

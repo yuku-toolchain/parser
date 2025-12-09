@@ -1,0 +1,69 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "SequenceExpression",
+              "expressions": [
+                {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "Literal",
+                    "value": 1,
+                    "raw": "1",
+                    "start": 2,
+                    "end": 3
+                  },
+                  "start": 1,
+                  "end": 4
+                },
+                {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "MemberExpression",
+                    "object": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 7,
+                      "end": 8
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 9,
+                      "end": 10
+                    },
+                    "computed": false,
+                    "start": 7,
+                    "end": 10
+                  },
+                  "start": 6,
+                  "end": 11
+                }
+              ],
+              "start": 1,
+              "end": 11
+            },
+            "start": 0,
+            "end": 12
+          },
+          "arguments": [],
+          "start": 0,
+          "end": 14
+        },
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 16
+  },
+  "errors": []
+}

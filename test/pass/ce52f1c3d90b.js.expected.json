@@ -1,0 +1,49 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "label": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 44,
+          "end": 45
+        },
+        "body": {
+          "type": "ForStatement",
+          "init": null,
+          "test": null,
+          "update": null,
+          "body": {
+            "type": "ForStatement",
+            "init": null,
+            "test": null,
+            "update": null,
+            "body": {
+              "type": "ContinueStatement",
+              "label": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 73,
+                "end": 74
+              },
+              "start": 64,
+              "end": 75
+            },
+            "start": 55,
+            "end": 75
+          },
+          "start": 47,
+          "end": 75
+        },
+        "start": 44,
+        "end": 75
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 76
+  },
+  "errors": []
+}

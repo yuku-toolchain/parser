@@ -1,0 +1,34 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "UnaryExpression",
+          "operator": "delete",
+          "argument": {
+            "type": "Literal",
+            "value": {},
+            "raw": "/test/",
+            "regex": {
+              "pattern": "test",
+              "flags": ""
+            },
+            "start": 7,
+            "end": 13
+          },
+          "prefix": true,
+          "start": 0,
+          "end": 13
+        },
+        "start": 0,
+        "end": 13
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 14
+  },
+  "errors": []
+}

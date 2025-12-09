@@ -1,0 +1,58 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "MemberExpression",
+          "object": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "MemberExpression",
+              "object": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 0,
+                "end": 1
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 2,
+                "end": 3
+              },
+              "computed": false,
+              "start": 0,
+              "end": 3
+            },
+            "property": {
+              "type": "Identifier",
+              "name": "c",
+              "start": 4,
+              "end": 5
+            },
+            "computed": false,
+            "start": 0,
+            "end": 5
+          },
+          "property": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 6,
+            "end": 7
+          },
+          "computed": false,
+          "start": 0,
+          "end": 7
+        },
+        "start": 0,
+        "end": 7
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 7
+  },
+  "errors": []
+}

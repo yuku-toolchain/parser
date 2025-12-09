@@ -1,0 +1,145 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": null,
+        "test": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 6,
+            "end": 7
+          },
+          "arguments": [],
+          "start": 6,
+          "end": 9
+        },
+        "update": null,
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 18,
+                  "end": 19
+                },
+                "arguments": [],
+                "start": 18,
+                "end": 21
+              },
+              "start": 18,
+              "end": 22
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 27,
+                  "end": 28
+                },
+                "arguments": [],
+                "start": 27,
+                "end": 30
+              },
+              "start": 27,
+              "end": 31
+            },
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "d",
+                  "start": 40,
+                  "end": 41
+                },
+                "arguments": [],
+                "start": 40,
+                "end": 43
+              },
+              "consequent": {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "e",
+                    "start": 45,
+                    "end": 46
+                  },
+                  "arguments": [],
+                  "start": 45,
+                  "end": 48
+                },
+                "start": 45,
+                "end": 49
+              },
+              "alternate": {
+                "type": "BreakStatement",
+                "label": null,
+                "start": 59,
+                "end": 65
+              },
+              "start": 36,
+              "end": 65
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "f",
+                  "start": 70,
+                  "end": 71
+                },
+                "arguments": [],
+                "start": 70,
+                "end": 73
+              },
+              "start": 70,
+              "end": 74
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "g",
+                  "start": 79,
+                  "end": 80
+                },
+                "arguments": [],
+                "start": 79,
+                "end": 82
+              },
+              "start": 79,
+              "end": 83
+            }
+          ],
+          "start": 12,
+          "end": 85
+        },
+        "start": 0,
+        "end": 85
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 85
+  },
+  "errors": []
+}

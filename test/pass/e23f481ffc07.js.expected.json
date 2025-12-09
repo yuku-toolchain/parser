@@ -1,0 +1,134 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 4,
+          "end": 5
+        },
+        "consequent": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 7,
+              "end": 8
+            },
+            "arguments": [],
+            "start": 7,
+            "end": 10
+          },
+          "start": 7,
+          "end": 11
+        },
+        "alternate": null,
+        "start": 0,
+        "end": 11
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "UnaryExpression",
+          "operator": "!",
+          "argument": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 17,
+            "end": 18
+          },
+          "prefix": true,
+          "start": 16,
+          "end": 18
+        },
+        "consequent": {
+          "type": "EmptyStatement",
+          "start": 19,
+          "end": 20
+        },
+        "alternate": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 26,
+              "end": 27
+            },
+            "arguments": [],
+            "start": 26,
+            "end": 29
+          },
+          "start": 26,
+          "end": 30
+        },
+        "start": 12,
+        "end": 30
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 35,
+          "end": 36
+        },
+        "consequent": {
+          "type": "EmptyStatement",
+          "start": 37,
+          "end": 38
+        },
+        "alternate": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 44,
+              "end": 45
+            },
+            "arguments": [],
+            "start": 44,
+            "end": 47
+          },
+          "start": 44,
+          "end": 48
+        },
+        "start": 31,
+        "end": 48
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 53,
+          "end": 54
+        },
+        "consequent": {
+          "type": "EmptyStatement",
+          "start": 55,
+          "end": 56
+        },
+        "alternate": {
+          "type": "EmptyStatement",
+          "start": 61,
+          "end": 62
+        },
+        "start": 49,
+        "end": 62
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 62
+  },
+  "errors": []
+}

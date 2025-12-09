@@ -1,0 +1,43 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "IfStatement",
+          "test": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 17,
+              "end": 18
+            },
+            "arguments": [],
+            "start": 17,
+            "end": 20
+          },
+          "consequent": {
+            "type": "BreakStatement",
+            "label": null,
+            "start": 22,
+            "end": 28
+          },
+          "alternate": null,
+          "start": 13,
+          "end": 28
+        },
+        "start": 0,
+        "end": 28
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 28
+  },
+  "errors": []
+}

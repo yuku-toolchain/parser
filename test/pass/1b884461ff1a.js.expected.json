@@ -1,0 +1,66 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "FunctionExpression",
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "ObjectPattern",
+                "properties": [
+                  {
+                    "type": "Property",
+                    "kind": "init",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 11,
+                      "end": 12
+                    },
+                    "value": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 11,
+                      "end": 12
+                    },
+                    "method": false,
+                    "shorthand": true,
+                    "computed": false,
+                    "start": 11,
+                    "end": 12
+                  }
+                ],
+                "start": 10,
+                "end": 13
+              }
+            ],
+            "body": {
+              "type": "BlockStatement",
+              "body": [],
+              "start": 14,
+              "end": 16
+            },
+            "expression": false,
+            "start": 1,
+            "end": 16
+          },
+          "start": 0,
+          "end": 17
+        },
+        "start": 0,
+        "end": 17
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 17
+  },
+  "errors": []
+}

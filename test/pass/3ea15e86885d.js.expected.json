@@ -1,0 +1,57 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "label": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 44,
+          "end": 45
+        },
+        "body": {
+          "type": "WhileStatement",
+          "test": {
+            "type": "Literal",
+            "value": true,
+            "raw": "true",
+            "start": 54,
+            "end": 58
+          },
+          "body": {
+            "type": "WhileStatement",
+            "test": {
+              "type": "Literal",
+              "value": true,
+              "raw": "true",
+              "start": 67,
+              "end": 71
+            },
+            "body": {
+              "type": "ContinueStatement",
+              "label": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 82,
+                "end": 83
+              },
+              "start": 73,
+              "end": 84
+            },
+            "start": 60,
+            "end": 84
+          },
+          "start": 47,
+          "end": 84
+        },
+        "start": 44,
+        "end": 84
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 85
+  },
+  "errors": []
+}

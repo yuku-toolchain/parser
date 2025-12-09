@@ -1,0 +1,23 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ThrowStatement",
+        "argument": {
+          "type": "Literal",
+          "value": 1,
+          "raw": "1",
+          "start": 6,
+          "end": 7
+        },
+        "start": 0,
+        "end": 8
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 9
+  },
+  "errors": []
+}

@@ -1,0 +1,93 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "decorators": [],
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 6,
+          "end": 7
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "decorators": [],
+              "key": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 16,
+                "end": 17
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "start": 20,
+                  "end": 22
+                },
+                "expression": false,
+                "start": 18,
+                "end": 22
+              },
+              "kind": "method",
+              "computed": true,
+              "static": true,
+              "start": 9,
+              "end": 22
+            },
+            {
+              "type": "MethodDefinition",
+              "decorators": [],
+              "key": {
+                "type": "Identifier",
+                "name": "c",
+                "start": 31,
+                "end": 32
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "start": 35,
+                  "end": 37
+                },
+                "expression": false,
+                "start": 33,
+                "end": 37
+              },
+              "kind": "method",
+              "computed": true,
+              "static": true,
+              "start": 24,
+              "end": 37
+            }
+          ],
+          "start": 8,
+          "end": 38
+        },
+        "start": 0,
+        "end": 38
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 38
+  },
+  "errors": []
+}

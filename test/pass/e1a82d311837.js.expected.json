@@ -1,0 +1,115 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 17,
+                  "end": 18
+                },
+                "arguments": [],
+                "start": 17,
+                "end": 20
+              },
+              "start": 17,
+              "end": 21
+            }
+          ],
+          "start": 13,
+          "end": 23
+        },
+        "expression": false,
+        "start": 0,
+        "end": 23
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "LogicalExpression",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 29,
+                "end": 30
+              },
+              "arguments": [],
+              "start": 29,
+              "end": 32
+            },
+            "start": 28,
+            "end": 33
+          },
+          "operator": "||",
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": true,
+              "raw": "true",
+              "start": 38,
+              "end": 42
+            },
+            "start": 37,
+            "end": 43
+          },
+          "start": 28,
+          "end": 43
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 49,
+                  "end": 50
+                },
+                "arguments": [],
+                "start": 49,
+                "end": 52
+              },
+              "start": 49,
+              "end": 53
+            }
+          ],
+          "start": 45,
+          "end": 55
+        },
+        "alternate": null,
+        "start": 24,
+        "end": 55
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 56
+  },
+  "errors": []
+}

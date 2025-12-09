@@ -53,23 +53,23 @@ pub fn build(b: *std.Build) void {
     const gen_unicode_id_table_step = b.step("generate-unicode-id", "Run unicode identifier table and utils generation");
     gen_unicode_id_table_step.dependOn(&run_gen_unicode_id_table.step);
 
-    const gen_ast_received_module = b.createModule(.{
-        .root_source_file = b.path("scripts/test/gen_ast_received.zig"),
+    const gen_ast_snapshots_module = b.createModule(.{
+        .root_source_file = b.path("scripts/gen_ast_snapshots.zig"),
         .target = target,
         .optimize = optimize,
     });
 
-    gen_ast_received_module.addImport("js", js_module);
+    gen_ast_snapshots_module.addImport("js", js_module);
 
-    const gen_ast_received = b.addExecutable(.{
-        .name = "gen-ast-received",
-        .root_module = gen_ast_received_module,
+    const gen_ast_snapshots = b.addExecutable(.{
+        .name = "gen-ast-snapshots",
+        .root_module = gen_ast_snapshots_module,
     });
 
-    b.installArtifact(gen_ast_received);
+    b.installArtifact(gen_ast_snapshots);
 
-    const gen_ast_received_step = b.step("gen-ast-received", "Generate yuku AST snapshots to compare with expected AST");
-    const run_gen_ast_received = b.addRunArtifact(gen_ast_received);
-    run_gen_ast_received.step.dependOn(b.getInstallStep());
-    gen_ast_received_step.dependOn(&run_gen_ast_received.step);
+    const gen_ast_snapshots_step = b.step("gen-ast-snapshots", "Generate yuku AST snapshots to compare with expected AST");
+    const run_gen_ast_snapshots = b.addRunArtifact(gen_ast_snapshots);
+    run_gen_ast_snapshots.step.dependOn(b.getInstallStep());
+    gen_ast_snapshots_step.dependOn(&run_gen_ast_snapshots.step);
 }

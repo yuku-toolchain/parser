@@ -1,0 +1,104 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "ArrayPattern",
+            "elements": [
+              {
+                "type": "Identifier",
+                "name": "b",
+                "start": 12,
+                "end": 13
+              }
+            ],
+            "start": 11,
+            "end": 14
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 22,
+                  "end": 23
+                },
+                "arguments": [],
+                "start": 22,
+                "end": 25
+              },
+              "start": 22,
+              "end": 26
+            },
+            {
+              "type": "VariableDeclaration",
+              "kind": "var",
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "id": {
+                    "type": "Identifier",
+                    "name": "d",
+                    "start": 35,
+                    "end": 36
+                  },
+                  "init": null,
+                  "start": 35,
+                  "end": 36
+                }
+              ],
+              "start": 31,
+              "end": 37
+            },
+            {
+              "type": "VariableDeclaration",
+              "kind": "var",
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "id": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 46,
+                    "end": 47
+                  },
+                  "init": null,
+                  "start": 46,
+                  "end": 47
+                }
+              ],
+              "start": 42,
+              "end": 48
+            }
+          ],
+          "start": 16,
+          "end": 105
+        },
+        "expression": false,
+        "start": 0,
+        "end": 105
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 105
+  },
+  "errors": []
+}

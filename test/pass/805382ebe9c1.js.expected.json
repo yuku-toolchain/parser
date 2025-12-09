@@ -1,0 +1,50 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "WithStatement",
+              "object": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 19,
+                "end": 20
+              },
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ContinueStatement",
+                    "label": null,
+                    "start": 28,
+                    "end": 37
+                  }
+                ],
+                "start": 22,
+                "end": 41
+              },
+              "start": 13,
+              "end": 41
+            }
+          ],
+          "start": 9,
+          "end": 43
+        },
+        "start": 0,
+        "end": 43
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 44
+  },
+  "errors": []
+}

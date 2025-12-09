@@ -1,0 +1,65 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "const",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "eval",
+              "start": 6,
+              "end": 10
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "Literal",
+                "value": 1,
+                "raw": "1",
+                "start": 14,
+                "end": 15
+              },
+              "start": 13,
+              "end": 16
+            },
+            "start": 6,
+            "end": 16
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "arguments",
+              "start": 18,
+              "end": 27
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "Literal",
+                "value": 2,
+                "raw": "2",
+                "start": 31,
+                "end": 32
+              },
+              "start": 30,
+              "end": 33
+            },
+            "start": 18,
+            "end": 33
+          }
+        ],
+        "start": 0,
+        "end": 34
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 35
+  },
+  "errors": []
+}

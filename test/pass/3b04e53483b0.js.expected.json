@@ -1,0 +1,74 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "init",
+                "key": {
+                  "type": "BinaryExpression",
+                  "left": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 4,
+                      "end": 5
+                    },
+                    "start": 3,
+                    "end": 6
+                  },
+                  "operator": "*",
+                  "right": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": 2,
+                      "raw": "2",
+                      "start": 10,
+                      "end": 11
+                    },
+                    "start": 9,
+                    "end": 12
+                  },
+                  "start": 3,
+                  "end": 12
+                },
+                "value": {
+                  "type": "Literal",
+                  "value": 3,
+                  "raw": "3",
+                  "start": 15,
+                  "end": 16
+                },
+                "method": false,
+                "shorthand": false,
+                "computed": true,
+                "start": 2,
+                "end": 16
+              }
+            ],
+            "start": 1,
+            "end": 17
+          },
+          "start": 0,
+          "end": 18
+        },
+        "start": 0,
+        "end": 19
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 20
+  },
+  "errors": []
+}

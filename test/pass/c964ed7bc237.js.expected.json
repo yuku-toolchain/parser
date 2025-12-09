@@ -1,0 +1,297 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "ObjectPattern",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "init",
+                "key": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 12,
+                  "end": 13
+                },
+                "value": {
+                  "type": "AssignmentPattern",
+                  "left": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 12,
+                    "end": 13
+                  },
+                  "right": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 15,
+                      "end": 16
+                    },
+                    "start": 14,
+                    "end": 17
+                  },
+                  "start": 12,
+                  "end": 17
+                },
+                "method": false,
+                "shorthand": true,
+                "computed": false,
+                "start": 12,
+                "end": 17
+              },
+              {
+                "type": "Property",
+                "kind": "init",
+                "key": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 19,
+                  "end": 20
+                },
+                "value": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 19,
+                  "end": 20
+                },
+                "method": false,
+                "shorthand": true,
+                "computed": false,
+                "start": 19,
+                "end": 20
+              }
+            ],
+            "start": 11,
+            "end": 21
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "body": [],
+          "start": 23,
+          "end": 25
+        },
+        "expression": false,
+        "start": 0,
+        "end": 25
+      },
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "b",
+          "start": 35,
+          "end": 36
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "ArrayPattern",
+            "elements": [
+              {
+                "type": "Identifier",
+                "name": "b",
+                "start": 38,
+                "end": 39
+              },
+              {
+                "type": "AssignmentPattern",
+                "left": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 41,
+                  "end": 42
+                },
+                "right": {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "Literal",
+                    "value": 2,
+                    "raw": "2",
+                    "start": 44,
+                    "end": 45
+                  },
+                  "start": 43,
+                  "end": 46
+                },
+                "start": 41,
+                "end": 46
+              }
+            ],
+            "start": 37,
+            "end": 47
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "body": [],
+          "start": 49,
+          "end": 51
+        },
+        "expression": false,
+        "start": 26,
+        "end": 51
+      },
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "d",
+                    "start": 58,
+                    "end": 59
+                  },
+                  "value": {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "d",
+                      "start": 58,
+                      "end": 59
+                    },
+                    "right": {
+                      "type": "ParenthesizedExpression",
+                      "expression": {
+                        "type": "Literal",
+                        "value": 3,
+                        "raw": "3",
+                        "start": 63,
+                        "end": 64
+                      },
+                      "start": 62,
+                      "end": 65
+                    },
+                    "start": 58,
+                    "end": 65
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 58,
+                  "end": 65
+                },
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "e",
+                    "start": 67,
+                    "end": 68
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "e",
+                    "start": 67,
+                    "end": 68
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 67,
+                  "end": 68
+                }
+              ],
+              "start": 56,
+              "end": 70
+            },
+            "init": {
+              "type": "Identifier",
+              "name": "d",
+              "start": 73,
+              "end": 74
+            },
+            "start": 56,
+            "end": 74
+          }
+        ],
+        "start": 52,
+        "end": 75
+      },
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "ArrayPattern",
+              "elements": [
+                {
+                  "type": "Identifier",
+                  "name": "d",
+                  "start": 82,
+                  "end": 83
+                },
+                {
+                  "type": "AssignmentPattern",
+                  "left": {
+                    "type": "Identifier",
+                    "name": "e",
+                    "start": 85,
+                    "end": 86
+                  },
+                  "right": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": 4,
+                      "raw": "4",
+                      "start": 90,
+                      "end": 91
+                    },
+                    "start": 89,
+                    "end": 92
+                  },
+                  "start": 85,
+                  "end": 92
+                }
+              ],
+              "start": 80,
+              "end": 94
+            },
+            "init": {
+              "type": "Identifier",
+              "name": "d",
+              "start": 97,
+              "end": 98
+            },
+            "start": 80,
+            "end": 98
+          }
+        ],
+        "start": 76,
+        "end": 99
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 99
+  },
+  "errors": []
+}

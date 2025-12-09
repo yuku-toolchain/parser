@@ -1,0 +1,71 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": "use strict",
+          "raw": "\"use strict\"",
+          "start": 0,
+          "end": 12
+        },
+        "directive": "use strict",
+        "start": 0,
+        "end": 13
+      },
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "yield",
+                    "start": 20,
+                    "end": 25
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 27,
+                    "end": 28
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false,
+                  "start": 20,
+                  "end": 28
+                }
+              ],
+              "start": 18,
+              "end": 30
+            },
+            "init": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 33,
+              "end": 34
+            },
+            "start": 18,
+            "end": 34
+          }
+        ],
+        "start": 14,
+        "end": 35
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 36
+  },
+  "errors": []
+}

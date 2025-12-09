@@ -1,0 +1,108 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "name": "b",
+            "start": 11,
+            "end": 12
+          },
+          {
+            "type": "Identifier",
+            "name": "c",
+            "start": 14,
+            "end": 15
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "id": {
+                "type": "Identifier",
+                "name": "d",
+                "start": 32,
+                "end": 33
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "CallExpression",
+                      "callee": {
+                        "type": "Identifier",
+                        "name": "e",
+                        "start": 46,
+                        "end": 47
+                      },
+                      "arguments": [],
+                      "start": 46,
+                      "end": 49
+                    },
+                    "start": 46,
+                    "end": 50
+                  }
+                ],
+                "start": 36,
+                "end": 56
+              },
+              "expression": false,
+              "start": 23,
+              "end": 56
+            },
+            {
+              "type": "ReturnStatement",
+              "argument": {
+                "type": "BinaryExpression",
+                "left": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 68,
+                  "end": 69
+                },
+                "operator": "+",
+                "right": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 72,
+                  "end": 73
+                },
+                "start": 68,
+                "end": 73
+              },
+              "start": 61,
+              "end": 74
+            }
+          ],
+          "start": 17,
+          "end": 76
+        },
+        "expression": false,
+        "start": 0,
+        "end": 76
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 76
+  },
+  "errors": []
+}

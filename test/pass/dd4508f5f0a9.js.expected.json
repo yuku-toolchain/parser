@@ -1,0 +1,51 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "BinaryExpression",
+              "left": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 1,
+                "end": 2
+              },
+              "operator": "*",
+              "right": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 5,
+                "end": 6
+              },
+              "start": 1,
+              "end": 6
+            },
+            "start": 0,
+            "end": 7
+          },
+          "operator": "%",
+          "right": {
+            "type": "Identifier",
+            "name": "c",
+            "start": 10,
+            "end": 11
+          },
+          "start": 0,
+          "end": 11
+        },
+        "start": 0,
+        "end": 12
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 13
+  },
+  "errors": []
+}

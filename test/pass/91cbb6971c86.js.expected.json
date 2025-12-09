@@ -1,0 +1,154 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "expression": true,
+          "async": false,
+          "params": [
+            {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 2,
+                    "end": 3
+                  },
+                  "value": {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 2,
+                      "end": 3
+                    },
+                    "right": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 6,
+                      "end": 7
+                    },
+                    "start": 2,
+                    "end": 7
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 2,
+                  "end": 7
+                }
+              ],
+              "start": 1,
+              "end": 8
+            },
+            {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 11,
+                    "end": 12
+                  },
+                  "value": {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 11,
+                      "end": 12
+                    },
+                    "right": {
+                      "type": "Literal",
+                      "value": 2,
+                      "raw": "2",
+                      "start": 15,
+                      "end": 16
+                    },
+                    "start": 11,
+                    "end": 16
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 11,
+                  "end": 16
+                }
+              ],
+              "start": 10,
+              "end": 17
+            },
+            {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 20,
+                    "end": 21
+                  },
+                  "value": {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "c",
+                      "start": 20,
+                      "end": 21
+                    },
+                    "right": {
+                      "type": "Literal",
+                      "value": 3,
+                      "raw": "3",
+                      "start": 24,
+                      "end": 25
+                    },
+                    "start": 20,
+                    "end": 25
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 20,
+                  "end": 25
+                }
+              ],
+              "start": 19,
+              "end": 26
+            }
+          ],
+          "body": {
+            "type": "Literal",
+            "value": 4,
+            "raw": "4",
+            "start": 29,
+            "end": 30
+          },
+          "id": null,
+          "generator": false,
+          "start": 0,
+          "end": 30
+        },
+        "start": 0,
+        "end": 30
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 30
+  },
+  "errors": []
+}

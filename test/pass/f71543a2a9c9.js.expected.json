@@ -1,0 +1,53 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": {
+          "type": "VariableDeclaration",
+          "kind": "var",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 9,
+                "end": 10
+              },
+              "init": null,
+              "start": 9,
+              "end": 10
+            }
+          ],
+          "start": 5,
+          "end": 10
+        },
+        "test": {
+          "type": "Identifier",
+          "name": "b",
+          "start": 12,
+          "end": 13
+        },
+        "update": {
+          "type": "Identifier",
+          "name": "c",
+          "start": 15,
+          "end": 16
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 18,
+          "end": 19
+        },
+        "start": 0,
+        "end": 19
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 20
+  },
+  "errors": []
+}

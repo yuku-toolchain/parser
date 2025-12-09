@@ -1,0 +1,33 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "label": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 0,
+          "end": 1
+        },
+        "body": {
+          "type": "BreakStatement",
+          "label": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 9,
+            "end": 10
+          },
+          "start": 3,
+          "end": 11
+        },
+        "start": 0,
+        "end": 11
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 12
+  },
+  "errors": []
+}

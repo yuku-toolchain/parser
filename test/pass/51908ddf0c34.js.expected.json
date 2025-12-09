@@ -1,0 +1,102 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "NewExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "VariableDeclaration",
+                    "kind": "var",
+                    "declarations": [
+                      {
+                        "type": "VariableDeclarator",
+                        "id": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 25,
+                          "end": 26
+                        },
+                        "init": {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "Literal",
+                            "value": 1,
+                            "raw": "1",
+                            "start": 30,
+                            "end": 31
+                          },
+                          "start": 29,
+                          "end": 32
+                        },
+                        "start": 25,
+                        "end": 32
+                      }
+                    ],
+                    "start": 21,
+                    "end": 33
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "MemberExpression",
+                      "object": {
+                        "type": "ParenthesizedExpression",
+                        "expression": {
+                          "type": "ThisExpression",
+                          "start": 37,
+                          "end": 41
+                        },
+                        "start": 36,
+                        "end": 42
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "name": "arguments",
+                        "start": 43,
+                        "end": 52
+                      },
+                      "computed": false,
+                      "start": 36,
+                      "end": 52
+                    },
+                    "start": 36,
+                    "end": 53
+                  }
+                ],
+                "start": 17,
+                "end": 55
+              },
+              "expression": false,
+              "start": 5,
+              "end": 55
+            },
+            "start": 4,
+            "end": 56
+          },
+          "arguments": [],
+          "start": 0,
+          "end": 56
+        },
+        "start": 0,
+        "end": 57
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 58
+  },
+  "errors": []
+}

@@ -1,0 +1,34 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "name": "日本語",
+            "start": 0,
+            "end": 3
+          },
+          "right": {
+            "type": "ArrayExpression",
+            "elements": [],
+            "start": 6,
+            "end": 8
+          },
+          "start": 0,
+          "end": 8
+        },
+        "start": 0,
+        "end": 8
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 8
+  },
+  "errors": []
+}

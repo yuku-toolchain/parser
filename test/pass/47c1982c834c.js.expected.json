@@ -1,0 +1,144 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "ObjectExpression",
+                "properties": [],
+                "start": 9,
+                "end": 11
+              },
+              "start": 8,
+              "end": 12
+            },
+            "start": 4,
+            "end": 12
+          }
+        ],
+        "start": 0,
+        "end": 13
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 14,
+              "end": 15
+            },
+            "property": {
+              "type": "Identifier",
+              "name": "你好",
+              "start": 16,
+              "end": 18
+            },
+            "computed": false,
+            "start": 14,
+            "end": 18
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 22,
+              "end": 23
+            },
+            "start": 21,
+            "end": 24
+          },
+          "start": 14,
+          "end": 24
+        },
+        "start": 14,
+        "end": 25
+      },
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "ↂωↂ",
+              "start": 30,
+              "end": 33
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "Literal",
+                "value": 2,
+                "raw": "2",
+                "start": 37,
+                "end": 38
+              },
+              "start": 36,
+              "end": 39
+            },
+            "start": 30,
+            "end": 39
+          }
+        ],
+        "start": 26,
+        "end": 40
+      },
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "l০",
+              "start": 45,
+              "end": 47
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "Literal",
+                "value": 3,
+                "raw": "3",
+                "start": 51,
+                "end": 52
+              },
+              "start": 50,
+              "end": 53
+            },
+            "start": 45,
+            "end": 53
+          }
+        ],
+        "start": 41,
+        "end": 54
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 55
+  },
+  "errors": []
+}

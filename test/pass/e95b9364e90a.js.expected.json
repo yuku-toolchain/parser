@@ -1,0 +1,51 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "TemplateLiteral",
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "value": {
+                "raw": "$$$",
+                "cooked": "$$$"
+              },
+              "tail": false,
+              "start": 1,
+              "end": 4
+            },
+            {
+              "type": "TemplateElement",
+              "value": {
+                "raw": "",
+                "cooked": ""
+              },
+              "tail": true,
+              "start": 8,
+              "end": 8
+            }
+          ],
+          "expressions": [
+            {
+              "type": "Identifier",
+              "name": "a",
+              "start": 6,
+              "end": 7
+            }
+          ],
+          "start": 0,
+          "end": 9
+        },
+        "start": 0,
+        "end": 9
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 9
+  },
+  "errors": []
+}

@@ -1,0 +1,97 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "ArrayPattern",
+              "elements": [
+                {
+                  "type": "ObjectPattern",
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "kind": "init",
+                      "key": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 7,
+                        "end": 8
+                      },
+                      "value": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 7,
+                        "end": 8
+                      },
+                      "method": false,
+                      "shorthand": true,
+                      "computed": false,
+                      "start": 7,
+                      "end": 8
+                    },
+                    {
+                      "type": "Property",
+                      "kind": "init",
+                      "key": {
+                        "type": "Identifier",
+                        "name": "b",
+                        "start": 10,
+                        "end": 11
+                      },
+                      "value": {
+                        "type": "Identifier",
+                        "name": "b",
+                        "start": 10,
+                        "end": 11
+                      },
+                      "method": false,
+                      "shorthand": true,
+                      "computed": false,
+                      "start": 10,
+                      "end": 11
+                    }
+                  ],
+                  "start": 5,
+                  "end": 13
+                },
+                {
+                  "type": "RestElement",
+                  "argument": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 18,
+                    "end": 19
+                  },
+                  "start": 15,
+                  "end": 19
+                }
+              ],
+              "start": 4,
+              "end": 20
+            },
+            "init": {
+              "type": "Identifier",
+              "name": "d",
+              "start": 23,
+              "end": 24
+            },
+            "start": 4,
+            "end": 24
+          }
+        ],
+        "start": 0,
+        "end": 24
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 24
+  },
+  "errors": []
+}

@@ -1,0 +1,44 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "imported": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 9,
+              "end": 10
+            },
+            "local": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 14,
+              "end": 15
+            },
+            "start": 9,
+            "end": 15
+          }
+        ],
+        "source": {
+          "type": "Literal",
+          "value": "c",
+          "raw": "\"c\"",
+          "start": 23,
+          "end": 26
+        },
+        "phase": null,
+        "attributes": [],
+        "start": 0,
+        "end": 26
+      }
+    ],
+    "sourceType": "module",
+    "start": 0,
+    "end": 26
+  },
+  "errors": []
+}

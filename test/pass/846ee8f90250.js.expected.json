@@ -1,0 +1,101 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": "use strict",
+          "raw": "\"use strict\"",
+          "start": 0,
+          "end": 12
+        },
+        "directive": "use strict",
+        "start": 0,
+        "end": 13
+      },
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 18,
+              "end": 19
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "ObjectExpression",
+                "properties": [
+                  {
+                    "type": "Property",
+                    "kind": "init",
+                    "key": {
+                      "type": "Literal",
+                      "value": 10,
+                      "raw": "10",
+                      "start": 24,
+                      "end": 26
+                    },
+                    "value": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 28,
+                      "end": 29
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "start": 24,
+                    "end": 29
+                  },
+                  {
+                    "type": "Property",
+                    "kind": "init",
+                    "key": {
+                      "type": "Literal",
+                      "value": 0,
+                      "raw": "0",
+                      "start": 31,
+                      "end": 32
+                    },
+                    "value": {
+                      "type": "Literal",
+                      "value": 2,
+                      "raw": "2",
+                      "start": 34,
+                      "end": 35
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "start": 31,
+                    "end": 35
+                  }
+                ],
+                "start": 23,
+                "end": 36
+              },
+              "start": 22,
+              "end": 37
+            },
+            "start": 18,
+            "end": 37
+          }
+        ],
+        "start": 14,
+        "end": 38
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 39
+  },
+  "errors": []
+}

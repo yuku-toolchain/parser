@@ -1,0 +1,322 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "NewExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 4,
+            "end": 5
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 6,
+              "end": 7
+            }
+          ],
+          "start": 0,
+          "end": 8
+        },
+        "start": 0,
+        "end": 9
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "NewExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 15,
+                "end": 16
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "value": 2,
+                  "raw": "2",
+                  "start": 17,
+                  "end": 18
+                }
+              ],
+              "start": 11,
+              "end": 19
+            },
+            "start": 10,
+            "end": 20
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": 3,
+              "raw": "3",
+              "start": 21,
+              "end": 22
+            }
+          ],
+          "start": 10,
+          "end": 23
+        },
+        "start": 10,
+        "end": 24
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "NewExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 31,
+                    "end": 32
+                  },
+                  "arguments": [
+                    {
+                      "type": "Literal",
+                      "value": 4,
+                      "raw": "4",
+                      "start": 33,
+                      "end": 34
+                    }
+                  ],
+                  "start": 27,
+                  "end": 35
+                },
+                "start": 26,
+                "end": 36
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "value": 5,
+                  "raw": "5",
+                  "start": 37,
+                  "end": 38
+                }
+              ],
+              "start": 26,
+              "end": 39
+            },
+            "start": 25,
+            "end": 40
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": 6,
+              "raw": "6",
+              "start": 41,
+              "end": 42
+            }
+          ],
+          "start": 25,
+          "end": 43
+        },
+        "start": 25,
+        "end": 44
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "NewExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "NewExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 54,
+                "end": 55
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "value": 7,
+                  "raw": "7",
+                  "start": 56,
+                  "end": 57
+                }
+              ],
+              "start": 50,
+              "end": 58
+            },
+            "start": 49,
+            "end": 59
+          },
+          "arguments": [],
+          "start": 45,
+          "end": 59
+        },
+        "start": 45,
+        "end": 60
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "NewExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "NewExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 70,
+                "end": 71
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "value": 8,
+                  "raw": "8",
+                  "start": 72,
+                  "end": 73
+                }
+              ],
+              "start": 66,
+              "end": 74
+            },
+            "start": 65,
+            "end": 75
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": 9,
+              "raw": "9",
+              "start": 76,
+              "end": 77
+            }
+          ],
+          "start": 61,
+          "end": 78
+        },
+        "start": 61,
+        "end": 79
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "NewExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "NewExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 89,
+                "end": 90
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "value": 10,
+                  "raw": "10",
+                  "start": 91,
+                  "end": 93
+                }
+              ],
+              "start": 85,
+              "end": 94
+            },
+            "start": 84,
+            "end": 95
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": 11,
+              "raw": "11",
+              "start": 96,
+              "end": 98
+            }
+          ],
+          "start": 80,
+          "end": 99
+        },
+        "start": 80,
+        "end": 100
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "NewExpression",
+              "callee": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "NewExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 111,
+                    "end": 112
+                  },
+                  "arguments": [
+                    {
+                      "type": "Literal",
+                      "value": 12,
+                      "raw": "12",
+                      "start": 113,
+                      "end": 115
+                    }
+                  ],
+                  "start": 107,
+                  "end": 116
+                },
+                "start": 106,
+                "end": 117
+              },
+              "arguments": [],
+              "start": 102,
+              "end": 117
+            },
+            "start": 101,
+            "end": 118
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": 13,
+              "raw": "13",
+              "start": 119,
+              "end": 121
+            }
+          ],
+          "start": 101,
+          "end": 122
+        },
+        "start": 101,
+        "end": 123
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 124
+  },
+  "errors": []
+}

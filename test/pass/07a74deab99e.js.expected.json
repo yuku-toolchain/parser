@@ -1,0 +1,49 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": {
+              "type": "ClassExpression",
+              "decorators": [],
+              "id": null,
+              "superClass": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 22,
+                "end": 23
+              },
+              "body": {
+                "type": "ClassBody",
+                "body": [],
+                "start": 24,
+                "end": 26
+              },
+              "start": 8,
+              "end": 26
+            },
+            "start": 4,
+            "end": 26
+          }
+        ],
+        "start": 0,
+        "end": 26
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 26
+  },
+  "errors": []
+}

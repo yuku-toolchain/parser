@@ -1,0 +1,41 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "UnaryExpression",
+          "operator": "void",
+          "argument": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "UnaryExpression",
+              "operator": "void",
+              "argument": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 11,
+                "end": 12
+              },
+              "prefix": true,
+              "start": 6,
+              "end": 12
+            },
+            "start": 5,
+            "end": 13
+          },
+          "prefix": true,
+          "start": 0,
+          "end": 13
+        },
+        "start": 0,
+        "end": 14
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 15
+  },
+  "errors": []
+}

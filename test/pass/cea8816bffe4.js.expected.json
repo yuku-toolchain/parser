@@ -1,0 +1,82 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "UnaryExpression",
+                "operator": "void",
+                "argument": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 28,
+                    "end": 29
+                  },
+                  "arguments": [],
+                  "start": 28,
+                  "end": 31
+                },
+                "prefix": true,
+                "start": 23,
+                "end": 31
+              },
+              "consequent": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "CallExpression",
+                      "callee": {
+                        "type": "Identifier",
+                        "name": "c",
+                        "start": 43,
+                        "end": 44
+                      },
+                      "arguments": [],
+                      "start": 43,
+                      "end": 46
+                    },
+                    "start": 43,
+                    "end": 47
+                  }
+                ],
+                "start": 33,
+                "end": 53
+              },
+              "alternate": null,
+              "start": 19,
+              "end": 53
+            }
+          ],
+          "start": 13,
+          "end": 55
+        },
+        "expression": false,
+        "start": 0,
+        "end": 55
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 56
+  },
+  "errors": []
+}

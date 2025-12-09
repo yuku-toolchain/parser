@@ -1,0 +1,33 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "WithStatement",
+        "object": {
+          "type": "ObjectExpression",
+          "properties": [],
+          "start": 5,
+          "end": 7
+        },
+        "body": {
+          "type": "BlockStatement",
+          "body": [],
+          "start": 9,
+          "end": 12
+        },
+        "start": 0,
+        "end": 12
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 12,
+        "end": 13
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 14
+  },
+  "errors": []
+}

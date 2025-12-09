@@ -1,0 +1,62 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "TryStatement",
+        "block": {
+          "type": "BlockStatement",
+          "body": [],
+          "start": 4,
+          "end": 6
+        },
+        "handler": {
+          "type": "CatchClause",
+          "param": {
+            "type": "ObjectPattern",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "init",
+                "key": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 15,
+                  "end": 16
+                },
+                "value": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 15,
+                  "end": 16
+                },
+                "method": false,
+                "shorthand": true,
+                "computed": false,
+                "start": 15,
+                "end": 16
+              }
+            ],
+            "start": 14,
+            "end": 17
+          },
+          "body": {
+            "type": "BlockStatement",
+            "body": [],
+            "start": 19,
+            "end": 21
+          },
+          "start": 7,
+          "end": 21
+        },
+        "finalizer": null,
+        "start": 0,
+        "end": 21
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 22
+  },
+  "errors": []
+}

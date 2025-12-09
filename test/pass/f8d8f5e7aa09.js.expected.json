@@ -1,0 +1,40 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Literal",
+          "value": 1,
+          "raw": "1",
+          "start": 4,
+          "end": 5
+        },
+        "consequent": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "Literal",
+            "value": {},
+            "raw": "/  foo/",
+            "regex": {
+              "pattern": "  foo",
+              "flags": ""
+            },
+            "start": 7,
+            "end": 14
+          },
+          "start": 7,
+          "end": 15
+        },
+        "alternate": null,
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 16
+  },
+  "errors": []
+}

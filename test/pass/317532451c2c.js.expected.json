@@ -1,0 +1,78 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": "use strict",
+          "raw": "'use strict'",
+          "start": 0,
+          "end": 12
+        },
+        "directive": "use strict",
+        "start": 0,
+        "end": 13
+      },
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 17,
+              "end": 18
+            },
+            "init": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "start": 31,
+                  "end": 33
+                },
+                "expression": false,
+                "start": 21,
+                "end": 33
+              },
+              "arguments": [
+                {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 34,
+                    "end": 35
+                  },
+                  "arguments": [],
+                  "start": 34,
+                  "end": 37
+                }
+              ],
+              "start": 21,
+              "end": 38
+            },
+            "start": 17,
+            "end": 38
+          }
+        ],
+        "start": 13,
+        "end": 38
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 39
+  },
+  "errors": []
+}

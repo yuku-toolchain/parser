@@ -1,0 +1,115 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "set",
+                "key": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 7,
+                  "end": 8
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 9,
+                      "end": 10
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "expression": {
+                          "type": "AssignmentExpression",
+                          "operator": "=",
+                          "left": {
+                            "type": "MemberExpression",
+                            "object": {
+                              "type": "MemberExpression",
+                              "object": {
+                                "type": "Super",
+                                "start": 14,
+                                "end": 19
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "name": "c",
+                                "start": 20,
+                                "end": 21
+                              },
+                              "computed": false,
+                              "start": 14,
+                              "end": 21
+                            },
+                            "property": {
+                              "type": "Literal",
+                              "value": 1,
+                              "raw": "1",
+                              "start": 22,
+                              "end": 23
+                            },
+                            "computed": true,
+                            "start": 14,
+                            "end": 24
+                          },
+                          "right": {
+                            "type": "Literal",
+                            "value": 2,
+                            "raw": "2",
+                            "start": 27,
+                            "end": 28
+                          },
+                          "start": 14,
+                          "end": 28
+                        },
+                        "start": 14,
+                        "end": 29
+                      }
+                    ],
+                    "start": 12,
+                    "end": 31
+                  },
+                  "expression": false,
+                  "start": 8,
+                  "end": 31
+                },
+                "method": false,
+                "shorthand": false,
+                "computed": false,
+                "start": 3,
+                "end": 31
+              }
+            ],
+            "start": 1,
+            "end": 33
+          },
+          "start": 0,
+          "end": 34
+        },
+        "start": 0,
+        "end": 35
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 35
+  },
+  "errors": []
+}

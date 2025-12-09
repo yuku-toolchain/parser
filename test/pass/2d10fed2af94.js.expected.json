@@ -1,0 +1,53 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "expression": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "name": "a",
+              "start": 1,
+              "end": 2
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "Literal",
+                  "value": "use strict",
+                  "raw": "'use strict'",
+                  "start": 6,
+                  "end": 18
+                },
+                "directive": "use strict",
+                "start": 6,
+                "end": 19
+              }
+            ],
+            "start": 5,
+            "end": 20
+          },
+          "id": null,
+          "generator": false,
+          "start": 0,
+          "end": 20
+        },
+        "start": 0,
+        "end": 20
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 20
+  },
+  "errors": []
+}

@@ -1,0 +1,112 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": null,
+            "start": 4,
+            "end": 5
+          }
+        ],
+        "start": 0,
+        "end": 6
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "b",
+            "start": 11,
+            "end": 12
+          },
+          "arguments": [],
+          "start": 11,
+          "end": 14
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "NewExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 24,
+                  "end": 25
+                },
+                "arguments": [
+                  {
+                    "type": "Literal",
+                    "value": 1,
+                    "raw": "1",
+                    "start": 26,
+                    "end": 27
+                  }
+                ],
+                "start": 20,
+                "end": 28
+              },
+              "start": 20,
+              "end": 29
+            }
+          ],
+          "start": 16,
+          "end": 31
+        },
+        "alternate": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 41,
+                  "end": 42
+                },
+                "arguments": [
+                  {
+                    "type": "Literal",
+                    "value": 2,
+                    "raw": "2",
+                    "start": 43,
+                    "end": 44
+                  }
+                ],
+                "start": 41,
+                "end": 45
+              },
+              "start": 41,
+              "end": 46
+            }
+          ],
+          "start": 37,
+          "end": 48
+        },
+        "start": 7,
+        "end": 48
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 49
+  },
+  "errors": []
+}

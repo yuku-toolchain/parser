@@ -1,0 +1,52 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "declaration": {
+          "type": "FunctionDeclaration",
+          "id": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 16,
+            "end": 17
+          },
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "body": [],
+            "start": 20,
+            "end": 22
+          },
+          "expression": false,
+          "start": 7,
+          "end": 22
+        },
+        "specifiers": [],
+        "source": null,
+        "attributes": [],
+        "start": 0,
+        "end": 22
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": false,
+          "raw": "false",
+          "start": 23,
+          "end": 28
+        },
+        "start": 23,
+        "end": 29
+      }
+    ],
+    "sourceType": "module",
+    "start": 0,
+    "end": 30
+  },
+  "errors": []
+}

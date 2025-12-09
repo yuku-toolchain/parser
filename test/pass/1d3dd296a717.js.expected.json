@@ -1,0 +1,52 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "expression": true,
+          "async": false,
+          "params": [
+            {
+              "type": "AssignmentPattern",
+              "left": {
+                "type": "Identifier",
+                "name": "eval",
+                "start": 1,
+                "end": 5
+              },
+              "right": {
+                "type": "Literal",
+                "value": 1,
+                "raw": "1",
+                "start": 8,
+                "end": 9
+              },
+              "start": 1,
+              "end": 9
+            }
+          ],
+          "body": {
+            "type": "Literal",
+            "value": 2,
+            "raw": "2",
+            "start": 14,
+            "end": 15
+          },
+          "id": null,
+          "generator": false,
+          "start": 0,
+          "end": 15
+        },
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 15
+  },
+  "errors": []
+}

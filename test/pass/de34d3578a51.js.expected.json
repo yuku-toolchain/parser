@@ -1,0 +1,102 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "BinaryExpression",
+                        "left": {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "Literal",
+                            "value": null,
+                            "raw": "null",
+                            "start": 19,
+                            "end": 23
+                          },
+                          "start": 18,
+                          "end": 24
+                        },
+                        "operator": "!=",
+                        "right": {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "SequenceExpression",
+                            "expressions": [
+                              {
+                                "type": "Identifier",
+                                "name": "a",
+                                "start": 29,
+                                "end": 30
+                              },
+                              {
+                                "type": "ParenthesizedExpression",
+                                "expression": {
+                                  "type": "Literal",
+                                  "value": 1,
+                                  "raw": "1",
+                                  "start": 33,
+                                  "end": 34
+                                },
+                                "start": 32,
+                                "end": 35
+                              }
+                            ],
+                            "start": 29,
+                            "end": 35
+                          },
+                          "start": 28,
+                          "end": 36
+                        },
+                        "start": 18,
+                        "end": 36
+                      },
+                      "start": 18,
+                      "end": 37
+                    }
+                  ],
+                  "start": 14,
+                  "end": 39
+                },
+                "expression": false,
+                "start": 2,
+                "end": 39
+              },
+              "start": 1,
+              "end": 40
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 42
+          },
+          "start": 0,
+          "end": 43
+        },
+        "start": 0,
+        "end": 44
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 45
+  },
+  "errors": []
+}

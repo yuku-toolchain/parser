@@ -1,0 +1,44 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "ArrayPattern",
+            "elements": [
+              null,
+              {
+                "type": "Identifier",
+                "name": "a",
+                "start": 3,
+                "end": 4
+              },
+              null
+            ],
+            "start": 0,
+            "end": 7
+          },
+          "right": {
+            "type": "Literal",
+            "value": 1,
+            "raw": "1",
+            "start": 10,
+            "end": 11
+          },
+          "start": 0,
+          "end": 11
+        },
+        "start": 0,
+        "end": 11
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 11
+  },
+  "errors": []
+}

@@ -1,0 +1,157 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 17,
+                  "end": 18
+                },
+                "arguments": [],
+                "start": 17,
+                "end": 20
+              },
+              "start": 17,
+              "end": 21
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 24,
+                  "end": 25
+                },
+                "arguments": [],
+                "start": 24,
+                "end": 27
+              },
+              "start": 24,
+              "end": 28
+            },
+            {
+              "type": "ReturnStatement",
+              "argument": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "d",
+                  "start": 38,
+                  "end": 39
+                },
+                "arguments": [],
+                "start": 38,
+                "end": 41
+              },
+              "start": 31,
+              "end": 42
+            }
+          ],
+          "start": 13,
+          "end": 44
+        },
+        "expression": false,
+        "start": 0,
+        "end": 44
+      },
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "e",
+          "start": 54,
+          "end": 55
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 62,
+                  "end": 63
+                },
+                "arguments": [],
+                "start": 62,
+                "end": 65
+              },
+              "start": 62,
+              "end": 66
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 69,
+                  "end": 70
+                },
+                "arguments": [],
+                "start": 69,
+                "end": 72
+              },
+              "start": 69,
+              "end": 73
+            },
+            {
+              "type": "ThrowStatement",
+              "argument": {
+                "type": "NewExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "f",
+                  "start": 86,
+                  "end": 87
+                },
+                "arguments": [],
+                "start": 82,
+                "end": 87
+              },
+              "start": 76,
+              "end": 88
+            }
+          ],
+          "start": 58,
+          "end": 90
+        },
+        "expression": false,
+        "start": 45,
+        "end": 90
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 91
+  },
+  "errors": []
+}

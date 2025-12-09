@@ -1,0 +1,43 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "let",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "xǕ",
+              "start": 4,
+              "end": 6
+            },
+            "init": null,
+            "start": 4,
+            "end": 6
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "x󠇕",
+              "start": 8,
+              "end": 11
+            },
+            "init": null,
+            "start": 8,
+            "end": 11
+          }
+        ],
+        "start": 0,
+        "end": 12
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 13
+  },
+  "errors": []
+}

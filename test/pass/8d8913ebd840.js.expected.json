@@ -1,0 +1,271 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 5,
+            "end": 6
+          },
+          "arguments": [],
+          "start": 5,
+          "end": 8
+        },
+        "start": 5,
+        "end": 9
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "b",
+            "start": 10,
+            "end": 11
+          },
+          "arguments": [],
+          "start": 10,
+          "end": 13
+        },
+        "start": 10,
+        "end": 14
+      },
+      {
+        "type": "ForStatement",
+        "init": null,
+        "test": {
+          "type": "Literal",
+          "value": false,
+          "raw": "false",
+          "start": 22,
+          "end": 27
+        },
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 29,
+          "end": 30
+        },
+        "start": 15,
+        "end": 30
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 36,
+            "end": 37
+          },
+          "arguments": [],
+          "start": 36,
+          "end": 39
+        },
+        "start": 36,
+        "end": 40
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "b",
+            "start": 41,
+            "end": 42
+          },
+          "arguments": [],
+          "start": 41,
+          "end": 44
+        },
+        "start": 41,
+        "end": 45
+      },
+      {
+        "type": "ForStatement",
+        "init": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "name": "c",
+            "start": 51,
+            "end": 52
+          },
+          "right": {
+            "type": "Literal",
+            "value": 1,
+            "raw": "1",
+            "start": 55,
+            "end": 56
+          },
+          "start": 51,
+          "end": 56
+        },
+        "test": {
+          "type": "Literal",
+          "value": false,
+          "raw": "false",
+          "start": 58,
+          "end": 63
+        },
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 65,
+          "end": 66
+        },
+        "start": 46,
+        "end": 66
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "name": "c",
+            "start": 72,
+            "end": 73
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "BinaryExpression",
+              "left": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 77,
+                "end": 78
+              },
+              "operator": "in",
+              "right": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 82,
+                "end": 83
+              },
+              "start": 77,
+              "end": 83
+            },
+            "start": 76,
+            "end": 84
+          },
+          "start": 72,
+          "end": 84
+        },
+        "start": 72,
+        "end": 85
+      },
+      {
+        "type": "ForStatement",
+        "init": null,
+        "test": {
+          "type": "Literal",
+          "value": false,
+          "raw": "false",
+          "start": 93,
+          "end": 98
+        },
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 100,
+          "end": 101
+        },
+        "start": 86,
+        "end": 101
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "name": "c",
+            "start": 107,
+            "end": 108
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "BinaryExpression",
+              "left": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 112,
+                "end": 113
+              },
+              "operator": "in",
+              "right": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 117,
+                "end": 118
+              },
+              "start": 112,
+              "end": 118
+            },
+            "start": 111,
+            "end": 119
+          },
+          "start": 107,
+          "end": 119
+        },
+        "start": 107,
+        "end": 120
+      },
+      {
+        "type": "ForStatement",
+        "init": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 126,
+            "end": 127
+          },
+          "right": {
+            "type": "Literal",
+            "value": 2,
+            "raw": "2",
+            "start": 130,
+            "end": 131
+          },
+          "start": 126,
+          "end": 131
+        },
+        "test": {
+          "type": "Literal",
+          "value": false,
+          "raw": "false",
+          "start": 133,
+          "end": 138
+        },
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 140,
+          "end": 141
+        },
+        "start": 121,
+        "end": 141
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 141
+  },
+  "errors": []
+}

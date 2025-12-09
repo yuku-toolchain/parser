@@ -1,0 +1,121 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "get",
+                "key": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 6,
+                  "end": 7
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [
+                      {
+                        "type": "ReturnStatement",
+                        "argument": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 21,
+                          "end": 22
+                        },
+                        "start": 14,
+                        "end": 23
+                      }
+                    ],
+                    "start": 10,
+                    "end": 25
+                  },
+                  "expression": false,
+                  "start": 7,
+                  "end": 25
+                },
+                "method": false,
+                "shorthand": false,
+                "computed": false,
+                "start": 2,
+                "end": 25
+              },
+              {
+                "type": "Property",
+                "kind": "set",
+                "key": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 31,
+                  "end": 32
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 34,
+                      "end": 35
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [
+                      {
+                        "type": "ReturnStatement",
+                        "argument": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 48,
+                          "end": 49
+                        },
+                        "start": 41,
+                        "end": 50
+                      }
+                    ],
+                    "start": 37,
+                    "end": 52
+                  },
+                  "expression": false,
+                  "start": 33,
+                  "end": 52
+                },
+                "method": false,
+                "shorthand": false,
+                "computed": false,
+                "start": 27,
+                "end": 52
+              }
+            ],
+            "start": 1,
+            "end": 53
+          },
+          "start": 0,
+          "end": 54
+        },
+        "start": 0,
+        "end": 55
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 56
+  },
+  "errors": []
+}

@@ -1,0 +1,58 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "yield",
+                    "start": 6,
+                    "end": 11
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 13,
+                    "end": 14
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false,
+                  "start": 6,
+                  "end": 14
+                }
+              ],
+              "start": 4,
+              "end": 16
+            },
+            "init": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 19,
+              "end": 20
+            },
+            "start": 4,
+            "end": 20
+          }
+        ],
+        "start": 0,
+        "end": 21
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 22
+  },
+  "errors": []
+}

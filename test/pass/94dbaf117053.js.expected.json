@@ -1,0 +1,97 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "BinaryExpression",
+              "left": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "ObjectExpression",
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "kind": "init",
+                      "key": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 3,
+                        "end": 4
+                      },
+                      "value": {
+                        "type": "ArrayExpression",
+                        "elements": [
+                          {
+                            "type": "Literal",
+                            "value": 1,
+                            "raw": "1",
+                            "start": 7,
+                            "end": 8
+                          }
+                        ],
+                        "start": 6,
+                        "end": 9
+                      },
+                      "method": false,
+                      "shorthand": false,
+                      "computed": false,
+                      "start": 3,
+                      "end": 9
+                    }
+                  ],
+                  "start": 2,
+                  "end": 10
+                },
+                "start": 1,
+                "end": 11
+              },
+              "operator": "+",
+              "right": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "ArrayExpression",
+                  "elements": [],
+                  "start": 15,
+                  "end": 17
+                },
+                "start": 14,
+                "end": 18
+              },
+              "start": 1,
+              "end": 18
+            },
+            "start": 0,
+            "end": 19
+          },
+          "operator": "/",
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": 2,
+              "raw": "2",
+              "start": 23,
+              "end": 24
+            },
+            "start": 22,
+            "end": 25
+          },
+          "start": 0,
+          "end": 25
+        },
+        "start": 0,
+        "end": 26
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 27
+  },
+  "errors": []
+}

@@ -1,0 +1,60 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "SwitchStatement",
+        "discriminant": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 7,
+          "end": 8
+        },
+        "cases": [
+          {
+            "type": "SwitchCase",
+            "test": {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 17,
+              "end": 18
+            },
+            "consequent": [
+              {
+                "type": "BlockStatement",
+                "body": [],
+                "start": 20,
+                "end": 22
+              },
+              {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "Literal",
+                  "value": {},
+                  "raw": "/foo/",
+                  "regex": {
+                    "pattern": "foo",
+                    "flags": ""
+                  },
+                  "start": 23,
+                  "end": 28
+                },
+                "start": 23,
+                "end": 28
+              }
+            ],
+            "start": 12,
+            "end": 28
+          }
+        ],
+        "start": 0,
+        "end": 30
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 30
+  },
+  "errors": []
+}

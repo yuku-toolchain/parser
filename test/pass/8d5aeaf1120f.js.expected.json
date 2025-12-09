@@ -1,0 +1,22 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ThrowStatement",
+        "argument": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 14,
+          "end": 15
+        },
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 15
+  },
+  "errors": []
+}

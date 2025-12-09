@@ -1,0 +1,110 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "SequenceExpression",
+              "expressions": [
+                {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "Literal",
+                    "value": 1,
+                    "raw": "1",
+                    "start": 2,
+                    "end": 3
+                  },
+                  "start": 1,
+                  "end": 4
+                },
+                {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 6,
+                  "end": 7
+                }
+              ],
+              "start": 1,
+              "end": 7
+            },
+            "start": 0,
+            "end": 8
+          },
+          "arguments": [],
+          "start": 0,
+          "end": 10
+        },
+        "start": 0,
+        "end": 11
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "SequenceExpression",
+              "expressions": [
+                {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "Literal",
+                    "value": 2,
+                    "raw": "2",
+                    "start": 14,
+                    "end": 15
+                  },
+                  "start": 13,
+                  "end": 16
+                },
+                {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "MemberExpression",
+                    "object": {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 19,
+                      "end": 20
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 21,
+                      "end": 22
+                    },
+                    "computed": false,
+                    "start": 19,
+                    "end": 22
+                  },
+                  "start": 18,
+                  "end": 23
+                }
+              ],
+              "start": 13,
+              "end": 23
+            },
+            "start": 12,
+            "end": 24
+          },
+          "arguments": [],
+          "start": 12,
+          "end": 26
+        },
+        "start": 12,
+        "end": 27
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 28
+  },
+  "errors": []
+}

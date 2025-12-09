@@ -1,0 +1,112 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "ParenthesizedExpression",
+                        "expression": {
+                          "type": "CallExpression",
+                          "callee": {
+                            "type": "ParenthesizedExpression",
+                            "expression": {
+                              "type": "FunctionExpression",
+                              "id": null,
+                              "generator": false,
+                              "async": false,
+                              "params": [],
+                              "body": {
+                                "type": "BlockStatement",
+                                "body": [
+                                  {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                      "type": "CallExpression",
+                                      "callee": {
+                                        "type": "Identifier",
+                                        "name": "a",
+                                        "start": 38,
+                                        "end": 39
+                                      },
+                                      "arguments": [
+                                        {
+                                          "type": "Literal",
+                                          "value": "b",
+                                          "raw": "\"b\"",
+                                          "start": 40,
+                                          "end": 43
+                                        }
+                                      ],
+                                      "start": 38,
+                                      "end": 44
+                                    },
+                                    "start": 38,
+                                    "end": 45
+                                  }
+                                ],
+                                "start": 32,
+                                "end": 49
+                              },
+                              "expression": false,
+                              "start": 20,
+                              "end": 49
+                            },
+                            "start": 19,
+                            "end": 50
+                          },
+                          "arguments": [],
+                          "start": 19,
+                          "end": 52
+                        },
+                        "start": 18,
+                        "end": 53
+                      },
+                      "start": 18,
+                      "end": 54
+                    }
+                  ],
+                  "start": 14,
+                  "end": 56
+                },
+                "expression": false,
+                "start": 2,
+                "end": 56
+              },
+              "start": 1,
+              "end": 57
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 59
+          },
+          "start": 0,
+          "end": 60
+        },
+        "start": 0,
+        "end": 61
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 62
+  },
+  "errors": []
+}

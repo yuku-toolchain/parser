@@ -1,0 +1,124 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "NewExpression",
+          "callee": {
+            "type": "FunctionExpression",
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "body": [
+                {
+                  "type": "VariableDeclaration",
+                  "kind": "var",
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "id": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 26,
+                        "end": 27
+                      },
+                      "init": {
+                        "type": "Literal",
+                        "value": 1,
+                        "raw": "1",
+                        "start": 30,
+                        "end": 31
+                      },
+                      "start": 26,
+                      "end": 31
+                    }
+                  ],
+                  "start": 22,
+                  "end": 32
+                },
+                {
+                  "type": "ExpressionStatement",
+                  "expression": {
+                    "type": "CallExpression",
+                    "callee": {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 37,
+                      "end": 38
+                    },
+                    "arguments": [
+                      {
+                        "type": "MemberExpression",
+                        "object": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "MemberExpression",
+                            "object": {
+                              "type": "ThisExpression",
+                              "start": 39,
+                              "end": 43
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "constructor",
+                              "start": 44,
+                              "end": 55
+                            },
+                            "computed": false,
+                            "start": 39,
+                            "end": 55
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "arguments",
+                            "start": 56,
+                            "end": 65
+                          },
+                          "computed": false,
+                          "start": 39,
+                          "end": 65
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "c",
+                          "start": 66,
+                          "end": 67
+                        },
+                        "computed": false,
+                        "start": 39,
+                        "end": 67
+                      }
+                    ],
+                    "start": 37,
+                    "end": 68
+                  },
+                  "start": 37,
+                  "end": 69
+                }
+              ],
+              "start": 16,
+              "end": 71
+            },
+            "expression": false,
+            "start": 4,
+            "end": 71
+          },
+          "arguments": [],
+          "start": 0,
+          "end": 71
+        },
+        "start": 0,
+        "end": 72
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 73
+  },
+  "errors": []
+}

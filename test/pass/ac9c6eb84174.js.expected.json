@@ -1,0 +1,171 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": null,
+            "start": 4,
+            "end": 5
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 7,
+              "end": 8
+            },
+            "init": null,
+            "start": 7,
+            "end": 8
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "c",
+              "start": 10,
+              "end": 11
+            },
+            "init": null,
+            "start": 10,
+            "end": 11
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "d",
+              "start": 13,
+              "end": 14
+            },
+            "init": null,
+            "start": 13,
+            "end": 14
+          }
+        ],
+        "start": 0,
+        "end": 15
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 16,
+            "end": 17
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "UnaryExpression",
+              "operator": "!",
+              "argument": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "SequenceExpression",
+                  "expressions": [
+                    {
+                      "type": "ParenthesizedExpression",
+                      "expression": {
+                        "type": "SequenceExpression",
+                        "expressions": [
+                          {
+                            "type": "ParenthesizedExpression",
+                            "expression": {
+                              "type": "CallExpression",
+                              "callee": {
+                                "type": "Identifier",
+                                "name": "b",
+                                "start": 25,
+                                "end": 26
+                              },
+                              "arguments": [],
+                              "start": 25,
+                              "end": 28
+                            },
+                            "start": 24,
+                            "end": 29
+                          },
+                          {
+                            "type": "ParenthesizedExpression",
+                            "expression": {
+                              "type": "CallExpression",
+                              "callee": {
+                                "type": "Identifier",
+                                "name": "c",
+                                "start": 32,
+                                "end": 33
+                              },
+                              "arguments": [],
+                              "start": 32,
+                              "end": 35
+                            },
+                            "start": 31,
+                            "end": 36
+                          }
+                        ],
+                        "start": 24,
+                        "end": 36
+                      },
+                      "start": 23,
+                      "end": 37
+                    },
+                    {
+                      "type": "ParenthesizedExpression",
+                      "expression": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "Identifier",
+                          "name": "d",
+                          "start": 40,
+                          "end": 41
+                        },
+                        "arguments": [],
+                        "start": 40,
+                        "end": 43
+                      },
+                      "start": 39,
+                      "end": 44
+                    }
+                  ],
+                  "start": 23,
+                  "end": 44
+                },
+                "start": 22,
+                "end": 45
+              },
+              "prefix": true,
+              "start": 21,
+              "end": 45
+            },
+            "start": 20,
+            "end": 46
+          },
+          "start": 16,
+          "end": 46
+        },
+        "start": 16,
+        "end": 47
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 48
+  },
+  "errors": []
+}

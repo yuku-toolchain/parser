@@ -1,0 +1,34 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "TemplateLiteral",
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "value": {
+                "raw": "\n\n\n",
+                "cooked": "\n\n\n"
+              },
+              "tail": true,
+              "start": 1,
+              "end": 5
+            }
+          ],
+          "expressions": [],
+          "start": 0,
+          "end": 6
+        },
+        "start": 0,
+        "end": 7
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 8
+  },
+  "errors": []
+}

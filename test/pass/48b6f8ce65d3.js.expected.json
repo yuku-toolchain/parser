@@ -1,0 +1,80 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "UnaryExpression",
+          "operator": "!",
+          "argument": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "CallExpression",
+                      "callee": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 12,
+                        "end": 13
+                      },
+                      "arguments": [],
+                      "start": 12,
+                      "end": 15
+                    },
+                    "start": 12,
+                    "end": 15
+                  }
+                ],
+                "start": 11,
+                "end": 16
+              },
+              "expression": false,
+              "start": 1,
+              "end": 16
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 18
+          },
+          "prefix": true,
+          "start": 0,
+          "end": 18
+        },
+        "start": 0,
+        "end": 19
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "b",
+            "start": 19,
+            "end": 20
+          },
+          "arguments": [],
+          "start": 19,
+          "end": 22
+        },
+        "start": 19,
+        "end": 22
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 23
+  },
+  "errors": []
+}

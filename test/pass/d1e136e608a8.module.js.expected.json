@@ -1,0 +1,46 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "declaration": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 16,
+              "end": 17
+            },
+            "start": 15,
+            "end": 18
+          },
+          "operator": "+",
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": 2,
+              "raw": "2",
+              "start": 22,
+              "end": 23
+            },
+            "start": 21,
+            "end": 24
+          },
+          "start": 15,
+          "end": 24
+        },
+        "start": 0,
+        "end": 25
+      }
+    ],
+    "sourceType": "module",
+    "start": 0,
+    "end": 26
+  },
+  "errors": []
+}

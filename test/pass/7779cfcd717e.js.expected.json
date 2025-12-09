@@ -1,0 +1,36 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "WhileStatement",
+        "test": {
+          "type": "Literal",
+          "value": true,
+          "raw": "true",
+          "start": 6,
+          "end": 10
+        },
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ContinueStatement",
+              "label": null,
+              "start": 14,
+              "end": 24
+            }
+          ],
+          "start": 12,
+          "end": 26
+        },
+        "start": 0,
+        "end": 26
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 26
+  },
+  "errors": []
+}

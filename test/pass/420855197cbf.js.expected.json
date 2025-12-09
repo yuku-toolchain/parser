@@ -1,0 +1,127 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "IfStatement",
+                    "test": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 22,
+                      "end": 23
+                    },
+                    "consequent": {
+                      "type": "BlockStatement",
+                      "body": [
+                        {
+                          "type": "ReturnStatement",
+                          "argument": {
+                            "type": "Literal",
+                            "value": 1,
+                            "raw": "1",
+                            "start": 42,
+                            "end": 43
+                          },
+                          "start": 35,
+                          "end": 44
+                        },
+                        {
+                          "type": "ExpressionStatement",
+                          "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                              "type": "Identifier",
+                              "name": "b",
+                              "start": 53,
+                              "end": 54
+                            },
+                            "arguments": [],
+                            "start": 53,
+                            "end": 56
+                          },
+                          "start": 53,
+                          "end": 57
+                        }
+                      ],
+                      "start": 25,
+                      "end": 63
+                    },
+                    "alternate": {
+                      "type": "BlockStatement",
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                              "type": "Identifier",
+                              "name": "c",
+                              "start": 79,
+                              "end": 80
+                            },
+                            "arguments": [],
+                            "start": 79,
+                            "end": 82
+                          },
+                          "start": 79,
+                          "end": 83
+                        }
+                      ],
+                      "start": 69,
+                      "end": 89
+                    },
+                    "start": 18,
+                    "end": 89
+                  },
+                  {
+                    "type": "ReturnStatement",
+                    "argument": {
+                      "type": "Literal",
+                      "value": 2,
+                      "raw": "2",
+                      "start": 101,
+                      "end": 102
+                    },
+                    "start": 94,
+                    "end": 103
+                  }
+                ],
+                "start": 12,
+                "end": 105
+              },
+              "expression": false,
+              "start": 1,
+              "end": 105
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 107
+          },
+          "start": 0,
+          "end": 108
+        },
+        "start": 0,
+        "end": 109
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 110
+  },
+  "errors": []
+}

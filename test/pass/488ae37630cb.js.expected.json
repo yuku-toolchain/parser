@@ -1,0 +1,43 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "expression": true,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "ArrowFunctionExpression",
+            "expression": true,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 12,
+              "end": 13
+            },
+            "id": null,
+            "generator": false,
+            "start": 6,
+            "end": 13
+          },
+          "id": null,
+          "generator": false,
+          "start": 0,
+          "end": 13
+        },
+        "start": 0,
+        "end": 13
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 13
+  },
+  "errors": []
+}

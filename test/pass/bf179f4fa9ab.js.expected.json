@@ -1,0 +1,45 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ThrowStatement",
+        "argument": {
+          "type": "ObjectExpression",
+          "properties": [
+            {
+              "type": "Property",
+              "kind": "init",
+              "key": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 7,
+                "end": 8
+              },
+              "value": {
+                "type": "Literal",
+                "value": "b",
+                "raw": "\"b\"",
+                "start": 10,
+                "end": 13
+              },
+              "method": false,
+              "shorthand": false,
+              "computed": false,
+              "start": 7,
+              "end": 13
+            }
+          ],
+          "start": 6,
+          "end": 14
+        },
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 16
+  },
+  "errors": []
+}

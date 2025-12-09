@@ -1,0 +1,110 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": null,
+            "start": 4,
+            "end": 5
+          }
+        ],
+        "start": 0,
+        "end": 6
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "b",
+            "start": 62,
+            "end": 63
+          },
+          "arguments": [],
+          "start": 62,
+          "end": 65
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 73,
+                  "end": 74
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 75,
+                    "end": 76
+                  }
+                ],
+                "start": 73,
+                "end": 77
+              },
+              "start": 73,
+              "end": 78
+            }
+          ],
+          "start": 67,
+          "end": 80
+        },
+        "alternate": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 92,
+                  "end": 93
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "d",
+                    "start": 94,
+                    "end": 95
+                  }
+                ],
+                "start": 92,
+                "end": 96
+              },
+              "start": 92,
+              "end": 97
+            }
+          ],
+          "start": 86,
+          "end": 99
+        },
+        "start": 58,
+        "end": 99
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 99
+  },
+  "errors": []
+}

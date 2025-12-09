@@ -1,0 +1,241 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 4,
+          "end": 5
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 15,
+                "end": 16
+              },
+              "consequent": {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 18,
+                  "end": 19
+                },
+                "start": 18,
+                "end": 20
+              },
+              "alternate": null,
+              "start": 11,
+              "end": 20
+            }
+          ],
+          "start": 7,
+          "end": 22
+        },
+        "alternate": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 28,
+            "end": 29
+          },
+          "start": 28,
+          "end": 30
+        },
+        "start": 0,
+        "end": 30
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 35,
+          "end": 36
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 46,
+                "end": 47
+              },
+              "consequent": {
+                "type": "ThrowStatement",
+                "argument": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 55,
+                  "end": 56
+                },
+                "start": 49,
+                "end": 57
+              },
+              "alternate": null,
+              "start": 42,
+              "end": 57
+            }
+          ],
+          "start": 38,
+          "end": 59
+        },
+        "alternate": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 65,
+            "end": 66
+          },
+          "start": 65,
+          "end": 67
+        },
+        "start": 31,
+        "end": 67
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 72,
+          "end": 73
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "WithStatement",
+              "object": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 85,
+                "end": 86
+              },
+              "body": {
+                "type": "IfStatement",
+                "test": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 92,
+                  "end": 93
+                },
+                "consequent": {
+                  "type": "ThrowStatement",
+                  "argument": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 101,
+                    "end": 102
+                  },
+                  "start": 95,
+                  "end": 103
+                },
+                "alternate": null,
+                "start": 88,
+                "end": 103
+              },
+              "start": 79,
+              "end": 103
+            }
+          ],
+          "start": 75,
+          "end": 105
+        },
+        "alternate": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 111,
+            "end": 112
+          },
+          "start": 111,
+          "end": 113
+        },
+        "start": 68,
+        "end": 113
+      },
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 118,
+          "end": 119
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "DoWhileStatement",
+              "body": {
+                "type": "IfStatement",
+                "test": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 132,
+                  "end": 133
+                },
+                "consequent": {
+                  "type": "ThrowStatement",
+                  "argument": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 141,
+                    "end": 142
+                  },
+                  "start": 135,
+                  "end": 143
+                },
+                "alternate": null,
+                "start": 128,
+                "end": 143
+              },
+              "test": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 151,
+                "end": 152
+              },
+              "start": 125,
+              "end": 154
+            }
+          ],
+          "start": 121,
+          "end": 156
+        },
+        "alternate": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 162,
+            "end": 163
+          },
+          "start": 162,
+          "end": 164
+        },
+        "start": 114,
+        "end": 164
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 165
+  },
+  "errors": []
+}

@@ -1,0 +1,47 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "BlockStatement",
+        "body": [
+          {
+            "type": "DoWhileStatement",
+            "body": {
+              "type": "EmptyStatement",
+              "start": 4,
+              "end": 5
+            },
+            "test": {
+              "type": "Literal",
+              "value": false,
+              "raw": "false",
+              "start": 12,
+              "end": 17
+            },
+            "start": 1,
+            "end": 18
+          },
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "Literal",
+              "value": false,
+              "raw": "false",
+              "start": 19,
+              "end": 24
+            },
+            "start": 19,
+            "end": 24
+          }
+        ],
+        "start": 0,
+        "end": 25
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 25
+  },
+  "errors": []
+}

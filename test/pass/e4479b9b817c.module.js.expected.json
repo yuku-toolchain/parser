@@ -1,0 +1,38 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "local": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 13,
+              "end": 14
+            },
+            "start": 8,
+            "end": 14
+          }
+        ],
+        "source": {
+          "type": "Literal",
+          "value": "foo",
+          "raw": "\"foo\"",
+          "start": 20,
+          "end": 25
+        },
+        "phase": null,
+        "attributes": [],
+        "start": 0,
+        "end": 26
+      }
+    ],
+    "sourceType": "module",
+    "start": 0,
+    "end": 27
+  },
+  "errors": []
+}

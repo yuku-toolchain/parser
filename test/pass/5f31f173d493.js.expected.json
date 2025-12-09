@@ -1,0 +1,157 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "IfStatement",
+                      "test": {
+                        "type": "BinaryExpression",
+                        "left": {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "Literal",
+                            "value": true,
+                            "raw": "true",
+                            "start": 23,
+                            "end": 27
+                          },
+                          "start": 22,
+                          "end": 28
+                        },
+                        "operator": "!=",
+                        "right": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 32,
+                          "end": 33
+                        },
+                        "start": 22,
+                        "end": 33
+                      },
+                      "consequent": {
+                        "type": "BlockStatement",
+                        "body": [
+                          {
+                            "type": "ExpressionStatement",
+                            "expression": {
+                              "type": "CallExpression",
+                              "callee": {
+                                "type": "Identifier",
+                                "name": "b",
+                                "start": 41,
+                                "end": 42
+                              },
+                              "arguments": [],
+                              "start": 41,
+                              "end": 44
+                            },
+                            "start": 41,
+                            "end": 45
+                          }
+                        ],
+                        "start": 35,
+                        "end": 49
+                      },
+                      "alternate": null,
+                      "start": 18,
+                      "end": 49
+                    },
+                    {
+                      "type": "IfStatement",
+                      "test": {
+                        "type": "BinaryExpression",
+                        "left": {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "Literal",
+                            "value": false,
+                            "raw": "false",
+                            "start": 57,
+                            "end": 62
+                          },
+                          "start": 56,
+                          "end": 63
+                        },
+                        "operator": "!=",
+                        "right": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 67,
+                          "end": 68
+                        },
+                        "start": 56,
+                        "end": 68
+                      },
+                      "consequent": {
+                        "type": "BlockStatement",
+                        "body": [
+                          {
+                            "type": "ExpressionStatement",
+                            "expression": {
+                              "type": "CallExpression",
+                              "callee": {
+                                "type": "Identifier",
+                                "name": "b",
+                                "start": 76,
+                                "end": 77
+                              },
+                              "arguments": [],
+                              "start": 76,
+                              "end": 79
+                            },
+                            "start": 76,
+                            "end": 80
+                          }
+                        ],
+                        "start": 70,
+                        "end": 84
+                      },
+                      "alternate": null,
+                      "start": 52,
+                      "end": 84
+                    }
+                  ],
+                  "start": 14,
+                  "end": 86
+                },
+                "expression": false,
+                "start": 2,
+                "end": 86
+              },
+              "start": 1,
+              "end": 87
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 89
+          },
+          "start": 0,
+          "end": 90
+        },
+        "start": 0,
+        "end": 91
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 92
+  },
+  "errors": []
+}

@@ -1,0 +1,86 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "ObjectExpression",
+                "properties": [
+                  {
+                    "type": "Property",
+                    "kind": "init",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "arguments",
+                      "start": 10,
+                      "end": 19
+                    },
+                    "value": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 21,
+                      "end": 22
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "start": 10,
+                    "end": 22
+                  },
+                  {
+                    "type": "Property",
+                    "kind": "init",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "eval",
+                      "start": 24,
+                      "end": 28
+                    },
+                    "value": {
+                      "type": "Literal",
+                      "value": 2,
+                      "raw": "2",
+                      "start": 30,
+                      "end": 31
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "start": 24,
+                    "end": 31
+                  }
+                ],
+                "start": 9,
+                "end": 32
+              },
+              "start": 8,
+              "end": 33
+            },
+            "start": 4,
+            "end": 33
+          }
+        ],
+        "start": 0,
+        "end": 34
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 35
+  },
+  "errors": []
+}

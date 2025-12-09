@@ -1,0 +1,92 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "WithStatement",
+              "object": {
+                "type": "SequenceExpression",
+                "expressions": [
+                  {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "CallExpression",
+                      "callee": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 24,
+                        "end": 25
+                      },
+                      "arguments": [],
+                      "start": 24,
+                      "end": 27
+                    },
+                    "start": 23,
+                    "end": 28
+                  },
+                  {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "UnaryExpression",
+                      "operator": "void",
+                      "argument": {
+                        "type": "ParenthesizedExpression",
+                        "expression": {
+                          "type": "Literal",
+                          "value": 1,
+                          "raw": "1",
+                          "start": 37,
+                          "end": 38
+                        },
+                        "start": 36,
+                        "end": 39
+                      },
+                      "prefix": true,
+                      "start": 31,
+                      "end": 39
+                    },
+                    "start": 30,
+                    "end": 40
+                  }
+                ],
+                "start": 23,
+                "end": 40
+              },
+              "body": {
+                "type": "BlockStatement",
+                "body": [],
+                "start": 42,
+                "end": 44
+              },
+              "start": 17,
+              "end": 44
+            }
+          ],
+          "start": 13,
+          "end": 46
+        },
+        "expression": false,
+        "start": 0,
+        "end": 46
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 47
+  },
+  "errors": []
+}

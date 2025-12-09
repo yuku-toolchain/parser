@@ -1,0 +1,51 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "WhileStatement",
+              "test": {
+                "type": "Literal",
+                "value": true,
+                "raw": "true",
+                "start": 22,
+                "end": 26
+              },
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ContinueStatement",
+                    "label": null,
+                    "start": 38,
+                    "end": 47
+                  }
+                ],
+                "start": 28,
+                "end": 53
+              },
+              "start": 15,
+              "end": 53
+            }
+          ],
+          "start": 9,
+          "end": 55
+        },
+        "start": 0,
+        "end": 55
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 56
+  },
+  "errors": []
+}

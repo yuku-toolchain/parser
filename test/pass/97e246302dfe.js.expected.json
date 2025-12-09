@@ -1,0 +1,83 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "name": "b",
+            "start": 11,
+            "end": 12
+          },
+          {
+            "type": "Identifier",
+            "name": "c",
+            "start": 14,
+            "end": 15
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ReturnStatement",
+              "argument": {
+                "type": "BinaryExpression",
+                "left": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 26,
+                  "end": 27
+                },
+                "operator": "<<",
+                "right": {
+                  "type": "UnaryExpression",
+                  "operator": "!",
+                  "argument": {
+                    "type": "UpdateExpression",
+                    "operator": "--",
+                    "prefix": true,
+                    "argument": {
+                      "type": "Identifier",
+                      "name": "c",
+                      "start": 34,
+                      "end": 35
+                    },
+                    "start": 32,
+                    "end": 35
+                  },
+                  "prefix": true,
+                  "start": 31,
+                  "end": 35
+                },
+                "start": 26,
+                "end": 35
+              },
+              "start": 19,
+              "end": 36
+            }
+          ],
+          "start": 17,
+          "end": 38
+        },
+        "expression": false,
+        "start": 0,
+        "end": 38
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 38
+  },
+  "errors": []
+}

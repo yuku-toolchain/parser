@@ -1,0 +1,221 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "ArrayPattern",
+            "elements": [
+              {
+                "type": "ArrayPattern",
+                "elements": [
+                  {
+                    "type": "ArrayPattern",
+                    "elements": [
+                      {
+                        "type": "ArrayPattern",
+                        "elements": [
+                          {
+                            "type": "ArrayPattern",
+                            "elements": [
+                              {
+                                "type": "ArrayPattern",
+                                "elements": [
+                                  {
+                                    "type": "ArrayPattern",
+                                    "elements": [
+                                      {
+                                        "type": "ArrayPattern",
+                                        "elements": [
+                                          {
+                                            "type": "ArrayPattern",
+                                            "elements": [
+                                              {
+                                                "type": "ArrayPattern",
+                                                "elements": [
+                                                  {
+                                                    "type": "ArrayPattern",
+                                                    "elements": [
+                                                      {
+                                                        "type": "ArrayPattern",
+                                                        "elements": [
+                                                          {
+                                                            "type": "ArrayPattern",
+                                                            "elements": [
+                                                              {
+                                                                "type": "ArrayPattern",
+                                                                "elements": [
+                                                                  {
+                                                                    "type": "ArrayPattern",
+                                                                    "elements": [
+                                                                      {
+                                                                        "type": "ArrayPattern",
+                                                                        "elements": [
+                                                                          {
+                                                                            "type": "ArrayPattern",
+                                                                            "elements": [
+                                                                              {
+                                                                                "type": "ArrayPattern",
+                                                                                "elements": [
+                                                                                  {
+                                                                                    "type": "ArrayPattern",
+                                                                                    "elements": [
+                                                                                      {
+                                                                                        "type": "ArrayPattern",
+                                                                                        "elements": [
+                                                                                          {
+                                                                                            "type": "ObjectPattern",
+                                                                                            "properties": [
+                                                                                              {
+                                                                                                "type": "Property",
+                                                                                                "kind": "init",
+                                                                                                "key": {
+                                                                                                  "type": "Identifier",
+                                                                                                  "name": "a",
+                                                                                                  "start": 21,
+                                                                                                  "end": 22
+                                                                                                },
+                                                                                                "value": {
+                                                                                                  "type": "AssignmentPattern",
+                                                                                                  "left": {
+                                                                                                    "type": "Identifier",
+                                                                                                    "name": "a",
+                                                                                                    "start": 21,
+                                                                                                    "end": 22
+                                                                                                  },
+                                                                                                  "right": {
+                                                                                                    "type": "MemberExpression",
+                                                                                                    "object": {
+                                                                                                      "type": "Identifier",
+                                                                                                      "name": "b",
+                                                                                                      "start": 23,
+                                                                                                      "end": 24
+                                                                                                    },
+                                                                                                    "property": {
+                                                                                                      "type": "Literal",
+                                                                                                      "value": 1,
+                                                                                                      "raw": "1",
+                                                                                                      "start": 25,
+                                                                                                      "end": 26
+                                                                                                    },
+                                                                                                    "computed": true,
+                                                                                                    "start": 23,
+                                                                                                    "end": 27
+                                                                                                  },
+                                                                                                  "start": 21,
+                                                                                                  "end": 27
+                                                                                                },
+                                                                                                "method": false,
+                                                                                                "shorthand": true,
+                                                                                                "computed": false,
+                                                                                                "start": 21,
+                                                                                                "end": 27
+                                                                                              }
+                                                                                            ],
+                                                                                            "start": 20,
+                                                                                            "end": 28
+                                                                                          }
+                                                                                        ],
+                                                                                        "start": 19,
+                                                                                        "end": 29
+                                                                                      }
+                                                                                    ],
+                                                                                    "start": 18,
+                                                                                    "end": 30
+                                                                                  }
+                                                                                ],
+                                                                                "start": 17,
+                                                                                "end": 31
+                                                                              }
+                                                                            ],
+                                                                            "start": 16,
+                                                                            "end": 32
+                                                                          }
+                                                                        ],
+                                                                        "start": 15,
+                                                                        "end": 33
+                                                                      }
+                                                                    ],
+                                                                    "start": 14,
+                                                                    "end": 34
+                                                                  }
+                                                                ],
+                                                                "start": 13,
+                                                                "end": 35
+                                                              }
+                                                            ],
+                                                            "start": 12,
+                                                            "end": 36
+                                                          }
+                                                        ],
+                                                        "start": 11,
+                                                        "end": 37
+                                                      }
+                                                    ],
+                                                    "start": 10,
+                                                    "end": 38
+                                                  }
+                                                ],
+                                                "start": 9,
+                                                "end": 39
+                                              }
+                                            ],
+                                            "start": 8,
+                                            "end": 40
+                                          }
+                                        ],
+                                        "start": 7,
+                                        "end": 41
+                                      }
+                                    ],
+                                    "start": 6,
+                                    "end": 42
+                                  }
+                                ],
+                                "start": 5,
+                                "end": 43
+                              }
+                            ],
+                            "start": 4,
+                            "end": 44
+                          }
+                        ],
+                        "start": 3,
+                        "end": 45
+                      }
+                    ],
+                    "start": 2,
+                    "end": 46
+                  }
+                ],
+                "start": 1,
+                "end": 47
+              }
+            ],
+            "start": 0,
+            "end": 48
+          },
+          "right": {
+            "type": "Literal",
+            "value": 2,
+            "raw": "2",
+            "start": 49,
+            "end": 50
+          },
+          "start": 0,
+          "end": 50
+        },
+        "start": 0,
+        "end": 51
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 52
+  },
+  "errors": []
+}

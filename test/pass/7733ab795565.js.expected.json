@@ -1,0 +1,80 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "expression": true,
+          "async": false,
+          "params": [
+            {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 2,
+                    "end": 3
+                  },
+                  "value": {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 2,
+                      "end": 3
+                    },
+                    "right": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 4,
+                      "end": 5
+                    },
+                    "start": 2,
+                    "end": 5
+                  },
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "start": 2,
+                  "end": 5
+                }
+              ],
+              "start": 1,
+              "end": 6
+            },
+            {
+              "type": "ObjectPattern",
+              "properties": [],
+              "start": 8,
+              "end": 10
+            }
+          ],
+          "body": {
+            "type": "Literal",
+            "value": 2,
+            "raw": "2",
+            "start": 13,
+            "end": 14
+          },
+          "id": null,
+          "generator": false,
+          "start": 0,
+          "end": 14
+        },
+        "start": 0,
+        "end": 14
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 14
+  },
+  "errors": []
+}

@@ -1,0 +1,51 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "expression": true,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "name": "a",
+              "start": 1,
+              "end": 2
+            }
+          ],
+          "body": {
+            "type": "BinaryExpression",
+            "left": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 7,
+              "end": 8
+            },
+            "operator": "*",
+            "right": {
+              "type": "Identifier",
+              "name": "yield",
+              "start": 11,
+              "end": 16
+            },
+            "start": 7,
+            "end": 16
+          },
+          "id": null,
+          "generator": false,
+          "start": 0,
+          "end": 16
+        },
+        "start": 0,
+        "end": 17
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 18
+  },
+  "errors": []
+}

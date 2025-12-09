@@ -1,0 +1,67 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "private",
+              "start": 4,
+              "end": 11
+            },
+            "init": null,
+            "start": 4,
+            "end": 11
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "protected",
+              "start": 13,
+              "end": 22
+            },
+            "init": null,
+            "start": 13,
+            "end": 22
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "public",
+              "start": 24,
+              "end": 30
+            },
+            "init": null,
+            "start": 24,
+            "end": 30
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "static",
+              "start": 32,
+              "end": 38
+            },
+            "init": null,
+            "start": 32,
+            "end": 38
+          }
+        ],
+        "start": 0,
+        "end": 38
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 38
+  },
+  "errors": []
+}

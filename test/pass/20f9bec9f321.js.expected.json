@@ -1,0 +1,54 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 14,
+          "end": 15
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "id": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 32,
+                "end": 33
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [],
+                "start": 36,
+                "end": 38
+              },
+              "expression": false,
+              "start": 23,
+              "end": 38
+            }
+          ],
+          "start": 18,
+          "end": 39
+        },
+        "expression": false,
+        "start": 5,
+        "end": 39
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 40
+  },
+  "errors": []
+}

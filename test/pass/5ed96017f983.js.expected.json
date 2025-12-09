@@ -1,0 +1,143 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 1,
+                "end": 2
+              },
+              "arguments": [],
+              "start": 1,
+              "end": 4
+            },
+            "start": 0,
+            "end": 5
+          },
+          "operator": "+",
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "SequenceExpression",
+              "expressions": [
+                {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "SequenceExpression",
+                    "expressions": [
+                      {
+                        "type": "ParenthesizedExpression",
+                        "expression": {
+                          "type": "SequenceExpression",
+                          "expressions": [
+                            {
+                              "type": "ParenthesizedExpression",
+                              "expression": {
+                                "type": "CallExpression",
+                                "callee": {
+                                  "type": "Identifier",
+                                  "name": "b",
+                                  "start": 12,
+                                  "end": 13
+                                },
+                                "arguments": [],
+                                "start": 12,
+                                "end": 15
+                              },
+                              "start": 11,
+                              "end": 16
+                            },
+                            {
+                              "type": "ParenthesizedExpression",
+                              "expression": {
+                                "type": "CallExpression",
+                                "callee": {
+                                  "type": "Identifier",
+                                  "name": "c",
+                                  "start": 19,
+                                  "end": 20
+                                },
+                                "arguments": [],
+                                "start": 19,
+                                "end": 22
+                              },
+                              "start": 18,
+                              "end": 23
+                            }
+                          ],
+                          "start": 11,
+                          "end": 23
+                        },
+                        "start": 10,
+                        "end": 24
+                      },
+                      {
+                        "type": "ParenthesizedExpression",
+                        "expression": {
+                          "type": "CallExpression",
+                          "callee": {
+                            "type": "Identifier",
+                            "name": "d",
+                            "start": 27,
+                            "end": 28
+                          },
+                          "arguments": [],
+                          "start": 27,
+                          "end": 30
+                        },
+                        "start": 26,
+                        "end": 31
+                      }
+                    ],
+                    "start": 10,
+                    "end": 31
+                  },
+                  "start": 9,
+                  "end": 32
+                },
+                {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "CallExpression",
+                    "callee": {
+                      "type": "Identifier",
+                      "name": "e",
+                      "start": 35,
+                      "end": 36
+                    },
+                    "arguments": [],
+                    "start": 35,
+                    "end": 38
+                  },
+                  "start": 34,
+                  "end": 39
+                }
+              ],
+              "start": 9,
+              "end": 39
+            },
+            "start": 8,
+            "end": 40
+          },
+          "start": 0,
+          "end": 40
+        },
+        "start": 0,
+        "end": 41
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 42
+  },
+  "errors": []
+}

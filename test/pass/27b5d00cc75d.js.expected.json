@@ -1,0 +1,83 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "name": "b",
+            "start": 11,
+            "end": 12
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 24,
+                "end": 25
+              },
+              "consequent": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ReturnStatement",
+                    "argument": null,
+                    "start": 37,
+                    "end": 44
+                  }
+                ],
+                "start": 27,
+                "end": 50
+              },
+              "alternate": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ReturnStatement",
+                    "argument": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 73,
+                      "end": 74
+                    },
+                    "start": 66,
+                    "end": 75
+                  }
+                ],
+                "start": 56,
+                "end": 81
+              },
+              "start": 20,
+              "end": 81
+            }
+          ],
+          "start": 14,
+          "end": 83
+        },
+        "expression": false,
+        "start": 0,
+        "end": 83
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 83
+  },
+  "errors": []
+}

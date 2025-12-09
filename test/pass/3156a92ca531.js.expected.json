@@ -1,0 +1,40 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ThrowStatement",
+        "argument": {
+          "type": "Literal",
+          "value": "a",
+          "raw": "'a'",
+          "start": 6,
+          "end": 9
+        },
+        "start": 0,
+        "end": 10
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "b",
+            "start": 11,
+            "end": 12
+          },
+          "arguments": [],
+          "start": 11,
+          "end": 14
+        },
+        "start": 11,
+        "end": 15
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 16
+  },
+  "errors": []
+}

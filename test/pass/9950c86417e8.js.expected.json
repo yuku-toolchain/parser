@@ -1,0 +1,147 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": {
+          "type": "VariableDeclaration",
+          "kind": "var",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 9,
+                "end": 10
+              },
+              "init": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "Literal",
+                  "value": 1,
+                  "raw": "1",
+                  "start": 14,
+                  "end": 15
+                },
+                "start": 13,
+                "end": 16
+              },
+              "start": 9,
+              "end": 16
+            }
+          ],
+          "start": 5,
+          "end": 16
+        },
+        "test": {
+          "type": "BinaryExpression",
+          "left": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 18,
+            "end": 19
+          },
+          "operator": "<",
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": 2,
+              "raw": "2",
+              "start": 23,
+              "end": 24
+            },
+            "start": 22,
+            "end": 25
+          },
+          "start": 18,
+          "end": 25
+        },
+        "update": {
+          "type": "UpdateExpression",
+          "operator": "++",
+          "prefix": true,
+          "argument": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 29,
+            "end": 30
+          },
+          "start": 27,
+          "end": 30
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "expression": {
+                          "type": "CallExpression",
+                          "callee": {
+                            "type": "Identifier",
+                            "name": "b",
+                            "start": 50,
+                            "end": 51
+                          },
+                          "arguments": [
+                            {
+                              "type": "Literal",
+                              "value": "c",
+                              "raw": "\"c\"",
+                              "start": 52,
+                              "end": 55
+                            }
+                          ],
+                          "start": 50,
+                          "end": 56
+                        },
+                        "start": 50,
+                        "end": 57
+                      }
+                    ],
+                    "start": 46,
+                    "end": 59
+                  },
+                  "expression": false,
+                  "start": 34,
+                  "end": 59
+                },
+                "start": 33,
+                "end": 60
+              },
+              "arguments": [],
+              "start": 33,
+              "end": 62
+            },
+            "start": 32,
+            "end": 63
+          },
+          "start": 32,
+          "end": 64
+        },
+        "start": 0,
+        "end": 64
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 65
+  },
+  "errors": []
+}

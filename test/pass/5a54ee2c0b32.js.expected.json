@@ -1,0 +1,126 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "name": "b",
+            "start": 11,
+            "end": 12
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ForStatement",
+              "init": {
+                "type": "VariableDeclaration",
+                "kind": "var",
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "id": {
+                      "type": "Identifier",
+                      "name": "c",
+                      "start": 29,
+                      "end": 30
+                    },
+                    "init": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 33,
+                      "end": 34
+                    },
+                    "start": 29,
+                    "end": 34
+                  },
+                  {
+                    "type": "VariableDeclarator",
+                    "id": {
+                      "type": "Identifier",
+                      "name": "d",
+                      "start": 36,
+                      "end": 37
+                    },
+                    "init": {
+                      "type": "CallExpression",
+                      "callee": {
+                        "type": "MemberExpression",
+                        "object": {
+                          "type": "Identifier",
+                          "name": "b",
+                          "start": 40,
+                          "end": 41
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "e",
+                          "start": 42,
+                          "end": 43
+                        },
+                        "computed": false,
+                        "start": 40,
+                        "end": 43
+                      },
+                      "arguments": [],
+                      "start": 40,
+                      "end": 45
+                    },
+                    "start": 36,
+                    "end": 45
+                  }
+                ],
+                "start": 25,
+                "end": 45
+              },
+              "test": null,
+              "update": {
+                "type": "UpdateExpression",
+                "operator": "++",
+                "prefix": false,
+                "argument": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 49,
+                  "end": 50
+                },
+                "start": 49,
+                "end": 52
+              },
+              "body": {
+                "type": "BlockStatement",
+                "body": [],
+                "start": 54,
+                "end": 56
+              },
+              "start": 20,
+              "end": 56
+            }
+          ],
+          "start": 14,
+          "end": 58
+        },
+        "expression": false,
+        "start": 0,
+        "end": 58
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 58
+  },
+  "errors": []
+}

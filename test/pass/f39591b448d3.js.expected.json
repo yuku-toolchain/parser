@@ -1,0 +1,108 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 0,
+            "end": 1
+          },
+          "arguments": [
+            {
+              "type": "TemplateLiteral",
+              "quasis": [
+                {
+                  "type": "TemplateElement",
+                  "value": {
+                    "raw": "",
+                    "cooked": ""
+                  },
+                  "tail": false,
+                  "start": 3,
+                  "end": 3
+                },
+                {
+                  "type": "TemplateElement",
+                  "value": {
+                    "raw": " + ",
+                    "cooked": " + "
+                  },
+                  "tail": false,
+                  "start": 7,
+                  "end": 10
+                },
+                {
+                  "type": "TemplateElement",
+                  "value": {
+                    "raw": " = ",
+                    "cooked": " = "
+                  },
+                  "tail": false,
+                  "start": 14,
+                  "end": 17
+                },
+                {
+                  "type": "TemplateElement",
+                  "value": {
+                    "raw": "",
+                    "cooked": ""
+                  },
+                  "tail": true,
+                  "start": 25,
+                  "end": 25
+                }
+              ],
+              "expressions": [
+                {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 5,
+                  "end": 6
+                },
+                {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 12,
+                  "end": 13
+                },
+                {
+                  "type": "BinaryExpression",
+                  "left": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 19,
+                    "end": 20
+                  },
+                  "operator": "+",
+                  "right": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 23,
+                    "end": 24
+                  },
+                  "start": 19,
+                  "end": 24
+                }
+              ],
+              "start": 2,
+              "end": 26
+            }
+          ],
+          "start": 0,
+          "end": 27
+        },
+        "start": 0,
+        "end": 28
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 29
+  },
+  "errors": []
+}

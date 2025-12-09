@@ -1,0 +1,24 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": "煎茶",
+          "raw": "\"\\u{714E}\\u{8336}\"",
+          "start": 0,
+          "end": 18
+        },
+        "directive": "\\u{714E}\\u{8336}",
+        "start": 0,
+        "end": 19
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 20
+  },
+  "errors": []
+}

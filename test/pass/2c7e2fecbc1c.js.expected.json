@@ -1,0 +1,190 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ForStatement",
+                    "init": {
+                      "type": "LogicalExpression",
+                      "left": {
+                        "type": "UnaryExpression",
+                        "operator": "!",
+                        "argument": {
+                          "type": "UnaryExpression",
+                          "operator": "!",
+                          "argument": {
+                            "type": "UnaryExpression",
+                            "operator": "!",
+                            "argument": {
+                              "type": "Identifier",
+                              "name": "a",
+                              "start": 25,
+                              "end": 26
+                            },
+                            "prefix": true,
+                            "start": 24,
+                            "end": 26
+                          },
+                          "prefix": true,
+                          "start": 23,
+                          "end": 26
+                        },
+                        "prefix": true,
+                        "start": 22,
+                        "end": 26
+                      },
+                      "operator": "&&",
+                      "right": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 28,
+                          "end": 29
+                        },
+                        "arguments": [],
+                        "start": 28,
+                        "end": 31
+                      },
+                      "start": 22,
+                      "end": 31
+                    },
+                    "test": {
+                      "type": "LogicalExpression",
+                      "left": {
+                        "type": "UnaryExpression",
+                        "operator": "!",
+                        "argument": {
+                          "type": "UnaryExpression",
+                          "operator": "!",
+                          "argument": {
+                            "type": "UnaryExpression",
+                            "operator": "!",
+                            "argument": {
+                              "type": "Identifier",
+                              "name": "b",
+                              "start": 35,
+                              "end": 36
+                            },
+                            "prefix": true,
+                            "start": 34,
+                            "end": 36
+                          },
+                          "prefix": true,
+                          "start": 33,
+                          "end": 36
+                        },
+                        "prefix": true,
+                        "start": 32,
+                        "end": 36
+                      },
+                      "operator": "&&",
+                      "right": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 38,
+                          "end": 39
+                        },
+                        "arguments": [],
+                        "start": 38,
+                        "end": 41
+                      },
+                      "start": 32,
+                      "end": 41
+                    },
+                    "update": {
+                      "type": "LogicalExpression",
+                      "left": {
+                        "type": "UnaryExpression",
+                        "operator": "!",
+                        "argument": {
+                          "type": "UnaryExpression",
+                          "operator": "!",
+                          "argument": {
+                            "type": "UnaryExpression",
+                            "operator": "!",
+                            "argument": {
+                              "type": "Identifier",
+                              "name": "b",
+                              "start": 45,
+                              "end": 46
+                            },
+                            "prefix": true,
+                            "start": 44,
+                            "end": 46
+                          },
+                          "prefix": true,
+                          "start": 43,
+                          "end": 46
+                        },
+                        "prefix": true,
+                        "start": 42,
+                        "end": 46
+                      },
+                      "operator": "&&",
+                      "right": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 48,
+                          "end": 49
+                        },
+                        "arguments": [],
+                        "start": 48,
+                        "end": 51
+                      },
+                      "start": 42,
+                      "end": 51
+                    },
+                    "body": {
+                      "type": "BlockStatement",
+                      "body": [],
+                      "start": 53,
+                      "end": 58
+                    },
+                    "start": 17,
+                    "end": 58
+                  }
+                ],
+                "start": 13,
+                "end": 60
+              },
+              "expression": false,
+              "start": 1,
+              "end": 60
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 62
+          },
+          "start": 0,
+          "end": 63
+        },
+        "start": 0,
+        "end": 64
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 65
+  },
+  "errors": []
+}

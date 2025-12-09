@@ -1,0 +1,73 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "init",
+                "key": {
+                  "type": "Literal",
+                  "value": 1,
+                  "raw": "1",
+                  "start": 2,
+                  "end": 3
+                },
+                "value": {
+                  "type": "BinaryExpression",
+                  "left": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "ObjectExpression",
+                      "properties": [],
+                      "start": 6,
+                      "end": 8
+                    },
+                    "start": 5,
+                    "end": 9
+                  },
+                  "operator": "/",
+                  "right": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 13,
+                      "end": 14
+                    },
+                    "start": 12,
+                    "end": 15
+                  },
+                  "start": 5,
+                  "end": 15
+                },
+                "method": false,
+                "shorthand": false,
+                "computed": false,
+                "start": 2,
+                "end": 15
+              }
+            ],
+            "start": 1,
+            "end": 16
+          },
+          "start": 0,
+          "end": 17
+        },
+        "start": 0,
+        "end": 18
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 19
+  },
+  "errors": []
+}

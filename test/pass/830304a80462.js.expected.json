@@ -1,0 +1,102 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "LogicalExpression",
+          "left": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 0,
+            "end": 1
+          },
+          "operator": "||",
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "LogicalExpression",
+              "left": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 6,
+                "end": 7
+              },
+              "operator": "||",
+              "right": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "LogicalExpression",
+                  "left": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 12,
+                    "end": 13
+                  },
+                  "operator": "||",
+                  "right": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "LogicalExpression",
+                      "left": {
+                        "type": "Identifier",
+                        "name": "d",
+                        "start": 18,
+                        "end": 19
+                      },
+                      "operator": "||",
+                      "right": {
+                        "type": "ParenthesizedExpression",
+                        "expression": {
+                          "type": "LogicalExpression",
+                          "left": {
+                            "type": "Identifier",
+                            "name": "e",
+                            "start": 24,
+                            "end": 25
+                          },
+                          "operator": "||",
+                          "right": {
+                            "type": "Identifier",
+                            "name": "f",
+                            "start": 29,
+                            "end": 30
+                          },
+                          "start": 24,
+                          "end": 30
+                        },
+                        "start": 23,
+                        "end": 31
+                      },
+                      "start": 18,
+                      "end": 31
+                    },
+                    "start": 17,
+                    "end": 32
+                  },
+                  "start": 12,
+                  "end": 32
+                },
+                "start": 11,
+                "end": 33
+              },
+              "start": 6,
+              "end": 33
+            },
+            "start": 5,
+            "end": 34
+          },
+          "start": 0,
+          "end": 34
+        },
+        "start": 0,
+        "end": 35
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 36
+  },
+  "errors": []
+}

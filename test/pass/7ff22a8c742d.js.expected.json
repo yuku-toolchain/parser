@@ -1,0 +1,39 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "WhileStatement",
+        "test": {
+          "type": "Literal",
+          "value": 1,
+          "raw": "1",
+          "start": 7,
+          "end": 8
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "Literal",
+            "value": {},
+            "raw": "/foo/",
+            "regex": {
+              "pattern": "foo",
+              "flags": ""
+            },
+            "start": 10,
+            "end": 15
+          },
+          "start": 10,
+          "end": 16
+        },
+        "start": 0,
+        "end": 16
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 17
+  },
+  "errors": []
+}

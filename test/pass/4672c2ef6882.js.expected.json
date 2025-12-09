@@ -1,0 +1,24 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": "\n\r\t\u000b\b\f\\'\"\u0000",
+          "raw": "\"\\n\\r\\t\\v\\b\\f\\\\\\'\\\"\\0\"",
+          "start": 0,
+          "end": 22
+        },
+        "directive": "\\n\\r\\t\\v\\b\\f\\\\\\'\\\"\\0",
+        "start": 0,
+        "end": 22
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 22
+  },
+  "errors": []
+}

@@ -1,0 +1,87 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "LogicalExpression",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "SequenceExpression",
+              "expressions": [
+                {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "SequenceExpression",
+                    "expressions": [
+                      {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 2,
+                        "end": 3
+                      },
+                      {
+                        "type": "Identifier",
+                        "name": "b",
+                        "start": 5,
+                        "end": 6
+                      }
+                    ],
+                    "start": 2,
+                    "end": 6
+                  },
+                  "start": 1,
+                  "end": 7
+                },
+                {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "LogicalExpression",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "c",
+                      "start": 10,
+                      "end": 11
+                    },
+                    "operator": "&&",
+                    "right": {
+                      "type": "Identifier",
+                      "name": "d",
+                      "start": 15,
+                      "end": 16
+                    },
+                    "start": 10,
+                    "end": 16
+                  },
+                  "start": 9,
+                  "end": 17
+                }
+              ],
+              "start": 1,
+              "end": 17
+            },
+            "start": 0,
+            "end": 18
+          },
+          "operator": "&&",
+          "right": {
+            "type": "Identifier",
+            "name": "e",
+            "start": 22,
+            "end": 23
+          },
+          "start": 0,
+          "end": 23
+        },
+        "start": 0,
+        "end": 24
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 25
+  },
+  "errors": []
+}

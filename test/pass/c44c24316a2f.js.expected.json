@@ -1,0 +1,80 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "LogicalExpression",
+          "left": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "MemberExpression",
+              "object": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 1,
+                "end": 2
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 3,
+                "end": 4
+              },
+              "computed": true,
+              "start": 1,
+              "end": 5
+            },
+            "start": 0,
+            "end": 6
+          },
+          "operator": "||",
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "AssignmentExpression",
+              "operator": "=",
+              "left": {
+                "type": "MemberExpression",
+                "object": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 11,
+                  "end": 12
+                },
+                "property": {
+                  "type": "Identifier",
+                  "name": "d",
+                  "start": 13,
+                  "end": 14
+                },
+                "computed": true,
+                "start": 11,
+                "end": 15
+              },
+              "right": {
+                "type": "Identifier",
+                "name": "e",
+                "start": 18,
+                "end": 19
+              },
+              "start": 11,
+              "end": 19
+            },
+            "start": 10,
+            "end": 20
+          },
+          "start": 0,
+          "end": 20
+        },
+        "start": 0,
+        "end": 21
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 22
+  },
+  "errors": []
+}

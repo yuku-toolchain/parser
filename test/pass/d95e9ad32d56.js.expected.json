@@ -1,0 +1,117 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "VariableDeclaration",
+                    "kind": "var",
+                    "declarations": [
+                      {
+                        "type": "VariableDeclarator",
+                        "id": {
+                          "type": "Identifier",
+                          "name": "a",
+                          "start": 19,
+                          "end": 20
+                        },
+                        "init": null,
+                        "start": 19,
+                        "end": 20
+                      }
+                    ],
+                    "start": 15,
+                    "end": 21
+                  },
+                  {
+                    "type": "ReturnStatement",
+                    "argument": {
+                      "type": "FunctionExpression",
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "body": [
+                          {
+                            "type": "ReturnStatement",
+                            "argument": {
+                              "type": "BinaryExpression",
+                              "left": {
+                                "type": "UnaryExpression",
+                                "operator": "typeof",
+                                "argument": {
+                                  "type": "Identifier",
+                                  "name": "a",
+                                  "start": 61,
+                                  "end": 62
+                                },
+                                "prefix": true,
+                                "start": 54,
+                                "end": 62
+                              },
+                              "operator": "===",
+                              "right": {
+                                "type": "Literal",
+                                "value": "b",
+                                "raw": "'b'",
+                                "start": 67,
+                                "end": 70
+                              },
+                              "start": 54,
+                              "end": 70
+                            },
+                            "start": 47,
+                            "end": 71
+                          }
+                        ],
+                        "start": 41,
+                        "end": 75
+                      },
+                      "expression": false,
+                      "start": 31,
+                      "end": 75
+                    },
+                    "start": 24,
+                    "end": 76
+                  }
+                ],
+                "start": 11,
+                "end": 78
+              },
+              "expression": false,
+              "start": 1,
+              "end": 78
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 80
+          },
+          "start": 0,
+          "end": 81
+        },
+        "start": 0,
+        "end": 82
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 83
+  },
+  "errors": []
+}

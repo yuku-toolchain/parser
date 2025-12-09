@@ -1,0 +1,58 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": "use strict",
+          "raw": "\"use strict\"",
+          "start": 0,
+          "end": 12
+        },
+        "directive": "use strict",
+        "start": 0,
+        "end": 13
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "MemberExpression",
+              "object": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 15,
+                "end": 16
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "static",
+                "start": 17,
+                "end": 23
+              },
+              "computed": false,
+              "start": 15,
+              "end": 23
+            },
+            "start": 14,
+            "end": 24
+          },
+          "arguments": [],
+          "start": 14,
+          "end": 26
+        },
+        "start": 14,
+        "end": 27
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 28
+  },
+  "errors": []
+}

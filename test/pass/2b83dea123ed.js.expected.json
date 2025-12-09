@@ -1,0 +1,85 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "expression": false,
+          "async": false,
+          "params": [
+            {
+              "type": "ObjectPattern",
+              "properties": [
+                {
+                  "type": "Property",
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 3,
+                    "end": 4
+                  },
+                  "value": {
+                    "type": "ArrayPattern",
+                    "elements": [
+                      {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 7,
+                        "end": 8
+                      },
+                      {
+                        "type": "Identifier",
+                        "name": "b",
+                        "start": 10,
+                        "end": 11
+                      }
+                    ],
+                    "start": 6,
+                    "end": 12
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false,
+                  "start": 3,
+                  "end": 12
+                }
+              ],
+              "start": 1,
+              "end": 14
+            },
+            {
+              "type": "RestElement",
+              "argument": {
+                "type": "Identifier",
+                "name": "c",
+                "start": 19,
+                "end": 20
+              },
+              "start": 16,
+              "end": 20
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "body": [],
+            "start": 25,
+            "end": 27
+          },
+          "id": null,
+          "generator": false,
+          "start": 0,
+          "end": 27
+        },
+        "start": 0,
+        "end": 27
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 27
+  },
+  "errors": []
+}

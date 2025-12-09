@@ -1,0 +1,133 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": {
+              "type": "LogicalExpression",
+              "left": {
+                "type": "LogicalExpression",
+                "left": {
+                  "type": "LogicalExpression",
+                  "left": {
+                    "type": "UnaryExpression",
+                    "operator": "!",
+                    "argument": {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 9,
+                      "end": 10
+                    },
+                    "prefix": true,
+                    "start": 8,
+                    "end": 10
+                  },
+                  "operator": "&&",
+                  "right": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "LogicalExpression",
+                      "left": {
+                        "type": "UnaryExpression",
+                        "operator": "!",
+                        "argument": {
+                          "type": "Identifier",
+                          "name": "c",
+                          "start": 55,
+                          "end": 56
+                        },
+                        "prefix": true,
+                        "start": 54,
+                        "end": 56
+                      },
+                      "operator": "||",
+                      "right": {
+                        "type": "Identifier",
+                        "name": "d",
+                        "start": 60,
+                        "end": 61
+                      },
+                      "start": 54,
+                      "end": 61
+                    },
+                    "start": 53,
+                    "end": 62
+                  },
+                  "start": 8,
+                  "end": 62
+                },
+                "operator": "&&",
+                "right": {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "LogicalExpression",
+                    "left": {
+                      "type": "UnaryExpression",
+                      "operator": "!",
+                      "argument": {
+                        "type": "Identifier",
+                        "name": "e",
+                        "start": 72,
+                        "end": 73
+                      },
+                      "prefix": true,
+                      "start": 71,
+                      "end": 73
+                    },
+                    "operator": "||",
+                    "right": {
+                      "type": "Identifier",
+                      "name": "f",
+                      "start": 77,
+                      "end": 78
+                    },
+                    "start": 71,
+                    "end": 78
+                  },
+                  "start": 70,
+                  "end": 79
+                },
+                "start": 8,
+                "end": 79
+              },
+              "operator": "&&",
+              "right": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "g",
+                  "start": 87,
+                  "end": 88
+                },
+                "arguments": [],
+                "start": 87,
+                "end": 90
+              },
+              "start": 8,
+              "end": 90
+            },
+            "start": 4,
+            "end": 90
+          }
+        ],
+        "start": 0,
+        "end": 91
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 91
+  },
+  "errors": []
+}

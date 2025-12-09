@@ -1,0 +1,168 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "LogicalExpression",
+                "left": {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "LogicalExpression",
+                    "left": {
+                      "type": "ParenthesizedExpression",
+                      "expression": {
+                        "type": "LogicalExpression",
+                        "left": {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "UnaryExpression",
+                            "operator": "!",
+                            "argument": {
+                              "type": "Identifier",
+                              "name": "b",
+                              "start": 13,
+                              "end": 14
+                            },
+                            "prefix": true,
+                            "start": 12,
+                            "end": 14
+                          },
+                          "start": 11,
+                          "end": 15
+                        },
+                        "operator": "&&",
+                        "right": {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "LogicalExpression",
+                            "left": {
+                              "type": "ParenthesizedExpression",
+                              "expression": {
+                                "type": "UnaryExpression",
+                                "operator": "!",
+                                "argument": {
+                                  "type": "Identifier",
+                                  "name": "c",
+                                  "start": 22,
+                                  "end": 23
+                                },
+                                "prefix": true,
+                                "start": 21,
+                                "end": 23
+                              },
+                              "start": 20,
+                              "end": 24
+                            },
+                            "operator": "||",
+                            "right": {
+                              "type": "Identifier",
+                              "name": "d",
+                              "start": 28,
+                              "end": 29
+                            },
+                            "start": 20,
+                            "end": 29
+                          },
+                          "start": 19,
+                          "end": 30
+                        },
+                        "start": 11,
+                        "end": 30
+                      },
+                      "start": 10,
+                      "end": 31
+                    },
+                    "operator": "&&",
+                    "right": {
+                      "type": "ParenthesizedExpression",
+                      "expression": {
+                        "type": "LogicalExpression",
+                        "left": {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "UnaryExpression",
+                            "operator": "!",
+                            "argument": {
+                              "type": "Identifier",
+                              "name": "e",
+                              "start": 38,
+                              "end": 39
+                            },
+                            "prefix": true,
+                            "start": 37,
+                            "end": 39
+                          },
+                          "start": 36,
+                          "end": 40
+                        },
+                        "operator": "||",
+                        "right": {
+                          "type": "Identifier",
+                          "name": "f",
+                          "start": 44,
+                          "end": 45
+                        },
+                        "start": 36,
+                        "end": 45
+                      },
+                      "start": 35,
+                      "end": 46
+                    },
+                    "start": 10,
+                    "end": 46
+                  },
+                  "start": 9,
+                  "end": 47
+                },
+                "operator": "&&",
+                "right": {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "CallExpression",
+                    "callee": {
+                      "type": "Identifier",
+                      "name": "g",
+                      "start": 52,
+                      "end": 53
+                    },
+                    "arguments": [],
+                    "start": 52,
+                    "end": 55
+                  },
+                  "start": 51,
+                  "end": 56
+                },
+                "start": 9,
+                "end": 56
+              },
+              "start": 8,
+              "end": 57
+            },
+            "start": 4,
+            "end": 57
+          }
+        ],
+        "start": 0,
+        "end": 58
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 59
+  },
+  "errors": []
+}

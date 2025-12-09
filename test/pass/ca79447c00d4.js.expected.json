@@ -1,0 +1,56 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "MemberExpression",
+          "object": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 0,
+            "end": 1
+          },
+          "property": {
+            "type": "Identifier",
+            "name": "in",
+            "start": 2,
+            "end": 4
+          },
+          "computed": false,
+          "start": 0,
+          "end": 4
+        },
+        "start": 0,
+        "end": 5
+      },
+      {
+        "type": "BlockStatement",
+        "body": [],
+        "start": 6,
+        "end": 8
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "Literal",
+          "value": {},
+          "raw": "/foo/",
+          "regex": {
+            "pattern": "foo",
+            "flags": ""
+          },
+          "start": 9,
+          "end": 14
+        },
+        "start": 9,
+        "end": 15
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 16
+  },
+  "errors": []
+}

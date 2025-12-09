@@ -1,0 +1,133 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 17,
+          "end": 18
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 36,
+                  "end": 37
+                },
+                "arguments": [],
+                "start": 36,
+                "end": 39
+              },
+              "start": 36,
+              "end": 40
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 54,
+                  "end": 55
+                },
+                "arguments": [],
+                "start": 54,
+                "end": 57
+              },
+              "start": 54,
+              "end": 58
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "AssignmentExpression",
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "name": "d",
+                  "start": 72,
+                  "end": 73
+                },
+                "right": {
+                  "type": "Literal",
+                  "value": 1,
+                  "raw": "1",
+                  "start": 76,
+                  "end": 77
+                },
+                "start": 72,
+                "end": 77
+              },
+              "start": 72,
+              "end": 78
+            },
+            {
+              "type": "ReturnStatement",
+              "argument": null,
+              "start": 92,
+              "end": 99
+            },
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "Identifier",
+                "name": "d",
+                "start": 117,
+                "end": 118
+              },
+              "consequent": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "CallExpression",
+                      "callee": {
+                        "type": "Identifier",
+                        "name": "e",
+                        "start": 139,
+                        "end": 140
+                      },
+                      "arguments": [],
+                      "start": 139,
+                      "end": 142
+                    },
+                    "start": 139,
+                    "end": 143
+                  }
+                ],
+                "start": 120,
+                "end": 158
+              },
+              "alternate": null,
+              "start": 113,
+              "end": 158
+            }
+          ],
+          "start": 21,
+          "end": 169
+        },
+        "expression": false,
+        "start": 8,
+        "end": 169
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 170
+  },
+  "errors": []
+}

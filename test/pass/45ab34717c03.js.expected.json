@@ -1,0 +1,34 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": null,
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 5,
+          "end": 6
+        },
+        "update": {
+          "type": "Identifier",
+          "name": "b",
+          "start": 7,
+          "end": 8
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 9,
+          "end": 10
+        },
+        "start": 0,
+        "end": 10
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 10
+  },
+  "errors": []
+}

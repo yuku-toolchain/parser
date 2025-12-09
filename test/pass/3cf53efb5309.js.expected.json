@@ -1,0 +1,111 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": null,
+        "test": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 6,
+            "end": 7
+          },
+          "arguments": [],
+          "start": 6,
+          "end": 9
+        },
+        "update": null,
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "b",
+                  "start": 22,
+                  "end": 23
+                },
+                "arguments": [],
+                "start": 22,
+                "end": 25
+              },
+              "consequent": {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 27,
+                    "end": 28
+                  },
+                  "arguments": [],
+                  "start": 27,
+                  "end": 30
+                },
+                "start": 27,
+                "end": 31
+              },
+              "alternate": {
+                "type": "BreakStatement",
+                "label": null,
+                "start": 41,
+                "end": 47
+              },
+              "start": 18,
+              "end": 47
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "d",
+                  "start": 52,
+                  "end": 53
+                },
+                "arguments": [],
+                "start": 52,
+                "end": 55
+              },
+              "start": 52,
+              "end": 56
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "e",
+                  "start": 61,
+                  "end": 62
+                },
+                "arguments": [],
+                "start": 61,
+                "end": 64
+              },
+              "start": 61,
+              "end": 65
+            }
+          ],
+          "start": 12,
+          "end": 67
+        },
+        "start": 0,
+        "end": 67
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 67
+  },
+  "errors": []
+}

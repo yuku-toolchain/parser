@@ -1,0 +1,88 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "VariableDeclaration",
+                      "kind": "var",
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
+                          "id": {
+                            "type": "Identifier",
+                            "name": "a",
+                            "start": 30,
+                            "end": 31
+                          },
+                          "init": {
+                            "type": "Literal",
+                            "value": 1,
+                            "raw": "1",
+                            "start": 34,
+                            "end": 35
+                          },
+                          "start": 30,
+                          "end": 35
+                        }
+                      ],
+                      "start": 26,
+                      "end": 36
+                    }
+                  ],
+                  "start": 24,
+                  "end": 38
+                },
+                "expression": false,
+                "start": 14,
+                "end": 38
+              },
+              "start": 13,
+              "end": 39
+            },
+            "property": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 40,
+              "end": 41
+            },
+            "computed": false,
+            "start": 13,
+            "end": 41
+          },
+          "arguments": [
+            {
+              "type": "ThisExpression",
+              "start": 42,
+              "end": 46
+            }
+          ],
+          "start": 13,
+          "end": 47
+        },
+        "start": 13,
+        "end": 47
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 47
+  },
+  "errors": []
+}

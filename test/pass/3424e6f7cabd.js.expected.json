@@ -1,0 +1,46 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "Literal",
+                "value": {},
+                "raw": "/[\\u{0000000000000061}-\\u{7A}]/u",
+                "regex": {
+                  "pattern": "[\\u{0000000000000061}-\\u{7A}]",
+                  "flags": "u"
+                },
+                "start": 9,
+                "end": 41
+              },
+              "start": 8,
+              "end": 42
+            },
+            "start": 4,
+            "end": 42
+          }
+        ],
+        "start": 0,
+        "end": 43
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 44
+  },
+  "errors": []
+}

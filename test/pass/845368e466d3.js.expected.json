@@ -1,0 +1,95 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "ArrayPattern",
+            "elements": [
+              {
+                "type": "ObjectPattern",
+                "properties": [
+                  {
+                    "type": "Property",
+                    "kind": "init",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 3,
+                      "end": 4
+                    },
+                    "value": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 3,
+                      "end": 4
+                    },
+                    "method": false,
+                    "shorthand": true,
+                    "computed": false,
+                    "start": 3,
+                    "end": 4
+                  },
+                  {
+                    "type": "Property",
+                    "kind": "init",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 6,
+                      "end": 7
+                    },
+                    "value": {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 6,
+                      "end": 7
+                    },
+                    "method": false,
+                    "shorthand": true,
+                    "computed": false,
+                    "start": 6,
+                    "end": 7
+                  }
+                ],
+                "start": 1,
+                "end": 9
+              },
+              {
+                "type": "RestElement",
+                "argument": {
+                  "type": "Identifier",
+                  "name": "c",
+                  "start": 14,
+                  "end": 15
+                },
+                "start": 11,
+                "end": 15
+              }
+            ],
+            "start": 0,
+            "end": 16
+          },
+          "right": {
+            "type": "Identifier",
+            "name": "d",
+            "start": 19,
+            "end": 20
+          },
+          "start": 0,
+          "end": 20
+        },
+        "start": 0,
+        "end": 20
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 20
+  },
+  "errors": []
+}

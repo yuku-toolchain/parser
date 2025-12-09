@@ -1,0 +1,98 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "BinaryExpression",
+                      "left": {
+                        "type": "Literal",
+                        "value": null,
+                        "raw": "null",
+                        "start": 19,
+                        "end": 23
+                      },
+                      "operator": "!=",
+                      "right": {
+                        "type": "ParenthesizedExpression",
+                        "expression": {
+                          "type": "ConditionalExpression",
+                          "test": {
+                            "type": "Identifier",
+                            "name": "a",
+                            "start": 26,
+                            "end": 27
+                          },
+                          "consequent": {
+                            "type": "UnaryExpression",
+                            "operator": "void",
+                            "argument": {
+                              "type": "Literal",
+                              "value": 1,
+                              "raw": "1",
+                              "start": 33,
+                              "end": 34
+                            },
+                            "prefix": true,
+                            "start": 28,
+                            "end": 34
+                          },
+                          "alternate": {
+                            "type": "Identifier",
+                            "name": "b",
+                            "start": 35,
+                            "end": 36
+                          },
+                          "start": 26,
+                          "end": 36
+                        },
+                        "start": 25,
+                        "end": 37
+                      },
+                      "start": 19,
+                      "end": 37
+                    },
+                    "start": 19,
+                    "end": 37
+                  }
+                ],
+                "start": 13,
+                "end": 39
+              },
+              "expression": false,
+              "start": 1,
+              "end": 39
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 41
+          },
+          "start": 0,
+          "end": 42
+        },
+        "start": 0,
+        "end": 43
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 44
+  },
+  "errors": []
+}

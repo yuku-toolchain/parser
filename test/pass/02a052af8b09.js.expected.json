@@ -1,0 +1,77 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "await": false,
+        "left": {
+          "type": "ObjectPattern",
+          "properties": [
+            {
+              "type": "Property",
+              "kind": "init",
+              "key": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 6,
+                "end": 7
+              },
+              "value": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 6,
+                "end": 7
+              },
+              "method": false,
+              "shorthand": true,
+              "computed": false,
+              "start": 6,
+              "end": 7
+            },
+            {
+              "type": "Property",
+              "kind": "init",
+              "key": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 9,
+                "end": 10
+              },
+              "value": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 9,
+                "end": 10
+              },
+              "method": false,
+              "shorthand": true,
+              "computed": false,
+              "start": 9,
+              "end": 10
+            }
+          ],
+          "start": 5,
+          "end": 11
+        },
+        "right": {
+          "type": "Identifier",
+          "name": "c",
+          "start": 15,
+          "end": 16
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 18,
+          "end": 19
+        },
+        "start": 0,
+        "end": 19
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 20
+  },
+  "errors": []
+}

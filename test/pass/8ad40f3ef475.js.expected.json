@@ -1,0 +1,111 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "Infinity",
+              "start": 4,
+              "end": 12
+            },
+            "init": null,
+            "start": 4,
+            "end": 12
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "NaN",
+              "start": 14,
+              "end": 17
+            },
+            "init": null,
+            "start": 14,
+            "end": 17
+          }
+        ],
+        "start": 0,
+        "end": 18
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "MemberExpression",
+              "object": {
+                "type": "Identifier",
+                "name": "Infinity",
+                "start": 20,
+                "end": 28
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 29,
+                "end": 30
+              },
+              "computed": false,
+              "start": 20,
+              "end": 30
+            },
+            "start": 19,
+            "end": 31
+          },
+          "arguments": [],
+          "start": 19,
+          "end": 33
+        },
+        "start": 19,
+        "end": 34
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "MemberExpression",
+              "object": {
+                "type": "Identifier",
+                "name": "NaN",
+                "start": 36,
+                "end": 39
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 40,
+                "end": 41
+              },
+              "computed": false,
+              "start": 36,
+              "end": 41
+            },
+            "start": 35,
+            "end": 42
+          },
+          "arguments": [],
+          "start": 35,
+          "end": 44
+        },
+        "start": 35,
+        "end": 45
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 46
+  },
+  "errors": []
+}

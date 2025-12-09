@@ -1,0 +1,138 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "name": "b",
+            "start": 11,
+            "end": 12
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "Identifier",
+                "name": "c",
+                "start": 24,
+                "end": 25
+              },
+              "consequent": {
+                "type": "ForStatement",
+                "init": {
+                  "type": "VariableDeclaration",
+                  "kind": "var",
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "id": {
+                        "type": "Identifier",
+                        "name": "d",
+                        "start": 36,
+                        "end": 37
+                      },
+                      "init": {
+                        "type": "Literal",
+                        "value": 1,
+                        "raw": "1",
+                        "start": 40,
+                        "end": 41
+                      },
+                      "start": 36,
+                      "end": 41
+                    },
+                    {
+                      "type": "VariableDeclarator",
+                      "id": {
+                        "type": "Identifier",
+                        "name": "e",
+                        "start": 43,
+                        "end": 44
+                      },
+                      "init": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "Identifier",
+                            "name": "b",
+                            "start": 47,
+                            "end": 48
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "f",
+                            "start": 49,
+                            "end": 50
+                          },
+                          "computed": false,
+                          "start": 47,
+                          "end": 50
+                        },
+                        "arguments": [],
+                        "start": 47,
+                        "end": 52
+                      },
+                      "start": 43,
+                      "end": 52
+                    }
+                  ],
+                  "start": 32,
+                  "end": 52
+                },
+                "test": null,
+                "update": {
+                  "type": "UpdateExpression",
+                  "operator": "++",
+                  "prefix": false,
+                  "argument": {
+                    "type": "Identifier",
+                    "name": "d",
+                    "start": 56,
+                    "end": 57
+                  },
+                  "start": 56,
+                  "end": 59
+                },
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "start": 61,
+                  "end": 63
+                },
+                "start": 27,
+                "end": 63
+              },
+              "alternate": null,
+              "start": 20,
+              "end": 63
+            }
+          ],
+          "start": 14,
+          "end": 65
+        },
+        "expression": false,
+        "start": 0,
+        "end": 65
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 65
+  },
+  "errors": []
+}

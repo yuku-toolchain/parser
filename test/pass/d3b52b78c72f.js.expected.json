@@ -1,0 +1,100 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 10,
+          "end": 11
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "ClassExpression",
+                  "decorators": [],
+                  "id": null,
+                  "superClass": null,
+                  "body": {
+                    "type": "ClassBody",
+                    "body": [
+                      {
+                        "type": "MethodDefinition",
+                        "decorators": [],
+                        "key": {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "YieldExpression",
+                            "delegate": false,
+                            "argument": null,
+                            "start": 33,
+                            "end": 38
+                          },
+                          "start": 32,
+                          "end": 39
+                        },
+                        "value": {
+                          "type": "FunctionExpression",
+                          "id": null,
+                          "generator": false,
+                          "async": false,
+                          "params": [],
+                          "body": {
+                            "type": "BlockStatement",
+                            "body": [],
+                            "start": 43,
+                            "end": 45
+                          },
+                          "expression": false,
+                          "start": 40,
+                          "end": 45
+                        },
+                        "kind": "method",
+                        "computed": true,
+                        "static": false,
+                        "start": 31,
+                        "end": 45
+                      }
+                    ],
+                    "start": 25,
+                    "end": 49
+                  },
+                  "start": 19,
+                  "end": 49
+                },
+                "start": 18,
+                "end": 50
+              },
+              "start": 18,
+              "end": 51
+            }
+          ],
+          "start": 14,
+          "end": 53
+        },
+        "expression": false,
+        "start": 0,
+        "end": 53
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 54,
+        "end": 55
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 56
+  },
+  "errors": []
+}

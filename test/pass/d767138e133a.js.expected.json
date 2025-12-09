@@ -1,0 +1,82 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "init",
+                "key": {
+                  "type": "Literal",
+                  "value": "__proto__",
+                  "raw": "\"__proto__\"",
+                  "start": 3,
+                  "end": 14
+                },
+                "value": {
+                  "type": "Literal",
+                  "value": null,
+                  "raw": "null",
+                  "start": 16,
+                  "end": 20
+                },
+                "method": false,
+                "shorthand": false,
+                "computed": false,
+                "start": 3,
+                "end": 20
+              },
+              {
+                "type": "Property",
+                "kind": "get",
+                "key": {
+                  "type": "Identifier",
+                  "name": "__proto__",
+                  "start": 26,
+                  "end": 35
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [],
+                    "start": 37,
+                    "end": 39
+                  },
+                  "expression": false,
+                  "start": 35,
+                  "end": 39
+                },
+                "method": false,
+                "shorthand": false,
+                "computed": false,
+                "start": 22,
+                "end": 39
+              }
+            ],
+            "start": 1,
+            "end": 41
+          },
+          "start": 0,
+          "end": 42
+        },
+        "start": 0,
+        "end": 42
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 43
+  },
+  "errors": []
+}

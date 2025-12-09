@@ -1,0 +1,87 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "MemberExpression",
+              "object": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "MemberExpression",
+                  "object": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "MemberExpression",
+                      "object": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 3,
+                        "end": 4
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "name": "b",
+                        "start": 5,
+                        "end": 6
+                      },
+                      "computed": false,
+                      "start": 3,
+                      "end": 6
+                    },
+                    "start": 2,
+                    "end": 7
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 8,
+                    "end": 9
+                  },
+                  "computed": false,
+                  "start": 2,
+                  "end": 9
+                },
+                "start": 1,
+                "end": 10
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "d",
+                "start": 11,
+                "end": 12
+              },
+              "computed": false,
+              "start": 1,
+              "end": 12
+            },
+            "start": 0,
+            "end": 13
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 14,
+              "end": 15
+            }
+          ],
+          "start": 0,
+          "end": 16
+        },
+        "start": 0,
+        "end": 17
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 18
+  },
+  "errors": []
+}

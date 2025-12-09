@@ -1,0 +1,84 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "declaration": {
+          "type": "FunctionDeclaration",
+          "id": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 24,
+            "end": 25
+          },
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "body": [],
+            "start": 27,
+            "end": 29
+          },
+          "expression": false,
+          "start": 15,
+          "end": 29
+        },
+        "start": 0,
+        "end": 29
+      },
+      {
+        "type": "VariableDeclaration",
+        "kind": "let",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 34,
+              "end": 35
+            },
+            "init": null,
+            "start": 34,
+            "end": 35
+          }
+        ],
+        "start": 30,
+        "end": 36
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "local": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 45,
+              "end": 46
+            },
+            "exported": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 50,
+              "end": 51
+            },
+            "start": 45,
+            "end": 51
+          }
+        ],
+        "source": null,
+        "attributes": [],
+        "start": 37,
+        "end": 53
+      }
+    ],
+    "sourceType": "module",
+    "start": 0,
+    "end": 54
+  },
+  "errors": []
+}

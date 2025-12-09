@@ -1,0 +1,58 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "decorators": [],
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 6,
+          "end": 7
+        },
+        "superClass": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "ClassExpression",
+            "decorators": [],
+            "id": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 23,
+              "end": 24
+            },
+            "superClass": {
+              "type": "Identifier",
+              "name": "c",
+              "start": 33,
+              "end": 34
+            },
+            "body": {
+              "type": "ClassBody",
+              "body": [],
+              "start": 35,
+              "end": 37
+            },
+            "start": 17,
+            "end": 37
+          },
+          "start": 16,
+          "end": 38
+        },
+        "body": {
+          "type": "ClassBody",
+          "body": [],
+          "start": 39,
+          "end": 41
+        },
+        "start": 0,
+        "end": 41
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 42
+  },
+  "errors": []
+}

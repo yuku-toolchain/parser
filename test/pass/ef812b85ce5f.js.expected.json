@@ -1,0 +1,101 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "Infinity",
+              "start": 4,
+              "end": 12
+            },
+            "init": null,
+            "start": 4,
+            "end": 12
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "NaN",
+              "start": 14,
+              "end": 17
+            },
+            "init": null,
+            "start": 14,
+            "end": 17
+          }
+        ],
+        "start": 0,
+        "end": 18
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "Identifier",
+              "name": "Infinity",
+              "start": 19,
+              "end": 27
+            },
+            "property": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 28,
+              "end": 29
+            },
+            "computed": false,
+            "start": 19,
+            "end": 29
+          },
+          "arguments": [],
+          "start": 19,
+          "end": 31
+        },
+        "start": 19,
+        "end": 32
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "Identifier",
+              "name": "NaN",
+              "start": 33,
+              "end": 36
+            },
+            "property": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 37,
+              "end": 38
+            },
+            "computed": false,
+            "start": 33,
+            "end": 38
+          },
+          "arguments": [],
+          "start": 33,
+          "end": 40
+        },
+        "start": 33,
+        "end": 41
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 41
+  },
+  "errors": []
+}

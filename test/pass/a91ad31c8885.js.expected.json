@@ -1,0 +1,55 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "implements",
+              "start": 4,
+              "end": 14
+            },
+            "init": null,
+            "start": 4,
+            "end": 14
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "interface",
+              "start": 16,
+              "end": 25
+            },
+            "init": null,
+            "start": 16,
+            "end": 25
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "package",
+              "start": 27,
+              "end": 34
+            },
+            "init": null,
+            "start": 27,
+            "end": 34
+          }
+        ],
+        "start": 0,
+        "end": 34
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 34
+  },
+  "errors": []
+}

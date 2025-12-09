@@ -1,0 +1,61 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "MetaProperty",
+                  "meta": {
+                    "type": "Identifier",
+                    "name": "new",
+                    "start": 19,
+                    "end": 22
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "name": "target",
+                    "start": 23,
+                    "end": 29
+                  },
+                  "start": 19,
+                  "end": 29
+                },
+                "arguments": [],
+                "start": 19,
+                "end": 31
+              },
+              "start": 19,
+              "end": 32
+            }
+          ],
+          "start": 13,
+          "end": 34
+        },
+        "expression": false,
+        "start": 0,
+        "end": 34
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 35
+  },
+  "errors": []
+}

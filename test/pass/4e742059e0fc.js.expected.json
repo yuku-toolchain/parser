@@ -1,0 +1,42 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForStatement",
+        "init": {
+          "type": "SequenceExpression",
+          "expressions": [
+            {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            {
+              "type": "Identifier",
+              "name": "b",
+              "start": 7,
+              "end": 8
+            }
+          ],
+          "start": 4,
+          "end": 8
+        },
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 11,
+          "end": 12
+        },
+        "start": 0,
+        "end": 12
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 12
+  },
+  "errors": []
+}

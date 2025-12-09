@@ -1,0 +1,113 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "label": {
+          "type": "Identifier",
+          "name": "e",
+          "start": 34,
+          "end": 35
+        },
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "LabeledStatement",
+              "label": {
+                "type": "Identifier",
+                "name": "d",
+                "start": 43,
+                "end": 44
+              },
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "CallExpression",
+                      "callee": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 56,
+                        "end": 57
+                      },
+                      "arguments": [
+                        {
+                          "type": "Literal",
+                          "value": "b",
+                          "raw": "\"b\"",
+                          "start": 58,
+                          "end": 61
+                        }
+                      ],
+                      "start": 56,
+                      "end": 62
+                    },
+                    "start": 56,
+                    "end": 63
+                  },
+                  {
+                    "type": "IfStatement",
+                    "test": {
+                      "type": "Identifier",
+                      "name": "c",
+                      "start": 76,
+                      "end": 77
+                    },
+                    "consequent": {
+                      "type": "BlockStatement",
+                      "body": [
+                        {
+                          "type": "BreakStatement",
+                          "label": {
+                            "type": "Identifier",
+                            "name": "d",
+                            "start": 99,
+                            "end": 100
+                          },
+                          "start": 93,
+                          "end": 101
+                        }
+                      ],
+                      "start": 79,
+                      "end": 111
+                    },
+                    "alternate": null,
+                    "start": 72,
+                    "end": 111
+                  },
+                  {
+                    "type": "BreakStatement",
+                    "label": {
+                      "type": "Identifier",
+                      "name": "e",
+                      "start": 126,
+                      "end": 127
+                    },
+                    "start": 120,
+                    "end": 128
+                  }
+                ],
+                "start": 46,
+                "end": 134
+              },
+              "start": 43,
+              "end": 134
+            }
+          ],
+          "start": 37,
+          "end": 136
+        },
+        "start": 34,
+        "end": 136
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 137
+  },
+  "errors": []
+}

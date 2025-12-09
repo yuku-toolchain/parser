@@ -1,0 +1,35 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "declaration": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "ClassExpression",
+            "decorators": [],
+            "id": null,
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "body": [],
+              "start": 21,
+              "end": 23
+            },
+            "start": 16,
+            "end": 23
+          },
+          "start": 15,
+          "end": 24
+        },
+        "start": 0,
+        "end": 25
+      }
+    ],
+    "sourceType": "module",
+    "start": 0,
+    "end": 25
+  },
+  "errors": []
+}

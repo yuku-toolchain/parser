@@ -1,0 +1,116 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "kind": "var",
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "id": {
+                    "type": "Identifier",
+                    "name": "a",
+                    "start": 21,
+                    "end": 22
+                  },
+                  "init": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Literal",
+                      "value": 1,
+                      "raw": "1",
+                      "start": 26,
+                      "end": 27
+                    },
+                    "start": 25,
+                    "end": 28
+                  },
+                  "start": 21,
+                  "end": 28
+                }
+              ],
+              "start": 17,
+              "end": 29
+            },
+            {
+              "type": "FunctionDeclaration",
+              "id": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 41,
+                "end": 42
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "VariableDeclaration",
+                    "kind": "var",
+                    "declarations": [
+                      {
+                        "type": "VariableDeclarator",
+                        "id": {
+                          "type": "Identifier",
+                          "name": "c",
+                          "start": 55,
+                          "end": 56
+                        },
+                        "init": {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "Identifier",
+                            "name": "a",
+                            "start": 60,
+                            "end": 61
+                          },
+                          "start": 59,
+                          "end": 62
+                        },
+                        "start": 55,
+                        "end": 62
+                      }
+                    ],
+                    "start": 51,
+                    "end": 63
+                  }
+                ],
+                "start": 45,
+                "end": 67
+              },
+              "expression": false,
+              "start": 32,
+              "end": 67
+            }
+          ],
+          "start": 13,
+          "end": 69
+        },
+        "expression": false,
+        "start": 0,
+        "end": 69
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 70
+  },
+  "errors": []
+}

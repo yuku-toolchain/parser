@@ -1,0 +1,121 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "WhileStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 7,
+          "end": 8
+        },
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 18,
+                "end": 19
+              },
+              "consequent": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "SwitchStatement",
+                    "discriminant": {
+                      "type": "Literal",
+                      "value": true,
+                      "raw": "true",
+                      "start": 35,
+                      "end": 39
+                    },
+                    "cases": [
+                      {
+                        "type": "SwitchCase",
+                        "test": {
+                          "type": "CallExpression",
+                          "callee": {
+                            "type": "Identifier",
+                            "name": "c",
+                            "start": 54,
+                            "end": 55
+                          },
+                          "arguments": [],
+                          "start": 54,
+                          "end": 57
+                        },
+                        "consequent": [
+                          {
+                            "type": "ExpressionStatement",
+                            "expression": {
+                              "type": "CallExpression",
+                              "callee": {
+                                "type": "Identifier",
+                                "name": "d",
+                                "start": 67,
+                                "end": 68
+                              },
+                              "arguments": [],
+                              "start": 67,
+                              "end": 70
+                            },
+                            "start": 67,
+                            "end": 71
+                          }
+                        ],
+                        "start": 49,
+                        "end": 71
+                      }
+                    ],
+                    "start": 27,
+                    "end": 77
+                  },
+                  {
+                    "type": "ContinueStatement",
+                    "label": null,
+                    "start": 82,
+                    "end": 91
+                  }
+                ],
+                "start": 21,
+                "end": 95
+              },
+              "alternate": null,
+              "start": 14,
+              "end": 95
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "e",
+                  "start": 98,
+                  "end": 99
+                },
+                "arguments": [],
+                "start": 98,
+                "end": 101
+              },
+              "start": 98,
+              "end": 102
+            }
+          ],
+          "start": 10,
+          "end": 104
+        },
+        "start": 0,
+        "end": 104
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 105
+  },
+  "errors": []
+}

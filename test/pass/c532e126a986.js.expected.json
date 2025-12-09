@@ -1,0 +1,16 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "EmptyStatement",
+        "start": 0,
+        "end": 1
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 18
+  },
+  "errors": []
+}

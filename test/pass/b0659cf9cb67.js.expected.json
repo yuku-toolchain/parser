@@ -1,0 +1,90 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "decorators": [],
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 6,
+          "end": 7
+        },
+        "superClass": {
+          "type": "Identifier",
+          "name": "b",
+          "start": 16,
+          "end": 17
+        },
+        "body": {
+          "type": "ClassBody",
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "decorators": [],
+              "key": {
+                "type": "Identifier",
+                "name": "constructor",
+                "start": 20,
+                "end": 31
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "AssignmentPattern",
+                    "left": {
+                      "type": "Identifier",
+                      "name": "c",
+                      "start": 32,
+                      "end": 33
+                    },
+                    "right": {
+                      "type": "CallExpression",
+                      "callee": {
+                        "type": "Super",
+                        "start": 36,
+                        "end": 41
+                      },
+                      "arguments": [],
+                      "start": 36,
+                      "end": 43
+                    },
+                    "start": 32,
+                    "end": 43
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "start": 44,
+                  "end": 46
+                },
+                "expression": false,
+                "start": 31,
+                "end": 46
+              },
+              "kind": "constructor",
+              "computed": false,
+              "static": false,
+              "start": 20,
+              "end": 46
+            }
+          ],
+          "start": 18,
+          "end": 48
+        },
+        "start": 0,
+        "end": 48
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 48
+  },
+  "errors": []
+}

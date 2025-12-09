@@ -1,0 +1,106 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ForStatement",
+                    "init": {
+                      "type": "VariableDeclaration",
+                      "kind": "var",
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
+                          "id": {
+                            "type": "Identifier",
+                            "name": "a",
+                            "start": 28,
+                            "end": 29
+                          },
+                          "init": null,
+                          "start": 28,
+                          "end": 29
+                        }
+                      ],
+                      "start": 24,
+                      "end": 29
+                    },
+                    "test": {
+                      "type": "BinaryExpression",
+                      "left": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 31,
+                        "end": 32
+                      },
+                      "operator": "<",
+                      "right": {
+                        "type": "Literal",
+                        "value": 1,
+                        "raw": "1",
+                        "start": 35,
+                        "end": 36
+                      },
+                      "start": 31,
+                      "end": 36
+                    },
+                    "update": {
+                      "type": "UpdateExpression",
+                      "operator": "++",
+                      "prefix": true,
+                      "argument": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "start": 40,
+                        "end": 41
+                      },
+                      "start": 38,
+                      "end": 41
+                    },
+                    "body": {
+                      "type": "EmptyStatement",
+                      "start": 42,
+                      "end": 43
+                    },
+                    "start": 19,
+                    "end": 43
+                  }
+                ],
+                "start": 13,
+                "end": 45
+              },
+              "expression": false,
+              "start": 1,
+              "end": 45
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 47
+          },
+          "start": 0,
+          "end": 48
+        },
+        "start": 0,
+        "end": 49
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 50
+  },
+  "errors": []
+}

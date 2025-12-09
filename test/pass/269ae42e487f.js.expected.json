@@ -1,0 +1,176 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 4,
+              "end": 5
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "ObjectExpression",
+                "properties": [],
+                "start": 9,
+                "end": 11
+              },
+              "start": 8,
+              "end": 12
+            },
+            "start": 4,
+            "end": 12
+          }
+        ],
+        "start": 0,
+        "end": 13
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 14,
+              "end": 15
+            },
+            "property": {
+              "type": "Identifier",
+              "name": "b",
+              "start": 16,
+              "end": 17
+            },
+            "computed": false,
+            "start": 14,
+            "end": 17
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 21,
+              "end": 22
+            },
+            "start": 20,
+            "end": 23
+          },
+          "start": 14,
+          "end": 23
+        },
+        "start": 14,
+        "end": 24
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "AssignmentExpression",
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "object": {
+              "type": "Identifier",
+              "name": "a",
+              "start": 25,
+              "end": 26
+            },
+            "property": {
+              "type": "Identifier",
+              "name": "c",
+              "start": 27,
+              "end": 28
+            },
+            "computed": false,
+            "start": 25,
+            "end": 28
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "Literal",
+              "value": 2,
+              "raw": "2",
+              "start": 32,
+              "end": 33
+            },
+            "start": 31,
+            "end": 34
+          },
+          "start": 25,
+          "end": 34
+        },
+        "start": 25,
+        "end": 35
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "expression": {
+              "type": "MemberExpression",
+              "object": {
+                "type": "Identifier",
+                "name": "d",
+                "start": 37,
+                "end": 38
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "e",
+                "start": 39,
+                "end": 40
+              },
+              "computed": false,
+              "start": 37,
+              "end": 40
+            },
+            "start": 36,
+            "end": 41
+          },
+          "arguments": [
+            {
+              "type": "MemberExpression",
+              "object": {
+                "type": "Identifier",
+                "name": "a",
+                "start": 42,
+                "end": 43
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 44,
+                "end": 45
+              },
+              "computed": false,
+              "start": 42,
+              "end": 45
+            }
+          ],
+          "start": 36,
+          "end": 46
+        },
+        "start": 36,
+        "end": 47
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 48
+  },
+  "errors": []
+}

@@ -1,0 +1,136 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "kind": "var",
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "id": {
+                    "type": "ObjectPattern",
+                    "properties": [
+                      {
+                        "type": "Property",
+                        "kind": "init",
+                        "key": {
+                          "type": "Identifier",
+                          "name": "b",
+                          "start": 22,
+                          "end": 23
+                        },
+                        "value": {
+                          "type": "Identifier",
+                          "name": "b",
+                          "start": 22,
+                          "end": 23
+                        },
+                        "method": false,
+                        "shorthand": true,
+                        "computed": false,
+                        "start": 22,
+                        "end": 23
+                      },
+                      {
+                        "type": "Property",
+                        "kind": "init",
+                        "key": {
+                          "type": "Identifier",
+                          "name": "c",
+                          "start": 25,
+                          "end": 26
+                        },
+                        "value": {
+                          "type": "Identifier",
+                          "name": "c",
+                          "start": 25,
+                          "end": 26
+                        },
+                        "method": false,
+                        "shorthand": true,
+                        "computed": false,
+                        "start": 25,
+                        "end": 26
+                      }
+                    ],
+                    "start": 21,
+                    "end": 27
+                  },
+                  "init": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 31,
+                      "end": 32
+                    },
+                    "start": 30,
+                    "end": 33
+                  },
+                  "start": 21,
+                  "end": 33
+                }
+              ],
+              "start": 17,
+              "end": 34
+            },
+            {
+              "type": "VariableDeclaration",
+              "kind": "var",
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "id": {
+                    "type": "Identifier",
+                    "name": "d",
+                    "start": 41,
+                    "end": 42
+                  },
+                  "init": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 46,
+                      "end": 47
+                    },
+                    "start": 45,
+                    "end": 48
+                  },
+                  "start": 41,
+                  "end": 48
+                }
+              ],
+              "start": 37,
+              "end": 49
+            }
+          ],
+          "start": 13,
+          "end": 51
+        },
+        "expression": false,
+        "start": 0,
+        "end": 51
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 52
+  },
+  "errors": []
+}

@@ -1,0 +1,90 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "FunctionExpression",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "IfStatement",
+                    "test": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 20,
+                      "end": 21
+                    },
+                    "consequent": {
+                      "type": "ReturnStatement",
+                      "argument": {
+                        "type": "Identifier",
+                        "name": "b",
+                        "start": 30,
+                        "end": 31
+                      },
+                      "start": 23,
+                      "end": 32
+                    },
+                    "alternate": null,
+                    "start": 17,
+                    "end": 32
+                  },
+                  {
+                    "type": "IfStatement",
+                    "test": {
+                      "type": "Identifier",
+                      "name": "b",
+                      "start": 40,
+                      "end": 41
+                    },
+                    "consequent": {
+                      "type": "ReturnStatement",
+                      "argument": {
+                        "type": "Identifier",
+                        "name": "c",
+                        "start": 50,
+                        "end": 51
+                      },
+                      "start": 43,
+                      "end": 52
+                    },
+                    "alternate": null,
+                    "start": 37,
+                    "end": 52
+                  }
+                ],
+                "start": 11,
+                "end": 54
+              },
+              "expression": false,
+              "start": 1,
+              "end": 54
+            },
+            "arguments": [],
+            "start": 1,
+            "end": 56
+          },
+          "start": 0,
+          "end": 57
+        },
+        "start": 0,
+        "end": 57
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 58
+  },
+  "errors": []
+}

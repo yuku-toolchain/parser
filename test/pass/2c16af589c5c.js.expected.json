@@ -1,0 +1,87 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "decorators": [],
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 6,
+          "end": 7
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "decorators": [],
+              "key": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 18,
+                "end": 19
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": true,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "c",
+                    "start": 20,
+                    "end": 21
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "YieldExpression",
+                        "delegate": false,
+                        "argument": {
+                          "type": "Identifier",
+                          "name": "c",
+                          "start": 31,
+                          "end": 32
+                        },
+                        "start": 25,
+                        "end": 32
+                      },
+                      "start": 25,
+                      "end": 33
+                    }
+                  ],
+                  "start": 23,
+                  "end": 35
+                },
+                "expression": false,
+                "start": 19,
+                "end": 35
+              },
+              "kind": "method",
+              "computed": false,
+              "static": true,
+              "start": 10,
+              "end": 35
+            }
+          ],
+          "start": 8,
+          "end": 36
+        },
+        "start": 0,
+        "end": 36
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 36
+  },
+  "errors": []
+}

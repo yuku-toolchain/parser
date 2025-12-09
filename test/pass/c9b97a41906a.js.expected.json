@@ -1,0 +1,131 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 10,
+          "end": 11
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "SequenceExpression",
+                "expressions": [
+                  {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "SequenceExpression",
+                      "expressions": [
+                        {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "YieldExpression",
+                            "delegate": false,
+                            "argument": {
+                              "type": "ParenthesizedExpression",
+                              "expression": {
+                                "type": "AssignmentExpression",
+                                "operator": "=",
+                                "left": {
+                                  "type": "Identifier",
+                                  "name": "b",
+                                  "start": 27,
+                                  "end": 28
+                                },
+                                "right": {
+                                  "type": "Identifier",
+                                  "name": "c",
+                                  "start": 31,
+                                  "end": 32
+                                },
+                                "start": 27,
+                                "end": 32
+                              },
+                              "start": 26,
+                              "end": 33
+                            },
+                            "start": 20,
+                            "end": 33
+                          },
+                          "start": 19,
+                          "end": 34
+                        },
+                        {
+                          "type": "ParenthesizedExpression",
+                          "expression": {
+                            "type": "YieldExpression",
+                            "delegate": true,
+                            "argument": {
+                              "type": "ParenthesizedExpression",
+                              "expression": {
+                                "type": "AssignmentExpression",
+                                "operator": "=",
+                                "left": {
+                                  "type": "Identifier",
+                                  "name": "d",
+                                  "start": 45,
+                                  "end": 46
+                                },
+                                "right": {
+                                  "type": "Identifier",
+                                  "name": "e",
+                                  "start": 49,
+                                  "end": 50
+                                },
+                                "start": 45,
+                                "end": 50
+                              },
+                              "start": 44,
+                              "end": 51
+                            },
+                            "start": 37,
+                            "end": 51
+                          },
+                          "start": 36,
+                          "end": 52
+                        }
+                      ],
+                      "start": 19,
+                      "end": 52
+                    },
+                    "start": 18,
+                    "end": 53
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "f",
+                    "start": 55,
+                    "end": 56
+                  }
+                ],
+                "start": 18,
+                "end": 56
+              },
+              "start": 18,
+              "end": 57
+            }
+          ],
+          "start": 14,
+          "end": 59
+        },
+        "expression": false,
+        "start": 0,
+        "end": 59
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 60
+  },
+  "errors": []
+}

@@ -1,0 +1,48 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ForInStatement",
+        "left": {
+          "type": "VariableDeclaration",
+          "kind": "let",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "yield",
+                "start": 8,
+                "end": 13
+              },
+              "init": null,
+              "start": 8,
+              "end": 13
+            }
+          ],
+          "start": 4,
+          "end": 13
+        },
+        "right": {
+          "type": "Literal",
+          "value": 1,
+          "raw": "1",
+          "start": 17,
+          "end": 18
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 19,
+          "end": 20
+        },
+        "start": 0,
+        "end": 20
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 20
+  },
+  "errors": []
+}

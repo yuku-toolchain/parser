@@ -1,0 +1,79 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "IfStatement",
+        "test": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 4,
+          "end": 5
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 15,
+                "end": 16
+              },
+              "consequent": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "Literal",
+                      "value": true,
+                      "raw": "true",
+                      "start": 24,
+                      "end": 28
+                    },
+                    "start": 24,
+                    "end": 29
+                  }
+                ],
+                "start": 18,
+                "end": 33
+              },
+              "alternate": null,
+              "start": 11,
+              "end": 33
+            }
+          ],
+          "start": 7,
+          "end": 35
+        },
+        "alternate": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "Literal",
+                "value": false,
+                "raw": "false",
+                "start": 45,
+                "end": 50
+              },
+              "start": 45,
+              "end": 51
+            }
+          ],
+          "start": 41,
+          "end": 53
+        },
+        "start": 0,
+        "end": 53
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 54
+  },
+  "errors": []
+}

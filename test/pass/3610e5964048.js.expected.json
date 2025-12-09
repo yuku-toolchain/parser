@@ -1,0 +1,28 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "WithStatement",
+        "object": {
+          "type": "Literal",
+          "value": 1,
+          "raw": "1",
+          "start": 5,
+          "end": 6
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 7,
+          "end": 8
+        },
+        "start": 0,
+        "end": 8
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 8
+  },
+  "errors": []
+}

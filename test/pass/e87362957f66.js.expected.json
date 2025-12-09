@@ -1,0 +1,237 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "TryStatement",
+        "block": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "FunctionExpression",
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "body": [
+                          {
+                            "type": "ExpressionStatement",
+                            "expression": {
+                              "type": "CallExpression",
+                              "callee": {
+                                "type": "Identifier",
+                                "name": "a",
+                                "start": 28,
+                                "end": 29
+                              },
+                              "arguments": [
+                                {
+                                  "type": "Literal",
+                                  "value": "b",
+                                  "raw": "\"b\"",
+                                  "start": 30,
+                                  "end": 33
+                                }
+                              ],
+                              "start": 28,
+                              "end": 34
+                            },
+                            "start": 28,
+                            "end": 35
+                          }
+                        ],
+                        "start": 22,
+                        "end": 39
+                      },
+                      "expression": false,
+                      "start": 10,
+                      "end": 39
+                    },
+                    "start": 9,
+                    "end": 40
+                  },
+                  "arguments": [],
+                  "start": 9,
+                  "end": 42
+                },
+                "start": 8,
+                "end": 43
+              },
+              "start": 8,
+              "end": 44
+            }
+          ],
+          "start": 4,
+          "end": 46
+        },
+        "handler": {
+          "type": "CatchClause",
+          "param": {
+            "type": "Identifier",
+            "name": "c",
+            "start": 54,
+            "end": 55
+          },
+          "body": {
+            "type": "BlockStatement",
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "ParenthesizedExpression",
+                  "expression": {
+                    "type": "CallExpression",
+                    "callee": {
+                      "type": "ParenthesizedExpression",
+                      "expression": {
+                        "type": "FunctionExpression",
+                        "id": null,
+                        "generator": false,
+                        "async": false,
+                        "params": [],
+                        "body": {
+                          "type": "BlockStatement",
+                          "body": [
+                            {
+                              "type": "ExpressionStatement",
+                              "expression": {
+                                "type": "CallExpression",
+                                "callee": {
+                                  "type": "Identifier",
+                                  "name": "a",
+                                  "start": 81,
+                                  "end": 82
+                                },
+                                "arguments": [
+                                  {
+                                    "type": "Literal",
+                                    "value": "b",
+                                    "raw": "\"b\"",
+                                    "start": 83,
+                                    "end": 86
+                                  }
+                                ],
+                                "start": 81,
+                                "end": 87
+                              },
+                              "start": 81,
+                              "end": 88
+                            }
+                          ],
+                          "start": 75,
+                          "end": 92
+                        },
+                        "expression": false,
+                        "start": 63,
+                        "end": 92
+                      },
+                      "start": 62,
+                      "end": 93
+                    },
+                    "arguments": [],
+                    "start": 62,
+                    "end": 95
+                  },
+                  "start": 61,
+                  "end": 96
+                },
+                "start": 61,
+                "end": 97
+              }
+            ],
+            "start": 57,
+            "end": 99
+          },
+          "start": 47,
+          "end": 99
+        },
+        "finalizer": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "ParenthesizedExpression",
+                "expression": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "FunctionExpression",
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [],
+                      "body": {
+                        "type": "BlockStatement",
+                        "body": [
+                          {
+                            "type": "ExpressionStatement",
+                            "expression": {
+                              "type": "CallExpression",
+                              "callee": {
+                                "type": "Identifier",
+                                "name": "a",
+                                "start": 132,
+                                "end": 133
+                              },
+                              "arguments": [
+                                {
+                                  "type": "Literal",
+                                  "value": "b",
+                                  "raw": "\"b\"",
+                                  "start": 134,
+                                  "end": 137
+                                }
+                              ],
+                              "start": 132,
+                              "end": 138
+                            },
+                            "start": 132,
+                            "end": 139
+                          }
+                        ],
+                        "start": 126,
+                        "end": 143
+                      },
+                      "expression": false,
+                      "start": 114,
+                      "end": 143
+                    },
+                    "start": 113,
+                    "end": 144
+                  },
+                  "arguments": [],
+                  "start": 113,
+                  "end": 146
+                },
+                "start": 112,
+                "end": 147
+              },
+              "start": 112,
+              "end": 148
+            }
+          ],
+          "start": 108,
+          "end": 150
+        },
+        "start": 0,
+        "end": 150
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 151
+  },
+  "errors": []
+}

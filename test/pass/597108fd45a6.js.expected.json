@@ -1,0 +1,111 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "decorators": [],
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 6,
+          "end": 7
+        },
+        "superClass": {
+          "type": "Identifier",
+          "name": "b",
+          "start": 16,
+          "end": 17
+        },
+        "body": {
+          "type": "ClassBody",
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "decorators": [],
+              "key": {
+                "type": "Identifier",
+                "name": "constructor",
+                "start": 20,
+                "end": 31
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "ParenthesizedExpression",
+                        "expression": {
+                          "type": "ObjectExpression",
+                          "properties": [
+                            {
+                              "type": "Property",
+                              "kind": "init",
+                              "key": {
+                                "type": "Identifier",
+                                "name": "c",
+                                "start": 38,
+                                "end": 39
+                              },
+                              "value": {
+                                "type": "CallExpression",
+                                "callee": {
+                                  "type": "Super",
+                                  "start": 41,
+                                  "end": 46
+                                },
+                                "arguments": [],
+                                "start": 41,
+                                "end": 48
+                              },
+                              "method": false,
+                              "shorthand": false,
+                              "computed": false,
+                              "start": 38,
+                              "end": 48
+                            }
+                          ],
+                          "start": 37,
+                          "end": 49
+                        },
+                        "start": 36,
+                        "end": 50
+                      },
+                      "start": 36,
+                      "end": 51
+                    }
+                  ],
+                  "start": 34,
+                  "end": 53
+                },
+                "expression": false,
+                "start": 31,
+                "end": 53
+              },
+              "kind": "constructor",
+              "computed": false,
+              "static": false,
+              "start": 20,
+              "end": 53
+            }
+          ],
+          "start": 18,
+          "end": 55
+        },
+        "start": 0,
+        "end": 55
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 55
+  },
+  "errors": []
+}

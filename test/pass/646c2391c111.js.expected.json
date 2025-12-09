@@ -1,0 +1,40 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "SequenceExpression",
+            "expressions": [
+              {
+                "type": "Identifier",
+                "name": "a",
+                "start": 1,
+                "end": 2
+              },
+              {
+                "type": "Identifier",
+                "name": "a",
+                "start": 3,
+                "end": 4
+              }
+            ],
+            "start": 1,
+            "end": 4
+          },
+          "start": 0,
+          "end": 5
+        },
+        "start": 0,
+        "end": 5
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 5
+  },
+  "errors": []
+}

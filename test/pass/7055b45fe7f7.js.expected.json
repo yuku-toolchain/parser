@@ -1,0 +1,85 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "decorators": [],
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 6,
+          "end": 7
+        },
+        "superClass": {
+          "type": "Identifier",
+          "name": "b",
+          "start": 16,
+          "end": 17
+        },
+        "body": {
+          "type": "ClassBody",
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "decorators": [],
+              "key": {
+                "type": "Literal",
+                "value": "constructor",
+                "raw": "\"constructor\"",
+                "start": 20,
+                "end": 33
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "Super",
+                          "start": 38,
+                          "end": 43
+                        },
+                        "arguments": [],
+                        "start": 38,
+                        "end": 45
+                      },
+                      "start": 38,
+                      "end": 45
+                    }
+                  ],
+                  "start": 36,
+                  "end": 47
+                },
+                "expression": false,
+                "start": 33,
+                "end": 47
+              },
+              "kind": "constructor",
+              "computed": false,
+              "static": false,
+              "start": 20,
+              "end": 47
+            }
+          ],
+          "start": 18,
+          "end": 49
+        },
+        "start": 0,
+        "end": 49
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 49
+  },
+  "errors": []
+}

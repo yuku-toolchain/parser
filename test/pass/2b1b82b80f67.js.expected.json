@@ -1,0 +1,65 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "kind": "let",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "eval",
+              "start": 4,
+              "end": 8
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "Literal",
+                "value": 1,
+                "raw": "1",
+                "start": 12,
+                "end": 13
+              },
+              "start": 11,
+              "end": 14
+            },
+            "start": 4,
+            "end": 14
+          },
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "arguments",
+              "start": 16,
+              "end": 25
+            },
+            "init": {
+              "type": "ParenthesizedExpression",
+              "expression": {
+                "type": "Literal",
+                "value": 2,
+                "raw": "2",
+                "start": 29,
+                "end": 30
+              },
+              "start": 28,
+              "end": 31
+            },
+            "start": 16,
+            "end": 31
+          }
+        ],
+        "start": 0,
+        "end": 32
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 33
+  },
+  "errors": []
+}

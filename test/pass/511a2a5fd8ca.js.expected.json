@@ -1,0 +1,139 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "label": {
+          "type": "Identifier",
+          "name": "d",
+          "start": 0,
+          "end": 1
+        },
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "LabeledStatement",
+              "label": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 36,
+                "end": 37
+              },
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "IfStatement",
+                    "test": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 53,
+                      "end": 54
+                    },
+                    "consequent": {
+                      "type": "BreakStatement",
+                      "label": {
+                        "type": "Identifier",
+                        "name": "b",
+                        "start": 62,
+                        "end": 63
+                      },
+                      "start": 56,
+                      "end": 64
+                    },
+                    "alternate": null,
+                    "start": 49,
+                    "end": 64
+                  },
+                  {
+                    "type": "IfStatement",
+                    "test": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 77,
+                      "end": 78
+                    },
+                    "consequent": {
+                      "type": "BreakStatement",
+                      "label": {
+                        "type": "Identifier",
+                        "name": "b",
+                        "start": 86,
+                        "end": 87
+                      },
+                      "start": 80,
+                      "end": 88
+                    },
+                    "alternate": null,
+                    "start": 73,
+                    "end": 88
+                  },
+                  {
+                    "type": "IfStatement",
+                    "test": {
+                      "type": "Identifier",
+                      "name": "a",
+                      "start": 101,
+                      "end": 102
+                    },
+                    "consequent": {
+                      "type": "BreakStatement",
+                      "label": {
+                        "type": "Identifier",
+                        "name": "b",
+                        "start": 110,
+                        "end": 111
+                      },
+                      "start": 104,
+                      "end": 112
+                    },
+                    "alternate": null,
+                    "start": 97,
+                    "end": 112
+                  }
+                ],
+                "start": 39,
+                "end": 118
+              },
+              "start": 36,
+              "end": 118
+            },
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "Identifier",
+                "name": "c",
+                "start": 127,
+                "end": 128
+              },
+              "consequent": {
+                "type": "BreakStatement",
+                "label": {
+                  "type": "Identifier",
+                  "name": "d",
+                  "start": 136,
+                  "end": 137
+                },
+                "start": 130,
+                "end": 138
+              },
+              "alternate": null,
+              "start": 123,
+              "end": 138
+            }
+          ],
+          "start": 3,
+          "end": 140
+        },
+        "start": 0,
+        "end": 140
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 141
+  },
+  "errors": []
+}

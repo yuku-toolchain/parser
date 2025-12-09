@@ -1,0 +1,106 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 9,
+          "end": 10
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "SequenceExpression",
+                "expressions": [
+                  {
+                    "type": "ParenthesizedExpression",
+                    "expression": {
+                      "type": "SequenceExpression",
+                      "expressions": [
+                        {
+                          "type": "Identifier",
+                          "name": "b",
+                          "start": 18,
+                          "end": 19
+                        },
+                        {
+                          "type": "Identifier",
+                          "name": "c",
+                          "start": 21,
+                          "end": 22
+                        }
+                      ],
+                      "start": 18,
+                      "end": 22
+                    },
+                    "start": 17,
+                    "end": 23
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "d",
+                    "start": 25,
+                    "end": 26
+                  }
+                ],
+                "start": 17,
+                "end": 26
+              },
+              "start": 17,
+              "end": 27
+            },
+            {
+              "type": "IfStatement",
+              "test": {
+                "type": "Identifier",
+                "name": "e",
+                "start": 34,
+                "end": 35
+              },
+              "consequent": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ThrowStatement",
+                    "argument": {
+                      "type": "Literal",
+                      "value": "f",
+                      "raw": "\"f\"",
+                      "start": 49,
+                      "end": 52
+                    },
+                    "start": 43,
+                    "end": 53
+                  }
+                ],
+                "start": 37,
+                "end": 57
+              },
+              "alternate": null,
+              "start": 30,
+              "end": 57
+            }
+          ],
+          "start": 13,
+          "end": 59
+        },
+        "expression": false,
+        "start": 0,
+        "end": 59
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 60
+  },
+  "errors": []
+}

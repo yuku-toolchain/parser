@@ -1,0 +1,93 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "SequenceExpression",
+            "expressions": [
+              {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "expression": {
+                          "type": "CallExpression",
+                          "callee": {
+                            "type": "Identifier",
+                            "name": "a",
+                            "start": 12,
+                            "end": 13
+                          },
+                          "arguments": [],
+                          "start": 12,
+                          "end": 15
+                        },
+                        "start": 12,
+                        "end": 15
+                      }
+                    ],
+                    "start": 11,
+                    "end": 16
+                  },
+                  "expression": false,
+                  "start": 1,
+                  "end": 16
+                },
+                "arguments": [],
+                "start": 1,
+                "end": 18
+              },
+              {
+                "type": "BinaryExpression",
+                "left": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "b",
+                    "start": 19,
+                    "end": 20
+                  },
+                  "arguments": [],
+                  "start": 19,
+                  "end": 22
+                },
+                "operator": "+",
+                "right": {
+                  "type": "Literal",
+                  "value": 1,
+                  "raw": "1",
+                  "start": 23,
+                  "end": 24
+                },
+                "start": 19,
+                "end": 24
+              }
+            ],
+            "start": 1,
+            "end": 24
+          },
+          "start": 0,
+          "end": 25
+        },
+        "start": 0,
+        "end": 25
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 26
+  },
+  "errors": []
+}

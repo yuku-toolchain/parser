@@ -1,0 +1,107 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "NewExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 4,
+            "end": 5
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": "aa, [bb]",
+              "raw": "\"aa, [bb]\"",
+              "start": 6,
+              "end": 16
+            },
+            {
+              "type": "Literal",
+              "value": "return aa;",
+              "raw": "\"return aa;\"",
+              "start": 18,
+              "end": 30
+            }
+          ],
+          "start": 0,
+          "end": 31
+        },
+        "start": 0,
+        "end": 32
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "NewExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 37,
+            "end": 38
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": "aa, {bb}",
+              "raw": "\"aa, {bb}\"",
+              "start": 39,
+              "end": 49
+            },
+            {
+              "type": "Literal",
+              "value": "return aa;",
+              "raw": "\"return aa;\"",
+              "start": 51,
+              "end": 63
+            }
+          ],
+          "start": 33,
+          "end": 64
+        },
+        "start": 33,
+        "end": 65
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "NewExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 70,
+            "end": 71
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": "[[aa]], [{bb}]",
+              "raw": "\"[[aa]], [{bb}]\"",
+              "start": 72,
+              "end": 88
+            },
+            {
+              "type": "Literal",
+              "value": "return aa;",
+              "raw": "\"return aa;\"",
+              "start": 90,
+              "end": 102
+            }
+          ],
+          "start": 66,
+          "end": 103
+        },
+        "start": 66,
+        "end": 104
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 105
+  },
+  "errors": []
+}

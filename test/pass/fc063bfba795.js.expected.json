@@ -1,0 +1,88 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "expression": {
+            "type": "ObjectExpression",
+            "properties": [
+              {
+                "type": "Property",
+                "kind": "init",
+                "key": {
+                  "type": "Identifier",
+                  "name": "a",
+                  "start": 3,
+                  "end": 4
+                },
+                "value": {
+                  "type": "FunctionExpression",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "AssignmentPattern",
+                      "left": {
+                        "type": "Identifier",
+                        "name": "b",
+                        "start": 5,
+                        "end": 6
+                      },
+                      "right": {
+                        "type": "MetaProperty",
+                        "meta": {
+                          "type": "Identifier",
+                          "name": "new",
+                          "start": 9,
+                          "end": 12
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "target",
+                          "start": 13,
+                          "end": 19
+                        },
+                        "start": 9,
+                        "end": 19
+                      },
+                      "start": 5,
+                      "end": 19
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "body": [],
+                    "start": 20,
+                    "end": 22
+                  },
+                  "expression": false,
+                  "start": 4,
+                  "end": 22
+                },
+                "method": true,
+                "shorthand": false,
+                "computed": false,
+                "start": 3,
+                "end": 22
+              }
+            ],
+            "start": 1,
+            "end": 24
+          },
+          "start": 0,
+          "end": 25
+        },
+        "start": 0,
+        "end": 25
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 25
+  },
+  "errors": []
+}

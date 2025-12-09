@@ -1,0 +1,57 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "NewExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "a",
+            "start": 4,
+            "end": 5
+          },
+          "arguments": [
+            {
+              "type": "SpreadElement",
+              "argument": {
+                "type": "Identifier",
+                "name": "b",
+                "start": 9,
+                "end": 10
+              },
+              "start": 6,
+              "end": 10
+            },
+            {
+              "type": "Identifier",
+              "name": "c",
+              "start": 12,
+              "end": 13
+            },
+            {
+              "type": "SpreadElement",
+              "argument": {
+                "type": "Identifier",
+                "name": "d",
+                "start": 18,
+                "end": 19
+              },
+              "start": 15,
+              "end": 19
+            }
+          ],
+          "start": 0,
+          "end": 20
+        },
+        "start": 0,
+        "end": 21
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 22
+  },
+  "errors": []
+}

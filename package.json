@@ -2,9 +2,8 @@
   "name": "yuku",
   "private": true,
   "scripts": {
-    "gen:expected": "bun run scripts/test/gen_ast_expected.ts",
-    "gen:received": "zig build gen-ast-received",
-    "test": "bun run gen:expected && bun run gen:received"
+    "gen:snapshots": "zig build gen-ast-snapshots",
+    "test": "bun run gen:snapshots"
   },
   "devDependencies": {
     "@types/bun": "latest"

@@ -1,0 +1,44 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "SwitchStatement",
+        "discriminant": {
+          "type": "Identifier",
+          "name": "a",
+          "start": 7,
+          "end": 8
+        },
+        "cases": [
+          {
+            "type": "SwitchCase",
+            "test": null,
+            "consequent": [],
+            "start": 10,
+            "end": 18
+          },
+          {
+            "type": "SwitchCase",
+            "test": {
+              "type": "Literal",
+              "value": 1,
+              "raw": "1",
+              "start": 23,
+              "end": 24
+            },
+            "consequent": [],
+            "start": 18,
+            "end": 25
+          }
+        ],
+        "start": 0,
+        "end": 26
+      }
+    ],
+    "sourceType": "script",
+    "start": 0,
+    "end": 26
+  },
+  "errors": []
+}
