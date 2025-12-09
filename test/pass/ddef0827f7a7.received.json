@@ -33,7 +33,7 @@
           "type": "Literal",
           "start": 6,
           "end": 19,
-          "value": null,
+          "value": {},
           "raw": "/* comment */",
           "regex": {
             "pattern": "* comment *",

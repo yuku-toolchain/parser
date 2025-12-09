@@ -18,7 +18,7 @@
               "type": "Literal",
               "start": 1,
               "end": 4,
-              "value": null,
+              "value": {},
               "raw": "/q/",
               "regex": {
                 "pattern": "q",

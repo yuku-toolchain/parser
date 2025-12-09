@@ -21,7 +21,7 @@
               "type": "Literal",
               "start": 1,
               "end": 7,
-              "value": null,
+              "value": {},
               "raw": "/test/",
               "regex": {
                 "pattern": "test",
@@ -38,7 +38,7 @@
               "type": "Literal",
               "start": 13,
               "end": 19,
-              "value": null,
+              "value": {},
               "raw": "/test/",
               "regex": {
                 "pattern": "test",

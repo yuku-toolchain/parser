@@ -13,7 +13,7 @@
           "type": "Literal",
           "start": 0,
           "end": 2,
-          "value": null,
+          "value": {},
           "raw": "//",
           "regex": {
             "pattern": "",
@@ -64,7 +64,7 @@
           "type": "Literal",
           "start": 31,
           "end": 33,
-          "value": null,
+          "value": {},
           "raw": "//",
           "regex": {
             "pattern": "",
@@ -115,7 +115,7 @@
           "type": "Literal",
           "start": 67,
           "end": 69,
-          "value": null,
+          "value": {},
           "raw": "//",
           "regex": {
             "pattern": "",
@@ -195,7 +195,7 @@
           "type": "Literal",
           "start": 102,
           "end": 104,
-          "value": null,
+          "value": {},
           "raw": "//",
           "regex": {
             "pattern": "",

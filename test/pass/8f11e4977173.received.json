@@ -29,7 +29,7 @@
                 "type": "Literal",
                 "start": 9,
                 "end": 19,
-                "value": null,
+                "value": {},
                 "raw": "/foo\\/bar/",
                 "regex": {
                   "pattern": "foo\\/bar",

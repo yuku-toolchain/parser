@@ -13,7 +13,7 @@
           "type": "Literal",
           "start": 88,
           "end": 90,
-          "value": null,
+          "value": {},
           "raw": "//",
           "regex": {
             "pattern": "",

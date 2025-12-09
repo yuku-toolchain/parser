@@ -13,7 +13,7 @@
           "type": "Literal",
           "start": 0,
           "end": 18,
-          "value": null,
+          "value": {},
           "raw": "/(()(?:\\2)((\\4)))/",
           "regex": {
             "pattern": "(()(?:\\2)((\\4)))",

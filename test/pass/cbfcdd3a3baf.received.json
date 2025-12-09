@@ -29,7 +29,7 @@
                 "type": "Literal",
                 "start": 9,
                 "end": 18,
-                "value": null,
+                "value": {},
                 "raw": "/[P QR]/i",
                 "regex": {
                   "pattern": "[P QR]",

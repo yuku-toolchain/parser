@@ -62,7 +62,7 @@
                     "type": "Literal",
                     "start": 24,
                     "end": 34,
-                    "value": null,
+                    "value": {},
                     "raw": "/* sync */",
                     "regex": {
                       "pattern": "* sync *",

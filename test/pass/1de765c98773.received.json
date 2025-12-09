@@ -13,7 +13,7 @@
           "type": "Literal",
           "start": 0,
           "end": 9,
-          "value": null,
+          "value": {},
           "raw": "/[\\s-\\w]/",
           "regex": {
             "pattern": "[\\s-\\w]",

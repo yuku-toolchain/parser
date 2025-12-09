@@ -29,7 +29,7 @@
                 "type": "Literal",
                 "start": 9,
                 "end": 16,
-                "value": null,
+                "value": {},
                 "raw": "/[\\]/]/",
                 "regex": {
                   "pattern": "[\\]/]",

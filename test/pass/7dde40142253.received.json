@@ -13,7 +13,7 @@
           "type": "Literal",
           "start": 0,
           "end": 6,
-          "value": null,
+          "value": {},
           "raw": "/*42*/",
           "regex": {
             "pattern": "*42*",

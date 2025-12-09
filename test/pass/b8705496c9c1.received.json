@@ -33,7 +33,7 @@
           "type": "Literal",
           "start": 217,
           "end": 219,
-          "value": null,
+          "value": {},
           "raw": "//",
           "regex": {
             "pattern": "",

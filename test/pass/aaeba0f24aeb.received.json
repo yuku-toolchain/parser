@@ -13,7 +13,7 @@
           "type": "Literal",
           "start": 0,
           "end": 24,
-          "value": null,
+          "value": {},
           "raw": "/\\uD834\\uDF06\\u{1d306}/u",
           "regex": {
             "pattern": "\\uD834\\uDF06\\u{1d306}",

@@ -376,7 +376,7 @@ pub const Serializer = struct {
         try self.beginObject();
         try self.fieldType("Literal");
         try self.fieldSpan(span);
-        try self.fieldNull("value"); // regex objects can't be serialized to JSON
+        try self.fieldEmptyObject("value"); // regex objects can't be serialized to JSON
         try self.field("raw");
         try self.writeByte('"');
         try self.writeByte('/');
@@ -622,6 +622,12 @@ pub const Serializer = struct {
     fn fieldNull(self: *Self, key: []const u8) !void {
         try self.field(key);
         try self.writeNull();
+    }
+
+    fn fieldEmptyObject(self: *Self, key: []const u8) !void {
+        try self.field(key);
+        try self.writeByte('{');
+        try self.writeByte('}');
     }
 
     fn fieldRaw(self: *Self, key: []const u8, value: []const u8) !void {

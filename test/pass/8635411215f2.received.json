@@ -23,7 +23,7 @@
               "type": "Literal",
               "start": 8,
               "end": 14,
-              "value": null,
+              "value": {},
               "raw": "/test/",
               "regex": {
                 "pattern": "test",

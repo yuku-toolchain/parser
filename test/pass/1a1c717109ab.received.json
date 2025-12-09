@@ -25,7 +25,7 @@
               "type": "Literal",
               "start": 8,
               "end": 41,
-              "value": null,
+              "value": {},
               "raw": "/[\\uD834\\uDF06-\\uD834\\uDF08a-z]/u",
               "regex": {
                 "pattern": "[\\uD834\\uDF06-\\uD834\\uDF08a-z]",

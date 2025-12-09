@@ -19,7 +19,7 @@ fn processFile(allocator: std.mem.Allocator, dir: std.fs.Dir, file_name: []const
     };
     defer allocator.free(source);
 
-    const is_module = std.mem.indexOf(u8, file_name, ".module.js") != null;
+    const is_module = std.mem.indexOf(u8, file_name, ".module.") != null;
 
     const tree = js.parse(allocator, source, .{
         .source_type = if (is_module) .module else .script,
@@ -35,7 +35,16 @@ fn processFile(allocator: std.mem.Allocator, dir: std.fs.Dir, file_name: []const
     };
     defer allocator.free(json);
 
-    const output_name = try std.fmt.allocPrint(allocator, "{s}.received.json", .{file_name});
+    var base_name: []const u8 = undefined;
+    if (std.mem.endsWith(u8, file_name, ".module.js")) {
+        base_name = file_name[0 .. file_name.len - ".module.js".len];
+    } else if (std.mem.endsWith(u8, file_name, ".js")) {
+        base_name = file_name[0 .. file_name.len - ".js".len];
+    } else {
+        base_name = file_name;
+    }
+
+    const output_name = try std.fmt.allocPrint(allocator, "{s}.received.json", .{base_name});
     defer allocator.free(output_name);
 
     const output_file = try dir.createFile(output_name, .{});

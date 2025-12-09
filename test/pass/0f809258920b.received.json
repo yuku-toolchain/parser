@@ -92,7 +92,7 @@
           "type": "Literal",
           "start": 150,
           "end": 152,
-          "value": null,
+          "value": {},
           "raw": "//",
           "regex": {
             "pattern": "",

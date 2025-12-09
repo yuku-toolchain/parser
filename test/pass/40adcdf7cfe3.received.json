@@ -46,7 +46,7 @@
                 "type": "Literal",
                 "start": 29,
                 "end": 42,
-                "value": null,
+                "value": {},
                 "raw": "/* Comment */",
                 "regex": {
                   "pattern": "* Comment *",

@@ -13,7 +13,7 @@
           "type": "Literal",
           "start": 0,
           "end": 9,
-          "value": null,
+          "value": {},
           "raw": "/*Venus*/",
           "regex": {
             "pattern": "*Venus*",
@@ -29,7 +29,7 @@
           "type": "Literal",
           "start": 20,
           "end": 22,
-          "value": null,
+          "value": {},
           "raw": "//",
           "regex": {
             "pattern": "",

@@ -13,7 +13,7 @@
           "type": "Literal",
           "start": 0,
           "end": 10,
-          "value": null,
+          "value": {},
           "raw": "/foo\\/bar/",
           "regex": {
             "pattern": "foo\\/bar",

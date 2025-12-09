@@ -13,7 +13,7 @@
           "type": "Literal",
           "start": 0,
           "end": 9,
-          "value": null,
+          "value": {},
           "raw": "/[-a-b-]/",
           "regex": {
             "pattern": "[-a-b-]",

@@ -13,7 +13,7 @@
           "type": "Literal",
           "start": 0,
           "end": 13,
-          "value": null,
+          "value": {},
           "raw": "/*@ngInject*/",
           "regex": {
             "pattern": "*@ngInject*",

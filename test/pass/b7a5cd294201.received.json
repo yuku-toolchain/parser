@@ -13,7 +13,7 @@
           "type": "Literal",
           "start": 0,
           "end": 19,
-          "value": null,
+          "value": {},
           "raw": "/* block comment */",
           "regex": {
             "pattern": "* block comment *",

@@ -154,7 +154,7 @@
               "type": "Literal",
               "start": 71,
               "end": 74,
-              "value": null,
+              "value": {},
               "raw": "/./",
               "regex": {
                 "pattern": ".",

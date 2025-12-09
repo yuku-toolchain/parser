@@ -33,7 +33,7 @@
                 "type": "Literal",
                 "start": 15,
                 "end": 29,
-                "value": null,
+                "value": {},
                 "raw": "/* infinite */",
                 "regex": {
                   "pattern": "* infinite *",
@@ -53,7 +53,7 @@
           "type": "Literal",
           "start": 47,
           "end": 56,
-          "value": null,
+          "value": {},
           "raw": "/* bar */",
           "regex": {
             "pattern": "* bar *",

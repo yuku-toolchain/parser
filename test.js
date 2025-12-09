@@ -1,1 +1,1 @@
-const cool = ""
+/[\]/]/cool;

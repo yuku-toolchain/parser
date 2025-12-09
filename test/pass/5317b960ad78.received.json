@@ -45,7 +45,7 @@
                 "type": "Literal",
                 "start": 23,
                 "end": 25,
-                "value": null,
+                "value": {},
                 "raw": "//",
                 "regex": {
                   "pattern": "",
