@@ -69,7 +69,7 @@
 - [ ] Try-catch-finally (TryStatement, CatchClause)
 
 **Other Statements:**
-- [ ] Block statement (BlockStatement)
+- [x] Block statement (BlockStatement)
 - [ ] Empty statement (EmptyStatement)
 - [ ] Debugger statement
 - [ ] With statement (WithStatement)

@@ -19,15 +19,15 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
     const start = parser.current_token.span.start;
     try parser.advance(); // consume [
 
-    const checkpoint = parser.scratch_a.begin();
-    errdefer parser.scratch_a.reset(checkpoint);
+    const checkpoint = parser.scratch_cover.begin();
+    errdefer parser.scratch_cover.reset(checkpoint);
 
     var end = start + 1;
 
     while (parser.current_token.type != .right_bracket and parser.current_token.type != .eof) {
         // elision (holes): [,,,]
         if (parser.current_token.type == .comma) {
-            try parser.scratch_a.append(parser.allocator(), ast.null_node);
+            try parser.scratch_cover.append(parser.allocator(), ast.null_node);
             try parser.advance();
             continue;
         }
@@ -37,7 +37,7 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
             const spread_start = parser.current_token.span.start;
             try parser.advance();
             const argument = try grammar.parseCoverElement(parser) orelse {
-                parser.scratch_a.reset(checkpoint);
+                parser.scratch_cover.reset(checkpoint);
                 return null;
             };
             const spread_end = parser.getSpan(argument).end;
@@ -45,15 +45,15 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
                 .{ .spread_element = .{ .argument = argument } },
                 .{ .start = spread_start, .end = spread_end },
             );
-            try parser.scratch_a.append(parser.allocator(), spread);
+            try parser.scratch_cover.append(parser.allocator(), spread);
             end = spread_end;
         } else {
             // regular element - parse as cover element
             const element = try grammar.parseCoverElement(parser) orelse {
-                parser.scratch_a.reset(checkpoint);
+                parser.scratch_cover.reset(checkpoint);
                 return null;
             };
-            try parser.scratch_a.append(parser.allocator(), element);
+            try parser.scratch_cover.append(parser.allocator(), element);
             end = parser.getSpan(element).end;
         }
 
@@ -66,7 +66,7 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
                 "Expected ',' or ']' in array",
                 .{ .help = "Add a comma between elements or close the array with ']'." },
             );
-            parser.scratch_a.reset(checkpoint);
+            parser.scratch_cover.reset(checkpoint);
             return null;
         }
     }
@@ -77,7 +77,7 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
             "Unterminated array",
             .{ .help = "Add a closing ']' to complete the array." },
         );
-        parser.scratch_a.reset(checkpoint);
+        parser.scratch_cover.reset(checkpoint);
         return null;
     }
 
@@ -85,7 +85,7 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
     try parser.advance(); // consume ]
 
     return .{
-        .elements = parser.scratch_a.take(checkpoint),
+        .elements = parser.scratch_cover.take(checkpoint),
         .start = start,
         .end = end,
     };

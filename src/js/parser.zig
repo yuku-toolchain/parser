@@ -101,6 +101,7 @@ pub const Parser = struct {
 
     scratch_statements: ScratchBuffer = .{},
     scratch_directives: ScratchBuffer = .{},
+    scratch_cover: ScratchBuffer = .{},
 
     // multiple scratches to handle multiple extras at the same time
     scratch_a: ScratchBuffer = .{},
@@ -435,6 +436,7 @@ pub const Parser = struct {
         try self.scratch_directives.items.ensureTotalCapacity(alloc, 256);
         try self.scratch_a.items.ensureTotalCapacity(alloc, 256);
         try self.scratch_b.items.ensureTotalCapacity(alloc, 256);
+        try self.scratch_cover.items.ensureTotalCapacity(alloc, 256);
     }
 };
 

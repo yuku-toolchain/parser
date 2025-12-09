@@ -21,8 +21,8 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
     const start = parser.current_token.span.start;
     try parser.advance(); // consume {
 
-    const checkpoint = parser.scratch_a.begin();
-    errdefer parser.scratch_a.reset(checkpoint);
+    const checkpoint = parser.scratch_cover.begin();
+    errdefer parser.scratch_cover.reset(checkpoint);
 
     var end = start + 1;
 
@@ -32,7 +32,7 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
             const spread_start = parser.current_token.span.start;
             try parser.advance();
             const argument = try grammar.parseCoverElement(parser) orelse {
-                parser.scratch_a.reset(checkpoint);
+                parser.scratch_cover.reset(checkpoint);
                 return null;
             };
             const spread_end = parser.getSpan(argument).end;
@@ -40,15 +40,15 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
                 .{ .spread_element = .{ .argument = argument } },
                 .{ .start = spread_start, .end = spread_end },
             );
-            try parser.scratch_a.append(parser.allocator(), spread);
+            try parser.scratch_cover.append(parser.allocator(), spread);
             end = spread_end;
         } else {
             // property
             const prop = try parseCoverProperty(parser) orelse {
-                parser.scratch_a.reset(checkpoint);
+                parser.scratch_cover.reset(checkpoint);
                 return null;
             };
-            try parser.scratch_a.append(parser.allocator(), prop);
+            try parser.scratch_cover.append(parser.allocator(), prop);
             end = parser.getSpan(prop).end;
         }
 
@@ -61,7 +61,7 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
                 "Expected ',' or '}' in object",
                 .{ .help = "Add a comma between properties or close the object with '}'." },
             );
-            parser.scratch_a.reset(checkpoint);
+            parser.scratch_cover.reset(checkpoint);
             return null;
         }
     }
@@ -72,7 +72,7 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
             "Unterminated object",
             .{ .help = "Add a closing '}' to complete the object." },
         );
-        parser.scratch_a.reset(checkpoint);
+        parser.scratch_cover.reset(checkpoint);
         return null;
     }
 
@@ -80,7 +80,7 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
     try parser.advance(); // consume }
 
     return .{
-        .properties = parser.scratch_a.take(checkpoint),
+        .properties = parser.scratch_cover.take(checkpoint),
         .start = start,
         .end = end,
     };

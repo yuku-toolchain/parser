@@ -29,8 +29,8 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
     const start = parser.current_token.span.start;
     try parser.advance(); // consume (
 
-    const checkpoint = parser.scratch_a.begin();
-    errdefer parser.scratch_a.reset(checkpoint);
+    const checkpoint = parser.scratch_cover.begin();
+    errdefer parser.scratch_cover.reset(checkpoint);
 
     var rest: ast.NodeIndex = ast.null_node;
     var end = start + 1;
@@ -41,7 +41,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
         end = parser.current_token.span.end;
         try parser.advance();
         return .{
-            .elements = parser.scratch_a.take(checkpoint),
+            .elements = parser.scratch_cover.take(checkpoint),
             .rest = rest,
             .start = start,
             .end = end,
@@ -56,7 +56,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
             try parser.advance();
 
             const argument = try grammar.parseCoverElement(parser) orelse {
-                parser.scratch_a.reset(checkpoint);
+                parser.scratch_cover.reset(checkpoint);
                 return null;
             };
             const spread_end = parser.getSpan(argument).end;
@@ -78,10 +78,10 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
 
         // regular element
         const element = try grammar.parseCoverElement(parser) orelse {
-            parser.scratch_a.reset(checkpoint);
+            parser.scratch_cover.reset(checkpoint);
             return null;
         };
-        try parser.scratch_a.append(parser.allocator(), element);
+        try parser.scratch_cover.append(parser.allocator(), element);
         end = parser.getSpan(element).end;
 
         // comma or end
@@ -94,7 +94,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
                 "Expected ',' or ')' in parenthesized expression",
                 .{ .help = "Add a comma between elements or close with ')'." },
             );
-            parser.scratch_a.reset(checkpoint);
+            parser.scratch_cover.reset(checkpoint);
             return null;
         }
     }
@@ -105,7 +105,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
             "Unterminated parenthesized expression",
             .{ .help = "Add a closing ')' to complete the expression." },
         );
-        parser.scratch_a.reset(checkpoint);
+        parser.scratch_cover.reset(checkpoint);
         return null;
     }
 
@@ -113,7 +113,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
     try parser.advance(); // consume )
 
     return .{
-        .elements = parser.scratch_a.take(checkpoint),
+        .elements = parser.scratch_cover.take(checkpoint),
         .rest = rest,
         .start = start,
         .end = end,
@@ -260,15 +260,15 @@ fn parseArrowBody(parser: *Parser) Error!?ArrowBodyResult {
 }
 
 fn convertToFormalParameters(parser: *Parser, cover: ParenthesizedCover) Error!?ast.NodeIndex {
-    const checkpoint = parser.scratch_b.begin();
-    errdefer parser.scratch_b.reset(checkpoint);
+    const checkpoint = parser.scratch_cover.begin();
+    errdefer parser.scratch_cover.reset(checkpoint);
 
     for (cover.elements) |elem| {
         const param = try convertToFormalParameter(parser, elem) orelse {
-            parser.scratch_b.reset(checkpoint);
+            parser.scratch_cover.reset(checkpoint);
             return null;
         };
-        try parser.scratch_b.append(parser.allocator(), param);
+        try parser.scratch_cover.append(parser.allocator(), param);
     }
 
     // handle rest parameter
@@ -281,7 +281,7 @@ fn convertToFormalParameters(parser: *Parser, cover: ParenthesizedCover) Error!?
         rest = cover.rest;
     }
 
-    const items = try parser.addExtra(parser.scratch_b.take(checkpoint));
+    const items = try parser.addExtra(parser.scratch_cover.take(checkpoint));
 
     return try parser.addNode(
         .{ .formal_parameters = .{ .items = items, .rest = rest, .kind = .arrow_formal_parameters } },
