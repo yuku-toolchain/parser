@@ -32,6 +32,8 @@ pub fn main() !void {
 
     const million_lines_per_sec = (@as(f64, @floatFromInt(line_count)) / 1_000_000.0) / (taken_ms / 1000.0);
 
+    const mb_per_sec = (@as(f64, @floatFromInt(contents.len)) / 1_000_000.0) / (taken_ms / 1000.0);
+
     const json = try js.estree.toJSON(&tree, allocator);
     defer allocator.free(json);
 
@@ -47,7 +49,7 @@ pub fn main() !void {
         }
     }
 
-    std.debug.print("\n\n{d:.2}ms | {d:.2} million lines/sec\n\n", .{ taken_ms, million_lines_per_sec });
+    std.debug.print("\n\n{d:.2}ms | {d:.2} million lines/sec | {d:.2} MB/s\n\n", .{ taken_ms, million_lines_per_sec, mb_per_sec });
 }
 
 const ns_to_ms = 1_000_000.0;
