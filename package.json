@@ -2,8 +2,8 @@
   "name": "yuku",
   "private": true,
   "scripts": {
-    "gen:snapshots": "zig build gen-ast-snapshots && bun run scripts/run_tests.ts",
-    "test": "bun run gen:snapshots"
+    "gen:snapshots": "zig build gen-ast-snapshots",
+    "test": "bun run gen:snapshots && bun run scripts/run_tests.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
