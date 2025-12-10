@@ -716,7 +716,6 @@ pub const Serializer = struct {
         return self.tree.getExtra(range);
     }
 
-
     fn writeDecodedString(self: *Self, s: []const u8) !void {
         self.scratch.clearRetainingCapacity();
         try decodeEscapes(s, &self.scratch, self.allocator);
@@ -783,14 +782,10 @@ fn decodeEscapes(input: []const u8, out: *std.ArrayList(u8), allocator: std.mem.
             },
             'x' => {
                 i += 1;
-                if (i + 2 <= input.len) {
-                    if (util.Utf.hexVal(input[i])) |hi| {
-                        if (util.Utf.hexVal(input[i + 1])) |lo| {
-                            try appendUtf8(out, allocator, (@as(u21, hi) << 4) | lo);
-                            i += 2;
-                            continue;
-                        }
-                    }
+                if (util.Utf.parseHex2(input, i)) |r| {
+                    try appendUtf8(out, allocator, r.value);
+                    i = r.end;
+                    continue;
                 }
                 try out.append(allocator, 'x');
             },
@@ -798,38 +793,18 @@ fn decodeEscapes(input: []const u8, out: *std.ArrayList(u8), allocator: std.mem.
                 i += 1;
                 if (i < input.len and input[i] == '{') {
                     i += 1;
-                    var cp: u21 = 0;
-                    var has_digits = false;
-                    while (i < input.len and input[i] != '}') {
-                        if (util.Utf.hexVal(input[i])) |d| {
-                            cp = (cp << 4) | d;
-                            has_digits = true;
-                            i += 1;
-                        } else break;
-                    }
-                    if (has_digits and i < input.len and input[i] == '}') {
-                        i += 1;
-                        try appendUtf8(out, allocator, cp);
-                    } else {
-                        try out.append(allocator, 'u');
-                    }
-                } else if (i + 4 <= input.len) {
-                    var cp: u21 = 0;
-                    var valid = true;
-                    for (0..4) |j| {
-                        if (util.Utf.hexVal(input[i + j])) |d| {
-                            cp = (cp << 4) | d;
-                        } else {
-                            valid = false;
-                            break;
+                    if (util.Utf.parseHexVariable(input, i, 6)) |r| {
+                        if (r.has_digits and r.end < input.len and input[r.end] == '}') {
+                            try appendUtf8(out, allocator, r.value);
+                            i = r.end + 1;
+                            continue;
                         }
                     }
-                    if (valid) {
-                        i += 4;
-                        try appendUtf8(out, allocator, cp);
-                    } else {
-                        try out.append(allocator, 'u');
-                    }
+                    try out.append(allocator, 'u');
+                } else if (util.Utf.parseHex4(input, i)) |r| {
+                    try appendUtf8(out, allocator, r.value);
+                    i = r.end;
+                    continue;
                 } else {
                     try out.append(allocator, 'u');
                 }

@@ -49,6 +49,53 @@ pub fn parseOctal(input: []const u8, start: usize) struct { value: u21, end: usi
     return .{ .value = value, .end = i };
 }
 
+/// exactly 2 hex digits (for \xHH escape sequences)
+pub fn parseHex2(input: []const u8, start: usize) ?struct { value: u21, end: usize } {
+    if (start + 2 > input.len) return null;
+
+    const hi = hexVal(input[start]) orelse return null;
+    const lo = hexVal(input[start + 1]) orelse return null;
+
+    return .{ .value = (@as(u21, hi) << 4) | lo, .end = start + 2 };
+}
+
+/// exactly 4 hex digits (for \uHHHH escape sequences)
+pub fn parseHex4(input: []const u8, start: usize) ?struct { value: u21, end: usize } {
+    if (start + 4 > input.len) return null;
+
+    var value: u21 = 0;
+    for (0..4) |j| {
+        const d = hexVal(input[start + j]) orelse return null;
+        value = (value << 4) | d;
+    }
+
+    return .{ .value = value, .end = start + 4 };
+}
+
+/// 1-6 hex digits until closing brace or max digits (for \u{H...} escape sequences)
+pub fn parseHexVariable(input: []const u8, start: usize, max_digits: usize) ?struct { value: u21, end: usize, has_digits: bool } {
+    var value: u21 = 0;
+    var i = start;
+    var count: usize = 0;
+    var has_digits = false;
+
+    const max = @min(max_digits, 6);
+
+    while (i < input.len and count < max) {
+        if (hexVal(input[i])) |d| {
+            value = (value << 4) | d;
+            has_digits = true;
+            count += 1;
+            i += 1;
+        } else {
+            break;
+        }
+    }
+
+    if (!has_digits) return null;
+    return .{ .value = value, .end = i, .has_digits = has_digits };
+}
+
 pub fn hexVal(c: u8) ?u8 {
     return if (c >= '0' and c <= '9') c - '0' else if (c >= 'a' and c <= 'f') c - 'a' + 10 else if (c >= 'A' and c <= 'F') c - 'A' + 10 else null;
 }
