@@ -441,7 +441,7 @@ pub const Lexer = struct {
             '0' => {
                 const c1 = self.peek(1);
 
-                if (!util.isOctalDigit(c1)) {
+                if (!util.Utf.isOctalDigit(c1)) {
                     self.cursor += 1; // null escape
                     break :brk;
                 }
@@ -471,7 +471,7 @@ pub const Lexer = struct {
         while (self.cursor < self.source_len and count < 3) {
             const c = self.source[self.cursor];
 
-            if (util.isOctalDigit(c)) {
+            if (util.Utf.isOctalDigit(c)) {
                 self.cursor += 1;
                 count += 1;
             } else {
@@ -641,7 +641,7 @@ pub const Lexer = struct {
                 }
             } else {
                 @branchHint(.cold);
-                const cp = try util.codePointAt(self.source, self.cursor);
+                const cp = try util.Utf.codePointAt(self.source, self.cursor);
                 if (util.UnicodeId.canContinueIdentifier(cp.value)) {
                     self.cursor += cp.len;
                 } else {
@@ -681,7 +681,7 @@ pub const Lexer = struct {
             try self.scanIdentifierBody();
         } else {
             @branchHint(.cold);
-            const c_cp = try util.codePointAt(self.source, self.cursor);
+            const c_cp = try util.Utf.codePointAt(self.source, self.cursor);
             if (!util.UnicodeId.canStartIdentifier(c_cp.value)) {
                 return error.InvalidIdentifierStart;
             }
@@ -965,7 +965,7 @@ pub const Lexer = struct {
 
         while (self.cursor < self.source_len) {
             const c = self.source[self.cursor];
-            if (util.isOctalDigit(c)) {
+            if (util.Utf.isOctalDigit(c)) {
                 self.cursor += 1;
                 last_was_separator = false;
             } else if (c == '_') {
@@ -1061,8 +1061,8 @@ pub const Lexer = struct {
             } else {
                 @branchHint(.unlikely);
                 // multi-byte space character
-                const cp = try util.codePointAt(self.source, self.cursor);
-                if (util.isMultiByteSpace(cp.value)) {
+                const cp = try util.Utf.codePointAt(self.source, self.cursor);
+                if (util.Utf.isMultiByteSpace(cp.value)) {
                     self.cursor += cp.len;
                     continue;
                 }
