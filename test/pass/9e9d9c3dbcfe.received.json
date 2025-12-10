@@ -19,7 +19,7 @@
               "start": 1,
               "end": 18,
               "value": {
-                "raw": "\\n\\r\\b\\v\\t\\f\\\n\\\r\n",
+                "raw": "\\n\\r\\b\\v\\t\\f\\\n\\\n",
                 "cooked": "\n\r\b\u000b\t\f"
               },
               "tail": true

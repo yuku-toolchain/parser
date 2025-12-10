@@ -20,7 +20,7 @@ pub const Serializer = struct {
     pos_map: []u32,
 
     const Self = @This();
-    const Error = error{ NoSpaceLeft, OutOfMemory };
+    const Error = error{ InvalidCharacter, NoSpaceLeft, OutOfMemory, Overflow };
     const max_depth = 64;
 
     pub fn serialize(tree: *const parser.ParseTree, allocator: std.mem.Allocator, options: EstreeJsonOptions) ![]u8 {
@@ -128,6 +128,19 @@ pub const Serializer = struct {
         try self.endObject();
     }
 
+    fn writeDirectiveAsExpressionStatement(self: *Self, data: ast.Directive, span: ast.Span) !void {
+        try self.sep();
+        if (self.options.pretty) {
+            try self.writeByte('\n');
+            try self.writeIndent();
+        }
+        try self.beginObject();
+        try self.fieldType("ExpressionStatement");
+        try self.fieldSpan(span);
+        try self.fieldNode("expression", data.expression);
+        try self.endObject();
+    }
+
     fn writeFunction(self: *Self, data: ast.Function, span: ast.Span) !void {
         try self.beginObject();
         try self.fieldType(switch (data.type) {
@@ -177,7 +190,15 @@ pub const Serializer = struct {
         try self.fieldSpan(span);
         try self.field("body");
         try self.beginArray();
-        for (self.getExtra(data.body)) |idx| try self.elemNode(idx);
+        for (self.getExtra(data.body)) |idx| {
+            // directives inside block statements should be written as ExpressionStatements without directive field
+            const node_data = self.tree.getData(idx);
+            if (node_data == .directive) {
+                try self.writeDirectiveAsExpressionStatement(node_data.directive, self.tree.getSpan(idx));
+            } else {
+                try self.elemNode(idx);
+            }
+        }
         try self.endArray();
         try self.endObject();
     }
@@ -320,14 +341,38 @@ pub const Serializer = struct {
 
     fn writeTemplateElement(self: *Self, data: ast.TemplateElement, span: ast.Span) !void {
         const raw = self.tree.source[data.raw_start..][0..data.raw_len];
+
+        // normalize line endings in raw values (per ECMAScript spec):
+        // CRLF (\r\n) -> LF (\n)
+        // standalone CR (\r) -> LF (\n)
+        self.scratch.clearRetainingCapacity();
+        var i: usize = 0;
+        while (i < raw.len) {
+            if (raw[i] == '\r') {
+                if (i + 1 < raw.len and raw[i + 1] == '\n') {
+                    // CRLF -> LF
+                    try self.scratch.append(self.allocator, '\n');
+                    i += 2;
+                } else {
+                    // standalone CR -> LF
+                    try self.scratch.append(self.allocator, '\n');
+                    i += 1;
+                }
+            } else {
+                try self.scratch.append(self.allocator, raw[i]);
+                i += 1;
+            }
+        }
+
+        const normalized_raw = self.scratch.items;
         try self.beginObject();
         try self.fieldType("TemplateElement");
         try self.fieldSpan(span);
         try self.field("value");
         try self.beginObject();
-        try self.fieldString("raw", raw);
+        try self.fieldString("raw", normalized_raw);
         try self.field("cooked");
-        try self.writeDecodedString(raw);
+        try self.writeDecodedString(normalized_raw);
         try self.endObject();
         try self.fieldBool("tail", data.tail);
         try self.endObject();
@@ -346,10 +391,17 @@ pub const Serializer = struct {
 
     fn writeNumericLiteral(self: *Self, data: ast.NumericLiteral, span: ast.Span) !void {
         const raw = self.tree.source[data.raw_start..][0..data.raw_len];
+
+        const numeric = try util.Number.parseJSNumeric(raw);
+
         try self.beginObject();
         try self.fieldType("Literal");
         try self.fieldSpan(span);
-        try self.fieldRaw("value", raw);
+        if(std.math.isInf(numeric)){
+            try self.fieldNull("value");
+        } else {
+            try self.fieldRaw("value", raw);
+        }
         try self.fieldString("raw", raw);
         try self.endObject();
     }
@@ -748,6 +800,15 @@ fn decodeEscapes(input: []const u8, out: *std.ArrayList(u8), allocator: std.mem.
         if (i >= input.len) {
             try out.append(allocator, '\\');
             break;
+        }
+
+        // check for U+2028 or U+2029 after backslash - skip them (invalid escape sequence)
+        // these are line terminators and should not appear in string values when escaped
+        if (i + 2 < input.len and input[i] == 0xE2 and input[i + 1] == 0x80) {
+            if (input[i + 2] == 0xA8 or input[i + 2] == 0xA9) {
+                i += 3;
+                continue;
+            }
         }
 
         switch (input[i]) {

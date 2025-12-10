@@ -19,8 +19,8 @@
               "start": 1,
               "end": 4,
               "value": {
-                "raw": "\n\r\n",
-                "cooked": "\n\r\n"
+                "raw": "\n\n",
+                "cooked": "\n\n"
               },
               "tail": true
             }

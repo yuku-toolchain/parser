@@ -1,1 +1,1 @@
-{ wow }
+const hello = 2e308
