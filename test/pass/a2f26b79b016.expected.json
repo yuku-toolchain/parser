@@ -101,5 +101,13 @@
     "start": 0,
     "end": 106
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " should not hoist to parameter",
+      "start": 31,
+      "end": 63
+    }
+  ]
 }

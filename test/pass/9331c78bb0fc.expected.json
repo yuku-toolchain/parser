@@ -26,5 +26,13 @@
     "start": 0,
     "end": 28
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not transform to 0",
+      "start": 0,
+      "end": 24
+    }
+  ]
 }

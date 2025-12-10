@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "*\n   * comments in empty block\n   ",
+      "start": 17,
+      "end": 55
+    }
+  ],
   "errors": [
     {
       "severity": "error",

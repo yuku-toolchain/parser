@@ -1,38 +1,10 @@
 {
   "program": {
     "type": "Program",
-    "start": 0,
+    "start": 5,
     "end": 141,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 2,
-        "expression": {
-          "type": "Literal",
-          "start": 0,
-          "end": 2,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 3,
-        "end": 4,
-        "expression": {
-          "type": "Literal",
-          "start": 3,
-          "end": 4,
-          "value": 1,
-          "raw": "1"
-        }
-      },
       {
         "type": "ExpressionStatement",
         "start": 5,
@@ -58,34 +30,6 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 31,
-        "end": 33,
-        "expression": {
-          "type": "Literal",
-          "start": 31,
-          "end": 33,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 34,
-        "end": 35,
-        "expression": {
-          "type": "Literal",
-          "start": 34,
-          "end": 35,
-          "value": 2,
-          "raw": "2"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
         "start": 36,
         "end": 37,
         "expression": {
@@ -105,34 +49,6 @@
           "end": 63,
           "value": false,
           "raw": "false"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 67,
-        "end": 69,
-        "expression": {
-          "type": "Literal",
-          "start": 67,
-          "end": 69,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 70,
-        "end": 71,
-        "expression": {
-          "type": "Literal",
-          "start": 70,
-          "end": 71,
-          "value": 3,
-          "raw": "3"
         }
       },
       {
@@ -189,34 +105,6 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 102,
-        "end": 104,
-        "expression": {
-          "type": "Literal",
-          "start": 102,
-          "end": 104,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 105,
-        "end": 106,
-        "expression": {
-          "type": "Literal",
-          "start": 105,
-          "end": 106,
-          "value": 4,
-          "raw": "4"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
         "start": 107,
         "end": 120,
         "expression": {
@@ -269,6 +157,32 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 1",
+      "start": 0,
+      "end": 4
+    },
+    {
+      "type": "Line",
+      "value": " 2",
+      "start": 31,
+      "end": 35
+    },
+    {
+      "type": "Line",
+      "value": " 3",
+      "start": 67,
+      "end": 71
+    },
+    {
+      "type": "Line",
+      "value": " 4",
+      "start": 102,
+      "end": 106
+    }
+  ],
   "errors": [
     {
       "severity": "error",

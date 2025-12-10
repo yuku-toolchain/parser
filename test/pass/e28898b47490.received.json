@@ -60,6 +60,8 @@
       }
     ]
   },
+  "comments": [
+  ],
   "errors": [
     {
       "severity": "error",

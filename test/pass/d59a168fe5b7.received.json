@@ -37,6 +37,8 @@
       }
     ]
   },
+  "comments": [
+  ],
   "errors": [
     {
       "severity": "error",

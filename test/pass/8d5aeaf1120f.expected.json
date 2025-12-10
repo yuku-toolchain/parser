@@ -18,5 +18,13 @@
     "start": 0,
     "end": 15
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": " ‪ ",
+      "start": 6,
+      "end": 13
+    }
+  ]
 }

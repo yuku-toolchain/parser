@@ -125,5 +125,13 @@
     "start": 0,
     "end": 106
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " This should be reduce",
+      "start": 75,
+      "end": 99
+    }
+  ]
 }

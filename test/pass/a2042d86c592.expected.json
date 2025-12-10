@@ -32,5 +32,13 @@
     "start": 0,
     "end": 22
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " NaN => 0/0",
+      "start": 0,
+      "end": 13
+    }
+  ]
 }

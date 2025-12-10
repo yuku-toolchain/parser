@@ -334,5 +334,37 @@
     "start": 0,
     "end": 575
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": " I would\n                              insert something\n                              there, but I'm sort\n                              of lazy so whatever.\n  ",
+      "start": 39,
+      "end": 202
+    },
+    {
+      "type": "Block",
+      "value": " I would insert something there, ",
+      "start": 271,
+      "end": 308
+    },
+    {
+      "type": "Block",
+      "value": "\n                             but I'm sort of lazy so\n  ",
+      "start": 309,
+      "end": 369
+    },
+    {
+      "type": "Block",
+      "value": "                      whatever. ",
+      "start": 370,
+      "end": 406
+    },
+    {
+      "type": "Line",
+      "value": " I would insert something there, but I'm sort of lazy so whatever.",
+      "start": 475,
+      "end": 543
+    }
+  ]
 }

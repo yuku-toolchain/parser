@@ -120,5 +120,13 @@
     "start": 0,
     "end": 126
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 'i' lookup can be observed by obj's getter.",
+      "start": 67,
+      "end": 113
+    }
+  ]
 }

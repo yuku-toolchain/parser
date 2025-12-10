@@ -27,5 +27,13 @@
     "start": 0,
     "end": 20
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": " comment ",
+      "start": 6,
+      "end": 19
+    }
+  ]
 }

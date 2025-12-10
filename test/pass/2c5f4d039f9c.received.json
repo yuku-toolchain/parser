@@ -30,6 +30,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " code",
+      "start": 50,
+      "end": 57
+    }
+  ],
   "errors": [
     {
       "severity": "error",

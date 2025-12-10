@@ -35,6 +35,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " optimize it",
+      "start": 23,
+      "end": 37
+    }
+  ],
   "errors": [
     {
       "severity": "error",

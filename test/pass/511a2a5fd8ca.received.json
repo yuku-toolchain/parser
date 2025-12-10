@@ -18,6 +18,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " this 'test2' to 'a'",
+      "start": 9,
+      "end": 31
+    }
+  ],
   "errors": [
     {
       "severity": "error",

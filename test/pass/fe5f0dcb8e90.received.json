@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " optimize it",
+      "start": 12,
+      "end": 26
+    }
+  ],
   "errors": [
     {
       "severity": "error",

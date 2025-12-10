@@ -35,6 +35,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " Comment",
+      "start": 20,
+      "end": 30
+    }
+  ],
   "errors": [
     {
       "severity": "error",

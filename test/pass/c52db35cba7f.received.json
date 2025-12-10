@@ -5,68 +5,16 @@
     "end": 121,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 88,
-        "end": 90,
-        "expression": {
-          "type": "Literal",
-          "start": 88,
-          "end": 90,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 91,
-        "end": 95,
-        "expression": {
-          "type": "Identifier",
-          "start": 91,
-          "end": 95,
-          "name": "This"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 96,
-        "end": 102,
-        "expression": {
-          "type": "Identifier",
-          "start": 96,
-          "end": 102,
-          "name": "should"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 103,
-        "end": 105,
-        "expression": {
-          "type": "Identifier",
-          "start": 103,
-          "end": 105,
-          "name": "be"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 106,
-        "end": 113,
-        "expression": {
-          "type": "Identifier",
-          "start": 106,
-          "end": 113,
-          "name": "removed"
-        }
-      }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " This should be removed.",
+      "start": 88,
+      "end": 114
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -97,10 +45,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
+      "message": "Unexpected token '}'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 113,
-      "end": 114,
+      "start": 115,
+      "end": 116,
       "labels": [
       ]
     }

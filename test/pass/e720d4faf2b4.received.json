@@ -24,44 +24,26 @@
           "start": 12,
           "end": 45,
           "body": [
-            {
-              "type": "ExpressionStatement",
-              "start": 14,
-              "end": 25,
-              "expression": {
-                "type": "Literal",
-                "start": 14,
-                "end": 25,
-                "value": {},
-                "raw": "/*Jupiter*/",
-                "regex": {
-                  "pattern": "*Jupiter*",
-                  "flags": ""
-                }
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 34,
-              "end": 44,
-              "expression": {
-                "type": "Literal",
-                "start": 34,
-                "end": 44,
-                "value": {},
-                "raw": "/*Saturn*/",
-                "regex": {
-                  "pattern": "*Saturn*",
-                  "flags": ""
-                }
-              }
-            }
           ]
         },
         "expression": false
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "Jupiter",
+      "start": 14,
+      "end": 25
+    },
+    {
+      "type": "Block",
+      "value": "Saturn",
+      "start": 34,
+      "end": 44
+    }
+  ],
   "errors": [
     {
       "severity": "error",

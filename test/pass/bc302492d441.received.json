@@ -52,22 +52,6 @@
                       }
                     }
                   ]
-                },
-                {
-                  "type": "ExpressionStatement",
-                  "start": 24,
-                  "end": 34,
-                  "expression": {
-                    "type": "Literal",
-                    "start": 24,
-                    "end": 34,
-                    "value": {},
-                    "raw": "/* sync */",
-                    "regex": {
-                      "pattern": "* sync *",
-                      "flags": ""
-                    }
-                  }
                 }
               ]
             },
@@ -77,6 +61,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": " sync ",
+      "start": 24,
+      "end": 34
+    }
+  ],
   "errors": [
     {
       "severity": "error",

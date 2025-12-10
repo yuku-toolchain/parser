@@ -19,5 +19,13 @@
     "start": 0,
     "end": 20
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": " the * answer ",
+      "start": 2,
+      "end": 20
+    }
+  ]
 }

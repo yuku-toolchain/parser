@@ -1,19 +1,27 @@
 {
   "program": {
     "type": "Program",
-    "start": 3,
+    "start": 24,
     "end": 35,
     "sourceType": "script",
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": " block comment ",
+      "start": 3,
+      "end": 22
+    }
+  ],
   "errors": [
     {
       "severity": "error",
-      "message": "Invalid operand for increment/decrement operator",
-      "help": "The '++' and '--' operators require a variable or property reference, not a literal or complex expression.",
-      "start": 3,
-      "end": 22,
+      "message": "Unexpected token '>'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 26,
+      "end": 27,
       "labels": [
       ]
     }

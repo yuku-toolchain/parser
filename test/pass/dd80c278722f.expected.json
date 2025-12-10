@@ -47,5 +47,13 @@
     "start": 0,
     "end": 45
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": "@ngInject",
+      "start": 0,
+      "end": 13
+    }
+  ]
 }

@@ -71,5 +71,13 @@
     "start": 0,
     "end": 68
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " should not hoist variable.",
+      "start": 32,
+      "end": 61
+    }
+  ]
 }

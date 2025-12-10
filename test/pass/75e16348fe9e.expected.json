@@ -497,5 +497,13 @@
     "start": 0,
     "end": 251
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " this CAN'T safely be shortened to 1 + x() + \"5boo\"",
+      "start": 128,
+      "end": 181
+    }
+  ]
 }

@@ -142,5 +142,13 @@
     "start": 0,
     "end": 85
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not transform",
+      "start": 59,
+      "end": 78
+    }
+  ]
 }

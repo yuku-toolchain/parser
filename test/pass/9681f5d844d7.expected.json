@@ -298,5 +298,49 @@
     "start": 0,
     "end": 269
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 1 args",
+      "start": 11,
+      "end": 20
+    },
+    {
+      "type": "Line",
+      "value": " n args",
+      "start": 35,
+      "end": 44
+    },
+    {
+      "type": "Line",
+      "value": " 0 args",
+      "start": 55,
+      "end": 64
+    },
+    {
+      "type": "Line",
+      "value": " func returns func returns func",
+      "start": 83,
+      "end": 116
+    },
+    {
+      "type": "Line",
+      "value": " So these parens are dropped",
+      "start": 137,
+      "end": 167
+    },
+    {
+      "type": "Line",
+      "value": " func returns func returns func",
+      "start": 187,
+      "end": 220
+    },
+    {
+      "type": "Line",
+      "value": " Dropping the parens",
+      "start": 247,
+      "end": 269
+    }
+  ]
 }

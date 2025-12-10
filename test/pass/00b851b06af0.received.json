@@ -2,7 +2,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 0,
+    "end": 186,
     "sourceType": "script",
     "body": [
       {
@@ -18,6 +18,20 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "@ngInject",
+      "start": 29,
+      "end": 42
+    },
+    {
+      "type": "Block",
+      "value": "@ngInject",
+      "start": 118,
+      "end": 131
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -30,10 +44,55 @@
     },
     {
       "severity": "error",
-      "message": "Invalid character at start of identifier",
-      "help": "Try starting the identifier here with a letter (a-z, A-Z), underscore (_), or dollar sign ($)",
-      "start": 31,
-      "end": 31,
+      "message": "Function declaration requires a name",
+      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
+      "start": 59,
+      "end": 60,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token 'return'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 77,
+      "end": 83,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token '}'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 95,
+      "end": 96,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Function declaration requires a name",
+      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
+      "start": 148,
+      "end": 149,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token 'return'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 166,
+      "end": 172,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token '}'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 184,
+      "end": 185,
       "labels": [
       ]
     }

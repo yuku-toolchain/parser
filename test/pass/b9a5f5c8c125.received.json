@@ -23,6 +23,8 @@
       }
     ]
   },
+  "comments": [
+  ],
   "errors": [
     {
       "severity": "error",

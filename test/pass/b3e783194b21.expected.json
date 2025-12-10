@@ -1544,5 +1544,19 @@
     "start": 0,
     "end": 690
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " compress these",
+      "start": 7,
+      "end": 24
+    },
+    {
+      "type": "Line",
+      "value": " don't compress these",
+      "start": 470,
+      "end": 493
+    }
+  ]
 }

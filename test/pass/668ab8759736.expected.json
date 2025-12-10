@@ -41,5 +41,19 @@
     "start": 0,
     "end": 128
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " ContinueStatement should be removed.",
+      "start": 0,
+      "end": 39
+    },
+    {
+      "type": "Line",
+      "value": " And label is not used, then label also should be removed.",
+      "start": 40,
+      "end": 100
+    }
+  ]
 }

@@ -113,5 +113,13 @@
     "start": 0,
     "end": 109
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " access to global should be assumed to have side effects",
+      "start": 7,
+      "end": 65
+    }
+  ]
 }

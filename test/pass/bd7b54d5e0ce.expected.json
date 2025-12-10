@@ -255,5 +255,25 @@
     "start": 0,
     "end": 316
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 'b'",
+      "start": 19,
+      "end": 25
+    },
+    {
+      "type": "Line",
+      "value": " 'a'",
+      "start": 67,
+      "end": 73
+    },
+    {
+      "type": "Line",
+      "value": " 'a'",
+      "start": 189,
+      "end": 195
+    }
+  ]
 }

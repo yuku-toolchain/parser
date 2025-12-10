@@ -7,16 +7,15 @@
     "body": [
     ]
   },
-  "errors": [
+  "comments": [
     {
-      "severity": "error",
-      "message": "Unexpected token ','",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 57,
-      "end": 58,
-      "labels": [
-      ]
-    },
+      "type": "Line",
+      "value": " This is global varible, so observable by getter.",
+      "start": 32,
+      "end": 83
+    }
+  ],
+  "errors": [
     {
       "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",

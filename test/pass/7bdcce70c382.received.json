@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not transform",
+      "start": 59,
+      "end": 78
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -14,15 +22,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 36,
       "end": 37,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'do'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 62,
-      "end": 64,
       "labels": [
       ]
     },

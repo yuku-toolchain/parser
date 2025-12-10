@@ -109,5 +109,13 @@
     "start": 0,
     "end": 137
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " Do not mangle to the same name",
+      "start": 0,
+      "end": 33
+    }
+  ]
 }

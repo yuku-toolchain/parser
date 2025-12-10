@@ -1,30 +1,14 @@
 {
   "program": {
     "type": "Program",
-    "start": 0,
+    "start": 5,
     "end": 40,
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 4,
-        "expression": {
-          "type": "Literal",
-          "start": 0,
-          "end": 4,
-          "value": {},
-          "raw": "/**/",
-          "regex": {
-            "pattern": "**",
-            "flags": ""
-          }
-        }
-      },
-      {
         "type": "FunctionDeclaration",
         "start": 5,
-        "end": 38,
+        "end": 39,
         "id": {
           "type": "Identifier",
           "start": 14,
@@ -38,34 +22,30 @@
         "body": {
           "type": "BlockStatement",
           "start": 18,
-          "end": 38,
+          "end": 39,
           "body": [
             {
-              "type": "ExpressionStatement",
-              "start": 19,
-              "end": 31,
-              "expression": {
-                "type": "Literal",
-                "start": 19,
-                "end": 31,
-                "value": {},
-                "raw": "/**/function",
-                "regex": {
-                  "pattern": "**",
-                  "flags": "function"
-                }
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 32,
-              "end": 33,
-              "expression": {
+              "type": "FunctionDeclaration",
+              "start": 23,
+              "end": 38,
+              "id": {
                 "type": "Identifier",
                 "start": 32,
                 "end": 33,
                 "name": "b"
-              }
+              },
+              "generator": false,
+              "async": false,
+              "params": [
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 36,
+                "end": 38,
+                "body": [
+                ]
+              },
+              "expression": false
             }
           ]
         },
@@ -73,24 +53,20 @@
       }
     ]
   },
-  "errors": [
+  "comments": [
     {
-      "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
-      "start": 33,
-      "end": 35,
-      "labels": [
-      ]
+      "type": "Block",
+      "value": "",
+      "start": 0,
+      "end": 4
     },
     {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 38,
-      "end": 39,
-      "labels": [
-      ]
+      "type": "Block",
+      "value": "",
+      "start": 19,
+      "end": 23
     }
+  ],
+  "errors": [
   ]
 }

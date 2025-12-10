@@ -27,15 +27,20 @@
       }
     ]
   },
-  "errors": [
+  "comments": [
     {
-      "severity": "error",
-      "message": "Unexpected token '*'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 29,
-      "end": 30,
-      "labels": [
-      ]
+      "type": "Block",
+      "value": " block comment 1 ",
+      "start": 6,
+      "end": 27
+    },
+    {
+      "type": "Block",
+      "value": " block comment 2 ",
+      "start": 28,
+      "end": 49
     }
+  ],
+  "errors": [
   ]
 }

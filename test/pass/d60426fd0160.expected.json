@@ -98,5 +98,19 @@
     "start": 0,
     "end": 107
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " not void context",
+      "start": 17,
+      "end": 36
+    },
+    {
+      "type": "Line",
+      "value": " do not optimize",
+      "start": 39,
+      "end": 57
+    }
+  ]
 }

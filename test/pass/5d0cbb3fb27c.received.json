@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " This should not removed and translation should not occur.",
+      "start": 86,
+      "end": 146
+    }
+  ],
   "errors": [
     {
       "severity": "error",

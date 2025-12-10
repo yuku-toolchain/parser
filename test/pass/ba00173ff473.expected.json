@@ -6,5 +6,19 @@
     "start": 0,
     "end": 35
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": " block comment ",
+      "start": 3,
+      "end": 22
+    },
+    {
+      "type": "Line",
+      "value": "> comment",
+      "start": 24,
+      "end": 35
+    }
+  ]
 }

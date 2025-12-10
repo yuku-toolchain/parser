@@ -142,5 +142,13 @@
     "start": 0,
     "end": 112
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " Don't apply transformation to global code",
+      "start": 0,
+      "end": 44
+    }
+  ]
 }

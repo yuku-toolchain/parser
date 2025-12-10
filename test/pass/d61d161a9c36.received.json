@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " indirect call to eval",
+      "start": 34,
+      "end": 58
+    }
+  ],
   "errors": [
     {
       "severity": "error",

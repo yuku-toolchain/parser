@@ -216,5 +216,13 @@
     "start": 0,
     "end": 168
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " https://github.com/Constellation/esmangle/issues/65",
+      "start": 16,
+      "end": 70
+    }
+  ]
 }

@@ -95,5 +95,19 @@
     "start": 0,
     "end": 220
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " To avoid JSC bug, we don't distinguish FunctionExpression name scope and it's function scope",
+      "start": 0,
+      "end": 95
+    },
+    {
+      "type": "Line",
+      "value": " Don't rename this variable to a name that is the same to function's name",
+      "start": 128,
+      "end": 203
+    }
+  ]
 }

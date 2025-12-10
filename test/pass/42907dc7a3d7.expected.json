@@ -43,5 +43,13 @@
     "start": 0,
     "end": 36
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " Comment",
+      "start": 21,
+      "end": 31
+    }
+  ]
 }

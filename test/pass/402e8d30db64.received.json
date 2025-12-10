@@ -5,17 +5,28 @@
     "end": 17,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 1,
+        "expression": {
+          "type": "Literal",
+          "start": 0,
+          "end": 1,
+          "value": 1,
+          "raw": "1"
+        }
+      }
     ]
   },
-  "errors": [
+  "comments": [
     {
-      "severity": "error",
-      "message": "Unterminated regular expression literal",
-      "help": "Try adding a closing slash (/) here, optionally followed by flags (g, i, m, etc.)",
-      "start": 3,
-      "end": 4,
-      "labels": [
-      ]
+      "type": "Line",
+      "value": " line comment",
+      "start": 2,
+      "end": 17
     }
+  ],
+  "errors": [
   ]
 }

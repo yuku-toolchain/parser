@@ -25,22 +25,6 @@
           "end": 79,
           "body": [
             {
-              "type": "ExpressionStatement",
-              "start": 17,
-              "end": 19,
-              "expression": {
-                "type": "Literal",
-                "start": 17,
-                "end": 19,
-                "value": {},
-                "raw": "//",
-                "regex": {
-                  "pattern": "",
-                  "flags": ""
-                }
-              }
-            },
-            {
               "type": "VariableDeclaration",
               "start": 47,
               "end": 57,
@@ -109,16 +93,15 @@
       }
     ]
   },
-  "errors": [
+  "comments": [
     {
-      "severity": "error",
-      "message": "Unexpected token 'do'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 20,
-      "end": 22,
-      "labels": [
-      ]
-    },
+      "type": "Line",
+      "value": " do not concat i=20,i2=30",
+      "start": 17,
+      "end": 44
+    }
+  ],
+  "errors": [
     {
       "severity": "error",
       "message": "Empty parentheses are only valid as arrow function parameters",

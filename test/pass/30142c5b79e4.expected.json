@@ -19,5 +19,13 @@
     "start": 0,
     "end": 17
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " line comment",
+      "start": 0,
+      "end": 15
+    }
+  ]
 }

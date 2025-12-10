@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": " perfect ",
+      "start": 25,
+      "end": 38
+    }
+  ],
   "errors": [
     {
       "severity": "error",

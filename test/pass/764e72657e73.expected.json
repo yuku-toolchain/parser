@@ -33,5 +33,13 @@
     "start": 0,
     "end": 37
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": "*\n * @type {number}\n ",
+      "start": 0,
+      "end": 25
+    }
+  ]
 }

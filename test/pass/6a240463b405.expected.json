@@ -33,5 +33,13 @@
     "start": 0,
     "end": 49
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " This test is ported from uglify-js",
+      "start": 0,
+      "end": 37
+    }
+  ]
 }

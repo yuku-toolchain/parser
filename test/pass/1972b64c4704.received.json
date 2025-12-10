@@ -28,6 +28,8 @@
       }
     ]
   },
+  "comments": [
+  ],
   "errors": [
     {
       "severity": "error",

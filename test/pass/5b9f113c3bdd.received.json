@@ -36,101 +36,6 @@
               }
             },
             {
-              "type": "ExpressionStatement",
-              "start": 98,
-              "end": 100,
-              "expression": {
-                "type": "Literal",
-                "start": 98,
-                "end": 100,
-                "value": {},
-                "raw": "//",
-                "regex": {
-                  "pattern": "",
-                  "flags": ""
-                }
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 101,
-              "end": 111,
-              "expression": {
-                "type": "Identifier",
-                "start": 101,
-                "end": 111,
-                "name": "completely"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 112,
-              "end": 122,
-              "expression": {
-                "type": "Identifier",
-                "start": 112,
-                "end": 122,
-                "name": "discarding"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 123,
-              "end": 126,
-              "expression": {
-                "type": "Identifier",
-                "start": 123,
-                "end": 126,
-                "name": "the"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 127,
-              "end": 131,
-              "expression": {
-                "type": "TemplateLiteral",
-                "start": 127,
-                "end": 131,
-                "quasis": [
-                  {
-                    "type": "TemplateElement",
-                    "start": 128,
-                    "end": 130,
-                    "value": {
-                      "raw": "if",
-                      "cooked": "if"
-                    },
-                    "tail": true
-                  }
-                ],
-                "expressions": [
-                ]
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 132,
-              "end": 137,
-              "expression": {
-                "type": "Identifier",
-                "start": 132,
-                "end": 137,
-                "name": "would"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 138,
-              "end": 147,
-              "expression": {
-                "type": "Identifier",
-                "start": 138,
-                "end": 147,
-                "name": "introduce"
-              }
-            },
-            {
               "type": "VariableDeclaration",
               "start": 346,
               "end": 352,
@@ -222,6 +127,32 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " completely discarding the `if` would introduce some",
+      "start": 98,
+      "end": 152
+    },
+    {
+      "type": "Line",
+      "value": " bugs.  UglifyJS v1 doesn't deal with this issue; in v2",
+      "start": 166,
+      "end": 223
+    },
+    {
+      "type": "Line",
+      "value": " we copy any declarations to the upper scope.",
+      "start": 237,
+      "end": 284
+    },
+    {
+      "type": "Line",
+      "value": " but nested declarations should not be kept.",
+      "start": 403,
+      "end": 449
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -238,15 +169,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 74,
       "end": 79,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Line terminator not allowed in regular expression literal",
-      "help": "Try removing the line break here or escaping it within the regex pattern",
-      "start": 167,
-      "end": 168,
       "labels": [
       ]
     },

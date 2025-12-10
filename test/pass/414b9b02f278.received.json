@@ -27,44 +27,6 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 7,
-        "end": 9,
-        "expression": {
-          "type": "Literal",
-          "start": 7,
-          "end": 9,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 10,
-        "end": 18,
-        "expression": {
-          "type": "Identifier",
-          "start": 10,
-          "end": 18,
-          "name": "compress"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 19,
-        "end": 24,
-        "expression": {
-          "type": "Identifier",
-          "start": 19,
-          "end": 24,
-          "name": "these"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
         "start": 25,
         "end": 30,
         "expression": {
@@ -399,6 +361,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " compress these",
+      "start": 7,
+      "end": 24
+    }
+  ],
   "errors": [
     {
       "severity": "error",

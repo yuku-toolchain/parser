@@ -24,69 +24,17 @@
             "init": null
           }
         ]
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 28,
-        "end": 30,
-        "expression": {
-          "type": "Literal",
-          "start": 28,
-          "end": 30,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 31,
-        "end": 37,
-        "expression": {
-          "type": "Identifier",
-          "start": 31,
-          "end": 37,
-          "name": "should"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 38,
-        "end": 40,
-        "expression": {
-          "type": "Identifier",
-          "start": 38,
-          "end": 40,
-          "name": "be"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 41,
-        "end": 46,
-        "expression": {
-          "type": "Identifier",
-          "start": 41,
-          "end": 46,
-          "name": "empty"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 47,
-        "end": 56,
-        "expression": {
-          "type": "Identifier",
-          "start": 47,
-          "end": 56,
-          "name": "statement"
-        }
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " should be empty statement",
+      "start": 28,
+      "end": 56
+    }
+  ],
   "errors": [
     {
       "severity": "error",

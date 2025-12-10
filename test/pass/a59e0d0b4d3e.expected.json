@@ -19,5 +19,13 @@
     "start": 0,
     "end": 43
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": " multiline\ncomment\nshould\nbe\nignored ",
+      "start": 0,
+      "end": 41
+    }
+  ]
 }

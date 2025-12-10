@@ -91,5 +91,37 @@
     "start": 0,
     "end": 245
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " Do not generate like this",
+      "start": 0,
+      "end": 28
+    },
+    {
+      "type": "Line",
+      "value": " if(cond)with(cond2)if(cond3)debugger;else ok();",
+      "start": 29,
+      "end": 79
+    },
+    {
+      "type": "Line",
+      "value": "",
+      "start": 80,
+      "end": 82
+    },
+    {
+      "type": "Line",
+      "value": "",
+      "start": 83,
+      "end": 85
+    },
+    {
+      "type": "Line",
+      "value": " See https://github.com/Constellation/escodegen/issues/49",
+      "start": 86,
+      "end": 145
+    }
+  ]
 }

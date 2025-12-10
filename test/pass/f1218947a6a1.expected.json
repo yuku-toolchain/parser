@@ -124,5 +124,13 @@
     "start": 0,
     "end": 125
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " hoist this, but it is very difficult.",
+      "start": 31,
+      "end": 71
+    }
+  ]
 }

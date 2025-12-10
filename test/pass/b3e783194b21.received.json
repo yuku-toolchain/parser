@@ -2,7 +2,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 0,
+    "end": 690,
     "sourceType": "script",
     "body": [
       {
@@ -24,44 +24,6 @@
             "init": null
           }
         ]
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 7,
-        "end": 9,
-        "expression": {
-          "type": "Literal",
-          "start": 7,
-          "end": 9,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 10,
-        "end": 18,
-        "expression": {
-          "type": "Identifier",
-          "start": 10,
-          "end": 18,
-          "name": "compress"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 19,
-        "end": 24,
-        "expression": {
-          "type": "Identifier",
-          "start": 19,
-          "end": 24,
-          "name": "these"
-        }
       },
       {
         "type": "ExpressionStatement",
@@ -945,33 +907,363 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 470,
-        "end": 472,
+        "start": 495,
+        "end": 516,
         "expression": {
-          "type": "Literal",
-          "start": 470,
-          "end": 472,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
+          "type": "AssignmentExpression",
+          "start": 495,
+          "end": 515,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 495,
+            "end": 496,
+            "name": "a"
+          },
+          "right": {
+            "type": "LogicalExpression",
+            "start": 499,
+            "end": 515,
+            "left": {
+              "type": "Identifier",
+              "start": 499,
+              "end": 500,
+              "name": "b"
+            },
+            "operator": "||",
+            "right": {
+              "type": "Literal",
+              "start": 511,
+              "end": 515,
+              "value": true,
+              "raw": "true"
+            }
           }
         }
       },
       {
         "type": "ExpressionStatement",
-        "start": 473,
-        "end": 476,
+        "start": 517,
+        "end": 522,
         "expression": {
-          "type": "Identifier",
-          "start": 473,
-          "end": 476,
-          "name": "don"
+          "type": "AssignmentExpression",
+          "start": 517,
+          "end": 522,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 517,
+            "end": 518,
+            "name": "a"
+          },
+          "right": {
+            "type": "Identifier",
+            "start": 521,
+            "end": 522,
+            "name": "c"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 537,
+        "end": 558,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 537,
+          "end": 557,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 537,
+            "end": 538,
+            "name": "a"
+          },
+          "right": {
+            "type": "LogicalExpression",
+            "start": 541,
+            "end": 557,
+            "left": {
+              "type": "BinaryExpression",
+              "start": 541,
+              "end": 547,
+              "left": {
+                "type": "Literal",
+                "start": 541,
+                "end": 543,
+                "value": 27,
+                "raw": "27"
+              },
+              "operator": "-",
+              "right": {
+                "type": "Identifier",
+                "start": 546,
+                "end": 547,
+                "name": "b"
+              }
+            },
+            "operator": "||",
+            "right": {
+              "type": "Literal",
+              "start": 554,
+              "end": 557,
+              "value": "e",
+              "raw": "\"e\""
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 559,
+        "end": 581,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 559,
+          "end": 580,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 559,
+            "end": 560,
+            "name": "a"
+          },
+          "right": {
+            "type": "LogicalExpression",
+            "start": 563,
+            "end": 580,
+            "left": {
+              "type": "BinaryExpression",
+              "start": 563,
+              "end": 570,
+              "left": {
+                "type": "Literal",
+                "start": 563,
+                "end": 565,
+                "value": 28,
+                "raw": "28"
+              },
+              "operator": "<<",
+              "right": {
+                "type": "Identifier",
+                "start": 569,
+                "end": 570,
+                "name": "b"
+              }
+            },
+            "operator": "||",
+            "right": {
+              "type": "UnaryExpression",
+              "start": 576,
+              "end": 580,
+              "operator": "-",
+              "prefix": true,
+              "argument": {
+                "type": "Literal",
+                "start": 577,
+                "end": 580,
+                "value": 4.5,
+                "raw": "4.5"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 583,
+        "end": 605,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 583,
+          "end": 604,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 583,
+            "end": 584,
+            "name": "a"
+          },
+          "right": {
+            "type": "LogicalExpression",
+            "start": 587,
+            "end": 604,
+            "left": {
+              "type": "Identifier",
+              "start": 587,
+              "end": 588,
+              "name": "b"
+            },
+            "operator": "||",
+            "right": {
+              "type": "Literal",
+              "start": 599,
+              "end": 604,
+              "value": false,
+              "raw": "false"
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 606,
+        "end": 611,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 606,
+          "end": 611,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 606,
+            "end": 607,
+            "name": "a"
+          },
+          "right": {
+            "type": "Identifier",
+            "start": 610,
+            "end": 611,
+            "name": "c"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 627,
+        "end": 632,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 627,
+          "end": 632,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 627,
+            "end": 628,
+            "name": "a"
+          },
+          "right": {
+            "type": "Identifier",
+            "start": 631,
+            "end": 632,
+            "name": "c"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 647,
+        "end": 666,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 647,
+          "end": 665,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 647,
+            "end": 648,
+            "name": "a"
+          },
+          "right": {
+            "type": "LogicalExpression",
+            "start": 651,
+            "end": 665,
+            "left": {
+              "type": "BinaryExpression",
+              "start": 651,
+              "end": 657,
+              "left": {
+                "type": "Literal",
+                "start": 651,
+                "end": 653,
+                "value": 30,
+                "raw": "30"
+              },
+              "operator": "*",
+              "right": {
+                "type": "Identifier",
+                "start": 656,
+                "end": 657,
+                "name": "b"
+              }
+            },
+            "operator": "||",
+            "right": {
+              "type": "Identifier",
+              "start": 664,
+              "end": 665,
+              "name": "h"
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 667,
+        "end": 689,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 667,
+          "end": 688,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 667,
+            "end": 668,
+            "name": "a"
+          },
+          "right": {
+            "type": "LogicalExpression",
+            "start": 671,
+            "end": 688,
+            "left": {
+              "type": "BinaryExpression",
+              "start": 671,
+              "end": 677,
+              "left": {
+                "type": "Identifier",
+                "start": 671,
+                "end": 672,
+                "name": "b"
+              },
+              "operator": "+",
+              "right": {
+                "type": "Literal",
+                "start": 675,
+                "end": 677,
+                "value": 31,
+                "raw": "31"
+              }
+            },
+            "operator": "||",
+            "right": {
+              "type": "Literal",
+              "start": 684,
+              "end": 688,
+              "value": null,
+              "raw": "null"
+            }
+          }
         }
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " compress these",
+      "start": 7,
+      "end": 24
+    },
+    {
+      "type": "Line",
+      "value": " don't compress these",
+      "start": 470,
+      "end": 493
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -1020,10 +1312,28 @@
     },
     {
       "severity": "error",
-      "message": "Unterminated string literal",
-      "help": "Try adding a closing quote here to complete the string",
-      "start": 476,
-      "end": 493,
+      "message": "Unexpected token '.'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 522,
+      "end": 523,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token '.'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 611,
+      "end": 612,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token '.'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 632,
+      "end": 633,
       "labels": [
       ]
     }

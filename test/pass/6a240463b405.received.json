@@ -1,79 +1,39 @@
 {
   "program": {
     "type": "Program",
-    "start": 0,
+    "start": 39,
     "end": 49,
     "sourceType": "script",
     "body": [
       {
         "type": "ExpressionStatement",
-        "start": 0,
-        "end": 2,
+        "start": 39,
+        "end": 43,
         "expression": {
           "type": "Literal",
-          "start": 0,
-          "end": 2,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 3,
-        "end": 7,
-        "expression": {
-          "type": "Identifier",
-          "start": 3,
-          "end": 7,
-          "name": "This"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 8,
-        "end": 12,
-        "expression": {
-          "type": "Identifier",
-          "start": 8,
-          "end": 12,
-          "name": "test"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 13,
-        "end": 15,
-        "expression": {
-          "type": "Identifier",
-          "start": 13,
-          "end": 15,
-          "name": "is"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 16,
-        "end": 22,
-        "expression": {
-          "type": "Identifier",
-          "start": 16,
-          "end": 22,
-          "name": "ported"
+          "start": 39,
+          "end": 43,
+          "value": 1e20,
+          "raw": "1e20"
         }
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " This test is ported from uglify-js",
+      "start": 0,
+      "end": 37
+    }
+  ],
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'from'",
+      "message": "Unexpected token ','",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 23,
-      "end": 27,
+      "start": 43,
+      "end": 44,
       "labels": [
       ]
     }

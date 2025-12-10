@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " getter is not observable after f()",
+      "start": 53,
+      "end": 90
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -19,19 +27,10 @@
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
-      "start": 88,
-      "end": 90,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
-      "start": 98,
-      "end": 99,
+      "start": 97,
+      "end": 98,
       "labels": [
       ]
     }

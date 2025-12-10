@@ -6,5 +6,13 @@
     "start": 0,
     "end": 17
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": "-- HTML comment",
+      "start": 0,
+      "end": 17
+    }
+  ]
 }

@@ -116,5 +116,13 @@
     "start": 0,
     "end": 95
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 'i' should remain",
+      "start": 62,
+      "end": 82
+    }
+  ]
 }

@@ -76,5 +76,13 @@
     "start": 0,
     "end": 70
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not optimize it",
+      "start": 11,
+      "end": 32
+    }
+  ]
 }

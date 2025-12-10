@@ -7,13 +7,21 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " should not hoist this",
+      "start": 31,
+      "end": 55
+    }
+  ],
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'this'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 51,
-      "end": 55,
+      "message": "Invalid element in destructuring pattern",
+      "help": "Expected an identifier, array pattern, object pattern, or assignment pattern.",
+      "start": 70,
+      "end": 71,
       "labels": [
       ]
     },

@@ -78,5 +78,13 @@
     "start": 0,
     "end": 77
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " DO NOT DROP i",
+      "start": 0,
+      "end": 16
+    }
+  ]
 }

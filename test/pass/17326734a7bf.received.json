@@ -1,37 +1,10 @@
 {
   "program": {
     "type": "Program",
-    "start": 0,
+    "start": 46,
     "end": 999,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 2,
-        "expression": {
-          "type": "Literal",
-          "start": 0,
-          "end": 2,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 3,
-        "end": 10,
-        "expression": {
-          "type": "Identifier",
-          "start": 3,
-          "end": 10,
-          "name": "adapted"
-        }
-      },
       {
         "type": "FunctionDeclaration",
         "start": 46,
@@ -316,33 +289,6 @@
                         }
                       }
                     ]
-                  },
-                  {
-                    "type": "ExpressionStatement",
-                    "start": 219,
-                    "end": 221,
-                    "expression": {
-                      "type": "Literal",
-                      "start": 219,
-                      "end": 221,
-                      "value": {},
-                      "raw": "//",
-                      "regex": {
-                        "pattern": "",
-                        "flags": ""
-                      }
-                    }
-                  },
-                  {
-                    "type": "ExpressionStatement",
-                    "start": 222,
-                    "end": 225,
-                    "expression": {
-                      "type": "Identifier",
-                      "start": 222,
-                      "end": 225,
-                      "name": "asm"
-                    }
                   },
                   {
                     "type": "ExpressionStatement",
@@ -846,33 +792,6 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 689,
-                    "end": 691,
-                    "expression": {
-                      "type": "Literal",
-                      "start": 689,
-                      "end": 691,
-                      "value": {},
-                      "raw": "//",
-                      "regex": {
-                        "pattern": "",
-                        "flags": ""
-                      }
-                    }
-                  },
-                  {
-                    "type": "ExpressionStatement",
-                    "start": 692,
-                    "end": 695,
-                    "expression": {
-                      "type": "Identifier",
-                      "start": 692,
-                      "end": 695,
-                      "name": "asm"
-                    }
-                  },
-                  {
-                    "type": "ExpressionStatement",
                     "start": 796,
                     "end": 812,
                     "expression": {
@@ -1101,16 +1020,27 @@
       }
     ]
   },
-  "errors": [
+  "comments": [
     {
-      "severity": "error",
-      "message": "Unexpected token 'from'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 11,
-      "end": 15,
-      "labels": [
-      ]
+      "type": "Line",
+      "value": " adapted from http://asmjs.org/spec/latest/",
+      "start": 0,
+      "end": 45
     },
+    {
+      "type": "Line",
+      "value": " asm.js forces byte addressing of the heap by requiring shifting by 3",
+      "start": 219,
+      "end": 290
+    },
+    {
+      "type": "Line",
+      "value": " asm.js forces byte addressing of the heap by requiring shifting by 3",
+      "start": 689,
+      "end": 760
+    }
+  ],
+  "errors": [
     {
       "severity": "error",
       "message": "Unexpected token '.'",
@@ -1144,15 +1074,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 125,
       "end": 128,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 225,
-      "end": 226,
       "labels": [
       ]
     },
@@ -1243,15 +1164,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 591,
       "end": 594,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 695,
-      "end": 696,
       "labels": [
       ]
     },

@@ -2,7 +2,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 0,
+    "end": 36,
     "sourceType": "script",
     "body": [
       {
@@ -18,6 +18,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": " ",
+      "start": 24,
+      "end": 31
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -39,10 +47,10 @@
     },
     {
       "severity": "error",
-      "message": "Invalid character at start of identifier",
-      "help": "Try starting the identifier here with a letter (a-z, A-Z), underscore (_), or dollar sign ($)",
-      "start": 26,
-      "end": 26,
+      "message": "Unexpected token '}'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 35,
+      "end": 36,
       "labels": [
       ]
     }

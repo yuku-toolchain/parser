@@ -1127,5 +1127,13 @@
     "start": 0,
     "end": 532
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " compress these",
+      "start": 7,
+      "end": 24
+    }
+  ]
 }

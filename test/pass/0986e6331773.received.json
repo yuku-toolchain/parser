@@ -101,6 +101,20 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 1",
+      "start": 38,
+      "end": 42
+    },
+    {
+      "type": "Line",
+      "value": " 2",
+      "start": 113,
+      "end": 117
+    }
+  ],
   "errors": [
     {
       "severity": "error",

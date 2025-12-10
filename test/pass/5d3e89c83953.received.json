@@ -25,55 +25,6 @@
           "end": 66,
           "body": [
             {
-              "type": "ExpressionStatement",
-              "start": 19,
-              "end": 21,
-              "expression": {
-                "type": "Literal",
-                "start": 19,
-                "end": 21,
-                "value": {},
-                "raw": "//",
-                "regex": {
-                  "pattern": "",
-                  "flags": ""
-                }
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 22,
-              "end": 24,
-              "expression": {
-                "type": "Identifier",
-                "start": 22,
-                "end": 24,
-                "name": "Do"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 25,
-              "end": 28,
-              "expression": {
-                "type": "Identifier",
-                "start": 25,
-                "end": 28,
-                "name": "not"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 29,
-              "end": 35,
-              "expression": {
-                "type": "Identifier",
-                "start": 29,
-                "end": 35,
-                "name": "remove"
-              }
-            },
-            {
               "type": "VariableDeclaration",
               "start": 52,
               "end": 57,
@@ -99,16 +50,15 @@
       }
     ]
   },
-  "errors": [
+  "comments": [
     {
-      "severity": "error",
-      "message": "Unexpected token 'this'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 36,
-      "end": 40,
-      "labels": [
-      ]
-    },
+      "type": "Line",
+      "value": " Do not remove this i",
+      "start": 19,
+      "end": 42
+    }
+  ],
+  "errors": [
     {
       "severity": "error",
       "message": "Unexpected token 'for'",

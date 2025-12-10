@@ -120,5 +120,13 @@
     "start": 0,
     "end": 78
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 2nd char is a unicode digit",
+      "start": 48,
+      "end": 78
+    }
+  ]
 }

@@ -799,5 +799,25 @@
     "start": 0,
     "end": 475
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " compress these",
+      "start": 19,
+      "end": 36
+    },
+    {
+      "type": "Line",
+      "value": " Compress conditions that have side effects",
+      "start": 214,
+      "end": 259
+    },
+    {
+      "type": "Line",
+      "value": " don't compress these",
+      "start": 417,
+      "end": 440
+    }
+  ]
 }

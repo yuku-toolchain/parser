@@ -5,79 +5,16 @@
     "end": 91,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 58,
-        "end": 60,
-        "expression": {
-          "type": "Literal",
-          "start": 58,
-          "end": 60,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 61,
-        "end": 65,
-        "expression": {
-          "type": "Identifier",
-          "start": 61,
-          "end": 65,
-          "name": "This"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 66,
-        "end": 72,
-        "expression": {
-          "type": "Identifier",
-          "start": 66,
-          "end": 72,
-          "name": "should"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 73,
-        "end": 76,
-        "expression": {
-          "type": "Identifier",
-          "start": 73,
-          "end": 76,
-          "name": "not"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 77,
-        "end": 79,
-        "expression": {
-          "type": "Identifier",
-          "start": 77,
-          "end": 79,
-          "name": "be"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 80,
-        "end": 87,
-        "expression": {
-          "type": "Identifier",
-          "start": 80,
-          "end": 87,
-          "name": "removed"
-        }
-      }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " This should not be removed.",
+      "start": 58,
+      "end": 88
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -117,10 +54,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
+      "message": "Unexpected token '}'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 87,
-      "end": 88,
+      "start": 89,
+      "end": 90,
       "labels": [
       ]
     }

@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not optimize it",
+      "start": 38,
+      "end": 59
+    }
+  ],
   "errors": [
     {
       "severity": "error",

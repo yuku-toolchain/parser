@@ -106,5 +106,13 @@
     "start": 0,
     "end": 103
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " getter is not observable after f()",
+      "start": 53,
+      "end": 90
+    }
+  ]
 }

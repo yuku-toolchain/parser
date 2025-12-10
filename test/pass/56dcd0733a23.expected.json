@@ -206,5 +206,19 @@
     "start": 0,
     "end": 190
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not optimize it",
+      "start": 35,
+      "end": 56
+    },
+    {
+      "type": "Line",
+      "value": " do not optimize it",
+      "start": 129,
+      "end": 150
+    }
+  ]
 }

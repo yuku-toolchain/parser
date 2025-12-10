@@ -232,5 +232,25 @@
     "start": 0,
     "end": 226
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": " \"static\" can be a method name! ",
+      "start": 90,
+      "end": 126
+    },
+    {
+      "type": "Block",
+      "value": " \"get\" can be a method name! ",
+      "start": 141,
+      "end": 174
+    },
+    {
+      "type": "Block",
+      "value": " \"set\" can be a method name! ",
+      "start": 189,
+      "end": 222
+    }
+  ]
 }

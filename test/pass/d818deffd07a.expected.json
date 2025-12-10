@@ -44,5 +44,13 @@
     "start": 0,
     "end": 57
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " should be empty statement",
+      "start": 28,
+      "end": 56
+    }
+  ]
 }

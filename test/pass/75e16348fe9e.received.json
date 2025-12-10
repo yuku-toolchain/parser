@@ -2,7 +2,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 0,
+    "end": 251,
     "sourceType": "script",
     "body": [
       {
@@ -146,23 +146,91 @@
         ]
       },
       {
-        "type": "ExpressionStatement",
-        "start": 128,
-        "end": 130,
-        "expression": {
-          "type": "Literal",
-          "start": 128,
-          "end": 130,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
+        "type": "VariableDeclaration",
+        "start": 182,
+        "end": 195,
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 186,
+            "end": 195,
+            "id": {
+              "type": "Identifier",
+              "start": 186,
+              "end": 187,
+              "name": "l"
+            },
+            "init": {
+              "type": "BinaryExpression",
+              "start": 190,
+              "end": 195,
+              "left": {
+                "type": "Literal",
+                "start": 190,
+                "end": 191,
+                "value": 5,
+                "raw": "5"
+              },
+              "operator": "+",
+              "right": {
+                "type": "Identifier",
+                "start": 194,
+                "end": 195,
+                "name": "d"
+              }
+            }
           }
-        }
+        ]
+      },
+      {
+        "type": "VariableDeclaration",
+        "start": 214,
+        "end": 227,
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 218,
+            "end": 227,
+            "id": {
+              "type": "Identifier",
+              "start": 218,
+              "end": 219,
+              "name": "m"
+            },
+            "init": {
+              "type": "BinaryExpression",
+              "start": 222,
+              "end": 227,
+              "left": {
+                "type": "Literal",
+                "start": 222,
+                "end": 223,
+                "value": 8,
+                "raw": "8"
+              },
+              "operator": "+",
+              "right": {
+                "type": "Identifier",
+                "start": 226,
+                "end": 227,
+                "name": "d"
+              }
+            }
+          }
+        ]
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " this CAN'T safely be shortened to 1 + x() + \"5boo\"",
+      "start": 128,
+      "end": 181
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -193,19 +261,19 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'this'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 131,
-      "end": 135,
+      "message": "Empty parentheses are only valid as arrow function parameters",
+      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "start": 195,
+      "end": 197,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unterminated string literal",
-      "help": "Try adding a closing quote here to complete the string",
-      "start": 139,
-      "end": 181,
+      "message": "Empty parentheses are only valid as arrow function parameters",
+      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "start": 227,
+      "end": 229,
       "labels": [
       ]
     }

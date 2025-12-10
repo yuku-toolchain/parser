@@ -66,5 +66,13 @@
     "start": 0,
     "end": 65
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " should hoist to parameter",
+      "start": 30,
+      "end": 58
+    }
+  ]
 }

@@ -98,5 +98,13 @@
     "start": 0,
     "end": 80
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not concat i=20,i2=30",
+      "start": 17,
+      "end": 44
+    }
+  ]
 }

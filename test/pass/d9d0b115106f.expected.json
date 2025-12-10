@@ -99,5 +99,19 @@
     "start": 0,
     "end": 199
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " drop this default clause",
+      "start": 97,
+      "end": 124
+    },
+    {
+      "type": "Line",
+      "value": " https://github.com/mishoo/UglifyJS2/issues/141",
+      "start": 137,
+      "end": 186
+    }
+  ]
 }

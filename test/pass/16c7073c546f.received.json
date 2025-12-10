@@ -1,59 +1,10 @@
 {
   "program": {
     "type": "Program",
-    "start": 0,
+    "start": 69,
     "end": 125,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 2,
-        "expression": {
-          "type": "Literal",
-          "start": 0,
-          "end": 2,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 3,
-        "end": 10,
-        "expression": {
-          "type": "Identifier",
-          "start": 3,
-          "end": 10,
-          "name": "prevent"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 11,
-        "end": 23,
-        "expression": {
-          "type": "Identifier",
-          "start": 11,
-          "end": 23,
-          "name": "optimization"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 24,
-        "end": 31,
-        "expression": {
-          "type": "Identifier",
-          "start": 24,
-          "end": 31,
-          "name": "because"
-        }
-      },
       {
         "type": "VariableDeclaration",
         "start": 91,
@@ -82,13 +33,21 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " prevent optimization because of this.constructor.arguments access",
+      "start": 0,
+      "end": 68
+    }
+  ],
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'of'",
+      "message": "Unexpected token 'new'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 32,
-      "end": 34,
+      "start": 69,
+      "end": 72,
       "labels": [
       ]
     },

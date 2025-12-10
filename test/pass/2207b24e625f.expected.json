@@ -125,5 +125,13 @@
     "start": 0,
     "end": 64
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " ok",
+      "start": 52,
+      "end": 57
+    }
+  ]
 }

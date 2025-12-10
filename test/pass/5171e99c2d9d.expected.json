@@ -75,5 +75,13 @@
     "start": 0,
     "end": 95
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " Do not remove first if consequent block",
+      "start": 0,
+      "end": 42
+    }
+  ]
 }

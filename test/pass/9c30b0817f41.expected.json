@@ -76,5 +76,13 @@
     "start": 0,
     "end": 67
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " should not transform this one",
+      "start": 35,
+      "end": 67
+    }
+  ]
 }

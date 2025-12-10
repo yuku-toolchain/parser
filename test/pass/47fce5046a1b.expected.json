@@ -30,5 +30,13 @@
     "start": 0,
     "end": 48
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " not reduce this because of ToNumber",
+      "start": 0,
+      "end": 38
+    }
+  ]
 }

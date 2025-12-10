@@ -143,5 +143,13 @@
     "start": 0,
     "end": 154
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " circular reference",
+      "start": 23,
+      "end": 44
+    }
+  ]
 }

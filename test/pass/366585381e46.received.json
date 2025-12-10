@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not transform because of global getter",
+      "start": 19,
+      "end": 63
+    }
+  ],
   "errors": [
     {
       "severity": "error",

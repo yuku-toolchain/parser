@@ -67,5 +67,19 @@
     "start": 0,
     "end": 65
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": " infinite ",
+      "start": 15,
+      "end": 29
+    },
+    {
+      "type": "Block",
+      "value": " bar ",
+      "start": 47,
+      "end": 56
+    }
+  ]
 }

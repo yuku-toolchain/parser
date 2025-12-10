@@ -73,5 +73,13 @@
     "start": 0,
     "end": 65
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not remove it",
+      "start": 19,
+      "end": 38
+    }
+  ]
 }

@@ -75,5 +75,13 @@
     "start": 0,
     "end": 101
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " because test is not referenced",
+      "start": 40,
+      "end": 73
+    }
+  ]
 }

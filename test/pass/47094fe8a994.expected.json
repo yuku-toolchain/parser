@@ -33,5 +33,13 @@
     "start": 0,
     "end": 16
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": "--foo",
+      "start": 9,
+      "end": 16
+    }
+  ]
 }

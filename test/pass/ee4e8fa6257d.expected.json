@@ -20,5 +20,6 @@
       "helpMessage": null,
       "codeframe": "\n  x Unexpected token\n   ,-[test/pass/ee4e8fa6257d.js:1:4]\n 1 | let++\n   :    ^^\n   `----\n"
     }
-  ]
+  ],
+  "comments": []
 }

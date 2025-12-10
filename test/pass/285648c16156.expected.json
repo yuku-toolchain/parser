@@ -51,5 +51,13 @@
     "start": 0,
     "end": 47
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": " Multiline\nComment ",
+      "start": 19,
+      "end": 42
+    }
+  ]
 }

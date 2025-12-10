@@ -1802,5 +1802,25 @@
     "start": 0,
     "end": 999
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " adapted from http://asmjs.org/spec/latest/",
+      "start": 0,
+      "end": 45
+    },
+    {
+      "type": "Line",
+      "value": " asm.js forces byte addressing of the heap by requiring shifting by 3",
+      "start": 219,
+      "end": 290
+    },
+    {
+      "type": "Line",
+      "value": " asm.js forces byte addressing of the heap by requiring shifting by 3",
+      "start": 689,
+      "end": 760
+    }
+  ]
 }

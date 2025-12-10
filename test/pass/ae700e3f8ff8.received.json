@@ -18,6 +18,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not transform",
+      "start": 23,
+      "end": 42
+    }
+  ],
   "errors": [
     {
       "severity": "error",

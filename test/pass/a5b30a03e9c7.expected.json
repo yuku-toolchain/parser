@@ -218,5 +218,25 @@
     "start": 0,
     "end": 217
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not optimize it",
+      "start": 8,
+      "end": 29
+    },
+    {
+      "type": "Line",
+      "value": " do not optimize it",
+      "start": 83,
+      "end": 104
+    },
+    {
+      "type": "Line",
+      "value": " do not optimize it",
+      "start": 156,
+      "end": 177
+    }
+  ]
 }

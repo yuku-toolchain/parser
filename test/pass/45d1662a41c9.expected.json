@@ -21,5 +21,13 @@
     "start": 0,
     "end": 49
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " should be empty statement",
+      "start": 20,
+      "end": 48
+    }
+  ]
 }

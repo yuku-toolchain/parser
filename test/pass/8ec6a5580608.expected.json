@@ -50,5 +50,13 @@
     "start": 0,
     "end": 23
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": "> nothing",
+      "start": 12,
+      "end": 23
+    }
+  ]
 }

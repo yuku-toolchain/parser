@@ -37,44 +37,6 @@
           "end": 154,
           "body": [
             {
-              "type": "ExpressionStatement",
-              "start": 23,
-              "end": 25,
-              "expression": {
-                "type": "Literal",
-                "start": 23,
-                "end": 25,
-                "value": {},
-                "raw": "//",
-                "regex": {
-                  "pattern": "",
-                  "flags": ""
-                }
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 26,
-              "end": 34,
-              "expression": {
-                "type": "Identifier",
-                "start": 26,
-                "end": 34,
-                "name": "circular"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 35,
-              "end": 44,
-              "expression": {
-                "type": "Identifier",
-                "start": 35,
-                "end": 44,
-                "name": "reference"
-              }
-            },
-            {
               "type": "FunctionDeclaration",
               "start": 49,
               "end": 89,
@@ -126,6 +88,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " circular reference",
+      "start": 23,
+      "end": 44
+    }
+  ],
   "errors": [
     {
       "severity": "error",

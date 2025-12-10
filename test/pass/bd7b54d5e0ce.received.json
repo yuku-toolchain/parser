@@ -7,6 +7,26 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 'b'",
+      "start": 19,
+      "end": 25
+    },
+    {
+      "type": "Line",
+      "value": " 'a'",
+      "start": 67,
+      "end": 73
+    },
+    {
+      "type": "Line",
+      "value": " 'a'",
+      "start": 189,
+      "end": 195
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -64,10 +84,10 @@
     },
     {
       "severity": "error",
-      "message": "Line terminator not allowed in regular expression literal",
-      "help": "Try removing the line break here or escaping it within the regex pattern",
-      "start": 190,
-      "end": 191,
+      "message": "Expected ',' or ')' in parenthesized expression",
+      "help": "Add a comma between elements or close with ')'.",
+      "start": 204,
+      "end": 205,
       "labels": [
       ]
     },

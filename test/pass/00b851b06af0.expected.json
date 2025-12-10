@@ -166,5 +166,19 @@
     "start": 0,
     "end": 186
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": "@ngInject",
+      "start": 29,
+      "end": 42
+    },
+    {
+      "type": "Block",
+      "value": "@ngInject",
+      "start": 118,
+      "end": 131
+    }
+  ]
 }

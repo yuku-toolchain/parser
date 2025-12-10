@@ -12,5 +12,19 @@
     "start": 0,
     "end": 27
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": "Venus",
+      "start": 0,
+      "end": 9
+    },
+    {
+      "type": "Line",
+      "value": " Mars",
+      "start": 20,
+      "end": 27
+    }
+  ]
 }

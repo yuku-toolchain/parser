@@ -1,55 +1,133 @@
 {
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 0,
+    "start": 27,
+    "end": 196,
     "sourceType": "script",
     "body": [
       {
         "type": "ExpressionStatement",
-        "start": 0,
-        "end": 2,
+        "start": 27,
+        "end": 186,
         "expression": {
-          "type": "Literal",
-          "start": 0,
-          "end": 2,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
+          "type": "UnaryExpression",
+          "start": 27,
+          "end": 186,
+          "operator": "void",
+          "prefix": true,
+          "argument": {
+            "type": "FunctionExpression",
+            "start": 32,
+            "end": 186,
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+            ],
+            "body": {
+              "type": "BlockStatement",
+              "start": 44,
+              "end": 186,
+              "body": [
+                {
+                  "type": "VariableDeclaration",
+                  "start": 48,
+                  "end": 54,
+                  "kind": "var",
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start": 52,
+                      "end": 53,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 52,
+                        "end": 53,
+                        "name": "a"
+                      },
+                      "init": null
+                    }
+                  ]
+                },
+                {
+                  "type": "ExpressionStatement",
+                  "start": 88,
+                  "end": 184,
+                  "expression": {
+                    "type": "AssignmentExpression",
+                    "start": 88,
+                    "end": 183,
+                    "operator": "=",
+                    "left": {
+                      "type": "Identifier",
+                      "start": 88,
+                      "end": 89,
+                      "name": "a"
+                    },
+                    "right": {
+                      "type": "FunctionExpression",
+                      "start": 92,
+                      "end": 183,
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [
+                      ],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 104,
+                        "end": 183,
+                        "body": [
+                        ]
+                      },
+                      "expression": false
+                    }
+                  }
+                }
+              ]
+            },
+            "expression": false
           }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 3,
-        "end": 11,
-        "expression": {
-          "type": "Identifier",
-          "start": 3,
-          "end": 11,
-          "name": "reported"
         }
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " reported from issue #60",
+      "start": 0,
+      "end": 26
+    },
+    {
+      "type": "Line",
+      "value": " this foo should be dropped",
+      "start": 56,
+      "end": 85
+    },
+    {
+      "type": "Line",
+      "value": " this should be transformed to non-assignment expression",
+      "start": 107,
+      "end": 165
+    }
+  ],
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'from'",
+      "message": "Unexpected token 'return'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 12,
-      "end": 16,
+      "start": 170,
+      "end": 176,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Invalid character at start of identifier",
-      "help": "Try starting the identifier here with a letter (a-z, A-Z), underscore (_), or dollar sign ($)",
-      "start": 23,
-      "end": 24,
+      "message": "Unexpected token '.'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 186,
+      "end": 187,
       "labels": [
       ]
     }

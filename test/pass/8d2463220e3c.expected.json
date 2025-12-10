@@ -180,5 +180,19 @@
     "start": 0,
     "end": 214
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 'a'",
+      "start": 19,
+      "end": 25
+    },
+    {
+      "type": "Line",
+      "value": " 'a'",
+      "start": 94,
+      "end": 100
+    }
+  ]
 }

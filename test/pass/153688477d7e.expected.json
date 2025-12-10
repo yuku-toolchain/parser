@@ -107,5 +107,25 @@
     "start": 0,
     "end": 198
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " TODO(Constellation):",
+      "start": 0,
+      "end": 23
+    },
+    {
+      "type": "Line",
+      "value": " This transformation sometimes make script bigger size.",
+      "start": 24,
+      "end": 81
+    },
+    {
+      "type": "Line",
+      "value": " So we should handle it in post processing pass.",
+      "start": 82,
+      "end": 132
+    }
+  ]
 }

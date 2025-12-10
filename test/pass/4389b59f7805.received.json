@@ -29,15 +29,10 @@
               },
               "operator": "+",
               "right": {
-                "type": "Literal",
-                "start": 5,
+                "type": "Identifier",
+                "start": 21,
                 "end": 22,
-                "value": {},
-                "raw": "/* assignment */b",
-                "regex": {
-                  "pattern": "* assignment *",
-                  "flags": "b"
-                }
+                "name": "b"
               }
             }
           },
@@ -52,6 +47,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": " assignment ",
+      "start": 5,
+      "end": 21
+    }
+  ],
   "errors": [
   ]
 }

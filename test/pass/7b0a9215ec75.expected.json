@@ -36,5 +36,13 @@
     "start": 0,
     "end": 36
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": " Multiline\nComment ",
+      "start": 9,
+      "end": 32
+    }
+  ]
 }

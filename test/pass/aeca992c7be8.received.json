@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 'i' should remain (global variable)",
+      "start": 28,
+      "end": 66
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -14,15 +22,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 19,
       "end": 20,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 57,
-      "end": 65,
       "labels": [
       ]
     },

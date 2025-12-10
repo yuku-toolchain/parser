@@ -1,118 +1,45 @@
 {
   "program": {
     "type": "Program",
-    "start": 0,
+    "start": 146,
     "end": 245,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 2,
-        "expression": {
-          "type": "Literal",
-          "start": 0,
-          "end": 2,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 3,
-        "end": 5,
-        "expression": {
-          "type": "Identifier",
-          "start": 3,
-          "end": 5,
-          "name": "Do"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 6,
-        "end": 9,
-        "expression": {
-          "type": "Identifier",
-          "start": 6,
-          "end": 9,
-          "name": "not"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 10,
-        "end": 18,
-        "expression": {
-          "type": "Identifier",
-          "start": 10,
-          "end": 18,
-          "name": "generate"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 19,
-        "end": 23,
-        "expression": {
-          "type": "Identifier",
-          "start": 19,
-          "end": 23,
-          "name": "like"
-        }
-      }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " Do not generate like this",
+      "start": 0,
+      "end": 28
+    },
+    {
+      "type": "Line",
+      "value": " if(cond)with(cond2)if(cond3)debugger;else ok();",
+      "start": 29,
+      "end": 79
+    },
+    {
+      "type": "Line",
+      "value": "",
+      "start": 80,
+      "end": 82
+    },
+    {
+      "type": "Line",
+      "value": "",
+      "start": 83,
+      "end": 85
+    },
+    {
+      "type": "Line",
+      "value": " See https://github.com/Constellation/escodegen/issues/49",
+      "start": 86,
+      "end": 145
+    }
+  ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'this'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 24,
-      "end": 28,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'if'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 32,
-      "end": 34,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'if'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 51,
-      "end": 53,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'else'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 69,
-      "end": 73,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Line terminator not allowed in regular expression literal",
-      "help": "Try removing the line break here or escaping it within the regex pattern",
-      "start": 84,
-      "end": 85,
-      "labels": [
-      ]
-    },
     {
       "severity": "error",
       "message": "Unexpected token 'if'",

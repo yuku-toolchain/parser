@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " should not hoist to parameter",
+      "start": 31,
+      "end": 63
+    }
+  ],
   "errors": [
     {
       "severity": "error",

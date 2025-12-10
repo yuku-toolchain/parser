@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": " Multiline\nComment ",
+      "start": 21,
+      "end": 44
+    }
+  ],
   "errors": [
     {
       "severity": "error",

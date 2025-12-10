@@ -84,5 +84,13 @@
     "start": 0,
     "end": 65
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " indirect call to eval",
+      "start": 34,
+      "end": 58
+    }
+  ]
 }

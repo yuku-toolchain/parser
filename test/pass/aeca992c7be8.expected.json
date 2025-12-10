@@ -72,5 +72,13 @@
     "start": 0,
     "end": 73
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 'i' should remain (global variable)",
+      "start": 28,
+      "end": 66
+    }
+  ]
 }

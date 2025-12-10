@@ -72,5 +72,13 @@
     "start": 0,
     "end": 64
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not transform because of global getter",
+      "start": 19,
+      "end": 63
+    }
+  ]
 }

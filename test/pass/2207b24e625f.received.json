@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " ok",
+      "start": 52,
+      "end": 57
+    }
+  ],
   "errors": [
     {
       "severity": "error",

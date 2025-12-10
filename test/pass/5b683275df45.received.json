@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 'i' should remain (dynamic)",
+      "start": 37,
+      "end": 67
+    }
+  ],
   "errors": [
     {
       "severity": "error",

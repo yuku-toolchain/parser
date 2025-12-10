@@ -102,5 +102,13 @@
     "start": 0,
     "end": 88
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 'i' should remain (dynamic)",
+      "start": 37,
+      "end": 67
+    }
+  ]
 }

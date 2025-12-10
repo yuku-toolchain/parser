@@ -7,6 +7,20 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 'a'",
+      "start": 19,
+      "end": 25
+    },
+    {
+      "type": "Line",
+      "value": " 'a'",
+      "start": 94,
+      "end": 100
+    }
+  ],
   "errors": [
     {
       "severity": "error",

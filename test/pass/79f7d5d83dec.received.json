@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " This should be removed.",
+      "start": 92,
+      "end": 118
+    }
+  ],
   "errors": [
     {
       "severity": "error",

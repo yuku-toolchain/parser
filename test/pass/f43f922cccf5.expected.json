@@ -76,5 +76,13 @@
     "start": 0,
     "end": 90
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " This is global varible, so observable by getter.",
+      "start": 32,
+      "end": 83
+    }
+  ]
 }

@@ -35,6 +35,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": " Multiline\nComment ",
+      "start": 19,
+      "end": 42
+    }
+  ],
   "errors": [
     {
       "severity": "error",

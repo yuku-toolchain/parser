@@ -97,5 +97,13 @@
     "start": 0,
     "end": 99
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " If foo is null or undefined, this should be an exception",
+      "start": 19,
+      "end": 78
+    }
+  ]
 }

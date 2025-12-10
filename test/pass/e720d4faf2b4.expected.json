@@ -35,5 +35,19 @@
     "start": 0,
     "end": 45
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": "Jupiter",
+      "start": 14,
+      "end": 25
+    },
+    {
+      "type": "Block",
+      "value": "Saturn",
+      "start": 34,
+      "end": 44
+    }
+  ]
 }

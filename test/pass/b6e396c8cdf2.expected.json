@@ -19,5 +19,19 @@
     "start": 0,
     "end": 38
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " Hello, world!",
+      "start": 0,
+      "end": 16
+    },
+    {
+      "type": "Line",
+      "value": "   Another hello",
+      "start": 18,
+      "end": 36
+    }
+  ]
 }

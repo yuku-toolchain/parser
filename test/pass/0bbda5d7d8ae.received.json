@@ -24,41 +24,9 @@
           "start": 13,
           "end": 46,
           "body": [
-            {
-              "type": "ExpressionStatement",
-              "start": 15,
-              "end": 29,
-              "expression": {
-                "type": "Literal",
-                "start": 15,
-                "end": 29,
-                "value": {},
-                "raw": "/* infinite */",
-                "regex": {
-                  "pattern": "* infinite *",
-                  "flags": ""
-                }
-              }
-            }
           ]
         },
         "expression": false
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 47,
-        "end": 56,
-        "expression": {
-          "type": "Literal",
-          "start": 47,
-          "end": 56,
-          "value": {},
-          "raw": "/* bar */",
-          "regex": {
-            "pattern": "* bar *",
-            "flags": ""
-          }
-        }
       },
       {
         "type": "VariableDeclaration",
@@ -82,6 +50,20 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": " infinite ",
+      "start": 15,
+      "end": 29
+    },
+    {
+      "type": "Block",
+      "value": " bar ",
+      "start": 47,
+      "end": 56
+    }
+  ],
   "errors": [
     {
       "severity": "error",

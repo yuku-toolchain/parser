@@ -44,5 +44,13 @@
     "start": 0,
     "end": 52
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " Don't transform to 0,typeof ident",
+      "start": 15,
+      "end": 51
+    }
+  ]
 }

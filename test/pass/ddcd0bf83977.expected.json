@@ -92,5 +92,13 @@
     "start": 0,
     "end": 94
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not optimize it",
+      "start": 27,
+      "end": 48
+    }
+  ]
 }

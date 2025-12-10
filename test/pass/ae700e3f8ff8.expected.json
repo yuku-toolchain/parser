@@ -90,5 +90,13 @@
     "start": 0,
     "end": 43
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not transform",
+      "start": 23,
+      "end": 42
+    }
+  ]
 }

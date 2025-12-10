@@ -267,5 +267,31 @@
     "start": 0,
     "end": 141
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 1",
+      "start": 0,
+      "end": 4
+    },
+    {
+      "type": "Line",
+      "value": " 2",
+      "start": 31,
+      "end": 35
+    },
+    {
+      "type": "Line",
+      "value": " 3",
+      "start": 67,
+      "end": 71
+    },
+    {
+      "type": "Line",
+      "value": " 4",
+      "start": 102,
+      "end": 106
+    }
+  ]
 }

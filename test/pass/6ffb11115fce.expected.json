@@ -115,5 +115,13 @@
     "start": 0,
     "end": 119
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " mangle to the same name 'a'",
+      "start": 0,
+      "end": 30
+    }
+  ]
 }

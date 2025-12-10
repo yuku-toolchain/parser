@@ -19,5 +19,19 @@
     "start": 0,
     "end": 45
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": " block comment 1 ",
+      "start": 2,
+      "end": 23
+    },
+    {
+      "type": "Block",
+      "value": " block comment 2 ",
+      "start": 24,
+      "end": 45
+    }
+  ]
 }

@@ -2,9 +2,57 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 0,
+    "end": 575,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 228,
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "start": 0,
+          "end": 228,
+          "expression": {
+            "type": "FunctionExpression",
+            "start": 1,
+            "end": 227,
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+            ],
+            "body": {
+              "type": "BlockStatement",
+              "start": 13,
+              "end": 227,
+              "body": [
+                {
+                  "type": "VariableDeclaration",
+                  "start": 17,
+                  "end": 22,
+                  "kind": "var",
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start": 21,
+                      "end": 22,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 21,
+                        "end": 22,
+                        "name": "a"
+                      },
+                      "init": null
+                    }
+                  ]
+                }
+              ]
+            },
+            "expression": false
+          }
+        }
+      },
       {
         "type": "VariableDeclaration",
         "start": 249,
@@ -24,9 +72,61 @@
             "init": null
           }
         ]
+      },
+      {
+        "type": "VariableDeclaration",
+        "start": 453,
+        "end": 458,
+        "kind": "var",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 457,
+            "end": 458,
+            "id": {
+              "type": "Identifier",
+              "start": 457,
+              "end": 458,
+              "name": "a"
+            },
+            "init": null
+          }
+        ]
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": " I would\n                              insert something\n                              there, but I'm sort\n                              of lazy so whatever.\n  ",
+      "start": 39,
+      "end": 202
+    },
+    {
+      "type": "Block",
+      "value": " I would insert something there, ",
+      "start": 271,
+      "end": 308
+    },
+    {
+      "type": "Block",
+      "value": "\n                             but I'm sort of lazy so\n  ",
+      "start": 309,
+      "end": 369
+    },
+    {
+      "type": "Block",
+      "value": "                      whatever. ",
+      "start": 370,
+      "end": 406
+    },
+    {
+      "type": "Line",
+      "value": " I would insert something there, but I'm sort of lazy so whatever.",
+      "start": 475,
+      "end": 543
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -48,37 +148,19 @@
     },
     {
       "severity": "error",
-      "message": "Unterminated string literal",
-      "help": "Try adding a closing quote here to complete the string",
-      "start": 139,
-      "end": 146,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected '}' to close function body",
-      "help": "Add a closing brace '}' to complete the function, or check for unbalanced braces inside.",
-      "start": 0,
-      "end": 0,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 0,
-      "end": 0,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token 'return'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 217,
       "end": 223,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Empty parentheses are only valid as arrow function parameters",
+      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "start": 228,
+      "end": 230,
       "labels": [
       ]
     },
@@ -111,10 +193,46 @@
     },
     {
       "severity": "error",
-      "message": "Unterminated string literal",
-      "help": "Try adding a closing quote here to complete the string",
-      "start": 346,
-      "end": 364,
+      "message": "Unexpected token 'return'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 421,
+      "end": 427,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Function declaration requires a name",
+      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
+      "start": 446,
+      "end": 447,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token 'if'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 461,
+      "end": 463,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token 'return'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 468,
+      "end": 474,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token 'return'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 560,
+      "end": 566,
       "labels": [
       ]
     }

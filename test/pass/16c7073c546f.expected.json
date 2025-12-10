@@ -83,5 +83,13 @@
     "start": 0,
     "end": 125
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " prevent optimization because of this.constructor.arguments access",
+      "start": 0,
+      "end": 68
+    }
+  ]
 }

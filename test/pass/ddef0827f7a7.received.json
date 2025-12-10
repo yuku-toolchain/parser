@@ -8,7 +8,7 @@
       {
         "type": "VariableDeclaration",
         "start": 0,
-        "end": 5,
+        "end": 6,
         "kind": "var",
         "declarations": [
           {
@@ -24,25 +24,17 @@
             "init": null
           }
         ]
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 6,
-        "end": 20,
-        "expression": {
-          "type": "Literal",
-          "start": 6,
-          "end": 19,
-          "value": {},
-          "raw": "/* comment */",
-          "regex": {
-            "pattern": "* comment *",
-            "flags": ""
-          }
-        }
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": " comment ",
+      "start": 6,
+      "end": 19
+    }
+  ],
   "errors": [
   ]
 }

@@ -51,5 +51,19 @@
     "start": 0,
     "end": 86
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": "*\n * @type {number}\n ",
+      "start": 0,
+      "end": 25
+    },
+    {
+      "type": "Block",
+      "value": "*\n     * @type {number}\n     ",
+      "start": 41,
+      "end": 74
+    }
+  ]
 }

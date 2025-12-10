@@ -126,5 +126,25 @@
     "start": 0,
     "end": 196
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " reported from issue #60",
+      "start": 0,
+      "end": 26
+    },
+    {
+      "type": "Line",
+      "value": " this foo should be dropped",
+      "start": 56,
+      "end": 85
+    },
+    {
+      "type": "Line",
+      "value": " this should be transformed to non-assignment expression",
+      "start": 107,
+      "end": 165
+    }
+  ]
 }

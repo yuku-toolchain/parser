@@ -106,5 +106,13 @@
     "start": 0,
     "end": 99
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " if undeclared it's assumed to have side-effects",
+      "start": 7,
+      "end": 57
+    }
+  ]
 }

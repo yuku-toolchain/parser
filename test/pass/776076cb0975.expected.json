@@ -19,5 +19,19 @@
     "start": 0,
     "end": 20
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Block",
+      "value": "The",
+      "start": 2,
+      "end": 9
+    },
+    {
+      "type": "Block",
+      "value": "Answer",
+      "start": 10,
+      "end": 20
+    }
+  ]
 }

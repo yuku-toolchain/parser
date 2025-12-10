@@ -18,6 +18,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "\r\n",
+      "start": 24,
+      "end": 30
+    }
+  ],
   "errors": [
     {
       "severity": "error",

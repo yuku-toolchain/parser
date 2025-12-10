@@ -67,5 +67,13 @@
     "start": 0,
     "end": 37
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " global getter to o",
+      "start": 0,
+      "end": 21
+    }
+  ]
 }

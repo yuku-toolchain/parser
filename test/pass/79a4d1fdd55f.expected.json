@@ -129,5 +129,13 @@
     "start": 0,
     "end": 91
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " should not touch this one",
+      "start": 20,
+      "end": 48
+    }
+  ]
 }

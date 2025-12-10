@@ -7,6 +7,14 @@
     "body": [
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 'i' lookup can be observed by obj's getter.",
+      "start": 67,
+      "end": 113
+    }
+  ],
   "errors": [
     {
       "severity": "error",
@@ -19,28 +27,10 @@
     },
     {
       "severity": "error",
-      "message": "Unterminated string literal",
-      "help": "Try adding a closing quote here to complete the string",
-      "start": 103,
-      "end": 113,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected '}' to close function body",
-      "help": "Add a closing brace '}' to complete the function, or check for unbalanced braces inside.",
-      "start": 0,
-      "end": 0,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
-      "start": 0,
-      "end": 0,
+      "start": 120,
+      "end": 121,
       "labels": [
       ]
     }

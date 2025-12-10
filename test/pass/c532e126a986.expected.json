@@ -12,5 +12,13 @@
     "start": 0,
     "end": 18
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": "> HTML comment",
+      "start": 2,
+      "end": 18
+    }
+  ]
 }

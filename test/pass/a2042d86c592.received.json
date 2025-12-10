@@ -1,7 +1,7 @@
 {
   "program": {
     "type": "Program",
-    "start": 0,
+    "start": 14,
     "end": 22,
     "sourceType": "script",
     "body": [
@@ -17,64 +17,6 @@
           "raw": "'a'"
         },
         "directive": "a"
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 2,
-        "expression": {
-          "type": "Literal",
-          "start": 0,
-          "end": 2,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 3,
-        "end": 13,
-        "expression": {
-          "type": "ArrowFunctionExpression",
-          "start": 3,
-          "end": 13,
-          "id": null,
-          "generator": false,
-          "async": false,
-          "params": [
-            {
-              "type": "Identifier",
-              "start": 3,
-              "end": 6,
-              "name": "NaN"
-            }
-          ],
-          "body": {
-            "type": "BinaryExpression",
-            "start": 10,
-            "end": 13,
-            "left": {
-              "type": "Literal",
-              "start": 10,
-              "end": 11,
-              "value": 0,
-              "raw": "0"
-            },
-            "operator": "/",
-            "right": {
-              "type": "Literal",
-              "start": 12,
-              "end": 13,
-              "value": 0,
-              "raw": "0"
-            }
-          },
-          "expression": true
-        }
       },
       {
         "type": "ExpressionStatement",
@@ -97,6 +39,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " NaN => 0/0",
+      "start": 0,
+      "end": 13
+    }
+  ],
   "errors": [
   ]
 }

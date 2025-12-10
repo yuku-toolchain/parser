@@ -135,5 +135,13 @@
     "start": 0,
     "end": 141
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " this 'test2' to 'a'",
+      "start": 9,
+      "end": 31
+    }
+  ]
 }

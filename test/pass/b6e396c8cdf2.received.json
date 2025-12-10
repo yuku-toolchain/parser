@@ -1,48 +1,38 @@
 {
   "program": {
     "type": "Program",
-    "start": 0,
+    "start": 37,
     "end": 38,
     "sourceType": "script",
     "body": [
       {
         "type": "ExpressionStatement",
-        "start": 0,
-        "end": 2,
+        "start": 37,
+        "end": 38,
         "expression": {
           "type": "Literal",
-          "start": 0,
-          "end": 2,
-          "value": {},
-          "raw": "//",
-          "regex": {
-            "pattern": "",
-            "flags": ""
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 3,
-        "end": 8,
-        "expression": {
-          "type": "Identifier",
-          "start": 3,
-          "end": 8,
-          "name": "Hello"
+          "start": 37,
+          "end": 38,
+          "value": 1,
+          "raw": "1"
         }
       }
     ]
   },
-  "errors": [
+  "comments": [
     {
-      "severity": "error",
-      "message": "Unexpected token ','",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 8,
-      "end": 9,
-      "labels": [
-      ]
+      "type": "Line",
+      "value": " Hello, world!",
+      "start": 0,
+      "end": 16
+    },
+    {
+      "type": "Line",
+      "value": "   Another hello",
+      "start": 18,
+      "end": 36
     }
+  ],
+  "errors": [
   ]
 }

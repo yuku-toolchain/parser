@@ -106,5 +106,13 @@
     "start": 0,
     "end": 121
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " This should be removed.",
+      "start": 88,
+      "end": 114
+    }
+  ]
 }

@@ -1,28 +1,20 @@
 {
   "program": {
     "type": "Program",
-    "start": 1,
+    "start": 7,
     "end": 7,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 1,
-        "end": 7,
-        "expression": {
-          "type": "Literal",
-          "start": 1,
-          "end": 7,
-          "value": {},
-          "raw": "/****/",
-          "regex": {
-            "pattern": "****",
-            "flags": ""
-          }
-        }
-      }
     ]
   },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "**",
+      "start": 1,
+      "end": 7
+    }
+  ],
   "errors": [
   ]
 }

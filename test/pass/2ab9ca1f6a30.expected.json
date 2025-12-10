@@ -252,5 +252,19 @@
     "start": 0,
     "end": 162
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " 1.",
+      "start": 0,
+      "end": 5
+    },
+    {
+      "type": "Line",
+      "value": " 2.",
+      "start": 76,
+      "end": 81
+    }
+  ]
 }

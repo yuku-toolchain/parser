@@ -7,16 +7,15 @@
     "body": [
     ]
   },
-  "errors": [
+  "comments": [
     {
-      "severity": "error",
-      "message": "Unexpected token ':'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 24,
-      "end": 25,
-      "labels": [
-      ]
-    },
+      "type": "Line",
+      "value": " https://github.com/Constellation/esmangle/issues/65",
+      "start": 16,
+      "end": 70
+    }
+  ],
+  "errors": [
     {
       "severity": "error",
       "message": "Unexpected token '.'",

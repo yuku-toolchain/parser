@@ -75,6 +75,14 @@
       }
     ]
   },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " do not optimize it",
+      "start": 30,
+      "end": 51
+    }
+  ],
   "errors": [
     {
       "severity": "error",

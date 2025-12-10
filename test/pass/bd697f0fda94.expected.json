@@ -99,5 +99,13 @@
     "start": 0,
     "end": 112
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " This must not be removed.",
+      "start": 77,
+      "end": 105
+    }
+  ]
 }

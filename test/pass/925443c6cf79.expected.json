@@ -53,5 +53,13 @@
     "start": 0,
     "end": 91
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " ContinueStatement should not be removed.",
+      "start": 0,
+      "end": 43
+    }
+  ]
 }

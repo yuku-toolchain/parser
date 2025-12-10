@@ -339,5 +339,19 @@
     "start": 0,
     "end": 397
   },
-  "errors": []
+  "errors": [],
+  "comments": [
+    {
+      "type": "Line",
+      "value": " this break refers to the for, not to the switch; thus it",
+      "start": 150,
+      "end": 209
+    },
+    {
+      "type": "Line",
+      "value": " shouldn't ruin our optimization",
+      "start": 240,
+      "end": 274
+    }
+  ]
 }
