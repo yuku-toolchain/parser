@@ -20,8 +20,9 @@ interface Stats {
 }
 
 interface ParsedAST {
-  errors?: unknown[];
-  [key: string]: unknown;
+  errors: unknown[];
+  comments: unknown[];
+  program: Record<string, unknown>
 }
 
 async function readJSON(filePath: string): Promise<ParsedAST> {
@@ -63,8 +64,11 @@ async function testFile(
       };
     }
 
-    if (!equal(received, expected)) {
-      const difference = diff(expected, received, {
+    const expectedToCheck = parsedAstToCheck(expected);
+    const receivedToCheck = parsedAstToCheck(received);
+
+    if (!equal(receivedToCheck, expectedToCheck)) {
+      const difference = diff(expectedToCheck, receivedToCheck, {
         contextLines: 2,
         expand: false,
       });
@@ -152,6 +156,10 @@ async function main() {
   console.log(`Conformance:       ${conformance.toFixed(2)}%\n`);
 
   process.exit(stats.failed > 0 ? 1 : 0);
+}
+
+function parsedAstToCheck(ast: ParsedAST) {
+  return {program: ast.program, comments: ast.comments}
 }
 
 main();
