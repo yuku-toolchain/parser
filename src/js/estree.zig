@@ -18,6 +18,8 @@ pub const Serializer = struct {
     needs_comma: [max_depth]bool = [_]bool{false} ** max_depth,
     /// Scratch buffer for decoding escape sequences - reused to avoid allocations
     scratch: std.ArrayList(u8) = .empty,
+    /// Whether the source is TypeScript
+    isTs: bool,
 
     const Self = @This();
     const Error = error{ NoSpaceLeft, OutOfMemory };
@@ -27,12 +29,15 @@ pub const Serializer = struct {
         var buffer: std.ArrayList(u8) = try .initCapacity(allocator, tree.source.len * 3);
         errdefer buffer.deinit(allocator);
 
+        const lang = tree.getLang();
+
         var self = Self{
             .tree = tree,
             .buffer = &buffer,
             .allocator = allocator,
             .options = options,
             .scratch = try .initCapacity(allocator, 256),
+            .isTs = lang == .ts or lang == .tsx or lang == .dts,
         };
         defer self.scratch.deinit(allocator);
 
@@ -53,8 +58,8 @@ pub const Serializer = struct {
             return;
         }
 
-        const data = self.tree.nodes.items(.data)[index];
-        const span = self.tree.nodes.items(.span)[index];
+        const data = self.tree.getData(index);
+        const span = self.tree.getSpan(index);
 
         try switch (data) {
             .program => |d| self.writeProgram(d, span),
@@ -133,8 +138,8 @@ pub const Serializer = struct {
         try self.fieldNode("id", data.id);
         try self.fieldBool("generator", data.generator);
         try self.fieldBool("async", data.async);
-        if(data.type == .ts_declare_function) {
-            try self.fieldBool("declare", true);
+        if (self.isTs) {
+            try self.fieldBool("declare", data.type == .ts_declare_function);
         }
         try self.field("params");
         try self.writeFunctionParams(data.params);
@@ -155,9 +160,9 @@ pub const Serializer = struct {
     fn writeFunctionParams(self: *Self, params_index: ast.NodeIndex) !void {
         try self.beginArray();
         if (!ast.isNull(params_index)) {
-            const params = self.tree.nodes.items(.data)[params_index].formal_parameters;
+            const params = self.tree.getData(params_index).formal_parameters;
             for (self.getExtra(params.items)) |idx| {
-                const param = self.tree.nodes.items(.data)[idx].formal_parameter;
+                const param = self.tree.getData(idx).formal_parameter;
                 try self.elemNode(param.pattern);
             }
             if (!ast.isNull(params.rest)) try self.elemNode(params.rest);
@@ -181,7 +186,7 @@ pub const Serializer = struct {
         _ = span;
         try self.beginArray();
         for (self.getExtra(data.items)) |idx| {
-            const param = self.tree.nodes.items(.data)[idx].formal_parameter;
+            const param = self.tree.getData(idx).formal_parameter;
             try self.elemNode(param.pattern);
         }
         if (!ast.isNull(data.rest)) try self.elemNode(data.rest);
@@ -740,7 +745,7 @@ pub const Serializer = struct {
     }
 
     inline fn getExtra(self: *const Self, range: ast.IndexRange) []const ast.NodeIndex {
-        return self.tree.extra.items[range.start..][0..range.len];
+        return self.tree.getExtra(range);
     }
 
     fn writeDecodedString(self: *Self, s: []const u8) !void {

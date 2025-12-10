@@ -62,6 +62,10 @@ pub const ParseTree = struct {
     comments: std.ArrayList(ast.Comment),
     /// Arena allocator owning all the memory
     arena: std.heap.ArenaAllocator,
+    /// Source type (script or module)
+    source_type: SourceType,
+    /// Language variant (js, ts, jsx, tsx, dts)
+    lang: Lang,
 
     pub inline fn hasErrors(self: ParseTree) bool {
         for (self.diagnostics.items) |d| {
@@ -76,6 +80,26 @@ pub const ParseTree = struct {
 
     pub fn deinit(self: *const ParseTree) void {
         self.arena.deinit();
+    }
+
+    pub inline fn getData(self: *const ParseTree, index: ast.NodeIndex) ast.NodeData {
+        return self.nodes.items(.data)[index];
+    }
+
+    pub inline fn getSpan(self: *const ParseTree, index: ast.NodeIndex) ast.Span {
+        return self.nodes.items(.span)[index];
+    }
+
+    pub inline fn getExtra(self: *const ParseTree, range: ast.IndexRange) []const ast.NodeIndex {
+        return self.extra.items[range.start..][0..range.len];
+    }
+
+    pub inline fn getSourceType(self: *const ParseTree) SourceType {
+        return self.source_type;
+    }
+
+    pub inline fn getLang(self: *const ParseTree) Lang {
+        return self.lang;
     }
 };
 
@@ -175,6 +199,8 @@ pub const Parser = struct {
             .diagnostics = self.diagnostics,
             .comments = self.lexer.comments,
             .arena = self.arena,
+            .source_type = self.source_type,
+            .lang = self.lang,
         };
 
         return tree;
