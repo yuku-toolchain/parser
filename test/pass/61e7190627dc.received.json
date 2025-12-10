@@ -5,6 +5,13 @@
     "end": 8,
     "sourceType": "script",
     "body": [
+      {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 2,
+        "body": [
+        ]
+      }
     ]
   },
   "comments": [
@@ -12,10 +19,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Invalid left-hand side in assignment",
-      "help": "The left side of an assignment must be a variable, property access, or destructuring pattern.",
-      "start": 0,
-      "end": 2,
+      "message": "Unexpected token '/='",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 3,
+      "end": 5,
       "labels": [
       ]
     }

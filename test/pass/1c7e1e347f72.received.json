@@ -6,37 +6,22 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
+        "type": "BlockStatement",
         "start": 0,
         "end": 5,
-        "expression": {
-          "type": "ObjectExpression",
-          "start": 0,
-          "end": 5,
-          "properties": [
-            {
-              "type": "Property",
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start": 2,
+            "end": 3,
+            "expression": {
+              "type": "Identifier",
               "start": 2,
               "end": 3,
-              "kind": "init",
-              "key": {
-                "type": "Identifier",
-                "start": 2,
-                "end": 3,
-                "name": "a"
-              },
-              "value": {
-                "type": "Identifier",
-                "start": 2,
-                "end": 3,
-                "name": "a"
-              },
-              "method": false,
-              "shorthand": true,
-              "computed": false
+              "name": "a"
             }
-          ]
-        }
+          }
+        ]
       }
     ]
   },

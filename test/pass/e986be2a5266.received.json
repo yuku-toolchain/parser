@@ -5,28 +5,40 @@
     "end": 18,
     "sourceType": "script",
     "body": [
+      {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 17,
+        "body": [
+          {
+            "type": "BlockStatement",
+            "start": 4,
+            "end": 6,
+            "body": [
+            ]
+          },
+          {
+            "type": "ExpressionStatement",
+            "start": 9,
+            "end": 15,
+            "expression": {
+              "type": "Literal",
+              "start": 9,
+              "end": 14,
+              "value": {},
+              "raw": "/foo/",
+              "regex": {
+                "pattern": "foo",
+                "flags": ""
+              }
+            }
+          }
+        ]
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token '{' as property key",
-      "help": "Property keys must be identifiers, strings, numbers, or computed expressions [expr].",
-      "start": 4,
-      "end": 5,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 16,
-      "end": 17,
-      "labels": [
-      ]
-    }
   ]
 }

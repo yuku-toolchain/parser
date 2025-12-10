@@ -64,6 +64,24 @@
           ]
         },
         "expression": false
+      },
+      {
+        "type": "BlockStatement",
+        "start": 116,
+        "end": 144,
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start": 130,
+            "end": 131,
+            "expression": {
+              "type": "Identifier",
+              "start": 130,
+              "end": 131,
+              "name": "c"
+            }
+          }
+        ]
       }
     ]
   },
@@ -90,10 +108,19 @@
     },
     {
       "severity": "error",
-      "message": "Expected '{' to start function body",
-      "help": "Function bodies must be enclosed in braces: function name() { ... }",
-      "start": 133,
-      "end": 134,
+      "message": "Empty parentheses are only valid as arrow function parameters",
+      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "start": 131,
+      "end": 133,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token '}'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 149,
+      "end": 150,
       "labels": [
       ]
     }

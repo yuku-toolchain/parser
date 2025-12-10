@@ -69,6 +69,7 @@ pub const Serializer = struct {
             .directive => |d| self.writeDirective(d, span),
             .function => |d| self.writeFunction(d, span),
             .function_body => |d| self.writeFunctionBody(d, span),
+            .block_statement => |d| self.writeBlockStatement(d, span),
             .formal_parameters => |d| self.writeFormalParameters(d, span),
             .formal_parameter => |d| self.writeFormalParameter(d),
             .expression_statement => |d| self.writeExpressionStatement(d, span),
@@ -160,6 +161,17 @@ pub const Serializer = struct {
     }
 
     fn writeFunctionBody(self: *Self, data: ast.FunctionBody, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("BlockStatement");
+        try self.fieldSpan(span);
+        try self.field("body");
+        try self.beginArray();
+        for (self.getExtra(data.body)) |idx| try self.elemNode(idx);
+        try self.endArray();
+        try self.endObject();
+    }
+
+    fn writeBlockStatement(self: *Self, data: ast.BlockStatement, span: ast.Span) !void {
         try self.beginObject();
         try self.fieldType("BlockStatement");
         try self.fieldSpan(span);

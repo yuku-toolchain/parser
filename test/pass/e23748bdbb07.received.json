@@ -21,10 +21,10 @@
     },
     {
       "severity": "error",
-      "message": "Expected ',' or '}' in object",
-      "help": "Add a comma between properties or close the object with '}'.",
-      "start": 81,
-      "end": 82,
+      "message": "Unexpected token '.'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 100,
+      "end": 101,
       "labels": [
       ]
     },
@@ -32,8 +32,8 @@
       "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
-      "start": 123,
-      "end": 124,
+      "start": 126,
+      "end": 127,
       "labels": [
       ]
     }

@@ -21,19 +21,10 @@
     },
     {
       "severity": "error",
-      "message": "Expected ',' or '}' in object",
-      "help": "Add a comma between properties or close the object with '}'.",
-      "start": 46,
-      "end": 47,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
-      "start": 59,
-      "end": 60,
+      "start": 60,
+      "end": 61,
       "labels": [
       ]
     }

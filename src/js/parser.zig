@@ -7,6 +7,7 @@ const expressions = @import("syntax/expressions.zig");
 const literals = @import("syntax/literals.zig");
 const variables = @import("syntax/variables.zig");
 const functions = @import("syntax/functions.zig");
+const statements = @import("syntax/statements.zig");
 
 pub const Severity = enum {
     @"error",
@@ -238,6 +239,7 @@ pub const Parser = struct {
                 try self.advance(); // consume 'declare'
                 break :blk try functions.parseFunction(self, .{ .is_declare = true }, start);
             },
+            .left_brace => statements.parseBlockStatement(self),
 
             else => self.parseExpressionStatementOrDirective(),
         };
@@ -246,16 +248,24 @@ pub const Parser = struct {
     pub fn parseExpressionStatementOrDirective(self: *Parser) Error!?ast.NodeIndex {
         const expression = try expressions.parseExpression(self, 0) orelse return null;
 
-        const data = self.getData(expression);
-        const span = self.getSpan(expression);
+        const expression_span = self.getSpan(expression);
 
-        const start = span.start;
-        const end = try self.eatSemicolon(span.end);
+        // const current_token = self.current_token;
+
+        // if(current_token.type != .semicolon and !self.canInsertSemicolon()) {
+        //     try self.report(.{ .start = expression_span.end, .end = expression_span.end }, "Expected a semicolon or an implicit semicolon after a statement, but found none", .{ .help = "Try inserting a semicolon here" });
+        //     return null;
+        // }
+
+        const expression_data = self.getData(expression);
+
+        const start = expression_span.start;
+        const end = try self.eatSemicolon(expression_span.end);
 
         // it's a directive
-        if (data == .string_literal) {
-            const value_start = data.string_literal.raw_start + 1;
-            const value_len: u16 = data.string_literal.raw_len - 2;
+        if (expression_data == .string_literal) {
+            const value_start = expression_data.string_literal.raw_start + 1;
+            const value_len: u16 = expression_data.string_literal.raw_len - 2;
 
             return try self.addNode(.{
                 .directive = .{
@@ -271,6 +281,11 @@ pub const Parser = struct {
             .{ .start = start, .end = end },
         );
     }
+
+    // pub inline fn canInsertSemicolon(self: *Parser) bool {
+    //     const current_token = self.current_token;
+    //     return current_token.type == .eof or current_token.has_line_terminator_before or current_token.type == .right_brace;
+    // }
 
     pub inline fn isTs(self: *Parser) bool {
         return self.lang == .ts or self.lang == .tsx or self.lang == .dts;

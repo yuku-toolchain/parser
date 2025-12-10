@@ -5,6 +5,24 @@
     "end": 12,
     "sourceType": "script",
     "body": [
+      {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 11,
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start": 4,
+            "end": 5,
+            "expression": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 5,
+              "name": "a"
+            }
+          }
+        ]
+      }
     ]
   },
   "comments": [
@@ -12,10 +30,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected ',' or '}' in object",
-      "help": "Add a comma between properties or close the object with '}'.",
-      "start": 8,
-      "end": 9,
+      "message": "Unexpected token ':'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 5,
+      "end": 6,
       "labels": [
       ]
     }

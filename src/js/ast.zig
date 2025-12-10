@@ -610,6 +610,12 @@ pub const FunctionBody = struct {
     body: IndexRange,
 };
 
+/// https://tc39.es/ecma262/#prod-BlockStatement
+pub const BlockStatement = struct {
+    // (Statement | Directive)[]
+    body: IndexRange,
+};
+
 /// https://tc39.es/ecma262/#prod-FormalParameters
 pub const FormalParameters = struct {
     /// FormalParameter[]
@@ -658,6 +664,7 @@ pub const NodeData = union(enum) {
     arrow_function_expression: ArrowFunctionExpression,
     function: Function,
     function_body: FunctionBody,
+    block_statement: BlockStatement,
     formal_parameters: FormalParameters,
     formal_parameter: FormalParameter,
     binary_expression: BinaryExpression,

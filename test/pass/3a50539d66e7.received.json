@@ -6,41 +6,65 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 21,
-        "end": 22,
-        "expression": {
-          "type": "Identifier",
-          "start": 21,
-          "end": 22,
-          "name": "b"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 53,
-        "end": 54,
-        "expression": {
-          "type": "Identifier",
-          "start": 53,
-          "end": 54,
-          "name": "b"
-        }
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 63,
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start": 6,
+            "end": 16,
+            "kind": "var",
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start": 10,
+                "end": 15,
+                "id": {
+                  "type": "Identifier",
+                  "start": 10,
+                  "end": 11,
+                  "name": "a"
+                },
+                "init": {
+                  "type": "Literal",
+                  "start": 14,
+                  "end": 15,
+                  "value": 1,
+                  "raw": "1"
+                }
+              }
+            ]
+          },
+          {
+            "type": "ExpressionStatement",
+            "start": 21,
+            "end": 22,
+            "expression": {
+              "type": "Identifier",
+              "start": 21,
+              "end": 22,
+              "name": "b"
+            }
+          },
+          {
+            "type": "ExpressionStatement",
+            "start": 53,
+            "end": 54,
+            "expression": {
+              "type": "Identifier",
+              "start": 53,
+              "end": 54,
+              "name": "b"
+            }
+          }
+        ]
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected ',' or '}' in object",
-      "help": "Add a comma between properties or close the object with '}'.",
-      "start": 10,
-      "end": 11,
-      "labels": [
-      ]
-    },
     {
       "severity": "error",
       "message": "Empty parentheses are only valid as arrow function parameters",
@@ -56,6 +80,15 @@
       "help": "Use '() => ...' for arrow functions or add an expression inside.",
       "start": 54,
       "end": 56,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token '}'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 64,
+      "end": 65,
       "labels": [
       ]
     }

@@ -5,6 +5,24 @@
     "end": 13,
     "sourceType": "script",
     "body": [
+      {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 13,
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start": 2,
+            "end": 3,
+            "expression": {
+              "type": "Identifier",
+              "start": 2,
+              "end": 3,
+              "name": "a"
+            }
+          }
+        ]
+      }
     ]
   },
   "comments": [
@@ -12,19 +30,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected '{' to start function body",
-      "help": "Function bodies must be enclosed in braces: function name() { ... }",
-      "start": 5,
-      "end": 6,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 12,
-      "end": 13,
+      "message": "Empty parentheses are only valid as arrow function parameters",
+      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "start": 3,
+      "end": 5,
       "labels": [
       ]
     }

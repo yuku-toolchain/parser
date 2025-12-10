@@ -6,6 +6,13 @@
     "sourceType": "script",
     "body": [
       {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 9,
+        "body": [
+        ]
+      },
+      {
         "type": "ExpressionStatement",
         "start": 27,
         "end": 33,
@@ -24,10 +31,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected ',' or '}' in object",
-      "help": "Add a comma between properties or close the object with '}'.",
-      "start": 7,
-      "end": 8,
+      "message": "Unexpected token 'do'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 4,
+      "end": 6,
       "labels": [
       ]
     },

@@ -5,19 +5,37 @@
     "end": 9,
     "sourceType": "script",
     "body": [
+      {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 9,
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start": 2,
+            "end": 7,
+            "kind": "let",
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start": 6,
+                "end": 7,
+                "id": {
+                  "type": "Identifier",
+                  "start": 6,
+                  "end": 7,
+                  "name": "a"
+                },
+                "init": null
+              }
+            ]
+          }
+        ]
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected ',' or '}' in object",
-      "help": "Add a comma between properties or close the object with '}'.",
-      "start": 6,
-      "end": 7,
-      "labels": [
-      ]
-    }
   ]
 }

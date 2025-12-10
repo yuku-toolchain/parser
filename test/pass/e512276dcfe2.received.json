@@ -5,19 +5,46 @@
     "end": 9,
     "sourceType": "script",
     "body": [
+      {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 9,
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start": 2,
+            "end": 3,
+            "expression": {
+              "type": "Identifier",
+              "start": 2,
+              "end": 3,
+              "name": "a"
+            }
+          },
+          {
+            "type": "ExpressionStatement",
+            "start": 4,
+            "end": 7,
+            "expression": {
+              "type": "UpdateExpression",
+              "start": 4,
+              "end": 7,
+              "operator": "++",
+              "prefix": true,
+              "argument": {
+                "type": "Identifier",
+                "start": 6,
+                "end": 7,
+                "name": "b"
+              }
+            }
+          }
+        ]
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected ',' or '}' in object",
-      "help": "Add a comma between properties or close the object with '}'.",
-      "start": 4,
-      "end": 6,
-      "labels": [
-      ]
-    }
   ]
 }

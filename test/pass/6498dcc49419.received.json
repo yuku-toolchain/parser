@@ -12,10 +12,19 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Shorthand property must be an identifier",
-      "help": "String and numeric keys require explicit ': value' syntax.",
-      "start": 1,
-      "end": 2,
+      "message": "Invalid character at start of identifier",
+      "help": "Try starting the identifier here with a letter (a-z, A-Z), underscore (_), or dollar sign ($)",
+      "start": 6,
+      "end": 6,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected '}' to close block statement",
+      "help": "Add a closing brace '}' to complete the block statement, or check for unbalanced braces inside.",
+      "start": 0,
+      "end": 0,
       "labels": [
       ]
     },

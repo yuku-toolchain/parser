@@ -5,28 +5,48 @@
     "end": 19,
     "sourceType": "script",
     "body": [
+      {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 18,
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start": 4,
+            "end": 16,
+            "kind": "let",
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start": 8,
+                "end": 15,
+                "id": {
+                  "type": "Identifier",
+                  "start": 8,
+                  "end": 9,
+                  "name": "a"
+                },
+                "init": {
+                  "type": "ParenthesizedExpression",
+                  "start": 12,
+                  "end": 15,
+                  "expression": {
+                    "type": "Literal",
+                    "start": 13,
+                    "end": 14,
+                    "value": 1,
+                    "raw": "1"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected ',' or '}' in object",
-      "help": "Add a comma between properties or close the object with '}'.",
-      "start": 8,
-      "end": 9,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 17,
-      "end": 18,
-      "labels": [
-      ]
-    }
   ]
 }

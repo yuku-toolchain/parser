@@ -24,6 +24,29 @@
           "start": 13,
           "end": 40,
           "body": [
+            {
+              "type": "BlockStatement",
+              "start": 27,
+              "end": 29,
+              "body": [
+              ]
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 32,
+              "end": 38,
+              "expression": {
+                "type": "Literal",
+                "start": 32,
+                "end": 37,
+                "value": {},
+                "raw": "/foo/",
+                "regex": {
+                  "pattern": "foo",
+                  "flags": ""
+                }
+              }
+            }
           ]
         },
         "expression": false
@@ -39,15 +62,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 17,
       "end": 23,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 37,
-      "end": 38,
       "labels": [
       ]
     }

@@ -6,43 +6,36 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
+        "type": "BlockStatement",
         "start": 0,
         "end": 6,
-        "expression": {
-          "type": "ObjectExpression",
-          "start": 0,
-          "end": 6,
-          "properties": [
-            {
-              "type": "Property",
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start": 1,
+            "end": 2,
+            "expression": {
+              "type": "Identifier",
               "start": 1,
-              "end": 5,
-              "kind": "init",
-              "key": {
-                "type": "Identifier",
-                "start": 1,
-                "end": 2,
-                "name": "a"
-              },
-              "value": {
-                "type": "Literal",
-                "start": 4,
-                "end": 5,
-                "value": 1,
-                "raw": "1"
-              },
-              "method": false,
-              "shorthand": false,
-              "computed": false
+              "end": 2,
+              "name": "a"
             }
-          ]
-        }
+          }
+        ]
       }
     ]
   },
   "comments": [
   ],
   "errors": [
+    {
+      "severity": "error",
+      "message": "Unexpected token ':'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 2,
+      "end": 3,
+      "labels": [
+      ]
+    }
   ]
 }

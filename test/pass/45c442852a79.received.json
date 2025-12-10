@@ -6,16 +6,23 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 26,
-        "end": 32,
-        "expression": {
-          "type": "Literal",
-          "start": 26,
-          "end": 31,
-          "value": false,
-          "raw": "false"
-        }
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 34,
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start": 26,
+            "end": 32,
+            "expression": {
+              "type": "Literal",
+              "start": 26,
+              "end": 31,
+              "value": false,
+              "raw": "false"
+            }
+          }
+        ]
       }
     ]
   },
@@ -24,10 +31,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected ',' or '}' in object",
-      "help": "Add a comma between properties or close the object with '}'.",
-      "start": 7,
-      "end": 8,
+      "message": "Unexpected token 'do'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 4,
+      "end": 6,
       "labels": [
       ]
     },
@@ -37,15 +44,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 9,
       "end": 14,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 33,
-      "end": 34,
       "labels": [
       ]
     }

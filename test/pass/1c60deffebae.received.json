@@ -22,20 +22,34 @@
             "name": "a"
           }
         }
+      },
+      {
+        "type": "BlockStatement",
+        "start": 5,
+        "end": 7,
+        "body": [
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 8,
+        "end": 14,
+        "expression": {
+          "type": "Literal",
+          "start": 8,
+          "end": 13,
+          "value": {},
+          "raw": "/foo/",
+          "regex": {
+            "pattern": "foo",
+            "flags": ""
+          }
+        }
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 13,
-      "end": 14,
-      "labels": [
-      ]
-    }
   ]
 }

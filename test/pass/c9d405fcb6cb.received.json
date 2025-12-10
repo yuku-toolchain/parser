@@ -6,41 +6,70 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 19,
-        "end": 20,
-        "expression": {
-          "type": "Identifier",
-          "start": 19,
-          "end": 20,
-          "name": "b"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 41,
-        "end": 42,
-        "expression": {
-          "type": "Identifier",
-          "start": 41,
-          "end": 42,
-          "name": "b"
-        }
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 49,
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start": 4,
+            "end": 16,
+            "kind": "var",
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start": 8,
+                "end": 15,
+                "id": {
+                  "type": "Identifier",
+                  "start": 8,
+                  "end": 9,
+                  "name": "a"
+                },
+                "init": {
+                  "type": "ParenthesizedExpression",
+                  "start": 12,
+                  "end": 15,
+                  "expression": {
+                    "type": "Literal",
+                    "start": 13,
+                    "end": 14,
+                    "value": 1,
+                    "raw": "1"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "ExpressionStatement",
+            "start": 19,
+            "end": 20,
+            "expression": {
+              "type": "Identifier",
+              "start": 19,
+              "end": 20,
+              "name": "b"
+            }
+          },
+          {
+            "type": "ExpressionStatement",
+            "start": 41,
+            "end": 42,
+            "expression": {
+              "type": "Identifier",
+              "start": 41,
+              "end": 42,
+              "name": "b"
+            }
+          }
+        ]
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected ',' or '}' in object",
-      "help": "Add a comma between properties or close the object with '}'.",
-      "start": 8,
-      "end": 9,
-      "labels": [
-      ]
-    },
     {
       "severity": "error",
       "message": "Empty parentheses are only valid as arrow function parameters",
@@ -56,6 +85,15 @@
       "help": "Use '() => ...' for arrow functions or add an expression inside.",
       "start": 42,
       "end": 44,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token '}'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 50,
+      "end": 51,
       "labels": [
       ]
     }

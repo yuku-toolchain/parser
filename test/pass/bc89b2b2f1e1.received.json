@@ -5,19 +5,33 @@
     "end": 8,
     "sourceType": "script",
     "body": [
+      {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 2,
+        "body": [
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 3,
+        "end": 8,
+        "expression": {
+          "type": "Literal",
+          "start": 3,
+          "end": 8,
+          "value": {},
+          "raw": "/foo/",
+          "regex": {
+            "pattern": "foo",
+            "flags": ""
+          }
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected end of input while parsing expression",
-      "help": "The parser reached the end of the file but expected an expression. Check for missing values or unclosed brackets.",
-      "start": 8,
-      "end": 8,
-      "labels": [
-      ]
-    }
   ]
 }

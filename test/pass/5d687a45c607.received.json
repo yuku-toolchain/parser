@@ -5,37 +5,53 @@
     "end": 28,
     "sourceType": "script",
     "body": [
+      {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 18,
+        "body": [
+          {
+            "type": "BlockStatement",
+            "start": 4,
+            "end": 16,
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 10,
+                "end": 12,
+                "expression": {
+                  "type": "Identifier",
+                  "start": 10,
+                  "end": 11,
+                  "name": "a"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "BlockStatement",
+        "start": 19,
+        "end": 27,
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start": 23,
+            "end": 25,
+            "expression": {
+              "type": "Identifier",
+              "start": 23,
+              "end": 24,
+              "name": "b"
+            }
+          }
+        ]
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token '{' as property key",
-      "help": "Property keys must be identifiers, strings, numbers, or computed expressions [expr].",
-      "start": 4,
-      "end": 5,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 15,
-      "end": 16,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 26,
-      "end": 27,
-      "labels": [
-      ]
-    }
   ]
 }

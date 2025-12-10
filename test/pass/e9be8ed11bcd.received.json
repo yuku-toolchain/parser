@@ -5,19 +5,30 @@
     "end": 20,
     "sourceType": "script",
     "body": [
+      {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 19,
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start": 4,
+            "end": 17,
+            "expression": {
+              "type": "Literal",
+              "start": 4,
+              "end": 16,
+              "value": "use strict",
+              "raw": "\"use strict\""
+            },
+            "directive": "use strict"
+          }
+        ]
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Shorthand property must be an identifier",
-      "help": "String and numeric keys require explicit ': value' syntax.",
-      "start": 4,
-      "end": 16,
-      "labels": [
-      ]
-    }
   ]
 }

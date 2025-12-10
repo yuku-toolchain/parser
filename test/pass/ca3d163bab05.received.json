@@ -6,16 +6,11 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
+        "type": "BlockStatement",
         "start": 0,
         "end": 2,
-        "expression": {
-          "type": "ObjectExpression",
-          "start": 0,
-          "end": 2,
-          "properties": [
-          ]
-        }
+        "body": [
+        ]
       }
     ]
   },
