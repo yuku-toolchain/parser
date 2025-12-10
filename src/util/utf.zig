@@ -42,11 +42,11 @@ pub fn parseOctal(input: []const u8, start: usize) struct { value: u21, end: usi
     var count: usize = 0;
     while (i < input.len and count < max) : (i += 1) {
         if (input[i] >= '0' and input[i] <= '7') {
-            value = value * 8 + (input[i] - '0');
+            value = (value << 3) | (input[i] - '0');
             count += 1;
         } else break;
     }
-    return .{ .value = value, .end = i };
+    return .{ .value = @intCast(value), .end = i };
 }
 
 /// exactly 2 hex digits (for \xHH escape sequences)
