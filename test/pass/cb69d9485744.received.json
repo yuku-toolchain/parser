@@ -12,6 +12,15 @@
   "errors": [
     {
       "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 39,
+      "end": 39,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
       "start": 50,

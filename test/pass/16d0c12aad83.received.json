@@ -151,44 +151,6 @@
           "start": 166,
           "end": 206,
           "body": [
-            {
-              "type": "ExpressionStatement",
-              "start": 172,
-              "end": 173,
-              "expression": {
-                "type": "Identifier",
-                "start": 172,
-                "end": 173,
-                "name": "j"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 187,
-              "end": 188,
-              "expression": {
-                "type": "Identifier",
-                "start": 187,
-                "end": 188,
-                "name": "l"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 188,
-              "end": 192,
-              "expression": {
-                "type": "ParenthesizedExpression",
-                "start": 188,
-                "end": 191,
-                "expression": {
-                  "type": "Identifier",
-                  "start": 189,
-                  "end": 190,
-                  "name": "h"
-                }
-              }
-            }
           ]
         },
         "expression": false
@@ -224,44 +186,6 @@
           "start": 224,
           "end": 309,
           "body": [
-            {
-              "type": "ExpressionStatement",
-              "start": 230,
-              "end": 231,
-              "expression": {
-                "type": "Identifier",
-                "start": 230,
-                "end": 231,
-                "name": "j"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 276,
-              "end": 277,
-              "expression": {
-                "type": "Identifier",
-                "start": 276,
-                "end": 277,
-                "name": "l"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 277,
-              "end": 281,
-              "expression": {
-                "type": "ParenthesizedExpression",
-                "start": 277,
-                "end": 280,
-                "expression": {
-                  "type": "Identifier",
-                  "start": 278,
-                  "end": 279,
-                  "name": "h"
-                }
-              }
-            }
           ]
         },
         "expression": false
@@ -297,44 +221,6 @@
           "start": 343,
           "end": 429,
           "body": [
-            {
-              "type": "ExpressionStatement",
-              "start": 349,
-              "end": 350,
-              "expression": {
-                "type": "Identifier",
-                "start": 349,
-                "end": 350,
-                "name": "j"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 395,
-              "end": 396,
-              "expression": {
-                "type": "Identifier",
-                "start": 395,
-                "end": 396,
-                "name": "l"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 396,
-              "end": 400,
-              "expression": {
-                "type": "ParenthesizedExpression",
-                "start": 396,
-                "end": 399,
-                "expression": {
-                  "type": "Identifier",
-                  "start": 397,
-                  "end": 398,
-                  "name": "h"
-                }
-              }
-            }
           ]
         },
         "expression": false
@@ -370,60 +256,6 @@
           "start": 467,
           "end": 509,
           "body": [
-            {
-              "type": "ExpressionStatement",
-              "start": 473,
-              "end": 474,
-              "expression": {
-                "type": "Identifier",
-                "start": 473,
-                "end": 474,
-                "name": "n"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 474,
-              "end": 478,
-              "expression": {
-                "type": "ParenthesizedExpression",
-                "start": 474,
-                "end": 477,
-                "expression": {
-                  "type": "Identifier",
-                  "start": 475,
-                  "end": 476,
-                  "name": "h"
-                }
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 483,
-              "end": 484,
-              "expression": {
-                "type": "Identifier",
-                "start": 483,
-                "end": 484,
-                "name": "q"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 484,
-              "end": 488,
-              "expression": {
-                "type": "ParenthesizedExpression",
-                "start": 484,
-                "end": 487,
-                "expression": {
-                  "type": "Identifier",
-                  "start": 485,
-                  "end": 486,
-                  "name": "i"
-                }
-              }
-            }
           ]
         },
         "expression": false
@@ -459,60 +291,6 @@
           "start": 527,
           "end": 564,
           "body": [
-            {
-              "type": "ExpressionStatement",
-              "start": 533,
-              "end": 534,
-              "expression": {
-                "type": "Identifier",
-                "start": 533,
-                "end": 534,
-                "name": "n"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 534,
-              "end": 538,
-              "expression": {
-                "type": "ParenthesizedExpression",
-                "start": 534,
-                "end": 537,
-                "expression": {
-                  "type": "Identifier",
-                  "start": 535,
-                  "end": 536,
-                  "name": "h"
-                }
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 543,
-              "end": 544,
-              "expression": {
-                "type": "Identifier",
-                "start": 543,
-                "end": 544,
-                "name": "q"
-              }
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 544,
-              "end": 548,
-              "expression": {
-                "type": "ParenthesizedExpression",
-                "start": 544,
-                "end": 547,
-                "expression": {
-                  "type": "Identifier",
-                  "start": 545,
-                  "end": 546,
-                  "name": "i"
-                }
-              }
-            }
           ]
         },
         "expression": false
@@ -629,10 +407,19 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 173,
-      "end": 174,
+      "end": 173,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 188,
+      "end": 188,
       "labels": [
       ]
     },
@@ -647,10 +434,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 231,
-      "end": 232,
+      "end": 231,
       "labels": [
       ]
     },
@@ -660,6 +447,15 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 245,
       "end": 247,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 277,
+      "end": 277,
       "labels": [
       ]
     },
@@ -692,10 +488,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 350,
-      "end": 351,
+      "end": 350,
       "labels": [
       ]
     },
@@ -705,6 +501,15 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 364,
       "end": 366,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 396,
+      "end": 396,
       "labels": [
       ]
     },
@@ -737,10 +542,46 @@
     },
     {
       "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 474,
+      "end": 474,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 484,
+      "end": 484,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
       "message": "Unexpected token 'return'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 493,
       "end": 499,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 534,
+      "end": 534,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 544,
+      "end": 544,
       "labels": [
       ]
     },

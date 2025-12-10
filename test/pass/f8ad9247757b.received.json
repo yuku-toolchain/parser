@@ -10,17 +10,6 @@
         "start": 0,
         "end": 11,
         "body": [
-          {
-            "type": "ExpressionStatement",
-            "start": 4,
-            "end": 5,
-            "expression": {
-              "type": "Identifier",
-              "start": 4,
-              "end": 5,
-              "name": "a"
-            }
-          }
         ]
       }
     ]
@@ -30,10 +19,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token ':'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 5,
-      "end": 6,
+      "end": 5,
       "labels": [
       ]
     }

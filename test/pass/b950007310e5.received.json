@@ -109,28 +109,6 @@
             }
           }
         }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 74,
-        "end": 75,
-        "expression": {
-          "type": "Identifier",
-          "start": 74,
-          "end": 75,
-          "name": "c"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 79,
-        "end": 80,
-        "expression": {
-          "type": "Identifier",
-          "start": 79,
-          "end": 80,
-          "name": "b"
-        }
       }
     ]
   },
@@ -139,19 +117,19 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 75,
-      "end": 76,
+      "end": 75,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token ':'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 80,
-      "end": 81,
+      "end": 80,
       "labels": [
       ]
     }

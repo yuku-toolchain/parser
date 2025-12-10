@@ -6,54 +6,6 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 228,
-        "expression": {
-          "type": "ParenthesizedExpression",
-          "start": 0,
-          "end": 228,
-          "expression": {
-            "type": "FunctionExpression",
-            "start": 1,
-            "end": 227,
-            "id": null,
-            "generator": false,
-            "async": false,
-            "params": [
-            ],
-            "body": {
-              "type": "BlockStatement",
-              "start": 13,
-              "end": 227,
-              "body": [
-                {
-                  "type": "VariableDeclaration",
-                  "start": 17,
-                  "end": 22,
-                  "kind": "var",
-                  "declarations": [
-                    {
-                      "type": "VariableDeclarator",
-                      "start": 21,
-                      "end": 22,
-                      "id": {
-                        "type": "Identifier",
-                        "start": 21,
-                        "end": 22,
-                        "name": "a"
-                      },
-                      "init": null
-                    }
-                  ]
-                }
-              ]
-            },
-            "expression": false
-          }
-        }
-      },
-      {
         "type": "VariableDeclaration",
         "start": 249,
         "end": 254,
@@ -157,10 +109,10 @@
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 228,
-      "end": 230,
+      "end": 228,
       "labels": [
       ]
     },

@@ -12,6 +12,15 @@
   "errors": [
     {
       "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 70,
+      "end": 70,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
       "start": 86,
@@ -21,10 +30,10 @@
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 102,
-      "end": 104,
+      "end": 102,
       "labels": [
       ]
     },

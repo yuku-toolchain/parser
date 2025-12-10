@@ -5,29 +5,6 @@
     "end": 9,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 4,
-        "expression": {
-          "type": "ParenthesizedExpression",
-          "start": 0,
-          "end": 4,
-          "expression": {
-            "type": "UnaryExpression",
-            "start": 1,
-            "end": 3,
-            "operator": "!",
-            "prefix": true,
-            "argument": {
-              "type": "Identifier",
-              "start": 2,
-              "end": 3,
-              "name": "a"
-            }
-          }
-        }
-      }
     ]
   },
   "comments": [
@@ -35,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token '?'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 4,
-      "end": 5,
+      "end": 4,
       "labels": [
       ]
     }

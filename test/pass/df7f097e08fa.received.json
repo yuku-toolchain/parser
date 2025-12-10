@@ -39,17 +39,6 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 10,
-        "end": 11,
-        "expression": {
-          "type": "Identifier",
-          "start": 10,
-          "end": 11,
-          "name": "a"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
         "start": 35,
         "end": 57,
         "expression": {
@@ -125,10 +114,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 11,
-      "end": 12,
+      "end": 11,
       "labels": [
       ]
     }

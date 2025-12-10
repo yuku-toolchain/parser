@@ -63,42 +63,6 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 45,
-        "end": 62,
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 45,
-          "end": 62,
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 45,
-            "end": 46,
-            "name": "a"
-          },
-          "right": {
-            "type": "LogicalExpression",
-            "start": 49,
-            "end": 62,
-            "left": {
-              "type": "Literal",
-              "start": 49,
-              "end": 50,
-              "value": 1,
-              "raw": "1"
-            },
-            "operator": "||",
-            "right": {
-              "type": "Identifier",
-              "start": 61,
-              "end": 62,
-              "name": "c"
-            }
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
         "start": 71,
         "end": 93,
         "expression": {
@@ -463,77 +427,6 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 226,
-        "end": 245,
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 226,
-          "end": 245,
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 226,
-            "end": 227,
-            "name": "a"
-          },
-          "right": {
-            "type": "LogicalExpression",
-            "start": 230,
-            "end": 245,
-            "left": {
-              "type": "Literal",
-              "start": 230,
-              "end": 232,
-              "value": 14,
-              "raw": "14"
-            },
-            "operator": "||",
-            "right": {
-              "type": "Identifier",
-              "start": 244,
-              "end": 245,
-              "name": "c"
-            }
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 254,
-        "end": 272,
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 254,
-          "end": 272,
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 254,
-            "end": 255,
-            "name": "a"
-          },
-          "right": {
-            "type": "LogicalExpression",
-            "start": 258,
-            "end": 272,
-            "left": {
-              "type": "Identifier",
-              "start": 258,
-              "end": 261,
-              "name": "NaN"
-            },
-            "operator": "||",
-            "right": {
-              "type": "Identifier",
-              "start": 271,
-              "end": 272,
-              "name": "c"
-            }
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
         "start": 281,
         "end": 297,
         "expression": {
@@ -861,52 +754,6 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 419,
-        "end": 424,
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 419,
-          "end": 424,
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 419,
-            "end": 420,
-            "name": "a"
-          },
-          "right": {
-            "type": "Identifier",
-            "start": 423,
-            "end": 424,
-            "name": "c"
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 444,
-        "end": 449,
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 444,
-          "end": 449,
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 444,
-            "end": 445,
-            "name": "a"
-          },
-          "right": {
-            "type": "Identifier",
-            "start": 448,
-            "end": 449,
-            "name": "c"
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
         "start": 495,
         "end": 516,
         "expression": {
@@ -938,29 +785,6 @@
               "value": true,
               "raw": "true"
             }
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 517,
-        "end": 522,
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 517,
-          "end": 522,
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 517,
-            "end": 518,
-            "name": "a"
-          },
-          "right": {
-            "type": "Identifier",
-            "start": 521,
-            "end": 522,
-            "name": "c"
           }
         }
       },
@@ -1107,52 +931,6 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 606,
-        "end": 611,
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 606,
-          "end": 611,
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 606,
-            "end": 607,
-            "name": "a"
-          },
-          "right": {
-            "type": "Identifier",
-            "start": 610,
-            "end": 611,
-            "name": "c"
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 627,
-        "end": 632,
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 627,
-          "end": 632,
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 627,
-            "end": 628,
-            "name": "a"
-          },
-          "right": {
-            "type": "Identifier",
-            "start": 631,
-            "end": 632,
-            "name": "c"
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
         "start": 647,
         "end": 666,
         "expression": {
@@ -1267,73 +1045,73 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 62,
-      "end": 63,
+      "end": 62,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 245,
-      "end": 246,
+      "end": 245,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 272,
-      "end": 273,
+      "end": 272,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 424,
-      "end": 425,
+      "end": 424,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 449,
-      "end": 450,
+      "end": 449,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 522,
-      "end": 523,
+      "end": 522,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 611,
-      "end": 612,
+      "end": 611,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 632,
-      "end": 633,
+      "end": 632,
       "labels": [
       ]
     }

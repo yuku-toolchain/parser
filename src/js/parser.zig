@@ -222,11 +222,6 @@ pub const Parser = struct {
             (terminator != null and self.current_token.type == terminator.?);
     }
 
-    // pub inline fn canInsertSemicolon(self: *Parser) bool {
-    //     const current_token = self.current_token;
-    //     return current_token.type == .eof or current_token.has_line_terminator_before or current_token.type == .right_brace;
-    // }
-
     pub inline fn isTs(self: *Parser) bool {
         return self.lang == .ts or self.lang == .tsx or self.lang == .dts;
     }

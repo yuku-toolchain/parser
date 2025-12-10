@@ -5,29 +5,6 @@
     "end": 10,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 7,
-        "expression": {
-          "type": "ArrowFunctionExpression",
-          "start": 0,
-          "end": 7,
-          "id": null,
-          "generator": false,
-          "async": false,
-          "params": [
-          ],
-          "body": {
-            "type": "Literal",
-            "start": 6,
-            "end": 7,
-            "value": 1,
-            "raw": "1"
-          },
-          "expression": true
-        }
-      }
     ]
   },
   "comments": [
@@ -35,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token ','",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 7,
-      "end": 8,
+      "end": 7,
       "labels": [
       ]
     }

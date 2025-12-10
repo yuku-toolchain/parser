@@ -5,82 +5,19 @@
     "end": 6,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 2,
-        "expression": {
-          "type": "TemplateLiteral",
-          "start": 0,
-          "end": 2,
-          "quasis": [
-            {
-              "type": "TemplateElement",
-              "start": 1,
-              "end": 1,
-              "value": {
-                "raw": "",
-                "cooked": ""
-              },
-              "tail": true
-            }
-          ],
-          "expressions": [
-          ]
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 2,
-        "end": 4,
-        "expression": {
-          "type": "TemplateLiteral",
-          "start": 2,
-          "end": 4,
-          "quasis": [
-            {
-              "type": "TemplateElement",
-              "start": 3,
-              "end": 3,
-              "value": {
-                "raw": "",
-                "cooked": ""
-              },
-              "tail": true
-            }
-          ],
-          "expressions": [
-          ]
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 4,
-        "end": 6,
-        "expression": {
-          "type": "TemplateLiteral",
-          "start": 4,
-          "end": 6,
-          "quasis": [
-            {
-              "type": "TemplateElement",
-              "start": 5,
-              "end": 5,
-              "value": {
-                "raw": "",
-                "cooked": ""
-              },
-              "tail": true
-            }
-          ],
-          "expressions": [
-          ]
-        }
-      }
     ]
   },
   "comments": [
   ],
   "errors": [
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 2,
+      "end": 2,
+      "labels": [
+      ]
+    }
   ]
 }

@@ -13,28 +13,10 @@
         ]
       },
       {
-        "type": "ExpressionStatement",
-        "start": 8,
-        "end": 9,
-        "expression": {
-          "type": "Identifier",
-          "start": 8,
-          "end": 9,
-          "name": "a"
-        }
-      },
-      {
         "type": "BlockStatement",
-        "start": 18,
-        "end": 30,
+        "start": 13,
+        "end": 15,
         "body": [
-          {
-            "type": "BlockStatement",
-            "start": 22,
-            "end": 24,
-            "body": [
-            ]
-          }
         ]
       },
       {
@@ -60,10 +42,10 @@
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 9,
-      "end": 11,
+      "end": 9,
       "labels": [
       ]
     },
@@ -71,17 +53,26 @@
       "severity": "error",
       "message": "Unexpected token ';'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 27,
-      "end": 28,
+      "start": 16,
+      "end": 17,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token ';'",
+      "message": "Unexpected token '}'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 31,
-      "end": 32,
+      "start": 29,
+      "end": 30,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 34,
+      "end": 34,
       "labels": [
       ]
     }

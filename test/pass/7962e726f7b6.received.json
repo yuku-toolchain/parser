@@ -5,41 +5,6 @@
     "end": 20,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 12,
-        "end": 13,
-        "expression": {
-          "type": "Identifier",
-          "start": 12,
-          "end": 13,
-          "name": "c"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 13,
-        "end": 19,
-        "expression": {
-          "type": "TemplateLiteral",
-          "start": 13,
-          "end": 18,
-          "quasis": [
-            {
-              "type": "TemplateElement",
-              "start": 14,
-              "end": 17,
-              "value": {
-                "raw": "bar",
-                "cooked": "bar"
-              },
-              "tail": true
-            }
-          ],
-          "expressions": [
-          ]
-        }
-      }
     ]
   },
   "comments": [
@@ -51,6 +16,15 @@
       "help": "Add a comma between elements or close with ')'.",
       "start": 2,
       "end": 3,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 13,
+      "end": 13,
       "labels": [
       ]
     }

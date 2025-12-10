@@ -21,7 +21,7 @@
       {
         "type": "BlockStatement",
         "start": 14,
-        "end": 77,
+        "end": 79,
         "body": [
           {
             "type": "VariableDeclaration",
@@ -50,26 +50,11 @@
             ]
           },
           {
-            "type": "ExpressionStatement",
-            "start": 35,
-            "end": 36,
-            "expression": {
-              "type": "Identifier",
-              "start": 35,
-              "end": 36,
-              "name": "b"
-            }
-          },
-          {
-            "type": "ExpressionStatement",
-            "start": 67,
-            "end": 68,
-            "expression": {
-              "type": "Identifier",
-              "start": 67,
-              "end": 68,
-              "name": "b"
-            }
+            "type": "BlockStatement",
+            "start": 44,
+            "end": 77,
+            "body": [
+            ]
           }
         ]
       }
@@ -80,28 +65,28 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 36,
-      "end": 38,
+      "end": 36,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 55,
+      "end": 55,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 68,
-      "end": 70,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 78,
-      "end": 79,
+      "end": 68,
       "labels": [
       ]
     }

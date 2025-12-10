@@ -72,75 +72,6 @@
             "init": null
           }
         ]
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 180,
-        "end": 185,
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 180,
-          "end": 185,
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 180,
-            "end": 181,
-            "name": "a"
-          },
-          "right": {
-            "type": "Identifier",
-            "start": 184,
-            "end": 185,
-            "name": "b"
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 441,
-        "end": 446,
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 441,
-          "end": 446,
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 441,
-            "end": 442,
-            "name": "a"
-          },
-          "right": {
-            "type": "Identifier",
-            "start": 445,
-            "end": 446,
-            "name": "b"
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 457,
-        "end": 462,
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 457,
-          "end": 462,
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 457,
-            "end": 458,
-            "name": "a"
-          },
-          "right": {
-            "type": "Identifier",
-            "start": 461,
-            "end": 462,
-            "name": "b"
-          }
-        }
       }
     ]
   },
@@ -239,10 +170,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token '?'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 186,
-      "end": 187,
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 185,
+      "end": 185,
       "labels": [
       ]
     },
@@ -320,19 +251,19 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token '?'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 447,
-      "end": 448,
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 446,
+      "end": 446,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token '?'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 463,
-      "end": 464,
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 462,
+      "end": 462,
       "labels": [
       ]
     }

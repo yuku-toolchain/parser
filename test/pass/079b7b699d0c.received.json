@@ -18,10 +18,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Invalid element in destructuring pattern",
-      "help": "Expected an identifier, array pattern, object pattern, or assignment pattern.",
-      "start": 29,
-      "end": 30,
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 28,
+      "end": 28,
       "labels": [
       ]
     },

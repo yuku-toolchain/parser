@@ -5,28 +5,6 @@
     "end": 73,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 22,
-        "end": 23,
-        "expression": {
-          "type": "Identifier",
-          "start": 22,
-          "end": 23,
-          "name": "c"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 58,
-        "end": 59,
-        "expression": {
-          "type": "Identifier",
-          "start": 58,
-          "end": 59,
-          "name": "f"
-        }
-      }
     ]
   },
   "comments": [
@@ -43,10 +21,19 @@
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 23,
-      "end": 25,
+      "end": 23,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 32,
+      "end": 32,
       "labels": [
       ]
     },
@@ -61,10 +48,19 @@
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 59,
-      "end": 61,
+      "end": 59,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 68,
+      "end": 68,
       "labels": [
       ]
     },

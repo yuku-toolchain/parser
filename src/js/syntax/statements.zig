@@ -35,6 +35,13 @@ pub fn parseExpressionStatementOrDirective(parser: *Parser) Error!?ast.NodeIndex
 
     const expression_span = parser.getSpan(expression);
 
+    const token_after_expression = parser.current_token;
+
+    if (token_after_expression.type != .semicolon and !canInsertSemicolon(parser)) {
+        try parser.report(.{ .start = expression_span.end, .end = expression_span.end }, "Expected a semicolon or an implicit semicolon after a statement, but found none", .{ .help = "Try inserting a semicolon here" });
+        return null;
+    }
+
     const expression_data = parser.getData(expression);
 
     const start = expression_span.start;
@@ -81,4 +88,9 @@ pub fn parseBlockStatement(parser: *Parser) Error!?ast.NodeIndex {
     )) return null;
 
     return try parser.addNode(.{ .block_statement = .{ .body = body } }, .{ .start = start, .end = end });
+}
+
+pub inline fn canInsertSemicolon(parser: *Parser) bool {
+    const current_token = parser.current_token;
+    return current_token.type == .eof or current_token.has_line_terminator_before or current_token.type == .right_brace;
 }

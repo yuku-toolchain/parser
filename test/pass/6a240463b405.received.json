@@ -5,18 +5,6 @@
     "end": 49,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 39,
-        "end": 43,
-        "expression": {
-          "type": "Literal",
-          "start": 39,
-          "end": 43,
-          "value": 1e20,
-          "raw": "1e20"
-        }
-      }
     ]
   },
   "comments": [
@@ -30,10 +18,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token ','",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 43,
-      "end": 44,
+      "end": 43,
       "labels": [
       ]
     }

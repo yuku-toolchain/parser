@@ -5,41 +5,6 @@
     "end": 28,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 8,
-        "expression": {
-          "type": "ParenthesizedExpression",
-          "start": 0,
-          "end": 8,
-          "expression": {
-            "type": "SequenceExpression",
-            "start": 1,
-            "end": 7,
-            "expressions": [
-              {
-                "type": "ParenthesizedExpression",
-                "start": 1,
-                "end": 4,
-                "expression": {
-                  "type": "Literal",
-                  "start": 2,
-                  "end": 3,
-                  "value": 1,
-                  "raw": "1"
-                }
-              },
-              {
-                "type": "Identifier",
-                "start": 6,
-                "end": 7,
-                "name": "a"
-              }
-            ]
-          }
-        }
-      }
     ]
   },
   "comments": [
@@ -47,10 +12,19 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 8,
-      "end": 10,
+      "end": 8,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected ',' or ')' in parenthesized expression",
+      "help": "Add a comma between elements or close with ')'.",
+      "start": 20,
+      "end": 21,
       "labels": [
       ]
     }

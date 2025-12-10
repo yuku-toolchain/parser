@@ -54,17 +54,6 @@
                   }
                 }
               ]
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 33,
-              "end": 34,
-              "expression": {
-                "type": "Identifier",
-                "start": 33,
-                "end": 34,
-                "name": "b"
-              }
             }
           ]
         },
@@ -77,10 +66,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Invalid element in destructuring pattern",
-      "help": "Expected an identifier, array pattern, object pattern, or assignment pattern.",
-      "start": 35,
-      "end": 43,
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 34,
+      "end": 34,
       "labels": [
       ]
     }

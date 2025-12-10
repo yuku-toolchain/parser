@@ -5,71 +5,6 @@
     "end": 26,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 16,
-        "expression": {
-          "type": "ParenthesizedExpression",
-          "start": 0,
-          "end": 16,
-          "expression": {
-            "type": "SequenceExpression",
-            "start": 1,
-            "end": 15,
-            "expressions": [
-              {
-                "type": "ParenthesizedExpression",
-                "start": 1,
-                "end": 12,
-                "expression": {
-                  "type": "SequenceExpression",
-                  "start": 2,
-                  "end": 11,
-                  "expressions": [
-                    {
-                      "type": "ParenthesizedExpression",
-                      "start": 2,
-                      "end": 8,
-                      "expression": {
-                        "type": "SequenceExpression",
-                        "start": 3,
-                        "end": 7,
-                        "expressions": [
-                          {
-                            "type": "Identifier",
-                            "start": 3,
-                            "end": 4,
-                            "name": "a"
-                          },
-                          {
-                            "type": "Identifier",
-                            "start": 6,
-                            "end": 7,
-                            "name": "b"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "Identifier",
-                      "start": 10,
-                      "end": 11,
-                      "name": "c"
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "Identifier",
-                "start": 14,
-                "end": 15,
-                "name": "d"
-              }
-            ]
-          }
-        }
-      }
     ]
   },
   "comments": [
@@ -77,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token '?'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 17,
-      "end": 18,
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 16,
+      "end": 16,
       "labels": [
       ]
     }

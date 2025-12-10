@@ -94,24 +94,6 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 53,
-        "end": 56,
-        "expression": {
-          "type": "UpdateExpression",
-          "start": 53,
-          "end": 56,
-          "operator": "++",
-          "prefix": false,
-          "argument": {
-            "type": "Identifier",
-            "start": 53,
-            "end": 54,
-            "name": "d"
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
         "start": 68,
         "end": 76,
         "expression": {
@@ -170,24 +152,6 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 93,
-        "end": 96,
-        "expression": {
-          "type": "UpdateExpression",
-          "start": 93,
-          "end": 96,
-          "operator": "++",
-          "prefix": false,
-          "argument": {
-            "type": "Identifier",
-            "start": 93,
-            "end": 94,
-            "name": "d"
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
         "start": 108,
         "end": 116,
         "expression": {
@@ -240,10 +204,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 56,
-      "end": 57,
+      "end": 56,
       "labels": [
       ]
     },
@@ -258,10 +222,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 96,
-      "end": 97,
+      "end": 96,
       "labels": [
       ]
     },

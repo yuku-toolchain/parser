@@ -25,17 +25,6 @@
           "end": 81,
           "body": [
             {
-              "type": "ExpressionStatement",
-              "start": 52,
-              "end": 53,
-              "expression": {
-                "type": "Identifier",
-                "start": 52,
-                "end": 53,
-                "name": "c"
-              }
-            },
-            {
               "type": "VariableDeclaration",
               "start": 63,
               "end": 75,
@@ -75,17 +64,6 @@
         "start": 86,
         "end": 104,
         "body": [
-          {
-            "type": "ExpressionStatement",
-            "start": 94,
-            "end": 95,
-            "expression": {
-              "type": "Identifier",
-              "start": 94,
-              "end": 95,
-              "name": "c"
-            }
-          }
         ]
       }
     ]
@@ -104,19 +82,19 @@
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 53,
-      "end": 55,
+      "end": 53,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 95,
-      "end": 97,
+      "end": 95,
       "labels": [
       ]
     },

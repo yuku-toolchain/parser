@@ -104,24 +104,6 @@
             }
           }
         }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 45,
-        "end": 48,
-        "expression": {
-          "type": "UpdateExpression",
-          "start": 45,
-          "end": 48,
-          "operator": "++",
-          "prefix": true,
-          "argument": {
-            "type": "Identifier",
-            "start": 47,
-            "end": 48,
-            "name": "d"
-          }
-        }
       }
     ]
   },
@@ -139,10 +121,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 48,
-      "end": 49,
+      "end": 48,
       "labels": [
       ]
     }

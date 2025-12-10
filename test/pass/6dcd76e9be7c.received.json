@@ -5,28 +5,6 @@
     "end": 40,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 1,
-        "expression": {
-          "type": "Identifier",
-          "start": 0,
-          "end": 1,
-          "name": "b"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 29,
-        "end": 30,
-        "expression": {
-          "type": "Identifier",
-          "start": 29,
-          "end": 30,
-          "name": "c"
-        }
-      }
     ]
   },
   "comments": [
@@ -34,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token ':'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 1,
-      "end": 2,
+      "end": 1,
       "labels": [
       ]
     },
@@ -52,10 +30,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 30,
-      "end": 31,
+      "end": 30,
       "labels": [
       ]
     },

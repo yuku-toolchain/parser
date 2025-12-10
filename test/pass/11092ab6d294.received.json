@@ -26,13 +26,31 @@
           "body": [
             {
               "type": "ExpressionStatement",
-              "start": 17,
-              "end": 18,
+              "start": 24,
+              "end": 32,
               "expression": {
-                "type": "Identifier",
-                "start": 17,
-                "end": 18,
-                "name": "b"
+                "type": "AssignmentExpression",
+                "start": 24,
+                "end": 31,
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start": 24,
+                  "end": 25,
+                  "name": "c"
+                },
+                "right": {
+                  "type": "ParenthesizedExpression",
+                  "start": 28,
+                  "end": 31,
+                  "expression": {
+                    "type": "Literal",
+                    "start": 29,
+                    "end": 30,
+                    "value": 1,
+                    "raw": "1"
+                  }
+                }
               }
             },
             {
@@ -132,10 +150,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 18,
-      "end": 20,
+      "end": 18,
       "labels": [
       ]
     },

@@ -58,17 +58,6 @@
         ]
       },
       {
-        "type": "ExpressionStatement",
-        "start": 58,
-        "end": 59,
-        "expression": {
-          "type": "Identifier",
-          "start": 58,
-          "end": 59,
-          "name": "d"
-        }
-      },
-      {
         "type": "VariableDeclaration",
         "start": 140,
         "end": 146,
@@ -87,17 +76,6 @@
             "init": null
           }
         ]
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 151,
-        "end": 152,
-        "expression": {
-          "type": "Identifier",
-          "start": 151,
-          "end": 152,
-          "name": "e"
-        }
       }
     ]
   },
@@ -127,10 +105,19 @@
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 59,
-      "end": 61,
+      "end": 59,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token '}'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 63,
+      "end": 64,
       "labels": [
       ]
     },
@@ -163,10 +150,19 @@
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 152,
-      "end": 154,
+      "end": 152,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token '}'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 156,
+      "end": 157,
       "labels": [
       ]
     }

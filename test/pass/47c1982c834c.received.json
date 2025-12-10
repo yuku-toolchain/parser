@@ -37,17 +37,6 @@
         ]
       },
       {
-        "type": "ExpressionStatement",
-        "start": 14,
-        "end": 15,
-        "expression": {
-          "type": "Identifier",
-          "start": 14,
-          "end": 15,
-          "name": "a"
-        }
-      },
-      {
         "type": "VariableDeclaration",
         "start": 26,
         "end": 40,
@@ -116,10 +105,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 15,
-      "end": 16,
+      "end": 15,
       "labels": [
       ]
     }

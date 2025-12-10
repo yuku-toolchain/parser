@@ -30,39 +30,6 @@
             }
           }
         ]
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 12,
-        "end": 13,
-        "expression": {
-          "type": "Identifier",
-          "start": 12,
-          "end": 13,
-          "name": "a"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 21,
-        "end": 22,
-        "expression": {
-          "type": "Identifier",
-          "start": 21,
-          "end": 22,
-          "name": "a"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 30,
-        "end": 31,
-        "expression": {
-          "type": "Identifier",
-          "start": 30,
-          "end": 31,
-          "name": "d"
-        }
       }
     ]
   },
@@ -71,28 +38,28 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 13,
-      "end": 14,
+      "end": 13,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 22,
-      "end": 23,
+      "end": 22,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 31,
-      "end": 32,
+      "end": 31,
       "labels": [
       ]
     }

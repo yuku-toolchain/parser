@@ -5,51 +5,19 @@
     "end": 8,
     "sourceType": "script",
     "body": [
-      {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 1,
-        "expression": {
-          "type": "Identifier",
-          "start": 0,
-          "end": 1,
-          "name": "a"
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 1,
-        "end": 8,
-        "expression": {
-          "type": "AssignmentExpression",
-          "start": 1,
-          "end": 8,
-          "operator": "=",
-          "left": {
-            "type": "ArrayPattern",
-            "start": 1,
-            "end": 4,
-            "elements": [
-              {
-                "type": "Identifier",
-                "start": 2,
-                "end": 3,
-                "name": "b"
-              }
-            ]
-          },
-          "right": {
-            "type": "Identifier",
-            "start": 7,
-            "end": 8,
-            "name": "b"
-          }
-        }
-      }
     ]
   },
   "comments": [
   ],
   "errors": [
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 1,
+      "end": 1,
+      "labels": [
+      ]
+    }
   ]
 }

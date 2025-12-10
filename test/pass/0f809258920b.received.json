@@ -6,17 +6,6 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 0,
-        "end": 1,
-        "expression": {
-          "type": "Identifier",
-          "start": 0,
-          "end": 1,
-          "name": "c"
-        }
-      },
-      {
         "type": "VariableDeclaration",
         "start": 95,
         "end": 105,
@@ -65,35 +54,6 @@
             "raw": "4"
           }
         }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 113,
-        "end": 116,
-        "expression": {
-          "type": "UpdateExpression",
-          "start": 113,
-          "end": 116,
-          "operator": "++",
-          "prefix": false,
-          "argument": {
-            "type": "Identifier",
-            "start": 113,
-            "end": 114,
-            "name": "b"
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 287,
-        "end": 288,
-        "expression": {
-          "type": "Identifier",
-          "start": 287,
-          "end": 288,
-          "name": "d"
-        }
       }
     ]
   },
@@ -114,10 +74,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token ':'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 1,
-      "end": 2,
+      "end": 1,
       "labels": [
       ]
     },
@@ -150,10 +110,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 116,
-      "end": 117,
+      "end": 116,
       "labels": [
       ]
     },
@@ -168,10 +128,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 288,
-      "end": 289,
+      "end": 288,
       "labels": [
       ]
     },

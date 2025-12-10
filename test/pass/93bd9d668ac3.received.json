@@ -41,17 +41,6 @@
                 "start": 20,
                 "end": 40,
                 "body": [
-                  {
-                    "type": "ExpressionStatement",
-                    "start": 26,
-                    "end": 27,
-                    "expression": {
-                      "type": "Identifier",
-                      "start": 26,
-                      "end": 27,
-                      "name": "b"
-                    }
-                  }
                 ]
               },
               "expression": false
@@ -66,10 +55,19 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 27,
-      "end": 29,
+      "end": 27,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 36,
+      "end": 36,
       "labels": [
       ]
     }

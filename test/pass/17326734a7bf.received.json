@@ -348,60 +348,6 @@
                         }
                       }
                     }
-                  },
-                  {
-                    "type": "ExpressionStatement",
-                    "start": 339,
-                    "end": 353,
-                    "expression": {
-                      "type": "AssignmentExpression",
-                      "start": 339,
-                      "end": 353,
-                      "operator": "=",
-                      "left": {
-                        "type": "Identifier",
-                        "start": 339,
-                        "end": 340,
-                        "name": "n"
-                      },
-                      "right": {
-                        "type": "BinaryExpression",
-                        "start": 343,
-                        "end": 353,
-                        "left": {
-                          "type": "ParenthesizedExpression",
-                          "start": 343,
-                          "end": 350,
-                          "expression": {
-                            "type": "BinaryExpression",
-                            "start": 344,
-                            "end": 349,
-                            "left": {
-                              "type": "Identifier",
-                              "start": 344,
-                              "end": 345,
-                              "name": "n"
-                            },
-                            "operator": "+",
-                            "right": {
-                              "type": "Literal",
-                              "start": 348,
-                              "end": 349,
-                              "value": 9,
-                              "raw": "9"
-                            }
-                          }
-                        },
-                        "operator": "|",
-                        "right": {
-                          "type": "Literal",
-                          "start": 351,
-                          "end": 353,
-                          "value": 10,
-                          "raw": "10"
-                        }
-                      }
-                    }
                   }
                 ]
               },
@@ -848,60 +794,6 @@
                         }
                       }
                     }
-                  },
-                  {
-                    "type": "ExpressionStatement",
-                    "start": 813,
-                    "end": 828,
-                    "expression": {
-                      "type": "AssignmentExpression",
-                      "start": 813,
-                      "end": 828,
-                      "operator": "=",
-                      "left": {
-                        "type": "Identifier",
-                        "start": 813,
-                        "end": 814,
-                        "name": "n"
-                      },
-                      "right": {
-                        "type": "BinaryExpression",
-                        "start": 817,
-                        "end": 828,
-                        "left": {
-                          "type": "ParenthesizedExpression",
-                          "start": 817,
-                          "end": 825,
-                          "expression": {
-                            "type": "BinaryExpression",
-                            "start": 818,
-                            "end": 824,
-                            "left": {
-                              "type": "Identifier",
-                              "start": 818,
-                              "end": 819,
-                              "name": "n"
-                            },
-                            "operator": "+",
-                            "right": {
-                              "type": "Literal",
-                              "start": 822,
-                              "end": 824,
-                              "value": 23,
-                              "raw": "23"
-                            }
-                          }
-                        },
-                        "operator": "|",
-                        "right": {
-                          "type": "Literal",
-                          "start": 826,
-                          "end": 828,
-                          "value": 24,
-                          "raw": "24"
-                        }
-                      }
-                    }
                   }
                 ]
               },
@@ -1088,10 +980,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 353,
-      "end": 354,
+      "end": 353,
       "labels": [
       ]
     },
@@ -1178,10 +1070,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 828,
-      "end": 829,
+      "end": 828,
       "labels": [
       ]
     },

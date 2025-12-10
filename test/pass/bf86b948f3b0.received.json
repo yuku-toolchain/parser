@@ -24,17 +24,6 @@
           "start": 13,
           "end": 47,
           "body": [
-            {
-              "type": "ExpressionStatement",
-              "start": 34,
-              "end": 35,
-              "expression": {
-                "type": "Identifier",
-                "start": 34,
-                "end": 35,
-                "name": "c"
-              }
-            }
           ]
         },
         "expression": false
@@ -58,17 +47,6 @@
           "start": 61,
           "end": 146,
           "body": [
-            {
-              "type": "ExpressionStatement",
-              "start": 133,
-              "end": 134,
-              "expression": {
-                "type": "Identifier",
-                "start": 133,
-                "end": 134,
-                "name": "g"
-              }
-            }
           ]
         },
         "expression": false
@@ -98,10 +76,19 @@
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 35,
-      "end": 37,
+      "end": 35,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 42,
+      "end": 42,
       "labels": [
       ]
     },
@@ -179,10 +166,19 @@
     },
     {
       "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
       "start": 134,
-      "end": 136,
+      "end": 134,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 141,
+      "end": 141,
       "labels": [
       ]
     }

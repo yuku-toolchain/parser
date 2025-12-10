@@ -35,17 +35,6 @@
             }
           }
         ]
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 36,
-        "end": 37,
-        "expression": {
-          "type": "Identifier",
-          "start": 36,
-          "end": 37,
-          "name": "b"
-        }
       }
     ]
   },
@@ -72,10 +61,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'this'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 41,
-      "end": 45,
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 37,
+      "end": 37,
       "labels": [
       ]
     },
