@@ -5,6 +5,84 @@
     "end": 96,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 34,
+        "end": 43,
+        "expression": {
+          "type": "CallExpression",
+          "start": 34,
+          "end": 42,
+          "callee": {
+            "type": "MemberExpression",
+            "start": 34,
+            "end": 37,
+            "object": {
+              "type": "Identifier",
+              "start": 34,
+              "end": 35,
+              "name": "c"
+            },
+            "property": {
+              "type": "Identifier",
+              "start": 36,
+              "end": 37,
+              "name": "d"
+            },
+            "computed": false,
+            "optional": false
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "start": 38,
+              "end": 41,
+              "value": "a",
+              "raw": "\"a\""
+            }
+          ],
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 85,
+        "end": 94,
+        "expression": {
+          "type": "CallExpression",
+          "start": 85,
+          "end": 93,
+          "callee": {
+            "type": "MemberExpression",
+            "start": 85,
+            "end": 88,
+            "object": {
+              "type": "Identifier",
+              "start": 85,
+              "end": 86,
+              "name": "c"
+            },
+            "property": {
+              "type": "Identifier",
+              "start": 87,
+              "end": 88,
+              "name": "d"
+            },
+            "computed": false,
+            "optional": false
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "start": 89,
+              "end": 92,
+              "value": "a",
+              "raw": "\"a\""
+            }
+          ],
+          "optional": false
+        }
+      }
     ]
   },
   "comments": [
@@ -25,15 +103,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 16,
       "end": 18,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 35,
-      "end": 35,
       "labels": [
       ]
     },
@@ -61,15 +130,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 65,
       "end": 67,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 86,
-      "end": 86,
       "labels": [
       ]
     },

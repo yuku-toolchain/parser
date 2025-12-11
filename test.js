@@ -1,1 +1,1 @@
-const hello = 2e308
+({a:(b.c)} = 1)

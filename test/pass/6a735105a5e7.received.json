@@ -5,6 +5,92 @@
     "end": 54,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 53,
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "start": 0,
+          "end": 52,
+          "expression": {
+            "type": "CallExpression",
+            "start": 1,
+            "end": 51,
+            "callee": {
+              "type": "FunctionExpression",
+              "start": 1,
+              "end": 49,
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 13,
+                "end": 49,
+                "body": [
+                  {
+                    "type": "VariableDeclaration",
+                    "start": 24,
+                    "end": 34,
+                    "kind": "var",
+                    "declarations": [
+                      {
+                        "type": "VariableDeclarator",
+                        "start": 28,
+                        "end": 33,
+                        "id": {
+                          "type": "Identifier",
+                          "start": 28,
+                          "end": 29,
+                          "name": "a"
+                        },
+                        "init": {
+                          "type": "Literal",
+                          "start": 32,
+                          "end": 33,
+                          "value": 1,
+                          "raw": "1"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 35,
+                    "end": 41,
+                    "expression": {
+                      "type": "BinaryExpression",
+                      "start": 35,
+                      "end": 40,
+                      "left": {
+                        "type": "Identifier",
+                        "start": 35,
+                        "end": 36,
+                        "name": "a"
+                      },
+                      "operator": "<",
+                      "right": {
+                        "type": "Literal",
+                        "start": 39,
+                        "end": 40,
+                        "value": 2,
+                        "raw": "2"
+                      }
+                    }
+                  }
+                ]
+              },
+              "expression": false
+            },
+            "arguments": [
+            ],
+            "optional": false
+          }
+        }
+      }
     ]
   },
   "comments": [
@@ -25,15 +111,6 @@
       "help": "Try inserting a semicolon here",
       "start": 45,
       "end": 45,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 49,
-      "end": 50,
       "labels": [
       ]
     }

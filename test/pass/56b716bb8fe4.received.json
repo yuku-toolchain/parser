@@ -21,10 +21,10 @@
     },
     {
       "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 74,
-      "end": 75,
+      "message": "Unexpected token 'this'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 78,
+      "end": 82,
       "labels": [
       ]
     }

@@ -53,6 +53,7 @@
               "start": 12,
               "end": 13
             },
+            "optional": false,
             "computed": false,
             "start": 10,
             "end": 13

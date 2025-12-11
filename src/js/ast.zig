@@ -658,6 +658,47 @@ pub const SequenceExpression = struct {
     expressions: IndexRange,
 };
 
+/// `obj.prop`, `obj[expr]`, `obj.#priv`
+/// https://tc39.es/ecma262/#sec-property-accessors
+pub const MemberExpression = struct {
+    /// Expression - the object being accessed
+    object: NodeIndex,
+    /// Expression (computed) | IdentifierName (static) | PrivateIdentifier (private)
+    property: NodeIndex,
+    /// true for obj[expr], false for obj.prop
+    computed: bool,
+    /// true for obj?.prop (optional chaining)
+    optional: bool,
+};
+
+/// `func()`, `func?.()`
+/// https://tc39.es/ecma262/#sec-function-calls
+pub const CallExpression = struct {
+    /// Expression - the function being called
+    callee: NodeIndex,
+    /// (Expression | SpreadElement)[]
+    arguments: IndexRange,
+    /// true for func?.() (optional chaining)
+    optional: bool,
+};
+
+/// `foo?.bar`, `foo?.bar.baz`, `foo?.()`
+/// Wraps an optional chain expression
+/// https://tc39.es/ecma262/#sec-optional-chains
+pub const ChainExpression = struct {
+    /// ChainElement (CallExpression | MemberExpression with optional somewhere in chain)
+    expression: NodeIndex,
+};
+
+/// `` tag`hello ${name}` ``
+/// https://tc39.es/ecma262/#sec-tagged-templates
+pub const TaggedTemplateExpression = struct {
+    /// Expression - the tag function
+    tag: NodeIndex,
+    /// TemplateLiteral
+    quasi: NodeIndex,
+};
+
 pub const NodeData = union(enum) {
     sequence_expression: SequenceExpression,
     parenthesized_expression: ParenthesizedExpression,
@@ -676,6 +717,10 @@ pub const NodeData = union(enum) {
     object_expression: ObjectExpression,
     spread_element: SpreadElement,
     object_property: ObjectProperty,
+    member_expression: MemberExpression,
+    call_expression: CallExpression,
+    chain_expression: ChainExpression,
+    tagged_template_expression: TaggedTemplateExpression,
     string_literal: StringLiteral,
     numeric_literal: NumericLiteral,
     bigint_literal: BigIntLiteral,

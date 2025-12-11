@@ -12,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected ',' or ']' in array",
-      "help": "Add a comma between elements or close the array with ']'.",
-      "start": 5,
-      "end": 6,
+      "message": "Invalid element in destructuring pattern",
+      "help": "Expected an identifier, array pattern, object pattern, or assignment pattern.",
+      "start": 4,
+      "end": 8,
       "labels": [
       ]
     }

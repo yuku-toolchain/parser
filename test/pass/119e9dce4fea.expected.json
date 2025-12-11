@@ -110,6 +110,7 @@
                               "start": 79,
                               "end": 80
                             },
+                            "optional": false,
                             "computed": false,
                             "start": 74,
                             "end": 80

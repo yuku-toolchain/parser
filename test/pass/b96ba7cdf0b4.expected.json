@@ -41,10 +41,12 @@
                   "end": 16
                 },
                 "arguments": [],
+                "optional": false,
                 "start": 15,
                 "end": 18
               }
             ],
+            "optional": false,
             "start": 1,
             "end": 19
           },

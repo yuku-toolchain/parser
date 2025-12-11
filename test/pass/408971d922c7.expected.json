@@ -42,6 +42,7 @@
                               "end": 38
                             },
                             "arguments": [],
+                            "optional": false,
                             "start": 37,
                             "end": 40
                           },
@@ -66,6 +67,7 @@
                         "end": 49
                       },
                       "arguments": [],
+                      "optional": false,
                       "start": 48,
                       "end": 51
                     },
@@ -81,6 +83,7 @@
               "end": 54
             },
             "arguments": [],
+            "optional": false,
             "start": 1,
             "end": 56
           },

@@ -93,6 +93,7 @@
                                                   "end": 36
                                                 },
                                                 "arguments": [],
+                                                "optional": false,
                                                 "start": 35,
                                                 "end": 38
                                               },
@@ -155,6 +156,7 @@
                                       "end": 63
                                     },
                                     "arguments": [],
+                                    "optional": false,
                                     "start": 62,
                                     "end": 65
                                   },
@@ -236,6 +238,7 @@
                       "end": 99
                     },
                     "arguments": [],
+                    "optional": false,
                     "start": 98,
                     "end": 101
                   },
@@ -326,6 +329,7 @@
                               "end": 134
                             },
                             "arguments": [],
+                            "optional": false,
                             "start": 133,
                             "end": 136
                           },
@@ -431,6 +435,7 @@
                               "end": 175
                             },
                             "arguments": [],
+                            "optional": false,
                             "start": 174,
                             "end": 177
                           },
@@ -540,6 +545,7 @@
                                   "end": 217
                                 },
                                 "arguments": [],
+                                "optional": false,
                                 "start": 216,
                                 "end": 219
                               },
@@ -672,6 +678,7 @@
                                       "end": 267
                                     },
                                     "arguments": [],
+                                    "optional": false,
                                     "start": 266,
                                     "end": 269
                                   },

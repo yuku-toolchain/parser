@@ -39,10 +39,10 @@
     },
     {
       "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 186,
-      "end": 186,
+      "message": "Unexpected token 'this'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 189,
+      "end": 193,
       "labels": [
       ]
     }

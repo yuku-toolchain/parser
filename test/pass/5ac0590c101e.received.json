@@ -5,29 +5,179 @@
     "end": 94,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 93,
+        "expression": {
+          "type": "CallExpression",
+          "start": 0,
+          "end": 92,
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "start": 0,
+            "end": 57,
+            "expression": {
+              "type": "MemberExpression",
+              "start": 1,
+              "end": 56,
+              "object": {
+                "type": "ParenthesizedExpression",
+                "start": 1,
+                "end": 54,
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 2,
+                  "end": 53,
+                  "callee": {
+                    "type": "ParenthesizedExpression",
+                    "start": 2,
+                    "end": 18,
+                    "expression": {
+                      "type": "MemberExpression",
+                      "start": 3,
+                      "end": 17,
+                      "object": {
+                        "type": "ParenthesizedExpression",
+                        "start": 3,
+                        "end": 15,
+                        "expression": {
+                          "type": "CallExpression",
+                          "start": 4,
+                          "end": 14,
+                          "callee": {
+                            "type": "ParenthesizedExpression",
+                            "start": 4,
+                            "end": 9,
+                            "expression": {
+                              "type": "MemberExpression",
+                              "start": 5,
+                              "end": 8,
+                              "object": {
+                                "type": "Identifier",
+                                "start": 5,
+                                "end": 6,
+                                "name": "a"
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "start": 7,
+                                "end": 8,
+                                "name": "b"
+                              },
+                              "computed": false,
+                              "optional": false
+                            }
+                          },
+                          "arguments": [
+                            {
+                              "type": "Literal",
+                              "start": 10,
+                              "end": 13,
+                              "value": "c",
+                              "raw": "\"c\""
+                            }
+                          ],
+                          "optional": false
+                        }
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 16,
+                        "end": 17,
+                        "name": "d"
+                      },
+                      "computed": false,
+                      "optional": false
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Literal",
+                      "start": 19,
+                      "end": 22,
+                      "value": "e",
+                      "raw": "\"e\""
+                    },
+                    {
+                      "type": "FunctionExpression",
+                      "start": 24,
+                      "end": 52,
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [
+                        {
+                          "type": "Identifier",
+                          "start": 34,
+                          "end": 35,
+                          "name": "f"
+                        }
+                      ],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 37,
+                        "end": 52,
+                        "body": [
+                        ]
+                      },
+                      "expression": false
+                    }
+                  ],
+                  "optional": false
+                }
+              },
+              "property": {
+                "type": "Identifier",
+                "start": 55,
+                "end": 56,
+                "name": "g"
+              },
+              "computed": false,
+              "optional": false
+            }
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "start": 58,
+              "end": 61,
+              "value": "h",
+              "raw": "\"h\""
+            },
+            {
+              "type": "FunctionExpression",
+              "start": 63,
+              "end": 91,
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 73,
+                  "end": 74,
+                  "name": "i"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 76,
+                "end": 91,
+                "body": [
+                ]
+              },
+              "expression": false
+            }
+          ],
+          "optional": false
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 6,
-      "end": 7,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Function declaration requires a name",
-      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
-      "start": 33,
-      "end": 34,
-      "labels": [
-      ]
-    },
     {
       "severity": "error",
       "message": "Unexpected token 'return'",
@@ -39,37 +189,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 51,
-      "end": 52,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Function declaration requires a name",
-      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
-      "start": 72,
-      "end": 73,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token 'return'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 80,
       "end": 86,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 90,
-      "end": 91,
       "labels": [
       ]
     }

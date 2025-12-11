@@ -8,13 +8,13 @@
       {
         "type": "VariableDeclaration",
         "start": 0,
-        "end": 21,
+        "end": 66,
         "kind": "var",
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 4,
-            "end": 21,
+            "end": 65,
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -24,33 +24,146 @@
             "init": {
               "type": "BinaryExpression",
               "start": 8,
-              "end": 21,
+              "end": 65,
               "left": {
                 "type": "BinaryExpression",
                 "start": 8,
-                "end": 17,
+                "end": 59,
                 "left": {
-                  "type": "Literal",
+                  "type": "BinaryExpression",
                   "start": 8,
-                  "end": 11,
-                  "value": "b",
-                  "raw": "\"b\""
+                  "end": 53,
+                  "left": {
+                    "type": "BinaryExpression",
+                    "start": 8,
+                    "end": 47,
+                    "left": {
+                      "type": "BinaryExpression",
+                      "start": 8,
+                      "end": 41,
+                      "left": {
+                        "type": "BinaryExpression",
+                        "start": 8,
+                        "end": 35,
+                        "left": {
+                          "type": "BinaryExpression",
+                          "start": 8,
+                          "end": 29,
+                          "left": {
+                            "type": "BinaryExpression",
+                            "start": 8,
+                            "end": 23,
+                            "left": {
+                              "type": "BinaryExpression",
+                              "start": 8,
+                              "end": 17,
+                              "left": {
+                                "type": "Literal",
+                                "start": 8,
+                                "end": 11,
+                                "value": "b",
+                                "raw": "\"b\""
+                              },
+                              "operator": "+",
+                              "right": {
+                                "type": "Literal",
+                                "start": 14,
+                                "end": 17,
+                                "value": "c",
+                                "raw": "\"c\""
+                              }
+                            },
+                            "operator": "+",
+                            "right": {
+                              "type": "CallExpression",
+                              "start": 20,
+                              "end": 23,
+                              "callee": {
+                                "type": "Identifier",
+                                "start": 20,
+                                "end": 21,
+                                "name": "d"
+                              },
+                              "arguments": [
+                              ],
+                              "optional": false
+                            }
+                          },
+                          "operator": "+",
+                          "right": {
+                            "type": "Literal",
+                            "start": 26,
+                            "end": 29,
+                            "value": "e",
+                            "raw": "\"e\""
+                          }
+                        },
+                        "operator": "+",
+                        "right": {
+                          "type": "Literal",
+                          "start": 32,
+                          "end": 35,
+                          "value": "b",
+                          "raw": "\"b\""
+                        }
+                      },
+                      "operator": "+",
+                      "right": {
+                        "type": "CallExpression",
+                        "start": 38,
+                        "end": 41,
+                        "callee": {
+                          "type": "Identifier",
+                          "start": 38,
+                          "end": 39,
+                          "name": "f"
+                        },
+                        "arguments": [
+                        ],
+                        "optional": false
+                      }
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "Literal",
+                      "start": 44,
+                      "end": 47,
+                      "value": "d",
+                      "raw": "\"d\""
+                    }
+                  },
+                  "operator": "+",
+                  "right": {
+                    "type": "Literal",
+                    "start": 50,
+                    "end": 53,
+                    "value": "f",
+                    "raw": "\"f\""
+                  }
                 },
                 "operator": "+",
                 "right": {
                   "type": "Literal",
-                  "start": 14,
-                  "end": 17,
-                  "value": "c",
-                  "raw": "\"c\""
+                  "start": 56,
+                  "end": 59,
+                  "value": "g",
+                  "raw": "\"g\""
                 }
               },
               "operator": "+",
               "right": {
-                "type": "Identifier",
-                "start": 20,
-                "end": 21,
-                "name": "d"
+                "type": "CallExpression",
+                "start": 62,
+                "end": 65,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 62,
+                  "end": 63,
+                  "name": "h"
+                },
+                "arguments": [
+                ],
+                "optional": false
               }
             }
           }
@@ -59,13 +172,13 @@
       {
         "type": "VariableDeclaration",
         "start": 67,
-        "end": 86,
+        "end": 99,
         "kind": "var",
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 71,
-            "end": 86,
+            "end": 98,
             "id": {
               "type": "Identifier",
               "start": 71,
@@ -75,33 +188,67 @@
             "init": {
               "type": "BinaryExpression",
               "start": 75,
-              "end": 86,
+              "end": 98,
               "left": {
                 "type": "BinaryExpression",
                 "start": 75,
-                "end": 82,
+                "end": 92,
                 "left": {
-                  "type": "Literal",
+                  "type": "BinaryExpression",
                   "start": 75,
-                  "end": 78,
-                  "value": "b",
-                  "raw": "\"b\""
+                  "end": 88,
+                  "left": {
+                    "type": "BinaryExpression",
+                    "start": 75,
+                    "end": 82,
+                    "left": {
+                      "type": "Literal",
+                      "start": 75,
+                      "end": 78,
+                      "value": "b",
+                      "raw": "\"b\""
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "Literal",
+                      "start": 81,
+                      "end": 82,
+                      "value": 1,
+                      "raw": "1"
+                    }
+                  },
+                  "operator": "+",
+                  "right": {
+                    "type": "CallExpression",
+                    "start": 85,
+                    "end": 88,
+                    "callee": {
+                      "type": "Identifier",
+                      "start": 85,
+                      "end": 86,
+                      "name": "d"
+                    },
+                    "arguments": [
+                    ],
+                    "optional": false
+                  }
                 },
                 "operator": "+",
                 "right": {
                   "type": "Literal",
-                  "start": 81,
-                  "end": 82,
-                  "value": 1,
-                  "raw": "1"
+                  "start": 91,
+                  "end": 92,
+                  "value": 2,
+                  "raw": "2"
                 }
               },
               "operator": "+",
               "right": {
-                "type": "Identifier",
-                "start": 85,
-                "end": 86,
-                "name": "d"
+                "type": "Literal",
+                "start": 95,
+                "end": 98,
+                "value": "j",
+                "raw": "\"j\""
               }
             }
           }
@@ -110,13 +257,13 @@
       {
         "type": "VariableDeclaration",
         "start": 100,
-        "end": 113,
+        "end": 126,
         "kind": "var",
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 104,
-            "end": 113,
+            "end": 125,
             "id": {
               "type": "Identifier",
               "start": 104,
@@ -126,20 +273,54 @@
             "init": {
               "type": "BinaryExpression",
               "start": 108,
-              "end": 113,
+              "end": 125,
               "left": {
-                "type": "Literal",
+                "type": "BinaryExpression",
                 "start": 108,
-                "end": 109,
-                "value": 3,
-                "raw": "3"
+                "end": 119,
+                "left": {
+                  "type": "BinaryExpression",
+                  "start": 108,
+                  "end": 115,
+                  "left": {
+                    "type": "Literal",
+                    "start": 108,
+                    "end": 109,
+                    "value": 3,
+                    "raw": "3"
+                  },
+                  "operator": "+",
+                  "right": {
+                    "type": "CallExpression",
+                    "start": 112,
+                    "end": 115,
+                    "callee": {
+                      "type": "Identifier",
+                      "start": 112,
+                      "end": 113,
+                      "name": "d"
+                    },
+                    "arguments": [
+                    ],
+                    "optional": false
+                  }
+                },
+                "operator": "+",
+                "right": {
+                  "type": "Literal",
+                  "start": 118,
+                  "end": 119,
+                  "value": 4,
+                  "raw": "4"
+                }
               },
               "operator": "+",
               "right": {
-                "type": "Identifier",
-                "start": 112,
-                "end": 113,
-                "name": "d"
+                "type": "Literal",
+                "start": 122,
+                "end": 125,
+                "value": "j",
+                "raw": "\"j\""
               }
             }
           }
@@ -148,13 +329,13 @@
       {
         "type": "VariableDeclaration",
         "start": 182,
-        "end": 195,
+        "end": 212,
         "kind": "var",
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 186,
-            "end": 195,
+            "end": 211,
             "id": {
               "type": "Identifier",
               "start": 186,
@@ -164,20 +345,67 @@
             "init": {
               "type": "BinaryExpression",
               "start": 190,
-              "end": 195,
+              "end": 211,
               "left": {
-                "type": "Literal",
+                "type": "BinaryExpression",
                 "start": 190,
-                "end": 191,
-                "value": 5,
-                "raw": "5"
+                "end": 205,
+                "left": {
+                  "type": "BinaryExpression",
+                  "start": 190,
+                  "end": 201,
+                  "left": {
+                    "type": "BinaryExpression",
+                    "start": 190,
+                    "end": 197,
+                    "left": {
+                      "type": "Literal",
+                      "start": 190,
+                      "end": 191,
+                      "value": 5,
+                      "raw": "5"
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "CallExpression",
+                      "start": 194,
+                      "end": 197,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 194,
+                        "end": 195,
+                        "name": "d"
+                      },
+                      "arguments": [
+                      ],
+                      "optional": false
+                    }
+                  },
+                  "operator": "+",
+                  "right": {
+                    "type": "Literal",
+                    "start": 200,
+                    "end": 201,
+                    "value": 6,
+                    "raw": "6"
+                  }
+                },
+                "operator": "+",
+                "right": {
+                  "type": "Literal",
+                  "start": 204,
+                  "end": 205,
+                  "value": 7,
+                  "raw": "7"
+                }
               },
               "operator": "+",
               "right": {
-                "type": "Identifier",
-                "start": 194,
-                "end": 195,
-                "name": "d"
+                "type": "Literal",
+                "start": 208,
+                "end": 211,
+                "value": "j",
+                "raw": "\"j\""
               }
             }
           }
@@ -186,13 +414,13 @@
       {
         "type": "VariableDeclaration",
         "start": 214,
-        "end": 227,
+        "end": 251,
         "kind": "var",
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 218,
-            "end": 227,
+            "end": 250,
             "id": {
               "type": "Identifier",
               "start": 218,
@@ -202,20 +430,80 @@
             "init": {
               "type": "BinaryExpression",
               "start": 222,
-              "end": 227,
+              "end": 250,
               "left": {
-                "type": "Literal",
+                "type": "BinaryExpression",
                 "start": 222,
-                "end": 223,
-                "value": 8,
-                "raw": "8"
+                "end": 244,
+                "left": {
+                  "type": "BinaryExpression",
+                  "start": 222,
+                  "end": 239,
+                  "left": {
+                    "type": "BinaryExpression",
+                    "start": 222,
+                    "end": 233,
+                    "left": {
+                      "type": "BinaryExpression",
+                      "start": 222,
+                      "end": 229,
+                      "left": {
+                        "type": "Literal",
+                        "start": 222,
+                        "end": 223,
+                        "value": 8,
+                        "raw": "8"
+                      },
+                      "operator": "+",
+                      "right": {
+                        "type": "CallExpression",
+                        "start": 226,
+                        "end": 229,
+                        "callee": {
+                          "type": "Identifier",
+                          "start": 226,
+                          "end": 227,
+                          "name": "d"
+                        },
+                        "arguments": [
+                        ],
+                        "optional": false
+                      }
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "Literal",
+                      "start": 232,
+                      "end": 233,
+                      "value": 9,
+                      "raw": "9"
+                    }
+                  },
+                  "operator": "+",
+                  "right": {
+                    "type": "Literal",
+                    "start": 236,
+                    "end": 239,
+                    "value": "n",
+                    "raw": "\"n\""
+                  }
+                },
+                "operator": "+",
+                "right": {
+                  "type": "Literal",
+                  "start": 242,
+                  "end": 244,
+                  "value": 10,
+                  "raw": "10"
+                }
               },
               "operator": "+",
               "right": {
-                "type": "Identifier",
-                "start": 226,
-                "end": 227,
-                "name": "d"
+                "type": "Literal",
+                "start": 247,
+                "end": 250,
+                "value": "j",
+                "raw": "\"j\""
               }
             }
           }
@@ -232,50 +520,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
-      "start": 21,
-      "end": 23,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
-      "start": 86,
-      "end": 88,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
-      "start": 113,
-      "end": 115,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
-      "start": 195,
-      "end": 197,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
-      "start": 227,
-      "end": 229,
-      "labels": [
-      ]
-    }
   ]
 }

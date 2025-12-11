@@ -37,6 +37,48 @@
         ]
       },
       {
+        "type": "ExpressionStatement",
+        "start": 14,
+        "end": 25,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 14,
+          "end": 24,
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "start": 14,
+            "end": 18,
+            "object": {
+              "type": "Identifier",
+              "start": 14,
+              "end": 15,
+              "name": "a"
+            },
+            "property": {
+              "type": "Identifier",
+              "start": 16,
+              "end": 18,
+              "name": "你好"
+            },
+            "computed": false,
+            "optional": false
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "start": 21,
+            "end": 24,
+            "expression": {
+              "type": "Literal",
+              "start": 22,
+              "end": 23,
+              "value": 1,
+              "raw": "1"
+            }
+          }
+        }
+      },
+      {
         "type": "VariableDeclaration",
         "start": 26,
         "end": 40,
@@ -103,14 +145,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 15,
-      "end": 15,
-      "labels": [
-      ]
-    }
   ]
 }

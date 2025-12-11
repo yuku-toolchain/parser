@@ -24,6 +24,38 @@
           "start": 14,
           "end": 28,
           "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 16,
+              "end": 26,
+              "expression": {
+                "type": "CallExpression",
+                "start": 16,
+                "end": 25,
+                "callee": {
+                  "type": "MemberExpression",
+                  "start": 16,
+                  "end": 23,
+                  "object": {
+                    "type": "Identifier",
+                    "start": 16,
+                    "end": 17,
+                    "name": "b"
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "start": 18,
+                    "end": 23,
+                    "name": "yield"
+                  },
+                  "computed": false,
+                  "optional": false
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            }
           ]
         },
         "expression": false
@@ -33,14 +65,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 17,
-      "end": 17,
-      "labels": [
-      ]
-    }
   ]
 }

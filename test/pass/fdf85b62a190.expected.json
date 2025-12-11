@@ -59,6 +59,7 @@
                                 "start": 39,
                                 "end": 40
                               },
+                              "optional": false,
                               "computed": false,
                               "start": 33,
                               "end": 40

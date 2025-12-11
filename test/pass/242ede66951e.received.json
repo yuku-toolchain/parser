@@ -5,6 +5,68 @@
     "end": 70,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 17,
+        "end": 47,
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "start": 17,
+          "end": 46,
+          "expression": {
+            "type": "CallExpression",
+            "start": 18,
+            "end": 45,
+            "callee": {
+              "type": "FunctionExpression",
+              "start": 18,
+              "end": 43,
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 30,
+                "end": 43,
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 34,
+                    "end": 41,
+                    "expression": {
+                      "type": "CallExpression",
+                      "start": 34,
+                      "end": 40,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 34,
+                        "end": 35,
+                        "name": "a"
+                      },
+                      "arguments": [
+                        {
+                          "type": "Literal",
+                          "start": 36,
+                          "end": 39,
+                          "value": "b",
+                          "raw": "'b'"
+                        }
+                      ],
+                      "optional": false
+                    }
+                  }
+                ]
+              },
+              "expression": false
+            },
+            "arguments": [
+            ],
+            "optional": false
+          }
+        }
+      }
     ]
   },
   "comments": [
@@ -16,24 +78,6 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 35,
-      "end": 35,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 43,
-      "end": 44,
-      "labels": [
-      ]
-    },
     {
       "severity": "error",
       "message": "Unexpected token 'try'",

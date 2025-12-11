@@ -5,6 +5,32 @@
     "end": 87,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 77,
+        "end": 84,
+        "expression": {
+          "type": "CallExpression",
+          "start": 77,
+          "end": 83,
+          "callee": {
+            "type": "Identifier",
+            "start": 77,
+            "end": 78,
+            "name": "b"
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "start": 79,
+              "end": 82,
+              "value": "d",
+              "raw": "\"d\""
+            }
+          ],
+          "optional": false
+        }
+      }
     ]
   },
   "comments": [
@@ -40,15 +66,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 69,
       "end": 70,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 78,
-      "end": 78,
       "labels": [
       ]
     },

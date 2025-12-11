@@ -118,6 +118,7 @@
                     "end": 99
                   }
                 ],
+                "optional": false,
                 "start": 93,
                 "end": 100
               },

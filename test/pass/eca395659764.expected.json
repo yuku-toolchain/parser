@@ -18,6 +18,7 @@
             "start": 7,
             "end": 9
           },
+          "optional": false,
           "computed": false,
           "start": 5,
           "end": 9

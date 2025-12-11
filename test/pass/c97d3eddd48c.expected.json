@@ -83,6 +83,7 @@
                 "end": 31
               }
             ],
+            "optional": false,
             "start": 28,
             "end": 32
           },

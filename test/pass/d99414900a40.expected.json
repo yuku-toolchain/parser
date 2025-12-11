@@ -50,6 +50,7 @@
               "end": 26
             },
             "arguments": [],
+            "optional": false,
             "start": 2,
             "end": 28
           },

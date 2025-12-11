@@ -13,6 +13,7 @@
             "end": 7
           },
           "arguments": [],
+          "optional": false,
           "start": 4,
           "end": 9
         },

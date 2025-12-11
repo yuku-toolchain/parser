@@ -366,6 +366,12 @@ pub const Token = struct {
             return self.type.precedence();
         }
 
-        return 0; // can't be infix
+        // member access, call, and tagged template expressions (precedence 17)
+        return switch (self.type) {
+            .dot, .optional_chaining, .left_bracket, .left_paren => 17,
+            // tagged template: only when no line terminator before the template
+            .template_head, .no_substitution_template => if (!self.has_line_terminator_before) 17 else 0,
+            else => 0, // can't be infix
+        };
     }
 };

@@ -33,7 +33,7 @@
             {
               "type": "VariableDeclaration",
               "start": 30,
-              "end": 44,
+              "end": 57,
               "kind": "var",
               "declarations": [
                 {
@@ -62,14 +62,50 @@
                 {
                   "type": "VariableDeclarator",
                   "start": 43,
-                  "end": 44,
+                  "end": 56,
                   "id": {
                     "type": "Identifier",
                     "start": 43,
                     "end": 44,
                     "name": "e"
                   },
-                  "init": null
+                  "init": {
+                    "type": "ParenthesizedExpression",
+                    "start": 47,
+                    "end": 56,
+                    "expression": {
+                      "type": "CallExpression",
+                      "start": 48,
+                      "end": 55,
+                      "callee": {
+                        "type": "ParenthesizedExpression",
+                        "start": 48,
+                        "end": 53,
+                        "expression": {
+                          "type": "MemberExpression",
+                          "start": 49,
+                          "end": 52,
+                          "object": {
+                            "type": "Identifier",
+                            "start": 49,
+                            "end": 50,
+                            "name": "b"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 51,
+                            "end": 52,
+                            "name": "f"
+                          },
+                          "computed": false,
+                          "optional": false
+                        }
+                      },
+                      "arguments": [
+                      ],
+                      "optional": false
+                    }
+                  }
                 }
               ]
             }
@@ -97,24 +133,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 25,
       "end": 28,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 50,
-      "end": 51,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 50,
-      "end": 51,
       "labels": [
       ]
     },

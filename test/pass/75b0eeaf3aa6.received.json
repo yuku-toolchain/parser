@@ -24,6 +24,44 @@
           "start": 13,
           "end": 53,
           "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 38,
+              "end": 42,
+              "expression": {
+                "type": "CallExpression",
+                "start": 38,
+                "end": 41,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 38,
+                  "end": 39,
+                  "name": "c"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 47,
+              "end": 51,
+              "expression": {
+                "type": "CallExpression",
+                "start": 47,
+                "end": 50,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 47,
+                  "end": 48,
+                  "name": "d"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            }
           ]
         },
         "expression": false
@@ -47,6 +85,44 @@
           "start": 67,
           "end": 164,
           "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 149,
+              "end": 153,
+              "expression": {
+                "type": "CallExpression",
+                "start": 149,
+                "end": 152,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 149,
+                  "end": 150,
+                  "name": "g"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 158,
+              "end": 162,
+              "expression": {
+                "type": "CallExpression",
+                "start": 158,
+                "end": 161,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 158,
+                  "end": 159,
+                  "name": "h"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            }
           ]
         },
         "expression": false
@@ -71,24 +147,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 26,
       "end": 32,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 39,
-      "end": 39,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 48,
-      "end": 48,
       "labels": [
       ]
     },
@@ -161,24 +219,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 137,
       "end": 143,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 150,
-      "end": 150,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 159,
-      "end": 159,
       "labels": [
       ]
     }

@@ -64,6 +64,49 @@
             }
           }
         }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 61,
+        "end": 70,
+        "expression": {
+          "type": "CallExpression",
+          "start": 61,
+          "end": 69,
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "start": 61,
+            "end": 66,
+            "expression": {
+              "type": "MemberExpression",
+              "start": 62,
+              "end": 65,
+              "object": {
+                "type": "Identifier",
+                "start": 62,
+                "end": 63,
+                "name": "b"
+              },
+              "property": {
+                "type": "Identifier",
+                "start": 64,
+                "end": 65,
+                "name": "c"
+              },
+              "computed": false,
+              "optional": false
+            }
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start": 67,
+              "end": 68,
+              "name": "a"
+            }
+          ],
+          "optional": false
+        }
       }
     ]
   },
@@ -94,15 +137,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 36,
       "end": 38,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 63,
-      "end": 64,
       "labels": [
       ]
     },

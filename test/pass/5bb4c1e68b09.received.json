@@ -5,6 +5,69 @@
     "end": 37,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 22,
+        "end": 36,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 22,
+          "end": 36,
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "start": 22,
+            "end": 25,
+            "object": {
+              "type": "Identifier",
+              "start": 22,
+              "end": 23,
+              "name": "a"
+            },
+            "property": {
+              "type": "Identifier",
+              "start": 24,
+              "end": 25,
+              "name": "b"
+            },
+            "computed": false,
+            "optional": false
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "start": 28,
+            "end": 36,
+            "expression": {
+              "type": "SequenceExpression",
+              "start": 29,
+              "end": 35,
+              "expressions": [
+                {
+                  "type": "CallExpression",
+                  "start": 29,
+                  "end": 32,
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 29,
+                    "end": 30,
+                    "name": "c"
+                  },
+                  "arguments": [
+                  ],
+                  "optional": false
+                },
+                {
+                  "type": "Literal",
+                  "start": 34,
+                  "end": 35,
+                  "value": 1,
+                  "raw": "1"
+                }
+              ]
+            }
+          }
+        }
+      }
     ]
   },
   "comments": [
@@ -16,14 +79,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 23,
-      "end": 23,
-      "labels": [
-      ]
-    }
   ]
 }

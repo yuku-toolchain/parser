@@ -94,6 +94,7 @@
               "end": 47
             },
             "arguments": [],
+            "optional": false,
             "start": 1,
             "end": 49
           },

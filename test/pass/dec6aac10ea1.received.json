@@ -25,6 +25,25 @@
           "end": 107,
           "body": [
             {
+              "type": "ExpressionStatement",
+              "start": 70,
+              "end": 74,
+              "expression": {
+                "type": "CallExpression",
+                "start": 70,
+                "end": 73,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 70,
+                  "end": 71,
+                  "name": "c"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
               "type": "VariableDeclaration",
               "start": 87,
               "end": 97,
@@ -59,6 +78,25 @@
         "start": 116,
         "end": 144,
         "body": [
+          {
+            "type": "ExpressionStatement",
+            "start": 130,
+            "end": 134,
+            "expression": {
+              "type": "CallExpression",
+              "start": 130,
+              "end": 133,
+              "callee": {
+                "type": "Identifier",
+                "start": 130,
+                "end": 131,
+                "name": "c"
+              },
+              "arguments": [
+              ],
+              "optional": false
+            }
+          }
         ]
       }
     ]
@@ -72,24 +110,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 19,
       "end": 24,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 71,
-      "end": 71,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 131,
-      "end": 131,
       "labels": [
       ]
     },

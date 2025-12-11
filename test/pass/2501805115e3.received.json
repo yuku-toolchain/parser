@@ -54,6 +54,86 @@
                   }
                 }
               ]
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 33,
+              "end": 58,
+              "expression": {
+                "type": "AssignmentExpression",
+                "start": 33,
+                "end": 57,
+                "operator": "=",
+                "left": {
+                  "type": "MemberExpression",
+                  "start": 33,
+                  "end": 44,
+                  "object": {
+                    "type": "Identifier",
+                    "start": 33,
+                    "end": 34,
+                    "name": "b"
+                  },
+                  "property": {
+                    "type": "UnaryExpression",
+                    "start": 35,
+                    "end": 43,
+                    "operator": "void",
+                    "prefix": true,
+                    "argument": {
+                      "type": "ParenthesizedExpression",
+                      "start": 40,
+                      "end": 43,
+                      "expression": {
+                        "type": "Literal",
+                        "start": 41,
+                        "end": 42,
+                        "value": 1,
+                        "raw": "1"
+                      }
+                    }
+                  },
+                  "computed": true,
+                  "optional": false
+                },
+                "right": {
+                  "type": "ParenthesizedExpression",
+                  "start": 47,
+                  "end": 57,
+                  "expression": {
+                    "type": "SequenceExpression",
+                    "start": 48,
+                    "end": 56,
+                    "expressions": [
+                      {
+                        "type": "ParenthesizedExpression",
+                        "start": 48,
+                        "end": 53,
+                        "expression": {
+                          "type": "CallExpression",
+                          "start": 49,
+                          "end": 52,
+                          "callee": {
+                            "type": "Identifier",
+                            "start": 49,
+                            "end": 50,
+                            "name": "c"
+                          },
+                          "arguments": [
+                          ],
+                          "optional": false
+                        }
+                      },
+                      {
+                        "type": "Identifier",
+                        "start": 55,
+                        "end": 56,
+                        "name": "d"
+                      }
+                    ]
+                  }
+                }
+              }
             }
           ]
         },
@@ -64,14 +144,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 34,
-      "end": 34,
-      "labels": [
-      ]
-    }
   ]
 }

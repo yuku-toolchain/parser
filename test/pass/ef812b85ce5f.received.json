@@ -36,29 +36,75 @@
             "init": null
           }
         ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 19,
+        "end": 32,
+        "expression": {
+          "type": "CallExpression",
+          "start": 19,
+          "end": 31,
+          "callee": {
+            "type": "MemberExpression",
+            "start": 19,
+            "end": 29,
+            "object": {
+              "type": "Identifier",
+              "start": 19,
+              "end": 27,
+              "name": "Infinity"
+            },
+            "property": {
+              "type": "Identifier",
+              "start": 28,
+              "end": 29,
+              "name": "a"
+            },
+            "computed": false,
+            "optional": false
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 33,
+        "end": 41,
+        "expression": {
+          "type": "CallExpression",
+          "start": 33,
+          "end": 40,
+          "callee": {
+            "type": "MemberExpression",
+            "start": 33,
+            "end": 38,
+            "object": {
+              "type": "Identifier",
+              "start": 33,
+              "end": 36,
+              "name": "NaN"
+            },
+            "property": {
+              "type": "Identifier",
+              "start": 37,
+              "end": 38,
+              "name": "a"
+            },
+            "computed": false,
+            "optional": false
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 27,
-      "end": 27,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 36,
-      "end": 36,
-      "labels": [
-      ]
-    }
   ]
 }

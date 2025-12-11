@@ -20,6 +20,7 @@
               "start": 6,
               "end": 7
             },
+            "optional": false,
             "computed": true,
             "start": 4,
             "end": 8

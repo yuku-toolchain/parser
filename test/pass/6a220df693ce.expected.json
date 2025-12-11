@@ -34,6 +34,7 @@
                 "end": 13
               }
             ],
+            "optional": false,
             "start": 5,
             "end": 14
           },
@@ -44,6 +45,7 @@
             "start": 15,
             "end": 16
           },
+          "optional": false,
           "computed": true,
           "start": 5,
           "end": 17

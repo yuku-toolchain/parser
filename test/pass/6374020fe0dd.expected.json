@@ -96,6 +96,7 @@
               "end": 26
             }
           ],
+          "optional": false,
           "start": 18,
           "end": 27
         },

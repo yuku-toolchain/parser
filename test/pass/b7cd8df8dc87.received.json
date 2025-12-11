@@ -158,6 +158,25 @@
         }
       },
       {
+        "type": "ExpressionStatement",
+        "start": 222,
+        "end": 226,
+        "expression": {
+          "type": "CallExpression",
+          "start": 222,
+          "end": 225,
+          "callee": {
+            "type": "Identifier",
+            "start": 222,
+            "end": 223,
+            "name": "a"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      },
+      {
         "type": "VariableDeclaration",
         "start": 240,
         "end": 246,
@@ -215,15 +234,6 @@
       "help": "Try inserting a semicolon here",
       "start": 187,
       "end": 187,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 223,
-      "end": 223,
       "labels": [
       ]
     },

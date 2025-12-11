@@ -58,6 +58,44 @@
                   "start": 36,
                   "end": 53,
                   "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 40,
+                      "end": 44,
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 40,
+                        "end": 43,
+                        "callee": {
+                          "type": "Identifier",
+                          "start": 40,
+                          "end": 41,
+                          "name": "b"
+                        },
+                        "arguments": [
+                        ],
+                        "optional": false
+                      }
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 47,
+                      "end": 51,
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 47,
+                        "end": 50,
+                        "callee": {
+                          "type": "Identifier",
+                          "start": 47,
+                          "end": 48,
+                          "name": "a"
+                        },
+                        "arguments": [
+                        ],
+                        "optional": false
+                      }
+                    }
                   ]
                 },
                 "expression": false
@@ -71,23 +109,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 41,
-      "end": 41,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 48,
-      "end": 48,
-      "labels": [
-      ]
-    }
   ]
 }

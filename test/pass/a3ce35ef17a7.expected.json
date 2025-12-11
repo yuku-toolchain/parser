@@ -16,6 +16,7 @@
                 "end": 5
               },
               "arguments": [],
+              "optional": false,
               "start": 4,
               "end": 7
             },
@@ -33,6 +34,7 @@
                 "end": 12
               },
               "arguments": [],
+              "optional": false,
               "start": 11,
               "end": 14
             },

@@ -20,6 +20,7 @@
               "start": 2,
               "end": 3
             },
+            "optional": false,
             "computed": false,
             "start": 0,
             "end": 3
@@ -30,6 +31,7 @@
             "start": 4,
             "end": 5
           },
+          "optional": false,
           "computed": false,
           "start": 0,
           "end": 5

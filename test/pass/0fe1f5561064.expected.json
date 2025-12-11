@@ -22,6 +22,7 @@
               "start": 2,
               "end": 5
             },
+            "optional": false,
             "computed": true,
             "start": 0,
             "end": 6

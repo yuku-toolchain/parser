@@ -5,6 +5,94 @@
     "end": 93,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 30,
+        "end": 41,
+        "expression": {
+          "type": "CallExpression",
+          "start": 30,
+          "end": 40,
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "start": 30,
+            "end": 35,
+            "expression": {
+              "type": "MemberExpression",
+              "start": 31,
+              "end": 34,
+              "object": {
+                "type": "Identifier",
+                "start": 31,
+                "end": 32,
+                "name": "c"
+              },
+              "property": {
+                "type": "Identifier",
+                "start": 33,
+                "end": 34,
+                "name": "d"
+              },
+              "computed": false,
+              "optional": false
+            }
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "start": 36,
+              "end": 39,
+              "value": "a",
+              "raw": "\"a\""
+            }
+          ],
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 79,
+        "end": 90,
+        "expression": {
+          "type": "CallExpression",
+          "start": 79,
+          "end": 89,
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "start": 79,
+            "end": 84,
+            "expression": {
+              "type": "MemberExpression",
+              "start": 80,
+              "end": 83,
+              "object": {
+                "type": "Identifier",
+                "start": 80,
+                "end": 81,
+                "name": "c"
+              },
+              "property": {
+                "type": "Identifier",
+                "start": 82,
+                "end": 83,
+                "name": "d"
+              },
+              "computed": false,
+              "optional": false
+            }
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "start": 85,
+              "end": 88,
+              "value": "a",
+              "raw": "\"a\""
+            }
+          ],
+          "optional": false
+        }
+      }
     ]
   },
   "comments": [
@@ -25,15 +113,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 14,
       "end": 16,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 32,
-      "end": 33,
       "labels": [
       ]
     },
@@ -61,15 +140,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 61,
       "end": 63,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 81,
-      "end": 82,
       "labels": [
       ]
     },

@@ -38,6 +38,7 @@
               "end": 12
             }
           ],
+          "optional": false,
           "start": 7,
           "end": 13
         },

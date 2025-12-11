@@ -55,6 +55,25 @@
                 "start": 36,
                 "end": 56,
                 "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 46,
+                    "end": 50,
+                    "expression": {
+                      "type": "CallExpression",
+                      "start": 46,
+                      "end": 49,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 46,
+                        "end": 47,
+                        "name": "e"
+                      },
+                      "arguments": [
+                      ],
+                      "optional": false
+                    }
+                  }
                 ]
               },
               "expression": false
@@ -68,15 +87,6 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 47,
-      "end": 47,
-      "labels": [
-      ]
-    },
     {
       "severity": "error",
       "message": "Unexpected token 'return'",

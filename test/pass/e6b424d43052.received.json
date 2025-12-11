@@ -33,7 +33,7 @@
             {
               "type": "VariableDeclaration",
               "start": 32,
-              "end": 48,
+              "end": 53,
               "kind": "var",
               "declarations": [
                 {
@@ -57,7 +57,7 @@
                 {
                   "type": "VariableDeclarator",
                   "start": 43,
-                  "end": 48,
+                  "end": 52,
                   "id": {
                     "type": "Identifier",
                     "start": 43,
@@ -65,10 +65,31 @@
                     "name": "e"
                   },
                   "init": {
-                    "type": "Identifier",
+                    "type": "CallExpression",
                     "start": 47,
-                    "end": 48,
-                    "name": "b"
+                    "end": 52,
+                    "callee": {
+                      "type": "MemberExpression",
+                      "start": 47,
+                      "end": 50,
+                      "object": {
+                        "type": "Identifier",
+                        "start": 47,
+                        "end": 48,
+                        "name": "b"
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 49,
+                        "end": 50,
+                        "name": "f"
+                      },
+                      "computed": false,
+                      "optional": false
+                    },
+                    "arguments": [
+                    ],
+                    "optional": false
                   }
                 }
               ]
@@ -97,15 +118,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 27,
       "end": 30,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 48,
-      "end": 49,
       "labels": [
       ]
     },

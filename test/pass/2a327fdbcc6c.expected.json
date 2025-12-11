@@ -57,6 +57,7 @@
               "end": 20
             }
           ],
+          "optional": false,
           "start": 0,
           "end": 21
         },

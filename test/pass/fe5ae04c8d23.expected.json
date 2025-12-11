@@ -53,6 +53,7 @@
                   "end": 61
                 },
                 "arguments": [],
+                "optional": false,
                 "start": 60,
                 "end": 63
               },

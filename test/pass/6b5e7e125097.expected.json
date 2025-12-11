@@ -21,6 +21,7 @@
               "start": 42,
               "end": 43
             },
+            "optional": false,
             "computed": false,
             "start": 40,
             "end": 43

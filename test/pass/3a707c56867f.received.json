@@ -5,6 +5,63 @@
     "end": 65,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 28,
+        "end": 32,
+        "expression": {
+          "type": "CallExpression",
+          "start": 28,
+          "end": 31,
+          "callee": {
+            "type": "Identifier",
+            "start": 28,
+            "end": 29,
+            "name": "c"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 50,
+        "end": 54,
+        "expression": {
+          "type": "CallExpression",
+          "start": 50,
+          "end": 53,
+          "callee": {
+            "type": "Identifier",
+            "start": 50,
+            "end": 51,
+            "name": "e"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 59,
+        "end": 63,
+        "expression": {
+          "type": "CallExpression",
+          "start": 59,
+          "end": 62,
+          "callee": {
+            "type": "Identifier",
+            "start": 59,
+            "end": 60,
+            "name": "f"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      }
     ]
   },
   "comments": [
@@ -30,37 +87,10 @@
     },
     {
       "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 29,
-      "end": 29,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token 'break'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 37,
       "end": 42,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 51,
-      "end": 51,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 60,
-      "end": 60,
       "labels": [
       ]
     },

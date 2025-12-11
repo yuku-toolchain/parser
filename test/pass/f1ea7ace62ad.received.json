@@ -12,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 1,
-      "end": 1,
+      "message": "Expected ']' after computed property",
+      "help": "Computed member access must end with ']'.",
+      "start": 3,
+      "end": 4,
       "labels": [
       ]
     }

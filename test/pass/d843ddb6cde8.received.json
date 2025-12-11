@@ -5,6 +5,42 @@
     "end": 47,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 46,
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "start": 0,
+          "end": 46,
+          "expression": {
+            "type": "CallExpression",
+            "start": 1,
+            "end": 45,
+            "callee": {
+              "type": "FunctionExpression",
+              "start": 1,
+              "end": 43,
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 11,
+                "end": 43,
+                "body": [
+                ]
+              },
+              "expression": false
+            },
+            "arguments": [
+            ],
+            "optional": false
+          }
+        }
+      }
     ]
   },
   "comments": [
@@ -16,15 +52,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 15,
       "end": 21,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 43,
-      "end": 44,
       "labels": [
       ]
     }

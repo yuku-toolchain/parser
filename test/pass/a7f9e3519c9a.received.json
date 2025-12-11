@@ -5,6 +5,25 @@
     "end": 40,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 21,
+        "end": 25,
+        "expression": {
+          "type": "CallExpression",
+          "start": 21,
+          "end": 24,
+          "callee": {
+            "type": "Identifier",
+            "start": 21,
+            "end": 22,
+            "name": "c"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      }
     ]
   },
   "comments": [
@@ -16,15 +35,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 0,
       "end": 5,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 22,
-      "end": 22,
       "labels": [
       ]
     },

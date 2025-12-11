@@ -58,8 +58,8 @@
       "severity": "error",
       "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
       "help": "Try inserting a semicolon here",
-      "start": 75,
-      "end": 75,
+      "start": 77,
+      "end": 77,
       "labels": [
       ]
     },
@@ -85,8 +85,8 @@
       "severity": "error",
       "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
       "help": "Try inserting a semicolon here",
-      "start": 138,
-      "end": 138,
+      "start": 140,
+      "end": 140,
       "labels": [
       ]
     },
@@ -157,8 +157,8 @@
       "severity": "error",
       "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
       "help": "Try inserting a semicolon here",
-      "start": 301,
-      "end": 301,
+      "start": 303,
+      "end": 303,
       "labels": [
       ]
     },
@@ -184,8 +184,8 @@
       "severity": "error",
       "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
       "help": "Try inserting a semicolon here",
-      "start": 362,
-      "end": 362,
+      "start": 364,
+      "end": 364,
       "labels": [
       ]
     },

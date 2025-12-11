@@ -7,6 +7,37 @@
     "body": [
       {
         "type": "ExpressionStatement",
+        "start": 26,
+        "end": 34,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 26,
+          "end": 33,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 26,
+            "end": 27,
+            "name": "d"
+          },
+          "right": {
+            "type": "CallExpression",
+            "start": 30,
+            "end": 33,
+            "callee": {
+              "type": "Identifier",
+              "start": 30,
+              "end": 31,
+              "name": "e"
+            },
+            "arguments": [
+            ],
+            "optional": false
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
         "start": 46,
         "end": 52,
         "expression": {
@@ -39,15 +70,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 0,
       "end": 2,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 31,
-      "end": 31,
       "labels": [
       ]
     },

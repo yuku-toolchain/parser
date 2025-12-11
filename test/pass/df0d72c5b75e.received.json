@@ -12,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 1,
-      "end": 1,
+      "message": "Unexpected token '})} blah`' as property key",
+      "help": "Property keys must be identifiers, strings, numbers, or computed expressions [expr].",
+      "start": 35,
+      "end": 44,
       "labels": [
       ]
     }

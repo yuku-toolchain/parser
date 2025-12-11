@@ -34,6 +34,7 @@
                     "start": 18,
                     "end": 19
                   },
+                  "optional": false,
                   "computed": false,
                   "start": 16,
                   "end": 19
@@ -47,6 +48,7 @@
                     "end": 25
                   }
                 ],
+                "optional": false,
                 "start": 16,
                 "end": 26
               },

@@ -75,6 +75,7 @@
                               "end": 58
                             },
                             "arguments": [],
+                            "optional": false,
                             "start": 25,
                             "end": 60
                           },
@@ -99,6 +100,7 @@
               "end": 65
             },
             "arguments": [],
+            "optional": false,
             "start": 1,
             "end": 67
           },

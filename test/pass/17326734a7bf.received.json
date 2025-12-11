@@ -58,13 +58,13 @@
             {
               "type": "VariableDeclaration",
               "start": 83,
-              "end": 92,
+              "end": 97,
               "kind": "var",
               "declarations": [
                 {
                   "type": "VariableDeclarator",
                   "start": 87,
-                  "end": 92,
+                  "end": 96,
                   "id": {
                     "type": "Identifier",
                     "start": 87,
@@ -72,10 +72,36 @@
                     "name": "e"
                   },
                   "init": {
-                    "type": "Identifier",
+                    "type": "MemberExpression",
                     "start": 91,
-                    "end": 92,
-                    "name": "b"
+                    "end": 96,
+                    "object": {
+                      "type": "MemberExpression",
+                      "start": 91,
+                      "end": 94,
+                      "object": {
+                        "type": "Identifier",
+                        "start": 91,
+                        "end": 92,
+                        "name": "b"
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 93,
+                        "end": 94,
+                        "name": "f"
+                      },
+                      "computed": false,
+                      "optional": false
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "start": 95,
+                      "end": 96,
+                      "name": "e"
+                    },
+                    "computed": false,
+                    "optional": false
                   }
                 }
               ]
@@ -83,13 +109,13 @@
             {
               "type": "VariableDeclaration",
               "start": 100,
-              "end": 109,
+              "end": 114,
               "kind": "var",
               "declarations": [
                 {
                   "type": "VariableDeclarator",
                   "start": 104,
-                  "end": 109,
+                  "end": 113,
                   "id": {
                     "type": "Identifier",
                     "start": 104,
@@ -97,10 +123,36 @@
                     "name": "g"
                   },
                   "init": {
-                    "type": "Identifier",
+                    "type": "MemberExpression",
                     "start": 108,
-                    "end": 109,
-                    "name": "b"
+                    "end": 113,
+                    "object": {
+                      "type": "MemberExpression",
+                      "start": 108,
+                      "end": 111,
+                      "object": {
+                        "type": "Identifier",
+                        "start": 108,
+                        "end": 109,
+                        "name": "b"
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 110,
+                        "end": 111,
+                        "name": "f"
+                      },
+                      "computed": false,
+                      "optional": false
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "start": 112,
+                      "end": 113,
+                      "name": "g"
+                    },
+                    "computed": false,
+                    "optional": false
                   }
                 }
               ]
@@ -504,13 +556,13 @@
             {
               "type": "VariableDeclaration",
               "start": 549,
-              "end": 558,
+              "end": 563,
               "kind": "var",
               "declarations": [
                 {
                   "type": "VariableDeclarator",
                   "start": 553,
-                  "end": 558,
+                  "end": 562,
                   "id": {
                     "type": "Identifier",
                     "start": 553,
@@ -518,10 +570,36 @@
                     "name": "e"
                   },
                   "init": {
-                    "type": "Identifier",
+                    "type": "MemberExpression",
                     "start": 557,
-                    "end": 558,
-                    "name": "b"
+                    "end": 562,
+                    "object": {
+                      "type": "MemberExpression",
+                      "start": 557,
+                      "end": 560,
+                      "object": {
+                        "type": "Identifier",
+                        "start": 557,
+                        "end": 558,
+                        "name": "b"
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 559,
+                        "end": 560,
+                        "name": "f"
+                      },
+                      "computed": false,
+                      "optional": false
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "start": 561,
+                      "end": 562,
+                      "name": "e"
+                    },
+                    "computed": false,
+                    "optional": false
                   }
                 }
               ]
@@ -529,13 +607,13 @@
             {
               "type": "VariableDeclaration",
               "start": 566,
-              "end": 575,
+              "end": 580,
               "kind": "var",
               "declarations": [
                 {
                   "type": "VariableDeclarator",
                   "start": 570,
-                  "end": 575,
+                  "end": 579,
                   "id": {
                     "type": "Identifier",
                     "start": 570,
@@ -543,10 +621,36 @@
                     "name": "g"
                   },
                   "init": {
-                    "type": "Identifier",
+                    "type": "MemberExpression",
                     "start": 574,
-                    "end": 575,
-                    "name": "b"
+                    "end": 579,
+                    "object": {
+                      "type": "MemberExpression",
+                      "start": 574,
+                      "end": 577,
+                      "object": {
+                        "type": "Identifier",
+                        "start": 574,
+                        "end": 575,
+                        "name": "b"
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 576,
+                        "end": 577,
+                        "name": "f"
+                      },
+                      "computed": false,
+                      "optional": false
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "start": 578,
+                      "end": 579,
+                      "name": "g"
+                    },
+                    "computed": false,
+                    "optional": false
                   }
                 }
               ]
@@ -935,24 +1039,6 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 92,
-      "end": 93,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 109,
-      "end": 110,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token 'new'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 125,
@@ -1020,24 +1106,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 523,
       "end": 524,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 558,
-      "end": 559,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 575,
-      "end": 576,
       "labels": [
       ]
     },

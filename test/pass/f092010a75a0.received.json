@@ -12,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected ',' or '}' in object",
-      "help": "Add a comma between properties or close the object with '}'.",
-      "start": 6,
-      "end": 7,
+      "message": "Expected ',' or ')' in parenthesized expression",
+      "help": "Add a comma between elements or close with ')'.",
+      "start": 10,
+      "end": 11,
       "labels": [
       ]
     }

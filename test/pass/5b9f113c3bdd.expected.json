@@ -27,6 +27,7 @@
                   "end": 37
                 },
                 "arguments": [],
+                "optional": false,
                 "start": 36,
                 "end": 39
               },
@@ -91,6 +92,7 @@
                         "end": 325
                       },
                       "arguments": [],
+                      "optional": false,
                       "start": 324,
                       "end": 327
                     },
@@ -216,6 +218,7 @@
                         "end": 564
                       },
                       "arguments": [],
+                      "optional": false,
                       "start": 467,
                       "end": 566
                     },

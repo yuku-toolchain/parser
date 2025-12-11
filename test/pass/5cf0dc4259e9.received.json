@@ -39,6 +39,74 @@
       },
       {
         "type": "ExpressionStatement",
+        "start": 10,
+        "end": 28,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 10,
+          "end": 27,
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "start": 10,
+            "end": 13,
+            "object": {
+              "type": "Identifier",
+              "start": 10,
+              "end": 11,
+              "name": "a"
+            },
+            "property": {
+              "type": "Identifier",
+              "start": 12,
+              "end": 13,
+              "name": "c"
+            },
+            "computed": false,
+            "optional": false
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "start": 16,
+            "end": 27,
+            "expression": {
+              "type": "SequenceExpression",
+              "start": 17,
+              "end": 26,
+              "expressions": [
+                {
+                  "type": "AssignmentExpression",
+                  "start": 17,
+                  "end": 23,
+                  "operator": "=",
+                  "left": {
+                    "type": "Identifier",
+                    "start": 17,
+                    "end": 18,
+                    "name": "a"
+                  },
+                  "right": {
+                    "type": "ObjectExpression",
+                    "start": 21,
+                    "end": 23,
+                    "properties": [
+                    ]
+                  }
+                },
+                {
+                  "type": "Literal",
+                  "start": 25,
+                  "end": 26,
+                  "value": 1,
+                  "raw": "1"
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
         "start": 29,
         "end": 45,
         "expression": {
@@ -97,14 +165,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 11,
-      "end": 11,
-      "labels": [
-      ]
-    }
   ]
 }

@@ -23,8 +23,8 @@
       "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
-      "start": 34,
-      "end": 35,
+      "start": 38,
+      "end": 39,
       "labels": [
       ]
     }

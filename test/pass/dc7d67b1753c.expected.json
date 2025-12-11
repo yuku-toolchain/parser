@@ -43,6 +43,7 @@
                           "end": 21
                         }
                       ],
+                      "optional": false,
                       "start": 16,
                       "end": 22
                     },

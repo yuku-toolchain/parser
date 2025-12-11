@@ -1,6 +1,7 @@
 const ast = @import("../ast.zig");
 const Parser = @import("../parser.zig").Parser;
 const Error = @import("../parser.zig").Error;
+const std = @import("std");
 
 const array = @import("array.zig");
 const object = @import("object.zig");
@@ -41,6 +42,16 @@ fn parseInfix(parser: *Parser, precedence: u5, left: ast.NodeIndex) Error!?ast.N
 
     if (current.type.isAssignmentOperator()) {
         return parseAssignmentExpression(parser, precedence, left);
+    }
+
+    // member access, call, and tagged template expressions
+    switch (current.type) {
+        .dot => return parseStaticMemberExpression(parser, left, false),
+        .left_bracket => return parseComputedMemberExpression(parser, left, false),
+        .left_paren => return parseCallExpression(parser, left, false),
+        .template_head, .no_substitution_template => return parseTaggedTemplateExpression(parser, left),
+        .optional_chaining => return parseOptionalChain(parser, left),
+        else => {},
     }
 
     try parser.reportFmt(
@@ -319,8 +330,7 @@ pub fn isValidAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
     return switch (parser.getData(index)) {
         // SimpleAssignmentTarget
         .identifier_reference => true,
-        // TODO: add member expressions when implemented
-        // .member_expression, .computed_member_expression => true,
+        .member_expression => |m| !m.optional, // optional chaining is not a valid assignment target
 
         // AssignmentPattern (destructuring)
         .array_pattern, .object_pattern => true,
@@ -333,8 +343,7 @@ pub fn isValidAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
 pub fn isSimpleAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
     return switch (parser.getData(index)) {
         .identifier_reference => true,
-        // TODO: add member expressions when implemented
-        // .member_expression, .computed_member_expression => true,
+        .member_expression => |m| !m.optional, // optional chaining is not a valid assignment target
         else => false,
     };
 }
@@ -367,4 +376,210 @@ fn parseObjectExpression(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     return object.coverToExpression(parser, cover, needs_validation);
+}
+
+/// obj.prop or obj.#priv
+fn parseStaticMemberExpression(parser: *Parser, object_node: ast.NodeIndex, optional: bool) Error!?ast.NodeIndex {
+    try parser.advance(); // consume '.'
+    return parseMemberProperty(parser, object_node, optional);
+}
+
+/// property after '.' or '?.'
+fn parseMemberProperty(parser: *Parser, object_node: ast.NodeIndex, optional: bool) Error!?ast.NodeIndex {
+    const tok_type = parser.current_token.type;
+
+    const property = if (tok_type.isIdentifierLike())
+        try parseIdentifierName(parser)
+    else if (tok_type == .private_identifier)
+        try literals.parsePrivateIdentifier(parser)
+    else {
+        try parser.report(
+            parser.current_token.span,
+            "Expected property name after '.'",
+            .{ .help = "Use an identifier or private identifier (#name) for member access." },
+        );
+        return null;
+    };
+
+    const prop = property orelse return null;
+
+    return try parser.addNode(.{
+        .member_expression = .{
+            .object = object_node,
+            .property = prop,
+            .computed = false,
+            .optional = optional,
+        },
+    }, .{ .start = parser.getSpan(object_node).start, .end = parser.getSpan(prop).end });
+}
+
+fn parseIdentifierName(parser: *Parser) Error!ast.NodeIndex {
+    const tok = parser.current_token;
+    try parser.advance();
+    return try parser.addNode(.{
+        .identifier_name = .{
+            .name_start = tok.span.start,
+            .name_len = @intCast(tok.lexeme.len),
+        },
+    }, tok.span);
+}
+
+/// obj[expr]
+fn parseComputedMemberExpression(parser: *Parser, object_node: ast.NodeIndex, optional: bool) Error!?ast.NodeIndex {
+    try parser.advance(); // consume '['
+
+    const property = try parseExpression(parser, 0) orelse return null;
+
+    const end = parser.current_token.span.end; // ']' position
+    if (!try parser.expect(.right_bracket, "Expected ']' after computed property", "Computed member access must end with ']'.")) {
+        return null;
+    }
+
+    return try parser.addNode(.{
+        .member_expression = .{
+            .object = object_node,
+            .property = property,
+            .computed = true,
+            .optional = optional,
+        },
+    }, .{ .start = parser.getSpan(object_node).start, .end = end });
+}
+
+/// func(args)
+fn parseCallExpression(parser: *Parser, callee_node: ast.NodeIndex, optional: bool) Error!?ast.NodeIndex {
+    const start = parser.getSpan(callee_node).start;
+    try parser.advance(); // consume '('
+
+    const args = try parseArguments(parser) orelse return null;
+
+    const end = parser.current_token.span.end; // ')' position
+    if (!try parser.expect(.right_paren, "Expected ')' after function arguments", "Function calls must end with ')'. Check for missing commas or unclosed parentheses.")) {
+        return null;
+    }
+
+    return try parser.addNode(.{
+        .call_expression = .{
+            .callee = callee_node,
+            .arguments = args,
+            .optional = optional,
+        },
+    }, .{ .start = start, .end = end });
+}
+
+/// function call arguments
+fn parseArguments(parser: *Parser) Error!?ast.IndexRange {
+    const checkpoint = parser.scratch_a.begin();
+
+    while (parser.current_token.type != .right_paren and parser.current_token.type != .eof) {
+        const arg = if (parser.current_token.type == .spread) blk: {
+            const spread_start = parser.current_token.span.start;
+            try parser.advance(); // consume '...'
+            const argument = try parseExpression(parser, 2) orelse return null;
+            const arg_span = parser.getSpan(argument);
+            break :blk try parser.addNode(.{
+                .spread_element = .{ .argument = argument },
+            }, .{ .start = spread_start, .end = arg_span.end });
+        } else try parseExpression(parser, 2) orelse return null;
+
+        try parser.scratch_a.append(parser.allocator(), arg);
+
+        if (parser.current_token.type == .comma) {
+            try parser.advance();
+        } else {
+            break;
+        }
+    }
+
+    return try parser.addExtra(parser.scratch_a.take(checkpoint));
+}
+
+/// tag`template`
+fn parseTaggedTemplateExpression(parser: *Parser, tag_node: ast.NodeIndex) Error!?ast.NodeIndex {
+    const start = parser.getSpan(tag_node).start;
+
+    const quasi = if (parser.current_token.type == .no_substitution_template)
+        try literals.parseNoSubstitutionTemplate(parser)
+    else
+        try literals.parseTemplateLiteral(parser);
+
+    if (quasi == null) return null;
+
+    const quasi_span = parser.getSpan(quasi.?);
+
+    return try parser.addNode(.{
+        .tagged_template_expression = .{
+            .tag = tag_node,
+            .quasi = quasi.?,
+        },
+    }, .{ .start = start, .end = quasi_span.end });
+}
+
+/// optional chain: a?.b, a?.[b], a?.()
+fn parseOptionalChain(parser: *Parser, left: ast.NodeIndex) Error!?ast.NodeIndex {
+    const chain_start = parser.getSpan(left).start;
+    try parser.advance(); // consume '?.'
+
+    // first optional operation
+    var expr = try parseOptionalChainElement(parser, left, true) orelse return null;
+
+    // Continue parsing the chain
+    while (true) {
+        switch (parser.current_token.type) {
+            .dot => expr = try parseStaticMemberExpression(parser, expr, false) orelse return null,
+            .left_bracket => expr = try parseComputedMemberExpression(parser, expr, false) orelse return null,
+            .left_paren => expr = try parseCallExpression(parser, expr, false) orelse return null,
+            .optional_chaining => {
+                try parser.advance();
+                expr = try parseOptionalChainElement(parser, expr, true) orelse return null;
+            },
+            .template_head, .no_substitution_template => {
+                // tagged template in optional chain, not allowed (unless line terminator separates)
+                if (!parser.current_token.has_line_terminator_before) {
+                    try parser.report(
+                        parser.current_token.span,
+                        "Tagged template expressions are not permitted in an optional chain",
+                        .{ .help = "Remove the optional chaining operator '?.' before the template literal or add parentheses." },
+                    );
+                    return null;
+                }
+                break;
+            },
+            else => break,
+        }
+    }
+
+    return try parser.addNode(.{
+        .chain_expression = .{ .expression = expr },
+    }, .{ .start = chain_start, .end = parser.getSpan(expr).end });
+}
+
+/// parse element after ?. (property access, computed, or call), '?.' already consumed
+fn parseOptionalChainElement(parser: *Parser, object_node: ast.NodeIndex, optional: bool) Error!?ast.NodeIndex {
+    const tok_type = parser.current_token.type;
+
+    // identifier-like tokens become property access (a?.b)
+    if (tok_type.isIdentifierLike() or tok_type == .private_identifier) {
+        return parseMemberProperty(parser, object_node, optional);
+    }
+
+    return switch (tok_type) {
+        .left_bracket => parseComputedMemberExpression(parser, object_node, optional),
+        .left_paren => parseCallExpression(parser, object_node, optional),
+        .template_head, .no_substitution_template => {
+            try parser.report(
+                parser.current_token.span,
+                "Tagged template expressions are not permitted in an optional chain",
+                .{ .help = "Remove the optional chaining operator '?.' before the template literal." },
+            );
+            return null;
+        },
+        else => {
+            try parser.report(
+                parser.current_token.span,
+                "Expected property name, '[', or '(' after '?.'",
+                .{ .help = "Optional chaining must be followed by property access (.x), computed access ([x]), or a call (())." },
+            );
+            return null;
+        },
+    };
 }

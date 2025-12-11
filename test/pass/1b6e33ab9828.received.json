@@ -23,8 +23,8 @@
       "severity": "error",
       "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
       "help": "Try inserting a semicolon here",
-      "start": 11,
-      "end": 11,
+      "start": 13,
+      "end": 13,
       "labels": [
       ]
     },
@@ -32,8 +32,8 @@
       "severity": "error",
       "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
       "help": "Try inserting a semicolon here",
-      "start": 17,
-      "end": 17,
+      "start": 19,
+      "end": 19,
       "labels": [
       ]
     },

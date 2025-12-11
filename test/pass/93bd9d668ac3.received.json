@@ -41,6 +41,44 @@
                 "start": 20,
                 "end": 40,
                 "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 26,
+                    "end": 30,
+                    "expression": {
+                      "type": "CallExpression",
+                      "start": 26,
+                      "end": 29,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 26,
+                        "end": 27,
+                        "name": "b"
+                      },
+                      "arguments": [
+                      ],
+                      "optional": false
+                    }
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 35,
+                    "end": 38,
+                    "expression": {
+                      "type": "CallExpression",
+                      "start": 35,
+                      "end": 38,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 35,
+                        "end": 36,
+                        "name": "a"
+                      },
+                      "arguments": [
+                      ],
+                      "optional": false
+                    }
+                  }
                 ]
               },
               "expression": false
@@ -53,23 +91,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 27,
-      "end": 27,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 36,
-      "end": 36,
-      "labels": [
-      ]
-    }
   ]
 }

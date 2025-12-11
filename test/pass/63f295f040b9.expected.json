@@ -31,6 +31,7 @@
               "end": 8
             }
           ],
+          "optional": false,
           "start": 0,
           "end": 9
         },

@@ -44,11 +44,13 @@
                               "start": 15,
                               "end": 16
                             },
+                            "optional": false,
                             "computed": false,
                             "start": 9,
                             "end": 16
                           },
                           "arguments": [],
+                          "optional": false,
                           "start": 9,
                           "end": 18
                         },

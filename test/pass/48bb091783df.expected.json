@@ -111,6 +111,7 @@
             "start": 75,
             "end": 76
           },
+          "optional": false,
           "computed": false,
           "start": 73,
           "end": 76
@@ -137,6 +138,7 @@
               "end": 82
             },
             "arguments": [],
+            "optional": false,
             "start": 81,
             "end": 84
           },

@@ -51,6 +51,25 @@
               ]
             },
             {
+              "type": "ExpressionStatement",
+              "start": 60,
+              "end": 64,
+              "expression": {
+                "type": "CallExpression",
+                "start": 60,
+                "end": 63,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 60,
+                  "end": 61,
+                  "name": "c"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
               "type": "VariableDeclaration",
               "start": 67,
               "end": 77,
@@ -91,14 +110,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 61,
-      "end": 61,
-      "labels": [
-      ]
-    }
   ]
 }

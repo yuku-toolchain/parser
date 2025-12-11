@@ -7,6 +7,44 @@
     "body": [
       {
         "type": "ExpressionStatement",
+        "start": 5,
+        "end": 9,
+        "expression": {
+          "type": "CallExpression",
+          "start": 5,
+          "end": 8,
+          "callee": {
+            "type": "Identifier",
+            "start": 5,
+            "end": 6,
+            "name": "a"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 10,
+        "end": 14,
+        "expression": {
+          "type": "CallExpression",
+          "start": 10,
+          "end": 13,
+          "callee": {
+            "type": "Identifier",
+            "start": 10,
+            "end": 11,
+            "name": "b"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
         "start": 22,
         "end": 28,
         "expression": {
@@ -15,6 +53,44 @@
           "end": 27,
           "value": false,
           "raw": "false"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 36,
+        "end": 40,
+        "expression": {
+          "type": "CallExpression",
+          "start": 36,
+          "end": 39,
+          "callee": {
+            "type": "Identifier",
+            "start": 36,
+            "end": 37,
+            "name": "a"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 41,
+        "end": 45,
+        "expression": {
+          "type": "CallExpression",
+          "start": 41,
+          "end": 44,
+          "callee": {
+            "type": "Identifier",
+            "start": 41,
+            "end": 42,
+            "name": "b"
+          },
+          "arguments": [
+          ],
+          "optional": false
         }
       },
       {
@@ -164,24 +240,6 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 6,
-      "end": 6,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 11,
-      "end": 11,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token 'for'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 15,
@@ -195,24 +253,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 28,
       "end": 29,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 37,
-      "end": 37,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 42,
-      "end": 42,
       "labels": [
       ]
     },

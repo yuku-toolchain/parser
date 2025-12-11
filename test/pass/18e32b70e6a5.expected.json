@@ -20,11 +20,13 @@
               "start": 9,
               "end": 10
             },
+            "optional": false,
             "computed": false,
             "start": 0,
             "end": 10
           },
           "arguments": [],
+          "optional": false,
           "start": 0,
           "end": 12
         },
@@ -49,11 +51,13 @@
               "start": 18,
               "end": 19
             },
+            "optional": false,
             "computed": false,
             "start": 14,
             "end": 19
           },
           "arguments": [],
+          "optional": false,
           "start": 14,
           "end": 21
         },

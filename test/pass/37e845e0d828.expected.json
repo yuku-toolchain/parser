@@ -80,6 +80,7 @@
               "end": 39
             },
             "arguments": [],
+            "optional": false,
             "start": 1,
             "end": 41
           },

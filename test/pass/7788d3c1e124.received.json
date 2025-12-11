@@ -12,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 3,
-      "end": 4,
+      "message": "Invalid element in destructuring pattern",
+      "help": "Expected an identifier, array pattern, object pattern, or assignment pattern.",
+      "start": 1,
+      "end": 6,
       "labels": [
       ]
     }

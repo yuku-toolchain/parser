@@ -104,6 +104,7 @@
               "end": 72
             },
             "arguments": [],
+            "optional": false,
             "start": 1,
             "end": 74
           },

@@ -37,6 +37,7 @@
                       "start": 27,
                       "end": 32
                     },
+                    "optional": false,
                     "computed": false,
                     "start": 25,
                     "end": 32

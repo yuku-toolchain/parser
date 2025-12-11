@@ -79,11 +79,13 @@
                             "start": 49,
                             "end": 50
                           },
+                          "optional": false,
                           "computed": false,
                           "start": 47,
                           "end": 50
                         },
                         "arguments": [],
+                        "optional": false,
                         "start": 47,
                         "end": 52
                       },

@@ -84,6 +84,10 @@ pub const Serializer = struct {
             .object_expression => |d| self.writeObjectExpression(d, span),
             .spread_element => |d| self.writeSpreadElement(d, span),
             .object_property => |d| self.writeObjectProperty(d, span),
+            .member_expression => |d| self.writeMemberExpression(d, span),
+            .call_expression => |d| self.writeCallExpression(d, span),
+            .chain_expression => |d| self.writeChainExpression(d, span),
+            .tagged_template_expression => |d| self.writeTaggedTemplateExpression(d, span),
             .template_literal => |d| self.writeTemplateLiteral(d, span),
             .template_element => |d| self.writeTemplateElement(d, span),
             .string_literal => |d| self.writeStringLiteral(d, span),
@@ -557,6 +561,44 @@ pub const Serializer = struct {
         try self.fieldType("SequenceExpression");
         try self.fieldSpan(span);
         try self.fieldNodeArray("expressions", data.expressions);
+        try self.endObject();
+    }
+
+    fn writeMemberExpression(self: *Self, data: ast.MemberExpression, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("MemberExpression");
+        try self.fieldSpan(span);
+        try self.fieldNode("object", data.object);
+        try self.fieldNode("property", data.property);
+        try self.fieldBool("computed", data.computed);
+        try self.fieldBool("optional", data.optional);
+        try self.endObject();
+    }
+
+    fn writeCallExpression(self: *Self, data: ast.CallExpression, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("CallExpression");
+        try self.fieldSpan(span);
+        try self.fieldNode("callee", data.callee);
+        try self.fieldNodeArray("arguments", data.arguments);
+        try self.fieldBool("optional", data.optional);
+        try self.endObject();
+    }
+
+    fn writeChainExpression(self: *Self, data: ast.ChainExpression, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ChainExpression");
+        try self.fieldSpan(span);
+        try self.fieldNode("expression", data.expression);
+        try self.endObject();
+    }
+
+    fn writeTaggedTemplateExpression(self: *Self, data: ast.TaggedTemplateExpression, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("TaggedTemplateExpression");
+        try self.fieldSpan(span);
+        try self.fieldNode("tag", data.tag);
+        try self.fieldNode("quasi", data.quasi);
         try self.endObject();
     }
 

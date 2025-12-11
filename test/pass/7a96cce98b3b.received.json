@@ -5,19 +5,52 @@
     "end": 9,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 8,
+        "expression": {
+          "type": "MemberExpression",
+          "start": 0,
+          "end": 7,
+          "object": {
+            "type": "ParenthesizedExpression",
+            "start": 0,
+            "end": 5,
+            "expression": {
+              "type": "MemberExpression",
+              "start": 1,
+              "end": 4,
+              "object": {
+                "type": "Identifier",
+                "start": 1,
+                "end": 2,
+                "name": "a"
+              },
+              "property": {
+                "type": "Identifier",
+                "start": 3,
+                "end": 4,
+                "name": "b"
+              },
+              "computed": false,
+              "optional": false
+            }
+          },
+          "property": {
+            "type": "Identifier",
+            "start": 6,
+            "end": 7,
+            "name": "c"
+          },
+          "computed": false,
+          "optional": false
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 2,
-      "end": 3,
-      "labels": [
-      ]
-    }
   ]
 }

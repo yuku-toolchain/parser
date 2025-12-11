@@ -8,13 +8,13 @@
       {
         "type": "VariableDeclaration",
         "start": 0,
-        "end": 20,
+        "end": 25,
         "kind": "var",
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 4,
-            "end": 20,
+            "end": 25,
             "id": {
               "type": "Identifier",
               "start": 4,
@@ -22,22 +22,44 @@
               "name": "a"
             },
             "init": {
-              "type": "FunctionExpression",
+              "type": "CallExpression",
               "start": 8,
-              "end": 20,
-              "id": null,
-              "generator": false,
-              "async": false,
-              "params": [
-              ],
-              "body": {
-                "type": "BlockStatement",
-                "start": 18,
+              "end": 25,
+              "callee": {
+                "type": "FunctionExpression",
+                "start": 8,
                 "end": 20,
-                "body": [
-                ]
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 18,
+                  "end": 20,
+                  "body": [
+                  ]
+                },
+                "expression": false
               },
-              "expression": false
+              "arguments": [
+                {
+                  "type": "CallExpression",
+                  "start": 21,
+                  "end": 24,
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 21,
+                    "end": 22,
+                    "name": "b"
+                  },
+                  "arguments": [
+                  ],
+                  "optional": false
+                }
+              ],
+              "optional": false
             }
           }
         ]
@@ -47,14 +69,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 22,
-      "end": 23,
-      "labels": [
-      ]
-    }
   ]
 }

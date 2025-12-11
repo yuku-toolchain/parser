@@ -99,21 +99,36 @@
             ]
           }
         }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 73,
+        "end": 77,
+        "expression": {
+          "type": "MemberExpression",
+          "start": 73,
+          "end": 76,
+          "object": {
+            "type": "Identifier",
+            "start": 73,
+            "end": 74,
+            "name": "c"
+          },
+          "property": {
+            "type": "Identifier",
+            "start": 75,
+            "end": 76,
+            "name": "b"
+          },
+          "computed": false,
+          "optional": false
+        }
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 74,
-      "end": 74,
-      "labels": [
-      ]
-    },
     {
       "severity": "error",
       "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",

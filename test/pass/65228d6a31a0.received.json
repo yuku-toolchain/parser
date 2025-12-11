@@ -63,6 +63,70 @@
       },
       {
         "type": "ExpressionStatement",
+        "start": 45,
+        "end": 70,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 45,
+          "end": 69,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 45,
+            "end": 46,
+            "name": "a"
+          },
+          "right": {
+            "type": "LogicalExpression",
+            "start": 49,
+            "end": 69,
+            "left": {
+              "type": "Literal",
+              "start": 49,
+              "end": 50,
+              "value": 1,
+              "raw": "1"
+            },
+            "operator": "&&",
+            "right": {
+              "type": "CallExpression",
+              "start": 61,
+              "end": 69,
+              "callee": {
+                "type": "MemberExpression",
+                "start": 61,
+                "end": 64,
+                "object": {
+                  "type": "Identifier",
+                  "start": 61,
+                  "end": 62,
+                  "name": "c"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 63,
+                  "end": 64,
+                  "name": "d"
+                },
+                "computed": false,
+                "optional": false
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "start": 65,
+                  "end": 68,
+                  "value": "a",
+                  "raw": "\"a\""
+                }
+              ],
+              "optional": false
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
         "start": 71,
         "end": 93,
         "expression": {
@@ -421,6 +485,133 @@
               "start": 223,
               "end": 224,
               "name": "b"
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 226,
+        "end": 252,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 226,
+          "end": 251,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 226,
+            "end": 227,
+            "name": "a"
+          },
+          "right": {
+            "type": "LogicalExpression",
+            "start": 230,
+            "end": 251,
+            "left": {
+              "type": "Identifier",
+              "start": 230,
+              "end": 233,
+              "name": "NaN"
+            },
+            "operator": "&&",
+            "right": {
+              "type": "CallExpression",
+              "start": 243,
+              "end": 251,
+              "callee": {
+                "type": "MemberExpression",
+                "start": 243,
+                "end": 246,
+                "object": {
+                  "type": "Identifier",
+                  "start": 243,
+                  "end": 244,
+                  "name": "c"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 245,
+                  "end": 246,
+                  "name": "d"
+                },
+                "computed": false,
+                "optional": false
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "start": 247,
+                  "end": 250,
+                  "value": "f",
+                  "raw": "\"f\""
+                }
+              ],
+              "optional": false
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 253,
+        "end": 280,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 253,
+          "end": 279,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 253,
+            "end": 254,
+            "name": "a"
+          },
+          "right": {
+            "type": "LogicalExpression",
+            "start": 257,
+            "end": 279,
+            "left": {
+              "type": "Literal",
+              "start": 257,
+              "end": 259,
+              "value": 14,
+              "raw": "14"
+            },
+            "operator": "&&",
+            "right": {
+              "type": "CallExpression",
+              "start": 271,
+              "end": 279,
+              "callee": {
+                "type": "MemberExpression",
+                "start": 271,
+                "end": 274,
+                "object": {
+                  "type": "Identifier",
+                  "start": 271,
+                  "end": 272,
+                  "name": "c"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 273,
+                  "end": 274,
+                  "name": "d"
+                },
+                "computed": false,
+                "optional": false
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "start": 275,
+                  "end": 278,
+                  "value": "g",
+                  "raw": "\"g\""
+                }
+              ],
+              "optional": false
             }
           }
         }
@@ -790,6 +981,70 @@
       },
       {
         "type": "ExpressionStatement",
+        "start": 467,
+        "end": 486,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 467,
+          "end": 485,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 467,
+            "end": 468,
+            "name": "a"
+          },
+          "right": {
+            "type": "LogicalExpression",
+            "start": 471,
+            "end": 485,
+            "left": {
+              "type": "CallExpression",
+              "start": 471,
+              "end": 479,
+              "callee": {
+                "type": "MemberExpression",
+                "start": 471,
+                "end": 474,
+                "object": {
+                  "type": "Identifier",
+                  "start": 471,
+                  "end": 472,
+                  "name": "c"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 473,
+                  "end": 474,
+                  "name": "d"
+                },
+                "computed": false,
+                "optional": false
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "start": 475,
+                  "end": 478,
+                  "value": "a",
+                  "raw": "\"a\""
+                }
+              ],
+              "optional": false
+            },
+            "operator": "&&",
+            "right": {
+              "type": "Literal",
+              "start": 483,
+              "end": 485,
+              "value": 27,
+              "raw": "27"
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
         "start": 487,
         "end": 508,
         "expression": {
@@ -931,6 +1186,133 @@
       },
       {
         "type": "ExpressionStatement",
+        "start": 556,
+        "end": 576,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 556,
+          "end": 575,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 556,
+            "end": 557,
+            "name": "a"
+          },
+          "right": {
+            "type": "LogicalExpression",
+            "start": 560,
+            "end": 575,
+            "left": {
+              "type": "CallExpression",
+              "start": 560,
+              "end": 568,
+              "callee": {
+                "type": "MemberExpression",
+                "start": 560,
+                "end": 563,
+                "object": {
+                  "type": "Identifier",
+                  "start": 560,
+                  "end": 561,
+                  "name": "c"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 562,
+                  "end": 563,
+                  "name": "d"
+                },
+                "computed": false,
+                "optional": false
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "start": 564,
+                  "end": 567,
+                  "value": "f",
+                  "raw": "\"f\""
+                }
+              ],
+              "optional": false
+            },
+            "operator": "&&",
+            "right": {
+              "type": "Identifier",
+              "start": 572,
+              "end": 575,
+              "name": "NaN"
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 577,
+        "end": 596,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 577,
+          "end": 595,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 577,
+            "end": 578,
+            "name": "a"
+          },
+          "right": {
+            "type": "LogicalExpression",
+            "start": 581,
+            "end": 595,
+            "left": {
+              "type": "CallExpression",
+              "start": 581,
+              "end": 589,
+              "callee": {
+                "type": "MemberExpression",
+                "start": 581,
+                "end": 584,
+                "object": {
+                  "type": "Identifier",
+                  "start": 581,
+                  "end": 582,
+                  "name": "c"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 583,
+                  "end": 584,
+                  "name": "d"
+                },
+                "computed": false,
+                "optional": false
+              },
+              "arguments": [
+                {
+                  "type": "Literal",
+                  "start": 585,
+                  "end": 588,
+                  "value": "g",
+                  "raw": "\"g\""
+                }
+              ],
+              "optional": false
+            },
+            "operator": "&&",
+            "right": {
+              "type": "Literal",
+              "start": 593,
+              "end": 595,
+              "value": 30,
+              "raw": "30"
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
         "start": 597,
         "end": 616,
         "expression": {
@@ -1043,59 +1425,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 62,
-      "end": 62,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 244,
-      "end": 244,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 272,
-      "end": 272,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 472,
-      "end": 472,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 561,
-      "end": 561,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 582,
-      "end": 582,
-      "labels": [
-      ]
-    }
   ]
 }

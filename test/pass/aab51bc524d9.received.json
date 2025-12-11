@@ -5,6 +5,42 @@
     "end": 48,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 47,
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "start": 0,
+          "end": 46,
+          "expression": {
+            "type": "CallExpression",
+            "start": 1,
+            "end": 45,
+            "callee": {
+              "type": "FunctionExpression",
+              "start": 1,
+              "end": 43,
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 13,
+                "end": 43,
+                "body": [
+                ]
+              },
+              "expression": false
+            },
+            "arguments": [
+            ],
+            "optional": false
+          }
+        }
+      }
     ]
   },
   "comments": [
@@ -12,19 +48,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 20,
-      "end": 20,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
-      "start": 43,
-      "end": 44,
+      "start": 29,
+      "end": 30,
       "labels": [
       ]
     }

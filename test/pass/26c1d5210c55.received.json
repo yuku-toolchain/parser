@@ -52,8 +52,8 @@
       "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
-      "start": 73,
-      "end": 74,
+      "start": 77,
+      "end": 78,
       "labels": [
       ]
     },
@@ -79,8 +79,8 @@
       "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
-      "start": 165,
-      "end": 166,
+      "start": 169,
+      "end": 170,
       "labels": [
       ]
     },
@@ -151,8 +151,8 @@
       "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
-      "start": 357,
-      "end": 358,
+      "start": 361,
+      "end": 362,
       "labels": [
       ]
     },
@@ -178,8 +178,8 @@
       "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
-      "start": 447,
-      "end": 448,
+      "start": 451,
+      "end": 452,
       "labels": [
       ]
     },

@@ -68,10 +68,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 22,
-      "end": 23,
+      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
+      "help": "Try inserting a semicolon here",
+      "start": 35,
+      "end": 35,
       "labels": [
       ]
     }

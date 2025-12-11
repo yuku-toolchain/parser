@@ -46,10 +46,12 @@
                   "end": 20
                 },
                 "arguments": [],
+                "optional": false,
                 "start": 19,
                 "end": 22
               }
             ],
+            "optional": false,
             "start": 1,
             "end": 23
           },

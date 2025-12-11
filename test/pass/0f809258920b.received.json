@@ -54,6 +54,44 @@
             "raw": "4"
           }
         }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 287,
+        "end": 294,
+        "expression": {
+          "type": "CallExpression",
+          "start": 287,
+          "end": 293,
+          "callee": {
+            "type": "MemberExpression",
+            "start": 287,
+            "end": 290,
+            "object": {
+              "type": "Identifier",
+              "start": 287,
+              "end": 288,
+              "name": "d"
+            },
+            "property": {
+              "type": "Identifier",
+              "start": 289,
+              "end": 290,
+              "name": "e"
+            },
+            "computed": false,
+            "optional": false
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start": 291,
+              "end": 292,
+              "name": "b"
+            }
+          ],
+          "optional": false
+        }
       }
     ]
   },
@@ -123,15 +161,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 132,
       "end": 134,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 288,
-      "end": 288,
       "labels": [
       ]
     },

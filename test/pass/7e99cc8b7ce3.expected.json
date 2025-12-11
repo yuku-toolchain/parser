@@ -46,6 +46,7 @@
               "start": 14,
               "end": 15
             },
+            "optional": false,
             "computed": false,
             "start": 12,
             "end": 15
@@ -82,6 +83,7 @@
               "start": 23,
               "end": 24
             },
+            "optional": false,
             "computed": false,
             "start": 21,
             "end": 24
@@ -117,6 +119,7 @@
               "start": 32,
               "end": 33
             },
+            "optional": false,
             "computed": false,
             "start": 30,
             "end": 33
@@ -136,11 +139,13 @@
                 "start": 36,
                 "end": 37
               },
+              "optional": false,
               "computed": false,
               "start": 34,
               "end": 37
             }
           ],
+          "optional": false,
           "start": 30,
           "end": 38
         },

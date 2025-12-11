@@ -39,7 +39,7 @@
             {
               "type": "VariableDeclaration",
               "start": 23,
-              "end": 57,
+              "end": 60,
               "kind": "var",
               "declarations": [
                 {
@@ -109,7 +109,7 @@
                 {
                   "type": "VariableDeclarator",
                   "start": 52,
-                  "end": 57,
+                  "end": 59,
                   "id": {
                     "type": "Identifier",
                     "start": 52,
@@ -117,10 +117,18 @@
                     "name": "g"
                   },
                   "init": {
-                    "type": "Identifier",
+                    "type": "CallExpression",
                     "start": 56,
-                    "end": 57,
-                    "name": "h"
+                    "end": 59,
+                    "callee": {
+                      "type": "Identifier",
+                      "start": 56,
+                      "end": 57,
+                      "name": "h"
+                    },
+                    "arguments": [
+                    ],
+                    "optional": false
                   }
                 }
               ]
@@ -134,15 +142,6 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Empty parentheses are only valid as arrow function parameters",
-      "help": "Use '() => ...' for arrow functions or add an expression inside.",
-      "start": 57,
-      "end": 59,
-      "labels": [
-      ]
-    },
     {
       "severity": "error",
       "message": "Unexpected token 'return'",

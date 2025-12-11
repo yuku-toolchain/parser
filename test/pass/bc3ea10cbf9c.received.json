@@ -14,35 +14,8 @@
       "severity": "error",
       "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
       "help": "Try inserting a semicolon here",
-      "start": 22,
-      "end": 22,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 28,
-      "end": 29,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Function declaration requires a name",
-      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
-      "start": 47,
-      "end": 48,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 59,
-      "end": 60,
+      "start": 66,
+      "end": 66,
       "labels": [
       ]
     }

@@ -25,6 +25,25 @@
           "end": 47,
           "body": [
             {
+              "type": "ExpressionStatement",
+              "start": 19,
+              "end": 23,
+              "expression": {
+                "type": "CallExpression",
+                "start": 19,
+                "end": 22,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 19,
+                  "end": 20,
+                  "name": "b"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
               "type": "VariableDeclaration",
               "start": 28,
               "end": 34,
@@ -94,6 +113,25 @@
           "end": 96,
           "body": [
             {
+              "type": "ExpressionStatement",
+              "start": 68,
+              "end": 72,
+              "expression": {
+                "type": "CallExpression",
+                "start": 68,
+                "end": 71,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 68,
+                  "end": 69,
+                  "name": "b"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
               "type": "VariableDeclaration",
               "start": 77,
               "end": 83,
@@ -142,23 +180,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 20,
-      "end": 20,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 69,
-      "end": 69,
-      "labels": [
-      ]
-    }
   ]
 }

@@ -141,6 +141,7 @@
               "end": 22
             }
           ],
+          "optional": false,
           "start": 17,
           "end": 23
         },

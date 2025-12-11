@@ -5,6 +5,91 @@
     "end": 107,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 106,
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "start": 0,
+          "end": 105,
+          "expression": {
+            "type": "CallExpression",
+            "start": 1,
+            "end": 104,
+            "callee": {
+              "type": "FunctionExpression",
+              "start": 1,
+              "end": 102,
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 13,
+                "end": 102,
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 60,
+                    "end": 100,
+                    "expression": {
+                      "type": "BinaryExpression",
+                      "start": 60,
+                      "end": 99,
+                      "left": {
+                        "type": "Literal",
+                        "start": 60,
+                        "end": 61,
+                        "value": 1,
+                        "raw": "1"
+                      },
+                      "operator": "+",
+                      "right": {
+                        "type": "ParenthesizedExpression",
+                        "start": 64,
+                        "end": 99,
+                        "expression": {
+                          "type": "CallExpression",
+                          "start": 65,
+                          "end": 98,
+                          "callee": {
+                            "type": "FunctionExpression",
+                            "start": 65,
+                            "end": 96,
+                            "id": null,
+                            "generator": false,
+                            "async": false,
+                            "params": [
+                            ],
+                            "body": {
+                              "type": "BlockStatement",
+                              "start": 77,
+                              "end": 96,
+                              "body": [
+                              ]
+                            },
+                            "expression": false
+                          },
+                          "arguments": [
+                          ],
+                          "optional": false
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "expression": false
+            },
+            "arguments": [
+            ],
+            "optional": false
+          }
+        }
+      }
     ]
   },
   "comments": [
@@ -28,24 +113,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 83,
       "end": 89,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 96,
-      "end": 97,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 102,
-      "end": 103,
       "labels": [
       ]
     }

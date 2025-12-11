@@ -25,6 +25,25 @@
           "end": 81,
           "body": [
             {
+              "type": "ExpressionStatement",
+              "start": 52,
+              "end": 56,
+              "expression": {
+                "type": "CallExpression",
+                "start": 52,
+                "end": 55,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 52,
+                  "end": 53,
+                  "name": "c"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
               "type": "VariableDeclaration",
               "start": 63,
               "end": 75,
@@ -64,6 +83,25 @@
         "start": 86,
         "end": 104,
         "body": [
+          {
+            "type": "ExpressionStatement",
+            "start": 94,
+            "end": 98,
+            "expression": {
+              "type": "CallExpression",
+              "start": 94,
+              "end": 97,
+              "callee": {
+                "type": "Identifier",
+                "start": 94,
+                "end": 95,
+                "name": "c"
+              },
+              "arguments": [
+              ],
+              "optional": false
+            }
+          }
         ]
       }
     ]
@@ -77,24 +115,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 17,
       "end": 22,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 53,
-      "end": 53,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 95,
-      "end": 95,
       "labels": [
       ]
     },

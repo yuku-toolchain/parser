@@ -26,6 +26,7 @@
               "end": 5
             }
           ],
+          "optional": false,
           "start": 0,
           "end": 6
         },

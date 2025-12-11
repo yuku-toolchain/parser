@@ -125,6 +125,7 @@
             "end": 91
           },
           "arguments": [],
+          "optional": false,
           "start": 90,
           "end": 93
         },

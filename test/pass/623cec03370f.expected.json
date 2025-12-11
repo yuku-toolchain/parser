@@ -47,6 +47,7 @@
               "end": 18
             }
           ],
+          "optional": false,
           "start": 0,
           "end": 19
         },

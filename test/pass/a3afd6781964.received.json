@@ -55,10 +55,67 @@
             ]
           },
           {
+            "type": "ExpressionStatement",
+            "start": 33,
+            "end": 37,
+            "expression": {
+              "type": "CallExpression",
+              "start": 33,
+              "end": 36,
+              "callee": {
+                "type": "Identifier",
+                "start": 33,
+                "end": 34,
+                "name": "b"
+              },
+              "arguments": [
+              ],
+              "optional": false
+            }
+          },
+          {
             "type": "BlockStatement",
             "start": 40,
             "end": 63,
             "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 46,
+                "end": 50,
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 46,
+                  "end": 49,
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 46,
+                    "end": 47,
+                    "name": "b"
+                  },
+                  "arguments": [
+                  ],
+                  "optional": false
+                }
+              },
+              {
+                "type": "ExpressionStatement",
+                "start": 55,
+                "end": 59,
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 55,
+                  "end": 58,
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 55,
+                    "end": 56,
+                    "name": "b"
+                  },
+                  "arguments": [
+                  ],
+                  "optional": false
+                }
+              }
             ]
           }
         ]
@@ -68,32 +125,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 34,
-      "end": 34,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 47,
-      "end": 47,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 56,
-      "end": 56,
-      "labels": [
-      ]
-    }
   ]
 }

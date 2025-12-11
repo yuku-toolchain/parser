@@ -5,6 +5,82 @@
     "end": 85,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 6,
+        "end": 10,
+        "expression": {
+          "type": "CallExpression",
+          "start": 6,
+          "end": 9,
+          "callee": {
+            "type": "Identifier",
+            "start": 6,
+            "end": 7,
+            "name": "a"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 27,
+        "end": 31,
+        "expression": {
+          "type": "CallExpression",
+          "start": 27,
+          "end": 30,
+          "callee": {
+            "type": "Identifier",
+            "start": 27,
+            "end": 28,
+            "name": "c"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 70,
+        "end": 74,
+        "expression": {
+          "type": "CallExpression",
+          "start": 70,
+          "end": 73,
+          "callee": {
+            "type": "Identifier",
+            "start": 70,
+            "end": 71,
+            "name": "f"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 79,
+        "end": 83,
+        "expression": {
+          "type": "CallExpression",
+          "start": 79,
+          "end": 82,
+          "callee": {
+            "type": "Identifier",
+            "start": 79,
+            "end": 80,
+            "name": "g"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      }
     ]
   },
   "comments": [
@@ -21,28 +97,10 @@
     },
     {
       "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 7,
-      "end": 7,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token ')'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 10,
       "end": 11,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 28,
-      "end": 28,
       "labels": [
       ]
     },
@@ -61,24 +119,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 54,
       "end": 58,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 71,
-      "end": 71,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 80,
-      "end": 80,
       "labels": [
       ]
     },

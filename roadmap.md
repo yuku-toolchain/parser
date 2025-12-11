@@ -31,11 +31,11 @@
 - [x] Sequence expression (comma operator)
 
 **Member & Call Expressions:**
-- [ ] Member expressions (obj.prop, obj[prop])
-- [ ] Call expressions (func(), obj.method())
+- [x] Member expressions (obj.prop, obj[prop])
+- [x] Call expressions (func(), obj.method())
 - [ ] New expressions (new Constructor())
-- [ ] Optional chaining (?.)
-- [ ] Computed member access
+- [x] Optional chaining (?.)
+- [x] Computed member access
 
 **Modern Expressions:**
 - [x] Arrow functions (ArrowFunctionExpression)

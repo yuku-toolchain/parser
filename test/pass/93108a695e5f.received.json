@@ -6,44 +6,168 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "VariableDeclaration",
-        "start": 249,
-        "end": 254,
-        "kind": "var",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 253,
-            "end": 254,
-            "id": {
-              "type": "Identifier",
-              "start": 253,
-              "end": 254,
-              "name": "a"
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 573,
+        "expression": {
+          "type": "CallExpression",
+          "start": 0,
+          "end": 573,
+          "callee": {
+            "type": "CallExpression",
+            "start": 0,
+            "end": 571,
+            "callee": {
+              "type": "CallExpression",
+              "start": 0,
+              "end": 434,
+              "callee": {
+                "type": "CallExpression",
+                "start": 0,
+                "end": 432,
+                "callee": {
+                  "type": "CallExpression",
+                  "start": 0,
+                  "end": 230,
+                  "callee": {
+                    "type": "ParenthesizedExpression",
+                    "start": 0,
+                    "end": 228,
+                    "expression": {
+                      "type": "FunctionExpression",
+                      "start": 1,
+                      "end": 227,
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [
+                      ],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 13,
+                        "end": 227,
+                        "body": [
+                          {
+                            "type": "VariableDeclaration",
+                            "start": 17,
+                            "end": 22,
+                            "kind": "var",
+                            "declarations": [
+                              {
+                                "type": "VariableDeclarator",
+                                "start": 21,
+                                "end": 22,
+                                "id": {
+                                  "type": "Identifier",
+                                  "start": 21,
+                                  "end": 22,
+                                  "name": "a"
+                                },
+                                "init": null
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "expression": false
+                    }
+                  },
+                  "arguments": [
+                  ],
+                  "optional": false
+                },
+                "arguments": [
+                  {
+                    "type": "FunctionExpression",
+                    "start": 233,
+                    "end": 431,
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [
+                    ],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 245,
+                      "end": 431,
+                      "body": [
+                        {
+                          "type": "VariableDeclaration",
+                          "start": 249,
+                          "end": 254,
+                          "kind": "var",
+                          "declarations": [
+                            {
+                              "type": "VariableDeclarator",
+                              "start": 253,
+                              "end": 254,
+                              "id": {
+                                "type": "Identifier",
+                                "start": 253,
+                                "end": 254,
+                                "name": "a"
+                              },
+                              "init": null
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "expression": false
+                  }
+                ],
+                "optional": false
+              },
+              "arguments": [
+              ],
+              "optional": false
             },
-            "init": null
-          }
-        ]
-      },
-      {
-        "type": "VariableDeclaration",
-        "start": 453,
-        "end": 458,
-        "kind": "var",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 457,
-            "end": 458,
-            "id": {
-              "type": "Identifier",
-              "start": 457,
-              "end": 458,
-              "name": "a"
-            },
-            "init": null
-          }
-        ]
+            "arguments": [
+              {
+                "type": "FunctionExpression",
+                "start": 437,
+                "end": 570,
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 449,
+                  "end": 570,
+                  "body": [
+                    {
+                      "type": "VariableDeclaration",
+                      "start": 453,
+                      "end": 458,
+                      "kind": "var",
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
+                          "start": 457,
+                          "end": 458,
+                          "id": {
+                            "type": "Identifier",
+                            "start": 457,
+                            "end": 458,
+                            "name": "a"
+                          },
+                          "init": null
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "expression": false
+              }
+            ],
+            "optional": false
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
       }
     ]
   },
@@ -109,24 +233,6 @@
     },
     {
       "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 228,
-      "end": 228,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Function declaration requires a name",
-      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
-      "start": 242,
-      "end": 243,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token 'if'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 257,
@@ -149,15 +255,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 421,
       "end": 427,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Function declaration requires a name",
-      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
-      "start": 446,
-      "end": 447,
       "labels": [
       ]
     },

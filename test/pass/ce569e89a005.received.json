@@ -17,20 +17,49 @@
           "raw": "'use strict'"
         },
         "directive": "use strict"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 14,
+        "end": 30,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 14,
+          "end": 30,
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "start": 14,
+            "end": 26,
+            "object": {
+              "type": "Identifier",
+              "start": 14,
+              "end": 23,
+              "name": "arguments"
+            },
+            "property": {
+              "type": "Literal",
+              "start": 24,
+              "end": 25,
+              "value": 1,
+              "raw": "1"
+            },
+            "computed": true,
+            "optional": false
+          },
+          "right": {
+            "type": "Literal",
+            "start": 29,
+            "end": 30,
+            "value": 2,
+            "raw": "2"
+          }
+        }
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 23,
-      "end": 23,
-      "labels": [
-      ]
-    }
   ]
 }

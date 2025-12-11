@@ -95,6 +95,7 @@
                   "start": 63,
                   "end": 64
                 },
+                "optional": false,
                 "computed": false,
                 "start": 61,
                 "end": 64
@@ -108,6 +109,7 @@
                   "end": 68
                 }
               ],
+              "optional": false,
               "start": 61,
               "end": 69
             },
@@ -520,6 +522,7 @@
                   "start": 245,
                   "end": 246
                 },
+                "optional": false,
                 "computed": false,
                 "start": 243,
                 "end": 246
@@ -533,6 +536,7 @@
                   "end": 250
                 }
               ],
+              "optional": false,
               "start": 243,
               "end": 251
             },
@@ -582,6 +586,7 @@
                   "start": 273,
                   "end": 274
                 },
+                "optional": false,
                 "computed": false,
                 "start": 271,
                 "end": 274
@@ -595,6 +600,7 @@
                   "end": 278
                 }
               ],
+              "optional": false,
               "start": 271,
               "end": 279
             },
@@ -999,6 +1005,7 @@
                   "start": 473,
                   "end": 474
                 },
+                "optional": false,
                 "computed": false,
                 "start": 471,
                 "end": 474
@@ -1012,6 +1019,7 @@
                   "end": 478
                 }
               ],
+              "optional": false,
               "start": 471,
               "end": 479
             },
@@ -1202,6 +1210,7 @@
                   "start": 562,
                   "end": 563
                 },
+                "optional": false,
                 "computed": false,
                 "start": 560,
                 "end": 563
@@ -1215,6 +1224,7 @@
                   "end": 567
                 }
               ],
+              "optional": false,
               "start": 560,
               "end": 568
             },
@@ -1263,6 +1273,7 @@
                   "start": 583,
                   "end": 584
                 },
+                "optional": false,
                 "computed": false,
                 "start": 581,
                 "end": 584
@@ -1276,6 +1287,7 @@
                   "end": 588
                 }
               ],
+              "optional": false,
               "start": 581,
               "end": 589
             },

@@ -12,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected ',' or '}' in object",
-      "help": "Add a comma between properties or close the object with '}'.",
-      "start": 50,
-      "end": 51,
+      "message": "Unexpected token 'this'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 63,
+      "end": 67,
       "labels": [
       ]
     }

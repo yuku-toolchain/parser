@@ -70,6 +70,7 @@
                                     "start": 43,
                                     "end": 44
                                   },
+                                  "optional": false,
                                   "computed": true,
                                   "start": 37,
                                   "end": 45

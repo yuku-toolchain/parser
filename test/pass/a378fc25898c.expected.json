@@ -31,11 +31,13 @@
               "start": 9,
               "end": 10
             },
+            "optional": false,
             "computed": false,
             "start": 0,
             "end": 10
           },
           "arguments": [],
+          "optional": false,
           "start": 0,
           "end": 12
         },

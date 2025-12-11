@@ -33,6 +33,7 @@
                 "start": 14,
                 "end": 15
               },
+              "optional": false,
               "computed": false,
               "start": 8,
               "end": 15

@@ -7,6 +7,42 @@
     "body": [
       {
         "type": "ExpressionStatement",
+        "start": 24,
+        "end": 34,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 24,
+          "end": 33,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 24,
+            "end": 25,
+            "name": "d"
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "start": 28,
+            "end": 33,
+            "expression": {
+              "type": "CallExpression",
+              "start": 29,
+              "end": 32,
+              "callee": {
+                "type": "Identifier",
+                "start": 29,
+                "end": 30,
+                "name": "e"
+              },
+              "arguments": [
+              ],
+              "optional": false
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
         "start": 44,
         "end": 50,
         "expression": {
@@ -39,15 +75,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 0,
       "end": 2,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 30,
-      "end": 31,
       "labels": [
       ]
     },

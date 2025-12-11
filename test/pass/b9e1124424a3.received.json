@@ -53,6 +53,31 @@
           ]
         },
         "expression": false
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 61,
+        "end": 66,
+        "expression": {
+          "type": "CallExpression",
+          "start": 61,
+          "end": 65,
+          "callee": {
+            "type": "Identifier",
+            "start": 61,
+            "end": 62,
+            "name": "c"
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start": 63,
+              "end": 64,
+              "name": "b"
+            }
+          ],
+          "optional": false
+        }
       }
     ]
   },
@@ -65,15 +90,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 19,
       "end": 21,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 62,
-      "end": 62,
       "labels": [
       ]
     },

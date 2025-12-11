@@ -20,6 +20,7 @@
               "end": 3
             }
           ],
+          "optional": false,
           "start": 0,
           "end": 4
         },

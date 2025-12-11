@@ -12,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 3,
-      "end": 3,
+      "message": "Expected property name after '.'",
+      "help": "Use an identifier or private identifier (#name) for member access.",
+      "start": 4,
+      "end": 5,
       "labels": [
       ]
     }

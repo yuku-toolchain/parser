@@ -14,6 +14,7 @@
             "end": 8
           },
           "arguments": [],
+          "optional": false,
           "start": 7,
           "end": 10
         },
@@ -32,6 +33,7 @@
                   "end": 18
                 },
                 "arguments": [],
+                "optional": false,
                 "start": 17,
                 "end": 20
               },
@@ -49,6 +51,7 @@
                   "end": 25
                 },
                 "arguments": [],
+                "optional": false,
                 "start": 24,
                 "end": 27
               },
@@ -66,6 +69,7 @@
                   "end": 36
                 },
                 "arguments": [],
+                "optional": false,
                 "start": 35,
                 "end": 38
               },
@@ -90,6 +94,7 @@
                   "end": 50
                 },
                 "arguments": [],
+                "optional": false,
                 "start": 49,
                 "end": 52
               },
@@ -107,6 +112,7 @@
                   "end": 57
                 },
                 "arguments": [],
+                "optional": false,
                 "start": 56,
                 "end": 59
               },

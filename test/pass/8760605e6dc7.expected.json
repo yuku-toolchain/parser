@@ -66,6 +66,7 @@
               "end": 52
             },
             "arguments": [],
+            "optional": false,
             "start": 1,
             "end": 54
           },

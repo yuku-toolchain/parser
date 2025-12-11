@@ -57,20 +57,59 @@
             }
           }
         ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 18,
+        "end": 28,
+        "expression": {
+          "type": "CallExpression",
+          "start": 18,
+          "end": 27,
+          "callee": {
+            "type": "Identifier",
+            "start": 18,
+            "end": 19,
+            "name": "a"
+          },
+          "arguments": [
+            {
+              "type": "ObjectExpression",
+              "start": 20,
+              "end": 26,
+              "properties": [
+                {
+                  "type": "Property",
+                  "start": 21,
+                  "end": 25,
+                  "kind": "init",
+                  "key": {
+                    "type": "Identifier",
+                    "start": 21,
+                    "end": 22,
+                    "name": "a"
+                  },
+                  "value": {
+                    "type": "Literal",
+                    "start": 24,
+                    "end": 25,
+                    "value": 2,
+                    "raw": "2"
+                  },
+                  "method": false,
+                  "shorthand": false,
+                  "computed": false
+                }
+              ]
+            }
+          ],
+          "optional": false
+        }
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 19,
-      "end": 19,
-      "labels": [
-      ]
-    }
   ]
 }

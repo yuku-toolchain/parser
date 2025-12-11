@@ -5,6 +5,81 @@
     "end": 88,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 56,
+        "end": 88,
+        "expression": {
+          "type": "CallExpression",
+          "start": 56,
+          "end": 87,
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "start": 56,
+            "end": 85,
+            "expression": {
+              "type": "FunctionExpression",
+              "start": 57,
+              "end": 84,
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 67,
+                "end": 84,
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 73,
+                    "end": 82,
+                    "expression": {
+                      "type": "CallExpression",
+                      "start": 73,
+                      "end": 81,
+                      "callee": {
+                        "type": "MemberExpression",
+                        "start": 73,
+                        "end": 76,
+                        "object": {
+                          "type": "Identifier",
+                          "start": 73,
+                          "end": 74,
+                          "name": "a"
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 75,
+                          "end": 76,
+                          "name": "b"
+                        },
+                        "computed": false,
+                        "optional": false
+                      },
+                      "arguments": [
+                        {
+                          "type": "Literal",
+                          "start": 77,
+                          "end": 80,
+                          "value": "c",
+                          "raw": "\"c\""
+                        }
+                      ],
+                      "optional": false
+                    }
+                  }
+                ]
+              },
+              "expression": false
+            }
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      }
     ]
   },
   "comments": [
@@ -23,26 +98,8 @@
       "severity": "error",
       "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
       "help": "Try inserting a semicolon here",
-      "start": 27,
-      "end": 27,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 74,
-      "end": 74,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 85,
-      "end": 85,
+      "start": 29,
+      "end": 29,
       "labels": [
       ]
     }

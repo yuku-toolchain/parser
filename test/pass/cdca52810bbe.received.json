@@ -24,9 +24,67 @@
           "start": 13,
           "end": 30,
           "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 19,
+              "end": 28,
+              "expression": {
+                "type": "CallExpression",
+                "start": 19,
+                "end": 27,
+                "callee": {
+                  "type": "MemberExpression",
+                  "start": 19,
+                  "end": 22,
+                  "object": {
+                    "type": "Identifier",
+                    "start": 19,
+                    "end": 20,
+                    "name": "b"
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "start": 21,
+                    "end": 22,
+                    "name": "c"
+                  },
+                  "computed": false,
+                  "optional": false
+                },
+                "arguments": [
+                  {
+                    "type": "Literal",
+                    "start": 23,
+                    "end": 26,
+                    "value": "d",
+                    "raw": "'d'"
+                  }
+                ],
+                "optional": false
+              }
+            }
           ]
         },
         "expression": false
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 31,
+        "end": 35,
+        "expression": {
+          "type": "CallExpression",
+          "start": 31,
+          "end": 34,
+          "callee": {
+            "type": "Identifier",
+            "start": 31,
+            "end": 32,
+            "name": "a"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
       },
       {
         "type": "BlockStatement",
@@ -54,6 +112,45 @@
           "start": 53,
           "end": 70,
           "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 59,
+              "end": 68,
+              "expression": {
+                "type": "CallExpression",
+                "start": 59,
+                "end": 67,
+                "callee": {
+                  "type": "MemberExpression",
+                  "start": 59,
+                  "end": 62,
+                  "object": {
+                    "type": "Identifier",
+                    "start": 59,
+                    "end": 60,
+                    "name": "b"
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "start": 61,
+                    "end": 62,
+                    "name": "c"
+                  },
+                  "computed": false,
+                  "optional": false
+                },
+                "arguments": [
+                  {
+                    "type": "Literal",
+                    "start": 63,
+                    "end": 66,
+                    "value": "e",
+                    "raw": "'e'"
+                  }
+                ],
+                "optional": false
+              }
+            }
           ]
         },
         "expression": false
@@ -63,32 +160,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 20,
-      "end": 20,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 32,
-      "end": 32,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 60,
-      "end": 60,
-      "labels": [
-      ]
-    }
   ]
 }

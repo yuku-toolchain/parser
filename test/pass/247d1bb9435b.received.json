@@ -17,20 +17,48 @@
           "raw": "\"use strict\""
         },
         "directive": "use strict"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 14,
+        "end": 27,
+        "expression": {
+          "type": "CallExpression",
+          "start": 14,
+          "end": 26,
+          "callee": {
+            "type": "ParenthesizedExpression",
+            "start": 14,
+            "end": 24,
+            "expression": {
+              "type": "MemberExpression",
+              "start": 15,
+              "end": 23,
+              "object": {
+                "type": "Identifier",
+                "start": 15,
+                "end": 16,
+                "name": "a"
+              },
+              "property": {
+                "type": "Identifier",
+                "start": 17,
+                "end": 23,
+                "name": "static"
+              },
+              "computed": false,
+              "optional": false
+            }
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 16,
-      "end": 17,
-      "labels": [
-      ]
-    }
   ]
 }

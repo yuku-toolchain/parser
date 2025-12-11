@@ -29,6 +29,7 @@
               "start": 4,
               "end": 5
             },
+            "optional": false,
             "computed": false,
             "start": 0,
             "end": 5

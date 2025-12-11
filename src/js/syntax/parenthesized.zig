@@ -81,6 +81,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
             parser.scratch_cover.reset(checkpoint);
             return null;
         };
+
         try parser.scratch_cover.append(parser.allocator(), element);
         end = parser.getSpan(element).end;
 

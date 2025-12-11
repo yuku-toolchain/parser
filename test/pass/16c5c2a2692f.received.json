@@ -58,40 +58,122 @@
             {
               "type": "VariableDeclaration",
               "start": 37,
-              "end": 42,
+              "end": 55,
               "kind": "var",
               "declarations": [
                 {
                   "type": "VariableDeclarator",
                   "start": 41,
-                  "end": 42,
+                  "end": 54,
                   "id": {
                     "type": "Identifier",
                     "start": 41,
                     "end": 42,
                     "name": "e"
                   },
-                  "init": null
+                  "init": {
+                    "type": "ParenthesizedExpression",
+                    "start": 45,
+                    "end": 54,
+                    "expression": {
+                      "type": "MemberExpression",
+                      "start": 46,
+                      "end": 53,
+                      "object": {
+                        "type": "ParenthesizedExpression",
+                        "start": 46,
+                        "end": 51,
+                        "expression": {
+                          "type": "MemberExpression",
+                          "start": 47,
+                          "end": 50,
+                          "object": {
+                            "type": "Identifier",
+                            "start": 47,
+                            "end": 48,
+                            "name": "b"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 49,
+                            "end": 50,
+                            "name": "f"
+                          },
+                          "computed": false,
+                          "optional": false
+                        }
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 52,
+                        "end": 53,
+                        "name": "e"
+                      },
+                      "computed": false,
+                      "optional": false
+                    }
+                  }
                 }
               ]
             },
             {
               "type": "VariableDeclaration",
               "start": 58,
-              "end": 63,
+              "end": 76,
               "kind": "var",
               "declarations": [
                 {
                   "type": "VariableDeclarator",
                   "start": 62,
-                  "end": 63,
+                  "end": 75,
                   "id": {
                     "type": "Identifier",
                     "start": 62,
                     "end": 63,
                     "name": "g"
                   },
-                  "init": null
+                  "init": {
+                    "type": "ParenthesizedExpression",
+                    "start": 66,
+                    "end": 75,
+                    "expression": {
+                      "type": "MemberExpression",
+                      "start": 67,
+                      "end": 74,
+                      "object": {
+                        "type": "ParenthesizedExpression",
+                        "start": 67,
+                        "end": 72,
+                        "expression": {
+                          "type": "MemberExpression",
+                          "start": 68,
+                          "end": 71,
+                          "object": {
+                            "type": "Identifier",
+                            "start": 68,
+                            "end": 69,
+                            "name": "b"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 70,
+                            "end": 71,
+                            "name": "f"
+                          },
+                          "computed": false,
+                          "optional": false
+                        }
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 73,
+                        "end": 74,
+                        "name": "g"
+                      },
+                      "computed": false,
+                      "optional": false
+                    }
+                  }
                 }
               ]
             },
@@ -559,40 +641,122 @@
             {
               "type": "VariableDeclaration",
               "start": 515,
-              "end": 520,
+              "end": 533,
               "kind": "var",
               "declarations": [
                 {
                   "type": "VariableDeclarator",
                   "start": 519,
-                  "end": 520,
+                  "end": 532,
                   "id": {
                     "type": "Identifier",
                     "start": 519,
                     "end": 520,
                     "name": "e"
                   },
-                  "init": null
+                  "init": {
+                    "type": "ParenthesizedExpression",
+                    "start": 523,
+                    "end": 532,
+                    "expression": {
+                      "type": "MemberExpression",
+                      "start": 524,
+                      "end": 531,
+                      "object": {
+                        "type": "ParenthesizedExpression",
+                        "start": 524,
+                        "end": 529,
+                        "expression": {
+                          "type": "MemberExpression",
+                          "start": 525,
+                          "end": 528,
+                          "object": {
+                            "type": "Identifier",
+                            "start": 525,
+                            "end": 526,
+                            "name": "b"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 527,
+                            "end": 528,
+                            "name": "f"
+                          },
+                          "computed": false,
+                          "optional": false
+                        }
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 530,
+                        "end": 531,
+                        "name": "e"
+                      },
+                      "computed": false,
+                      "optional": false
+                    }
+                  }
                 }
               ]
             },
             {
               "type": "VariableDeclaration",
               "start": 536,
-              "end": 541,
+              "end": 554,
               "kind": "var",
               "declarations": [
                 {
                   "type": "VariableDeclarator",
                   "start": 540,
-                  "end": 541,
+                  "end": 553,
                   "id": {
                     "type": "Identifier",
                     "start": 540,
                     "end": 541,
                     "name": "g"
                   },
-                  "init": null
+                  "init": {
+                    "type": "ParenthesizedExpression",
+                    "start": 544,
+                    "end": 553,
+                    "expression": {
+                      "type": "MemberExpression",
+                      "start": 545,
+                      "end": 552,
+                      "object": {
+                        "type": "ParenthesizedExpression",
+                        "start": 545,
+                        "end": 550,
+                        "expression": {
+                          "type": "MemberExpression",
+                          "start": 546,
+                          "end": 549,
+                          "object": {
+                            "type": "Identifier",
+                            "start": 546,
+                            "end": 547,
+                            "name": "b"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 548,
+                            "end": 549,
+                            "name": "f"
+                          },
+                          "computed": false,
+                          "optional": false
+                        }
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 551,
+                        "end": 552,
+                        "name": "g"
+                      },
+                      "computed": false,
+                      "optional": false
+                    }
+                  }
                 }
               ]
             },
@@ -1027,42 +1191,6 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 48,
-      "end": 49,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 48,
-      "end": 49,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 69,
-      "end": 70,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 69,
-      "end": 70,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token 'new'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 88,
@@ -1130,42 +1258,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 489,
       "end": 490,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 526,
-      "end": 527,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 526,
-      "end": 527,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected ',' or ')' in parenthesized expression",
-      "help": "Add a comma between elements or close with ')'.",
-      "start": 547,
-      "end": 548,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '.'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 547,
-      "end": 548,
       "labels": [
       ]
     },
