@@ -44,10 +44,6 @@ pub const IndexRange = struct {
     len: u32,
 
     pub const empty: IndexRange = .{ .start = 0, .len = 0 };
-
-    pub fn isEmpty(self: IndexRange) bool {
-        return self.start == 0 and self.len == 0;
-    }
 };
 
 /// https://tc39.es/ecma262/#sec-binary-operators
