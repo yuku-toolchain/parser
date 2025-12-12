@@ -33,7 +33,7 @@
 **Member & Call Expressions:**
 - [x] Member expressions (obj.prop, obj[prop])
 - [x] Call expressions (func(), obj.method())
-- [ ] New expressions (new Constructor())
+- [x] New expressions (new Constructor())
 - [x] Optional chaining (?.)
 - [x] Computed member access
 
@@ -41,12 +41,11 @@
 - [x] Arrow functions (ArrowFunctionExpression)
 - [x] Parenthesized expressions (ParenthesizedExpression)
 - [x] Function expressions (FunctionExpression)
-- [ ] Class expressions (ClassExpression)
 - [x] Object expressions (ObjectExpression)
 - [x] Array expressions (ArrayExpression)
 - [x] Spread elements (SpreadElement)
-- [ ] Await expressions
-- [ ] Yield expressions
+- [x] Await expressions
+- [x] Yield expressions
 - [ ] Meta property (new.target, import.meta)
 
 ### 1.4 Statements
