@@ -52,6 +52,69 @@
                       }
                     }
                   ]
+                },
+                {
+                  "type": "ExpressionStatement",
+                  "start": 37,
+                  "end": 69,
+                  "expression": {
+                    "type": "CallExpression",
+                    "start": 37,
+                    "end": 68,
+                    "callee": {
+                      "type": "Identifier",
+                      "start": 37,
+                      "end": 38,
+                      "name": "b"
+                    },
+                    "arguments": [
+                      {
+                        "type": "MemberExpression",
+                        "start": 39,
+                        "end": 67,
+                        "object": {
+                          "type": "MemberExpression",
+                          "start": 39,
+                          "end": 65,
+                          "object": {
+                            "type": "MemberExpression",
+                            "start": 39,
+                            "end": 55,
+                            "object": {
+                              "type": "ThisExpression",
+                              "start": 39,
+                              "end": 43
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "start": 44,
+                              "end": 55,
+                              "name": "constructor"
+                            },
+                            "computed": false,
+                            "optional": false
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 56,
+                            "end": 65,
+                            "name": "arguments"
+                          },
+                          "computed": false,
+                          "optional": false
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 66,
+                          "end": 67,
+                          "name": "c"
+                        },
+                        "computed": false,
+                        "optional": false
+                      }
+                    ],
+                    "optional": false
+                  }
                 }
               ]
             },
@@ -66,14 +129,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'this'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 39,
-      "end": 43,
-      "labels": [
-      ]
-    }
   ]
 }

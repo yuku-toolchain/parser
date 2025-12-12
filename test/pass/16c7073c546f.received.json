@@ -52,6 +52,29 @@
                       }
                     }
                   ]
+                },
+                {
+                  "type": "ExpressionStatement",
+                  "start": 106,
+                  "end": 121,
+                  "expression": {
+                    "type": "MemberExpression",
+                    "start": 106,
+                    "end": 120,
+                    "object": {
+                      "type": "ThisExpression",
+                      "start": 106,
+                      "end": 110
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "start": 111,
+                      "end": 120,
+                      "name": "arguments"
+                    },
+                    "computed": false,
+                    "optional": false
+                  }
                 }
               ]
             },
@@ -72,14 +95,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'this'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 106,
-      "end": 110,
-      "labels": [
-      ]
-    }
   ]
 }

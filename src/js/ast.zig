@@ -1,13 +1,9 @@
 const std = @import("std");
 const token = @import("token.zig");
 
-/// ESTree Comment node
-/// https://github.com/estree/estree/blob/master/es5.md#comment
 pub const Comment = struct {
     type: Type,
-    /// Start position in source (byte offset)
     start: u32,
-    /// End position in source (byte offset)
     end: u32,
 
     pub const Type = enum {
@@ -22,7 +18,6 @@ pub const Comment = struct {
         }
     };
 
-    /// Returns the comment value (content without delimiters)
     pub fn getValue(self: Comment, source: []const u8) []const u8 {
         return switch (self.type) {
             // Skip "//" prefix
@@ -754,6 +749,7 @@ pub const NodeData = union(enum) {
     bigint_literal: BigIntLiteral,
     boolean_literal: BooleanLiteral,
     null_literal,
+    this_expression,
     regexp_literal: RegExpLiteral,
     template_literal: TemplateLiteral,
     template_element: TemplateElement,

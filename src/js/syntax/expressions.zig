@@ -109,6 +109,7 @@ inline fn parsePrimaryExpression(parser: *Parser, enable_validation: bool) Error
         .string_literal => literals.parseStringLiteral(parser),
         .true, .false => literals.parseBooleanLiteral(parser),
         .null_literal => literals.parseNullLiteral(parser),
+        .this => parseThisExpression(parser),
         .numeric_literal, .hex_literal, .octal_literal, .binary_literal => literals.parseNumericLiteral(parser),
         .bigint_literal => literals.parseBigIntLiteral(parser),
         .slash => literals.parseRegExpLiteral(parser),
@@ -259,6 +260,14 @@ fn parseYieldExpression(parser: *Parser) Error!?ast.NodeIndex {
         .{ .yield_expression = .{ .argument = argument, .delegate = delegate } },
         .{ .start = start, .end = end },
     );
+}
+
+/// `this`
+/// https://tc39.es/ecma262/#sec-this-keyword
+fn parseThisExpression(parser: *Parser) Error!?ast.NodeIndex {
+    const this_token = parser.current_token;
+    try parser.advance(); // consume 'this'
+    return try parser.addNode(.this_expression, this_token.span);
 }
 
 /// `new Callee` or `new Callee(args)`

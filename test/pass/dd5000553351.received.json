@@ -30,20 +30,47 @@
             }
           }
         ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 11,
+        "end": 22,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 11,
+          "end": 21,
+          "operator": "=",
+          "left": {
+            "type": "MemberExpression",
+            "start": 11,
+            "end": 17,
+            "object": {
+              "type": "ThisExpression",
+              "start": 11,
+              "end": 15
+            },
+            "property": {
+              "type": "Identifier",
+              "start": 16,
+              "end": 17,
+              "name": "b"
+            },
+            "computed": false,
+            "optional": false
+          },
+          "right": {
+            "type": "Literal",
+            "start": 20,
+            "end": 21,
+            "value": 2,
+            "raw": "2"
+          }
+        }
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'this'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 11,
-      "end": 15,
-      "labels": [
-      ]
-    }
   ]
 }
