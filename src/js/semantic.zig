@@ -28,3 +28,5 @@
 // ImportMeta :
 //  import.meta
 //  It is a Syntax Error if the syntactic goal symbol is not Module.
+// It is a Syntax Error if this BreakStatement is not nested, directly or indirectly (but not crossing function or static initialization block boundaries), within an IterationStatement or a SwitchStatement.
+// It is a Syntax Error if this ContinueStatement is not nested, directly or indirectly (but not crossing function or static initialization block boundaries), within an IterationStatement.
