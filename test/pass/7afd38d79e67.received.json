@@ -60,8 +60,7 @@
                       "end": 48,
                       "value": "not a directive",
                       "raw": "\"not a directive\""
-                    },
-                    "directive": "not a directive"
+                    }
                   },
                   {
                     "type": "ExpressionStatement",

@@ -113,6 +113,8 @@ const ParserContext = struct {
 const ParserState = struct {
     /// tracks if CoverInitializedName ({a = 1}) was parsed in current cover context.
     cover_has_init_name: bool = false,
+    /// tracks if we're still in the directive prologue of a function/script body.
+    in_directive_prologue: bool = true,
 };
 
 pub const Error = error{OutOfMemory};
@@ -206,10 +208,19 @@ pub const Parser = struct {
     pub fn parseBody(self: *Parser, terminator: ?token.TokenType) Error!ast.IndexRange {
         const statements_checkpoint = self.scratch_statements.begin();
 
+        // Reset directive prologue state for this body
+        self.state.in_directive_prologue = true;
+
         while (!self.isAtBodyEnd(terminator)) {
             if (try statements.parseStatement(self)) |statement| {
                 try self.scratch_statements.append(self.allocator(), statement);
+
+                // End directive prologue after first non-directive statement
+                if (self.state.in_directive_prologue and self.getData(statement) != .directive) {
+                    self.state.in_directive_prologue = false;
+                }
             } else {
+                self.state.in_directive_prologue = false;
                 try self.synchronize(terminator);
             }
         }

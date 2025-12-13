@@ -55,8 +55,8 @@ fn parseExpressionStatementOrLabeledOrDirective(parser: *Parser) Error!?ast.Node
     const start = expression_span.start;
     const end = try parser.eatSemicolon(expression_span.end);
 
-    // it's a directive
-    if (expression_data == .string_literal) {
+    // Directive: string literal at start of body (directive prologue)
+    if (expression_data == .string_literal and parser.state.in_directive_prologue) {
         const value_start = expression_data.string_literal.raw_start + 1;
         const value_len: u16 = expression_data.string_literal.raw_len - 2;
 
