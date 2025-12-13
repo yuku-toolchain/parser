@@ -45,6 +45,17 @@
                   "start": 22,
                   "end": 37,
                   "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "start": 26,
+                      "end": 35,
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 33,
+                        "end": 34,
+                        "name": "b"
+                      }
+                    }
                   ]
                 },
                 "expression": false
@@ -58,14 +69,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 26,
-      "end": 32,
-      "labels": [
-      ]
-    }
   ]
 }

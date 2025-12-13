@@ -87,6 +87,12 @@
               }
             },
             {
+              "type": "ReturnStatement",
+              "start": 92,
+              "end": 99,
+              "argument": null
+            },
+            {
               "type": "IfStatement",
               "start": 113,
               "end": 158,
@@ -133,14 +139,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 92,
-      "end": 98,
-      "labels": [
-      ]
-    }
   ]
 }

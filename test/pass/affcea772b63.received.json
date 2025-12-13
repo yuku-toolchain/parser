@@ -71,20 +71,42 @@
             "optional": false
           }
         }
+      },
+      {
+        "type": "TryStatement",
+        "start": 33,
+        "end": 52,
+        "block": {
+          "type": "BlockStatement",
+          "start": 37,
+          "end": 39,
+          "body": [
+          ]
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start": 40,
+          "end": 52,
+          "param": {
+            "type": "Identifier",
+            "start": 47,
+            "end": 48,
+            "name": "c"
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start": 50,
+            "end": 52,
+            "body": [
+            ]
+          }
+        },
+        "finalizer": null
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'try'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 33,
-      "end": 36,
-      "labels": [
-      ]
-    }
   ]
 }

@@ -36,6 +36,36 @@
           "start": 17,
           "end": 36,
           "body": [
+            {
+              "type": "ReturnStatement",
+              "start": 19,
+              "end": 34,
+              "argument": {
+                "type": "BinaryExpression",
+                "start": 26,
+                "end": 33,
+                "left": {
+                  "type": "UpdateExpression",
+                  "start": 26,
+                  "end": 29,
+                  "operator": "--",
+                  "prefix": false,
+                  "argument": {
+                    "type": "Identifier",
+                    "start": 26,
+                    "end": 27,
+                    "name": "b"
+                  }
+                },
+                "operator": ">",
+                "right": {
+                  "type": "Identifier",
+                  "start": 32,
+                  "end": 33,
+                  "name": "c"
+                }
+              }
+            }
           ]
         },
         "expression": false
@@ -45,14 +75,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 19,
-      "end": 25,
-      "labels": [
-      ]
-    }
   ]
 }

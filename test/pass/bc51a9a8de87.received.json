@@ -88,6 +88,24 @@
                                       ]
                                     },
                                     {
+                                      "type": "IfStatement",
+                                      "start": 31,
+                                      "end": 45,
+                                      "test": {
+                                        "type": "Identifier",
+                                        "start": 35,
+                                        "end": 36,
+                                        "name": "b"
+                                      },
+                                      "consequent": {
+                                        "type": "ReturnStatement",
+                                        "start": 38,
+                                        "end": 45,
+                                        "argument": null
+                                      },
+                                      "alternate": null
+                                    },
+                                    {
                                       "type": "ExpressionStatement",
                                       "start": 48,
                                       "end": 60,
@@ -120,6 +138,17 @@
                                             ]
                                           }
                                         }
+                                      }
+                                    },
+                                    {
+                                      "type": "ReturnStatement",
+                                      "start": 63,
+                                      "end": 72,
+                                      "argument": {
+                                        "type": "Identifier",
+                                        "start": 70,
+                                        "end": 71,
+                                        "name": "a"
                                       }
                                     }
                                   ]
@@ -168,6 +197,24 @@
                                   ]
                                 },
                                 {
+                                  "type": "IfStatement",
+                                  "start": 104,
+                                  "end": 118,
+                                  "test": {
+                                    "type": "Identifier",
+                                    "start": 108,
+                                    "end": 109,
+                                    "name": "b"
+                                  },
+                                  "consequent": {
+                                    "type": "ReturnStatement",
+                                    "start": 111,
+                                    "end": 118,
+                                    "argument": null
+                                  },
+                                  "alternate": null
+                                },
+                                {
                                   "type": "ExpressionStatement",
                                   "start": 121,
                                   "end": 133,
@@ -200,6 +247,17 @@
                                         ]
                                       }
                                     }
+                                  }
+                                },
+                                {
+                                  "type": "ReturnStatement",
+                                  "start": 136,
+                                  "end": 145,
+                                  "argument": {
+                                    "type": "Identifier",
+                                    "start": 143,
+                                    "end": 144,
+                                    "name": "a"
                                   }
                                 }
                               ]
@@ -251,6 +309,24 @@
                           ]
                         },
                         {
+                          "type": "IfStatement",
+                          "start": 178,
+                          "end": 192,
+                          "test": {
+                            "type": "Identifier",
+                            "start": 182,
+                            "end": 183,
+                            "name": "b"
+                          },
+                          "consequent": {
+                            "type": "ReturnStatement",
+                            "start": 185,
+                            "end": 192,
+                            "argument": null
+                          },
+                          "alternate": null
+                        },
+                        {
                           "type": "ExpressionStatement",
                           "start": 195,
                           "end": 207,
@@ -284,6 +360,17 @@
                               }
                             }
                           }
+                        },
+                        {
+                          "type": "ReturnStatement",
+                          "start": 210,
+                          "end": 219,
+                          "argument": {
+                            "type": "Identifier",
+                            "start": 217,
+                            "end": 218,
+                            "name": "a"
+                          }
                         }
                       ]
                     },
@@ -304,59 +391,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 38,
-      "end": 44,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 63,
-      "end": 69,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 111,
-      "end": 117,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 136,
-      "end": 142,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 185,
-      "end": 191,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 210,
-      "end": 216,
-      "labels": [
-      ]
-    }
   ]
 }

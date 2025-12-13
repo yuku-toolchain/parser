@@ -17,20 +17,42 @@
           "raw": "\"use strict\""
         },
         "directive": "use strict"
+      },
+      {
+        "type": "TryStatement",
+        "start": 14,
+        "end": 33,
+        "block": {
+          "type": "BlockStatement",
+          "start": 18,
+          "end": 20,
+          "body": [
+          ]
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start": 21,
+          "end": 33,
+          "param": {
+            "type": "Identifier",
+            "start": 28,
+            "end": 29,
+            "name": "a"
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start": 31,
+            "end": 33,
+            "body": [
+            ]
+          }
+        },
+        "finalizer": null
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'try'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 14,
-      "end": 17,
-      "labels": [
-      ]
-    }
   ]
 }

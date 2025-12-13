@@ -32,6 +32,18 @@
                 "end": 39,
                 "body": [
                   {
+                    "type": "ThrowStatement",
+                    "start": 18,
+                    "end": 28,
+                    "argument": {
+                      "type": "Literal",
+                      "start": 24,
+                      "end": 27,
+                      "value": "a",
+                      "raw": "'a'"
+                    }
+                  },
+                  {
                     "type": "ExpressionStatement",
                     "start": 33,
                     "end": 37,
@@ -65,14 +77,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'throw'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 18,
-      "end": 23,
-      "labels": [
-      ]
-    }
   ]
 }

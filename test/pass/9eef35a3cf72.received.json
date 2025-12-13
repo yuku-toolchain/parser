@@ -8,7 +8,7 @@
       {
         "type": "IfStatement",
         "start": 0,
-        "end": 34,
+        "end": 88,
         "test": {
           "type": "Identifier",
           "start": 4,
@@ -18,8 +18,132 @@
         "consequent": {
           "type": "BlockStatement",
           "start": 7,
-          "end": 34,
+          "end": 88,
           "body": [
+            {
+              "type": "TryStatement",
+              "start": 11,
+              "end": 47,
+              "block": {
+                "type": "BlockStatement",
+                "start": 15,
+                "end": 34,
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 21,
+                    "end": 30,
+                    "expression": {
+                      "type": "CallExpression",
+                      "start": 21,
+                      "end": 29,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 21,
+                        "end": 22,
+                        "name": "b"
+                      },
+                      "arguments": [
+                        {
+                          "type": "Literal",
+                          "start": 23,
+                          "end": 28,
+                          "value": "try",
+                          "raw": "\"try\""
+                        }
+                      ],
+                      "optional": false
+                    }
+                  }
+                ]
+              },
+              "handler": {
+                "type": "CatchClause",
+                "start": 35,
+                "end": 47,
+                "param": {
+                  "type": "Identifier",
+                  "start": 42,
+                  "end": 43,
+                  "name": "c"
+                },
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 45,
+                  "end": 47,
+                  "body": [
+                  ]
+                }
+              },
+              "finalizer": null
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 50,
+              "end": 86,
+              "expression": {
+                "type": "ParenthesizedExpression",
+                "start": 50,
+                "end": 85,
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 51,
+                  "end": 84,
+                  "callee": {
+                    "type": "ParenthesizedExpression",
+                    "start": 51,
+                    "end": 82,
+                    "expression": {
+                      "type": "FunctionExpression",
+                      "start": 52,
+                      "end": 81,
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [
+                      ],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 64,
+                        "end": 81,
+                        "body": [
+                          {
+                            "type": "ExpressionStatement",
+                            "start": 70,
+                            "end": 77,
+                            "expression": {
+                              "type": "CallExpression",
+                              "start": 70,
+                              "end": 76,
+                              "callee": {
+                                "type": "Identifier",
+                                "start": 70,
+                                "end": 71,
+                                "name": "b"
+                              },
+                              "arguments": [
+                                {
+                                  "type": "Literal",
+                                  "start": 72,
+                                  "end": 75,
+                                  "value": "d",
+                                  "raw": "\"d\""
+                                }
+                              ],
+                              "optional": false
+                            }
+                          }
+                        ]
+                      },
+                      "expression": false
+                    }
+                  },
+                  "arguments": [
+                  ],
+                  "optional": false
+                }
+              }
+            }
           ]
         },
         "alternate": null
@@ -29,50 +153,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'try'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 11,
-      "end": 14,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'catch'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 35,
-      "end": 40,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Function declaration requires a name",
-      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
-      "start": 61,
-      "end": 62,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 80,
-      "end": 81,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 87,
-      "end": 88,
-      "labels": [
-      ]
-    }
   ]
 }

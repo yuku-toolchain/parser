@@ -73,6 +73,18 @@
                             "start": 27,
                             "end": 46,
                             "body": [
+                              {
+                                "type": "ReturnStatement",
+                                "start": 33,
+                                "end": 42,
+                                "argument": {
+                                  "type": "Literal",
+                                  "start": 40,
+                                  "end": 41,
+                                  "value": 1,
+                                  "raw": "1"
+                                }
+                              }
                             ]
                           },
                           "expression": false
@@ -95,14 +107,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 33,
-      "end": 39,
-      "labels": [
-      ]
-    }
   ]
 }

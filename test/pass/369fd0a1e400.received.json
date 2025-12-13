@@ -5,6 +5,12 @@
     "end": 62,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ReturnStatement",
+        "start": 38,
+        "end": 44,
+        "argument": null
+      }
     ]
   },
   "comments": [
@@ -21,10 +27,19 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'return'",
+      "message": "Unexpected token 'super'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 38,
-      "end": 44,
+      "start": 45,
+      "end": 50,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Unexpected token 'super'",
+      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "start": 45,
+      "end": 50,
       "labels": [
       ]
     }

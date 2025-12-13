@@ -98,6 +98,25 @@
                             ],
                             "optional": false
                           }
+                        },
+                        {
+                          "type": "ReturnStatement",
+                          "start": 59,
+                          "end": 73,
+                          "argument": {
+                            "type": "UnaryExpression",
+                            "start": 66,
+                            "end": 72,
+                            "operator": "void",
+                            "prefix": true,
+                            "argument": {
+                              "type": "Literal",
+                              "start": 71,
+                              "end": 72,
+                              "value": 1,
+                              "raw": "1"
+                            }
+                          }
                         }
                       ]
                     },
@@ -116,14 +135,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 59,
-      "end": 65,
-      "labels": [
-      ]
-    }
   ]
 }

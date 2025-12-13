@@ -8,7 +8,7 @@
       {
         "type": "IfStatement",
         "start": 0,
-        "end": 86,
+        "end": 104,
         "test": {
           "type": "Identifier",
           "start": 4,
@@ -18,7 +18,7 @@
         "consequent": {
           "type": "BlockStatement",
           "start": 7,
-          "end": 86,
+          "end": 104,
           "body": [
             {
               "type": "ExpressionStatement",
@@ -81,6 +81,63 @@
                   "optional": false
                 }
               }
+            },
+            {
+              "type": "TryStatement",
+              "start": 65,
+              "end": 102,
+              "block": {
+                "type": "BlockStatement",
+                "start": 69,
+                "end": 86,
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 75,
+                    "end": 82,
+                    "expression": {
+                      "type": "CallExpression",
+                      "start": 75,
+                      "end": 81,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 75,
+                        "end": 76,
+                        "name": "b"
+                      },
+                      "arguments": [
+                        {
+                          "type": "Literal",
+                          "start": 77,
+                          "end": 80,
+                          "value": "d",
+                          "raw": "\"d\""
+                        }
+                      ],
+                      "optional": false
+                    }
+                  }
+                ]
+              },
+              "handler": {
+                "type": "CatchClause",
+                "start": 87,
+                "end": 102,
+                "param": {
+                  "type": "Identifier",
+                  "start": 94,
+                  "end": 95,
+                  "name": "e"
+                },
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 97,
+                  "end": 102,
+                  "body": [
+                  ]
+                }
+              },
+              "finalizer": null
             }
           ]
         },
@@ -97,23 +154,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'try'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 65,
-      "end": 68,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'catch'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 87,
-      "end": 92,
-      "labels": [
-      ]
-    }
   ]
 }

@@ -39,6 +39,18 @@
                 "start": 37,
                 "end": 62,
                 "body": [
+                  {
+                    "type": "ThrowStatement",
+                    "start": 47,
+                    "end": 56,
+                    "argument": {
+                      "type": "Literal",
+                      "start": 53,
+                      "end": 56,
+                      "value": "f",
+                      "raw": "'f'"
+                    }
+                  }
                 ]
               },
               "alternate": null
@@ -58,15 +70,6 @@
       "help": "Try inserting a semicolon here",
       "start": 20,
       "end": 20,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'throw'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 47,
-      "end": 52,
       "labels": [
       ]
     }

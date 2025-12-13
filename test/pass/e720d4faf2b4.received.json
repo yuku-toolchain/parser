@@ -24,6 +24,12 @@
           "start": 12,
           "end": 45,
           "body": [
+            {
+              "type": "ReturnStatement",
+              "start": 26,
+              "end": 33,
+              "argument": null
+            }
           ]
         },
         "expression": false
@@ -45,14 +51,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 26,
-      "end": 32,
-      "labels": [
-      ]
-    }
   ]
 }

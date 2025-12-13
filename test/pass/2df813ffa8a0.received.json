@@ -24,6 +24,18 @@
           "start": 13,
           "end": 69,
           "body": [
+            {
+              "type": "ReturnStatement",
+              "start": 15,
+              "end": 67,
+              "argument": {
+                "type": "Literal",
+                "start": 22,
+                "end": 66,
+                "value": "<!--HTML-->comment in<!--string literal-->",
+                "raw": "\"<!--HTML-->comment in<!--string literal-->\""
+              }
+            }
           ]
         },
         "expression": false
@@ -33,14 +45,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 15,
-      "end": 21,
-      "labels": [
-      ]
-    }
   ]
 }

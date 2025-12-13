@@ -24,6 +24,17 @@
           "start": 13,
           "end": 38,
           "body": [
+            {
+              "type": "DebuggerStatement",
+              "start": 17,
+              "end": 26
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 29,
+              "end": 36,
+              "argument": null
+            }
           ]
         },
         "expression": false
@@ -33,23 +44,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'debugger'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 17,
-      "end": 25,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 29,
-      "end": 35,
-      "labels": [
-      ]
-    }
   ]
 }

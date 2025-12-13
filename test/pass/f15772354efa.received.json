@@ -39,6 +39,18 @@
                     "raw": "'use strict'"
                   },
                   "directive": "use strict"
+                },
+                {
+                  "type": "ReturnStatement",
+                  "start": 26,
+                  "end": 35,
+                  "argument": {
+                    "type": "Literal",
+                    "start": 33,
+                    "end": 34,
+                    "value": 1,
+                    "raw": "1"
+                  }
                 }
               ]
             },
@@ -51,14 +63,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 26,
-      "end": 32,
-      "labels": [
-      ]
-    }
   ]
 }

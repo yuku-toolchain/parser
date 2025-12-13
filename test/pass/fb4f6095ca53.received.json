@@ -47,6 +47,17 @@
           "start": 29,
           "end": 44,
           "body": [
+            {
+              "type": "ReturnStatement",
+              "start": 33,
+              "end": 42,
+              "argument": {
+                "type": "Identifier",
+                "start": 40,
+                "end": 41,
+                "name": "c"
+              }
+            }
           ]
         },
         "expression": false
@@ -70,6 +81,30 @@
           "start": 58,
           "end": 80,
           "body": [
+            {
+              "type": "ReturnStatement",
+              "start": 62,
+              "end": 78,
+              "argument": {
+                "type": "UnaryExpression",
+                "start": 69,
+                "end": 77,
+                "operator": "void",
+                "prefix": true,
+                "argument": {
+                  "type": "ParenthesizedExpression",
+                  "start": 74,
+                  "end": 77,
+                  "expression": {
+                    "type": "Literal",
+                    "start": 75,
+                    "end": 76,
+                    "value": 1,
+                    "raw": "1"
+                  }
+                }
+              }
+            }
           ]
         },
         "expression": false
@@ -93,6 +128,30 @@
           "start": 94,
           "end": 116,
           "body": [
+            {
+              "type": "ReturnStatement",
+              "start": 98,
+              "end": 114,
+              "argument": {
+                "type": "UnaryExpression",
+                "start": 105,
+                "end": 113,
+                "operator": "void",
+                "prefix": true,
+                "argument": {
+                  "type": "ParenthesizedExpression",
+                  "start": 110,
+                  "end": 113,
+                  "expression": {
+                    "type": "Literal",
+                    "start": 111,
+                    "end": 112,
+                    "value": 2,
+                    "raw": "2"
+                  }
+                }
+              }
+            }
           ]
         },
         "expression": false
@@ -116,6 +175,12 @@
           "start": 130,
           "end": 143,
           "body": [
+            {
+              "type": "ReturnStatement",
+              "start": 134,
+              "end": 141,
+              "argument": null
+            }
           ]
         },
         "expression": false
@@ -224,6 +289,12 @@
                 ],
                 "optional": false
               }
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 188,
+              "end": 195,
+              "argument": null
             }
           ]
         },
@@ -373,10 +444,44 @@
                       ],
                       "optional": false
                     }
+                  },
+                  {
+                    "type": "ReturnStatement",
+                    "start": 267,
+                    "end": 280,
+                    "argument": {
+                      "type": "BinaryExpression",
+                      "start": 274,
+                      "end": 279,
+                      "left": {
+                        "type": "Identifier",
+                        "start": 274,
+                        "end": 275,
+                        "name": "h"
+                      },
+                      "operator": "+",
+                      "right": {
+                        "type": "Identifier",
+                        "start": 278,
+                        "end": 279,
+                        "name": "i"
+                      }
+                    }
                   }
                 ]
               },
               "alternate": null
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 287,
+              "end": 296,
+              "argument": {
+                "type": "Identifier",
+                "start": 294,
+                "end": 295,
+                "name": "c"
+              }
             }
           ]
         },
@@ -526,10 +631,57 @@
                       ],
                       "optional": false
                     }
+                  },
+                  {
+                    "type": "ReturnStatement",
+                    "start": 368,
+                    "end": 384,
+                    "argument": {
+                      "type": "UnaryExpression",
+                      "start": 375,
+                      "end": 383,
+                      "operator": "void",
+                      "prefix": true,
+                      "argument": {
+                        "type": "ParenthesizedExpression",
+                        "start": 380,
+                        "end": 383,
+                        "expression": {
+                          "type": "Literal",
+                          "start": 381,
+                          "end": 382,
+                          "value": 3,
+                          "raw": "3"
+                        }
+                      }
+                    }
                   }
                 ]
               },
               "alternate": null
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 391,
+              "end": 404,
+              "argument": {
+                "type": "BinaryExpression",
+                "start": 398,
+                "end": 403,
+                "left": {
+                  "type": "Identifier",
+                  "start": 398,
+                  "end": 399,
+                  "name": "h"
+                },
+                "operator": "+",
+                "right": {
+                  "type": "Identifier",
+                  "start": 402,
+                  "end": 403,
+                  "name": "i"
+                }
+              }
             }
           ]
         },
@@ -614,6 +766,30 @@
                   }
                 ],
                 "optional": false
+              }
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 444,
+              "end": 460,
+              "argument": {
+                "type": "UnaryExpression",
+                "start": 451,
+                "end": 459,
+                "operator": "void",
+                "prefix": true,
+                "argument": {
+                  "type": "ParenthesizedExpression",
+                  "start": 456,
+                  "end": 459,
+                  "expression": {
+                    "type": "Literal",
+                    "start": 457,
+                    "end": 458,
+                    "value": 4,
+                    "raw": "4"
+                  }
+                }
               }
             }
           ]
@@ -700,6 +876,17 @@
                 ],
                 "optional": false
               }
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 500,
+              "end": 509,
+              "argument": {
+                "type": "Identifier",
+                "start": 507,
+                "end": 508,
+                "name": "c"
+              }
             }
           ]
         },
@@ -724,6 +911,18 @@
           "start": 525,
           "end": 544,
           "body": [
+            {
+              "type": "ReturnStatement",
+              "start": 529,
+              "end": 542,
+              "argument": {
+                "type": "Literal",
+                "start": 536,
+                "end": 541,
+                "value": false,
+                "raw": "false"
+              }
+            }
           ]
         },
         "expression": false
@@ -747,6 +946,18 @@
           "start": 558,
           "end": 576,
           "body": [
+            {
+              "type": "ReturnStatement",
+              "start": 562,
+              "end": 574,
+              "argument": {
+                "type": "Literal",
+                "start": 569,
+                "end": 573,
+                "value": null,
+                "raw": "null"
+              }
+            }
           ]
         },
         "expression": false
@@ -770,6 +981,18 @@
           "start": 590,
           "end": 605,
           "body": [
+            {
+              "type": "ReturnStatement",
+              "start": 594,
+              "end": 603,
+              "argument": {
+                "type": "Literal",
+                "start": 601,
+                "end": 602,
+                "value": 5,
+                "raw": "5"
+              }
+            }
           ]
         },
         "expression": false
@@ -779,131 +1002,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 33,
-      "end": 39,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 62,
-      "end": 68,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 98,
-      "end": 104,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 134,
-      "end": 140,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 188,
-      "end": 194,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 267,
-      "end": 273,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 287,
-      "end": 293,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 368,
-      "end": 374,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 391,
-      "end": 397,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 444,
-      "end": 450,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 500,
-      "end": 506,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 529,
-      "end": 535,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 562,
-      "end": 568,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 594,
-      "end": 600,
-      "labels": [
-      ]
-    }
   ]
 }

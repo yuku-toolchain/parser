@@ -73,6 +73,18 @@
                       "end": 89,
                       "body": [
                         {
+                          "type": "ReturnStatement",
+                          "start": 61,
+                          "end": 70,
+                          "argument": {
+                            "type": "Literal",
+                            "start": 68,
+                            "end": 69,
+                            "value": 1,
+                            "raw": "1"
+                          }
+                        },
+                        {
                           "type": "ExpressionStatement",
                           "start": 79,
                           "end": 83,
@@ -93,6 +105,18 @@
                         }
                       ]
                     }
+                  },
+                  {
+                    "type": "ReturnStatement",
+                    "start": 94,
+                    "end": 103,
+                    "argument": {
+                      "type": "Literal",
+                      "start": 101,
+                      "end": 102,
+                      "value": 2,
+                      "raw": "2"
+                    }
                   }
                 ]
               },
@@ -109,23 +133,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 61,
-      "end": 67,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 94,
-      "end": 100,
-      "labels": [
-      ]
-    }
   ]
 }

@@ -31,6 +31,39 @@
                 "start": 12,
                 "end": 47,
                 "body": [
+                  {
+                    "type": "IfStatement",
+                    "start": 14,
+                    "end": 45,
+                    "test": {
+                      "type": "Identifier",
+                      "start": 18,
+                      "end": 19,
+                      "name": "a"
+                    },
+                    "consequent": {
+                      "type": "ReturnStatement",
+                      "start": 21,
+                      "end": 30,
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 28,
+                        "end": 29,
+                        "name": "b"
+                      }
+                    },
+                    "alternate": {
+                      "type": "ReturnStatement",
+                      "start": 36,
+                      "end": 45,
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 43,
+                        "end": 44,
+                        "name": "c"
+                      }
+                    }
+                  }
                 ]
               },
               "expression": false
@@ -46,32 +79,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 21,
-      "end": 27,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'else'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 31,
-      "end": 35,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 36,
-      "end": 42,
-      "labels": [
-      ]
-    }
   ]
 }

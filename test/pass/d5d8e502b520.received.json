@@ -35,6 +35,35 @@
                   "start": 14,
                   "end": 49,
                   "body": [
+                    {
+                      "type": "IfStatement",
+                      "start": 18,
+                      "end": 47,
+                      "test": {
+                        "type": "Identifier",
+                        "start": 22,
+                        "end": 23,
+                        "name": "a"
+                      },
+                      "consequent": {
+                        "type": "ReturnStatement",
+                        "start": 25,
+                        "end": 32,
+                        "argument": null
+                      },
+                      "alternate": {
+                        "type": "ReturnStatement",
+                        "start": 38,
+                        "end": 47,
+                        "argument": {
+                          "type": "Literal",
+                          "start": 45,
+                          "end": 46,
+                          "value": 1,
+                          "raw": "1"
+                        }
+                      }
+                    }
                   ]
                 },
                 "expression": false
@@ -51,32 +80,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 25,
-      "end": 31,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'else'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 33,
-      "end": 37,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 38,
-      "end": 44,
-      "labels": [
-      ]
-    }
   ]
 }

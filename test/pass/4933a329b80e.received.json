@@ -75,6 +75,17 @@
                               }
                             }
                           ]
+                        },
+                        {
+                          "type": "ReturnStatement",
+                          "start": 61,
+                          "end": 70,
+                          "argument": {
+                            "type": "Identifier",
+                            "start": 68,
+                            "end": 69,
+                            "name": "b"
+                          }
                         }
                       ]
                     },
@@ -95,14 +106,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 61,
-      "end": 67,
-      "labels": [
-      ]
-    }
   ]
 }

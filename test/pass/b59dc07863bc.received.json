@@ -25,38 +25,38 @@
           "end": 43,
           "body": [
             {
-              "type": "FunctionDeclaration",
-              "start": 24,
-              "end": 40,
-              "id": {
-                "type": "Identifier",
-                "start": 33,
-                "end": 34,
-                "name": "b"
-              },
-              "generator": false,
-              "async": false,
-              "params": [
-                {
-                  "type": "Identifier",
-                  "start": 35,
-                  "end": 36,
-                  "name": "c"
-                }
-              ],
-              "body": {
-                "type": "BlockStatement",
-                "start": 38,
+              "type": "ReturnStatement",
+              "start": 17,
+              "end": 41,
+              "argument": {
+                "type": "FunctionExpression",
+                "start": 24,
                 "end": 40,
-                "body": [
-                ]
-              },
-              "expression": false
-            },
-            {
-              "type": "EmptyStatement",
-              "start": 40,
-              "end": 41
+                "id": {
+                  "type": "Identifier",
+                  "start": 33,
+                  "end": 34,
+                  "name": "b"
+                },
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 35,
+                    "end": 36,
+                    "name": "c"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 38,
+                  "end": 40,
+                  "body": [
+                  ]
+                },
+                "expression": false
+              }
             }
           ]
         },
@@ -67,14 +67,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 17,
-      "end": 23,
-      "labels": [
-      ]
-    }
   ]
 }

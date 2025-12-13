@@ -510,6 +510,24 @@
                 ]
               },
               "expression": false
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 339,
+              "end": 349,
+              "argument": {
+                "type": "UnaryExpression",
+                "start": 346,
+                "end": 348,
+                "operator": "+",
+                "prefix": true,
+                "argument": {
+                  "type": "Identifier",
+                  "start": 347,
+                  "end": 348,
+                  "name": "m"
+                }
+              }
             }
           ]
         },
@@ -637,10 +655,181 @@
                   }
                 }
               }
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 419,
+              "end": 467,
+              "argument": {
+                "type": "UnaryExpression",
+                "start": 426,
+                "end": 466,
+                "operator": "+",
+                "prefix": true,
+                "argument": {
+                  "type": "ParenthesizedExpression",
+                  "start": 427,
+                  "end": 466,
+                  "expression": {
+                    "type": "CallExpression",
+                    "start": 428,
+                    "end": 465,
+                    "callee": {
+                      "type": "Identifier",
+                      "start": 428,
+                      "end": 429,
+                      "name": "e"
+                    },
+                    "arguments": [
+                      {
+                        "type": "BinaryExpression",
+                        "start": 430,
+                        "end": 464,
+                        "left": {
+                          "type": "ParenthesizedExpression",
+                          "start": 430,
+                          "end": 442,
+                          "expression": {
+                            "type": "UnaryExpression",
+                            "start": 431,
+                            "end": 441,
+                            "operator": "+",
+                            "prefix": true,
+                            "argument": {
+                              "type": "ParenthesizedExpression",
+                              "start": 432,
+                              "end": 441,
+                              "expression": {
+                                "type": "CallExpression",
+                                "start": 433,
+                                "end": 440,
+                                "callee": {
+                                  "type": "Identifier",
+                                  "start": 433,
+                                  "end": 434,
+                                  "name": "j"
+                                },
+                                "arguments": [
+                                  {
+                                    "type": "Identifier",
+                                    "start": 435,
+                                    "end": 436,
+                                    "name": "k"
+                                  },
+                                  {
+                                    "type": "Identifier",
+                                    "start": 438,
+                                    "end": 439,
+                                    "name": "l"
+                                  }
+                                ],
+                                "optional": false
+                              }
+                            }
+                          }
+                        },
+                        "operator": "/",
+                        "right": {
+                          "type": "ParenthesizedExpression",
+                          "start": 445,
+                          "end": 464,
+                          "expression": {
+                            "type": "UnaryExpression",
+                            "start": 446,
+                            "end": 463,
+                            "operator": "+",
+                            "prefix": true,
+                            "argument": {
+                              "type": "ParenthesizedExpression",
+                              "start": 447,
+                              "end": 463,
+                              "expression": {
+                                "type": "BinaryExpression",
+                                "start": 448,
+                                "end": 462,
+                                "left": {
+                                  "type": "ParenthesizedExpression",
+                                  "start": 448,
+                                  "end": 455,
+                                  "expression": {
+                                    "type": "BinaryExpression",
+                                    "start": 449,
+                                    "end": 454,
+                                    "left": {
+                                      "type": "Identifier",
+                                      "start": 449,
+                                      "end": 450,
+                                      "name": "l"
+                                    },
+                                    "operator": "-",
+                                    "right": {
+                                      "type": "Identifier",
+                                      "start": 453,
+                                      "end": 454,
+                                      "name": "k"
+                                    }
+                                  }
+                                },
+                                "operator": "|",
+                                "right": {
+                                  "type": "ParenthesizedExpression",
+                                  "start": 458,
+                                  "end": 462,
+                                  "expression": {
+                                    "type": "Literal",
+                                    "start": 459,
+                                    "end": 461,
+                                    "value": 14,
+                                    "raw": "14"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "optional": false
+                  }
+                }
+              }
             }
           ]
         },
         "expression": false
+      },
+      {
+        "type": "ReturnStatement",
+        "start": 474,
+        "end": 488,
+        "argument": {
+          "type": "ObjectExpression",
+          "start": 481,
+          "end": 487,
+          "properties": [
+            {
+              "type": "Property",
+              "start": 482,
+              "end": 486,
+              "kind": "init",
+              "key": {
+                "type": "Identifier",
+                "start": 482,
+                "end": 483,
+                "name": "p"
+              },
+              "value": {
+                "type": "Identifier",
+                "start": 485,
+                "end": 486,
+                "name": "p"
+              },
+              "method": false,
+              "shorthand": false,
+              "computed": false
+            }
+          ]
+        }
       },
       {
         "type": "FunctionDeclaration",
@@ -1134,6 +1323,24 @@
                 ]
               },
               "expression": false
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 826,
+              "end": 836,
+              "argument": {
+                "type": "UnaryExpression",
+                "start": 833,
+                "end": 835,
+                "operator": "+",
+                "prefix": true,
+                "argument": {
+                  "type": "Identifier",
+                  "start": 834,
+                  "end": 835,
+                  "name": "m"
+                }
+              }
             }
           ]
         },
@@ -1261,10 +1468,181 @@
                   }
                 }
               }
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 906,
+              "end": 954,
+              "argument": {
+                "type": "UnaryExpression",
+                "start": 913,
+                "end": 953,
+                "operator": "+",
+                "prefix": true,
+                "argument": {
+                  "type": "ParenthesizedExpression",
+                  "start": 914,
+                  "end": 953,
+                  "expression": {
+                    "type": "CallExpression",
+                    "start": 915,
+                    "end": 952,
+                    "callee": {
+                      "type": "Identifier",
+                      "start": 915,
+                      "end": 916,
+                      "name": "e"
+                    },
+                    "arguments": [
+                      {
+                        "type": "BinaryExpression",
+                        "start": 917,
+                        "end": 951,
+                        "left": {
+                          "type": "ParenthesizedExpression",
+                          "start": 917,
+                          "end": 929,
+                          "expression": {
+                            "type": "UnaryExpression",
+                            "start": 918,
+                            "end": 928,
+                            "operator": "+",
+                            "prefix": true,
+                            "argument": {
+                              "type": "ParenthesizedExpression",
+                              "start": 919,
+                              "end": 928,
+                              "expression": {
+                                "type": "CallExpression",
+                                "start": 920,
+                                "end": 927,
+                                "callee": {
+                                  "type": "Identifier",
+                                  "start": 920,
+                                  "end": 921,
+                                  "name": "j"
+                                },
+                                "arguments": [
+                                  {
+                                    "type": "Identifier",
+                                    "start": 922,
+                                    "end": 923,
+                                    "name": "k"
+                                  },
+                                  {
+                                    "type": "Identifier",
+                                    "start": 925,
+                                    "end": 926,
+                                    "name": "l"
+                                  }
+                                ],
+                                "optional": false
+                              }
+                            }
+                          }
+                        },
+                        "operator": "/",
+                        "right": {
+                          "type": "ParenthesizedExpression",
+                          "start": 932,
+                          "end": 951,
+                          "expression": {
+                            "type": "UnaryExpression",
+                            "start": 933,
+                            "end": 950,
+                            "operator": "+",
+                            "prefix": true,
+                            "argument": {
+                              "type": "ParenthesizedExpression",
+                              "start": 934,
+                              "end": 950,
+                              "expression": {
+                                "type": "BinaryExpression",
+                                "start": 935,
+                                "end": 949,
+                                "left": {
+                                  "type": "ParenthesizedExpression",
+                                  "start": 935,
+                                  "end": 942,
+                                  "expression": {
+                                    "type": "BinaryExpression",
+                                    "start": 936,
+                                    "end": 941,
+                                    "left": {
+                                      "type": "Identifier",
+                                      "start": 936,
+                                      "end": 937,
+                                      "name": "l"
+                                    },
+                                    "operator": "-",
+                                    "right": {
+                                      "type": "Identifier",
+                                      "start": 940,
+                                      "end": 941,
+                                      "name": "k"
+                                    }
+                                  }
+                                },
+                                "operator": "|",
+                                "right": {
+                                  "type": "ParenthesizedExpression",
+                                  "start": 945,
+                                  "end": 949,
+                                  "expression": {
+                                    "type": "Literal",
+                                    "start": 946,
+                                    "end": 948,
+                                    "value": 28,
+                                    "raw": "28"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "optional": false
+                  }
+                }
+              }
             }
           ]
         },
         "expression": false
+      },
+      {
+        "type": "ReturnStatement",
+        "start": 961,
+        "end": 975,
+        "argument": {
+          "type": "ObjectExpression",
+          "start": 968,
+          "end": 974,
+          "properties": [
+            {
+              "type": "Property",
+              "start": 969,
+              "end": 973,
+              "kind": "init",
+              "key": {
+                "type": "Identifier",
+                "start": 969,
+                "end": 970,
+                "name": "p"
+              },
+              "value": {
+                "type": "Identifier",
+                "start": 972,
+                "end": 973,
+                "name": "p"
+              },
+              "method": false,
+              "shorthand": false,
+              "computed": false
+            }
+          ]
+        }
       }
     ]
   },
@@ -1286,33 +1664,6 @@
       "help": "Try inserting a semicolon here",
       "start": 287,
       "end": 287,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 339,
-      "end": 345,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 419,
-      "end": 425,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 474,
-      "end": 480,
       "labels": [
       ]
     },
@@ -1340,33 +1691,6 @@
       "help": "Try inserting a semicolon here",
       "start": 774,
       "end": 774,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 826,
-      "end": 832,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 906,
-      "end": 912,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 961,
-      "end": 967,
       "labels": [
       ]
     },

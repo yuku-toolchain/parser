@@ -435,6 +435,24 @@
                 ]
               },
               "expression": false
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 395,
+              "end": 405,
+              "argument": {
+                "type": "UnaryExpression",
+                "start": 402,
+                "end": 404,
+                "operator": "+",
+                "prefix": true,
+                "argument": {
+                  "type": "Identifier",
+                  "start": 403,
+                  "end": 404,
+                  "name": "m"
+                }
+              }
             }
           ]
         },
@@ -542,10 +560,156 @@
                   }
                 }
               }
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 463,
+              "end": 499,
+              "argument": {
+                "type": "UnaryExpression",
+                "start": 470,
+                "end": 498,
+                "operator": "+",
+                "prefix": true,
+                "argument": {
+                  "type": "CallExpression",
+                  "start": 471,
+                  "end": 498,
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 471,
+                    "end": 472,
+                    "name": "e"
+                  },
+                  "arguments": [
+                    {
+                      "type": "BinaryExpression",
+                      "start": 473,
+                      "end": 497,
+                      "left": {
+                        "type": "UnaryExpression",
+                        "start": 473,
+                        "end": 481,
+                        "operator": "+",
+                        "prefix": true,
+                        "argument": {
+                          "type": "CallExpression",
+                          "start": 474,
+                          "end": 481,
+                          "callee": {
+                            "type": "Identifier",
+                            "start": 474,
+                            "end": 475,
+                            "name": "j"
+                          },
+                          "arguments": [
+                            {
+                              "type": "Identifier",
+                              "start": 476,
+                              "end": 477,
+                              "name": "k"
+                            },
+                            {
+                              "type": "Identifier",
+                              "start": 479,
+                              "end": 480,
+                              "name": "l"
+                            }
+                          ],
+                          "optional": false
+                        }
+                      },
+                      "operator": "/",
+                      "right": {
+                        "type": "UnaryExpression",
+                        "start": 484,
+                        "end": 497,
+                        "operator": "+",
+                        "prefix": true,
+                        "argument": {
+                          "type": "ParenthesizedExpression",
+                          "start": 485,
+                          "end": 497,
+                          "expression": {
+                            "type": "BinaryExpression",
+                            "start": 486,
+                            "end": 496,
+                            "left": {
+                              "type": "ParenthesizedExpression",
+                              "start": 486,
+                              "end": 493,
+                              "expression": {
+                                "type": "BinaryExpression",
+                                "start": 487,
+                                "end": 492,
+                                "left": {
+                                  "type": "Identifier",
+                                  "start": 487,
+                                  "end": 488,
+                                  "name": "l"
+                                },
+                                "operator": "-",
+                                "right": {
+                                  "type": "Identifier",
+                                  "start": 491,
+                                  "end": 492,
+                                  "name": "k"
+                                }
+                              }
+                            },
+                            "operator": "|",
+                            "right": {
+                              "type": "Literal",
+                              "start": 494,
+                              "end": 496,
+                              "value": 14,
+                              "raw": "14"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "optional": false
+                }
+              }
             }
           ]
         },
         "expression": false
+      },
+      {
+        "type": "ReturnStatement",
+        "start": 506,
+        "end": 522,
+        "argument": {
+          "type": "ObjectExpression",
+          "start": 513,
+          "end": 521,
+          "properties": [
+            {
+              "type": "Property",
+              "start": 515,
+              "end": 519,
+              "kind": "init",
+              "key": {
+                "type": "Identifier",
+                "start": 515,
+                "end": 516,
+                "name": "p"
+              },
+              "value": {
+                "type": "Identifier",
+                "start": 518,
+                "end": 519,
+                "name": "p"
+              },
+              "method": false,
+              "shorthand": false,
+              "computed": false
+            }
+          ]
+        }
       },
       {
         "type": "FunctionDeclaration",
@@ -964,6 +1128,24 @@
                 ]
               },
               "expression": false
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 870,
+              "end": 880,
+              "argument": {
+                "type": "UnaryExpression",
+                "start": 877,
+                "end": 879,
+                "operator": "+",
+                "prefix": true,
+                "argument": {
+                  "type": "Identifier",
+                  "start": 878,
+                  "end": 879,
+                  "name": "m"
+                }
+              }
             }
           ]
         },
@@ -1071,10 +1253,156 @@
                   }
                 }
               }
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 938,
+              "end": 974,
+              "argument": {
+                "type": "UnaryExpression",
+                "start": 945,
+                "end": 973,
+                "operator": "+",
+                "prefix": true,
+                "argument": {
+                  "type": "CallExpression",
+                  "start": 946,
+                  "end": 973,
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 946,
+                    "end": 947,
+                    "name": "e"
+                  },
+                  "arguments": [
+                    {
+                      "type": "BinaryExpression",
+                      "start": 948,
+                      "end": 972,
+                      "left": {
+                        "type": "UnaryExpression",
+                        "start": 948,
+                        "end": 956,
+                        "operator": "+",
+                        "prefix": true,
+                        "argument": {
+                          "type": "CallExpression",
+                          "start": 949,
+                          "end": 956,
+                          "callee": {
+                            "type": "Identifier",
+                            "start": 949,
+                            "end": 950,
+                            "name": "j"
+                          },
+                          "arguments": [
+                            {
+                              "type": "Identifier",
+                              "start": 951,
+                              "end": 952,
+                              "name": "k"
+                            },
+                            {
+                              "type": "Identifier",
+                              "start": 954,
+                              "end": 955,
+                              "name": "l"
+                            }
+                          ],
+                          "optional": false
+                        }
+                      },
+                      "operator": "/",
+                      "right": {
+                        "type": "UnaryExpression",
+                        "start": 959,
+                        "end": 972,
+                        "operator": "+",
+                        "prefix": true,
+                        "argument": {
+                          "type": "ParenthesizedExpression",
+                          "start": 960,
+                          "end": 972,
+                          "expression": {
+                            "type": "BinaryExpression",
+                            "start": 961,
+                            "end": 971,
+                            "left": {
+                              "type": "ParenthesizedExpression",
+                              "start": 961,
+                              "end": 968,
+                              "expression": {
+                                "type": "BinaryExpression",
+                                "start": 962,
+                                "end": 967,
+                                "left": {
+                                  "type": "Identifier",
+                                  "start": 962,
+                                  "end": 963,
+                                  "name": "l"
+                                },
+                                "operator": "-",
+                                "right": {
+                                  "type": "Identifier",
+                                  "start": 966,
+                                  "end": 967,
+                                  "name": "k"
+                                }
+                              }
+                            },
+                            "operator": "|",
+                            "right": {
+                              "type": "Literal",
+                              "start": 969,
+                              "end": 971,
+                              "value": 28,
+                              "raw": "28"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "optional": false
+                }
+              }
             }
           ]
         },
         "expression": false
+      },
+      {
+        "type": "ReturnStatement",
+        "start": 981,
+        "end": 997,
+        "argument": {
+          "type": "ObjectExpression",
+          "start": 988,
+          "end": 996,
+          "properties": [
+            {
+              "type": "Property",
+              "start": 990,
+              "end": 994,
+              "kind": "init",
+              "key": {
+                "type": "Identifier",
+                "start": 990,
+                "end": 991,
+                "name": "p"
+              },
+              "value": {
+                "type": "Identifier",
+                "start": 993,
+                "end": 994,
+                "name": "p"
+              },
+              "method": false,
+              "shorthand": false,
+              "computed": false
+            }
+          ]
+        }
       }
     ]
   },
@@ -1119,33 +1447,6 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 395,
-      "end": 401,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 463,
-      "end": 469,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 506,
-      "end": 512,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token '}'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 523,
@@ -1168,33 +1469,6 @@
       "help": "Try inserting a semicolon here",
       "start": 828,
       "end": 828,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 870,
-      "end": 876,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 938,
-      "end": 944,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 981,
-      "end": 987,
       "labels": [
       ]
     },

@@ -33,6 +33,10 @@ pub fn parseStatement(parser: *Parser) Error!?ast.NodeIndex {
         .@"for" => parseForStatement(parser, false),
         .@"break" => parseBreakStatement(parser),
         .@"continue" => parseContinueStatement(parser),
+        .@"return" => parseReturnStatement(parser),
+        .throw => parseThrowStatement(parser),
+        .@"try" => parseTryStatement(parser),
+        .debugger => parseDebuggerStatement(parser),
         .semicolon => parseEmptyStatement(parser),
 
         else => parseExpressionStatementOrLabeledOrDirective(parser),
@@ -493,6 +497,123 @@ fn parseForOfStatementRest(parser: *Parser, start: u32, left: ast.NodeIndex, is_
             .@"await" = is_await,
         },
     }, .{ .start = start, .end = parser.getSpan(body).end });
+}
+
+/// https://tc39.es/ecma262/#sec-return-statement
+fn parseReturnStatement(parser: *Parser) Error!?ast.NodeIndex {
+    const start = parser.current_token.span.start;
+    var end = parser.current_token.span.end;
+    try parser.advance(); // consume 'return'
+
+    var argument: ast.NodeIndex = ast.null_node;
+
+    // return [no LineTerminator here] Expression?
+    // Only parse expression if we're not at a statement terminator
+    if (!canInsertSemicolon(parser) and parser.current_token.type != .semicolon) {
+        if (try expressions.parseExpression(parser, 0, .{})) |expr| {
+            argument = expr;
+            end = parser.getSpan(expr).end;
+        }
+    }
+
+    end = try parser.eatSemicolon(end);
+
+    return try parser.addNode(.{ .return_statement = .{ .argument = argument } }, .{ .start = start, .end = end });
+}
+
+/// https://tc39.es/ecma262/#sec-throw-statement
+fn parseThrowStatement(parser: *Parser) Error!?ast.NodeIndex {
+    const start = parser.current_token.span.start;
+    try parser.advance(); // consume 'throw'
+
+    // throw [no LineTerminator here] Expression
+    if (parser.current_token.has_line_terminator_before) {
+        try parser.report(parser.current_token.span, "Illegal newline after throw", .{
+            .help = "The thrown expression must be on the same line as 'throw'",
+        });
+        return null;
+    }
+
+    const argument = try expressions.parseExpression(parser, 0, .{}) orelse {
+        try parser.report(parser.current_token.span, "Expected expression after 'throw'", .{});
+        return null;
+    };
+
+    const end = try parser.eatSemicolon(parser.getSpan(argument).end);
+
+    return try parser.addNode(.{ .throw_statement = .{ .argument = argument } }, .{ .start = start, .end = end });
+}
+
+/// https://tc39.es/ecma262/#sec-try-statement
+fn parseTryStatement(parser: *Parser) Error!?ast.NodeIndex {
+    const start = parser.current_token.span.start;
+    try parser.advance(); // consume 'try'
+
+    const block = try parseBlockStatement(parser) orelse return null;
+
+    var handler: ast.NodeIndex = ast.null_node;
+    var finalizer: ast.NodeIndex = ast.null_node;
+    var end = parser.getSpan(block).end;
+
+    // parse catch clause
+    if (parser.current_token.type == .@"catch") {
+        handler = try parseCatchClause(parser) orelse return null;
+        end = parser.getSpan(handler).end;
+    }
+
+    // parse finally clause
+    if (parser.current_token.type == .finally) {
+        try parser.advance(); // consume 'finally'
+        finalizer = try parseBlockStatement(parser) orelse return null;
+        end = parser.getSpan(finalizer).end;
+    }
+
+    // must have at least catch or finally
+    if (ast.isNull(handler) and ast.isNull(finalizer)) {
+        try parser.report(parser.current_token.span, "Try statement requires catch or finally clause", .{});
+        return null;
+    }
+
+    return try parser.addNode(.{
+        .try_statement = .{
+            .block = block,
+            .handler = handler,
+            .finalizer = finalizer,
+        },
+    }, .{ .start = start, .end = end });
+}
+
+/// https://tc39.es/ecma262/#prod-Catch
+fn parseCatchClause(parser: *Parser) Error!?ast.NodeIndex {
+    const start = parser.current_token.span.start;
+    try parser.advance(); // consume 'catch'
+
+    var param: ast.NodeIndex = ast.null_node;
+
+    // optional catch binding: catch (param) or catch
+    if (parser.current_token.type == .left_paren) {
+        try parser.advance(); // consume '('
+        param = try patterns.parseBindingPattern(parser) orelse return null;
+        if (!try parser.expect(.right_paren, "Expected ')' after catch parameter", null)) return null;
+    }
+
+    const body = try parseBlockStatement(parser) orelse return null;
+
+    return try parser.addNode(.{
+        .catch_clause = .{
+            .param = param,
+            .body = body,
+        },
+    }, .{ .start = start, .end = parser.getSpan(body).end });
+}
+
+/// https://tc39.es/ecma262/#sec-debugger-statement
+fn parseDebuggerStatement(parser: *Parser) Error!?ast.NodeIndex {
+    const start = parser.current_token.span.start;
+    var end = parser.current_token.span.end;
+    try parser.advance(); // consume 'debugger'
+    end = try parser.eatSemicolon(end);
+    return try parser.addNode(.debugger_statement, .{ .start = start, .end = end });
 }
 
 /// variable kind for for loops

@@ -66,6 +66,37 @@
             "optional": false
           }
         }
+      },
+      {
+        "type": "TryStatement",
+        "start": 48,
+        "end": 69,
+        "block": {
+          "type": "BlockStatement",
+          "start": 52,
+          "end": 55,
+          "body": [
+          ]
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start": 56,
+          "end": 69,
+          "param": {
+            "type": "Identifier",
+            "start": 63,
+            "end": 64,
+            "name": "c"
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start": 66,
+            "end": 69,
+            "body": [
+            ]
+          }
+        },
+        "finalizer": null
       }
     ]
   },
@@ -78,14 +109,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'try'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 48,
-      "end": 51,
-      "labels": [
-      ]
-    }
   ]
 }

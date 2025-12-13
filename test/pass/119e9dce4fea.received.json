@@ -112,6 +112,29 @@
                       "start": 57,
                       "end": 87,
                       "body": [
+                        {
+                          "type": "ReturnStatement",
+                          "start": 67,
+                          "end": 81,
+                          "argument": {
+                            "type": "MemberExpression",
+                            "start": 74,
+                            "end": 80,
+                            "object": {
+                              "type": "ThisExpression",
+                              "start": 74,
+                              "end": 78
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "start": 79,
+                              "end": 80,
+                              "name": "b"
+                            },
+                            "computed": false,
+                            "optional": false
+                          }
+                        }
                       ]
                     },
                     "expression": false
@@ -130,14 +153,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 67,
-      "end": 73,
-      "labels": [
-      ]
-    }
   ]
 }

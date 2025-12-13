@@ -68,6 +68,18 @@
                               ],
                               "optional": false
                             }
+                          },
+                          {
+                            "type": "ReturnStatement",
+                            "start": 40,
+                            "end": 49,
+                            "argument": {
+                              "type": "Literal",
+                              "start": 47,
+                              "end": 48,
+                              "value": 1,
+                              "raw": "1"
+                            }
                           }
                         ]
                       },
@@ -93,6 +105,18 @@
                               "arguments": [
                               ],
                               "optional": false
+                            }
+                          },
+                          {
+                            "type": "ReturnStatement",
+                            "start": 74,
+                            "end": 83,
+                            "argument": {
+                              "type": "Literal",
+                              "start": 81,
+                              "end": 82,
+                              "value": 2,
+                              "raw": "2"
                             }
                           }
                         ]
@@ -133,23 +157,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 40,
-      "end": 46,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 74,
-      "end": 80,
-      "labels": [
-      ]
-    }
   ]
 }

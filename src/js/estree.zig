@@ -82,6 +82,11 @@ pub const Serializer = struct {
             .break_statement => |d| self.writeBreakStatement(d, span),
             .continue_statement => |d| self.writeContinueStatement(d, span),
             .labeled_statement => |d| self.writeLabeledStatement(d, span),
+            .return_statement => |d| self.writeReturnStatement(d, span),
+            .throw_statement => |d| self.writeThrowStatement(d, span),
+            .try_statement => |d| self.writeTryStatement(d, span),
+            .catch_clause => |d| self.writeCatchClause(d, span),
+            .debugger_statement => self.writeDebuggerStatement(span),
             .empty_statement => self.writeEmptyStatement(span),
             .variable_declaration => |d| self.writeVariableDeclaration(d, span),
             .variable_declarator => |d| self.writeVariableDeclarator(d, span),
@@ -334,6 +339,48 @@ pub const Serializer = struct {
     fn writeEmptyStatement(self: *Self, span: ast.Span) !void {
         try self.beginObject();
         try self.fieldType("EmptyStatement");
+        try self.fieldSpan(span);
+        try self.endObject();
+    }
+
+    fn writeReturnStatement(self: *Self, data: ast.ReturnStatement, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ReturnStatement");
+        try self.fieldSpan(span);
+        try self.fieldNode("argument", data.argument);
+        try self.endObject();
+    }
+
+    fn writeThrowStatement(self: *Self, data: ast.ThrowStatement, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ThrowStatement");
+        try self.fieldSpan(span);
+        try self.fieldNode("argument", data.argument);
+        try self.endObject();
+    }
+
+    fn writeTryStatement(self: *Self, data: ast.TryStatement, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("TryStatement");
+        try self.fieldSpan(span);
+        try self.fieldNode("block", data.block);
+        try self.fieldNode("handler", data.handler);
+        try self.fieldNode("finalizer", data.finalizer);
+        try self.endObject();
+    }
+
+    fn writeCatchClause(self: *Self, data: ast.CatchClause, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("CatchClause");
+        try self.fieldSpan(span);
+        try self.fieldNode("param", data.param);
+        try self.fieldNode("body", data.body);
+        try self.endObject();
+    }
+
+    fn writeDebuggerStatement(self: *Self, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("DebuggerStatement");
         try self.fieldSpan(span);
         try self.endObject();
     }

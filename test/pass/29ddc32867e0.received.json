@@ -6,6 +6,18 @@
     "sourceType": "script",
     "body": [
       {
+        "type": "ThrowStatement",
+        "start": 0,
+        "end": 10,
+        "argument": {
+          "type": "Literal",
+          "start": 6,
+          "end": 9,
+          "value": "a",
+          "raw": "\"a\""
+        }
+      },
+      {
         "type": "ExpressionStatement",
         "start": 11,
         "end": 15,
@@ -29,14 +41,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'throw'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 5,
-      "labels": [
-      ]
-    }
   ]
 }

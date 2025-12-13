@@ -5,19 +5,21 @@
     "end": 8,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ThrowStatement",
+        "start": 0,
+        "end": 8,
+        "argument": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "name": "a"
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'throw'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 5,
-      "labels": [
-      ]
-    }
   ]
 }

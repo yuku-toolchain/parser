@@ -5,19 +5,34 @@
     "end": 18,
     "sourceType": "script",
     "body": [
+      {
+        "type": "IfStatement",
+        "start": 0,
+        "end": 17,
+        "test": {
+          "type": "UnaryExpression",
+          "start": 4,
+          "end": 6,
+          "operator": "!",
+          "prefix": true,
+          "argument": {
+            "type": "Identifier",
+            "start": 5,
+            "end": 6,
+            "name": "a"
+          }
+        },
+        "consequent": {
+          "type": "DebuggerStatement",
+          "start": 8,
+          "end": 17
+        },
+        "alternate": null
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'debugger'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 8,
-      "end": 16,
-      "labels": [
-      ]
-    }
   ]
 }

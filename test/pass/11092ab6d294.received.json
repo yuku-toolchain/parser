@@ -73,6 +73,18 @@
               }
             },
             {
+              "type": "ThrowStatement",
+              "start": 35,
+              "end": 45,
+              "argument": {
+                "type": "Literal",
+                "start": 41,
+                "end": 44,
+                "value": "d",
+                "raw": "\"d\""
+              }
+            },
+            {
               "type": "IfStatement",
               "start": 48,
               "end": 180,
@@ -256,14 +268,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'throw'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 35,
-      "end": 40,
-      "labels": [
-      ]
-    }
   ]
 }

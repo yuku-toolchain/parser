@@ -72,6 +72,29 @@
           "start": 38,
           "end": 59,
           "body": [
+            {
+              "type": "IfStatement",
+              "start": 42,
+              "end": 57,
+              "test": {
+                "type": "Identifier",
+                "start": 46,
+                "end": 47,
+                "name": "b"
+              },
+              "consequent": {
+                "type": "ThrowStatement",
+                "start": 49,
+                "end": 57,
+                "argument": {
+                  "type": "Identifier",
+                  "start": 55,
+                  "end": 56,
+                  "name": "c"
+                }
+              },
+              "alternate": null
+            }
           ]
         },
         "alternate": {
@@ -101,6 +124,29 @@
           "start": 75,
           "end": 105,
           "body": [
+            {
+              "type": "IfStatement",
+              "start": 88,
+              "end": 103,
+              "test": {
+                "type": "Identifier",
+                "start": 92,
+                "end": 93,
+                "name": "b"
+              },
+              "consequent": {
+                "type": "ThrowStatement",
+                "start": 95,
+                "end": 103,
+                "argument": {
+                  "type": "Identifier",
+                  "start": 101,
+                  "end": 102,
+                  "name": "c"
+                }
+              },
+              "alternate": null
+            }
           ]
         },
         "alternate": {
@@ -130,6 +176,29 @@
           "start": 121,
           "end": 156,
           "body": [
+            {
+              "type": "IfStatement",
+              "start": 128,
+              "end": 143,
+              "test": {
+                "type": "Identifier",
+                "start": 132,
+                "end": 133,
+                "name": "b"
+              },
+              "consequent": {
+                "type": "ThrowStatement",
+                "start": 135,
+                "end": 143,
+                "argument": {
+                  "type": "Identifier",
+                  "start": 141,
+                  "end": 142,
+                  "name": "c"
+                }
+              },
+              "alternate": null
+            }
           ]
         },
         "alternate": {
@@ -151,15 +220,6 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'throw'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 49,
-      "end": 54,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token 'with'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 79,
@@ -169,28 +229,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'throw'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 95,
-      "end": 100,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token 'do'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 125,
       "end": 127,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'throw'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 135,
-      "end": 140,
       "labels": [
       ]
     },

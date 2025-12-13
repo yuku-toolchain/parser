@@ -5,6 +5,63 @@
     "end": 74,
     "sourceType": "script",
     "body": [
+      {
+        "type": "TryStatement",
+        "start": 43,
+        "end": 73,
+        "block": {
+          "type": "BlockStatement",
+          "start": 47,
+          "end": 49,
+          "body": [
+          ]
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start": 50,
+          "end": 73,
+          "param": {
+            "type": "Identifier",
+            "start": 57,
+            "end": 58,
+            "name": "d"
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start": 60,
+            "end": 73,
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start": 64,
+                "end": 71,
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 64,
+                  "end": 70,
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 64,
+                    "end": 65,
+                    "name": "b"
+                  },
+                  "arguments": [
+                    {
+                      "type": "Literal",
+                      "start": 66,
+                      "end": 69,
+                      "value": "e",
+                      "raw": "\"e\""
+                    }
+                  ],
+                  "optional": false
+                }
+              }
+            ]
+          }
+        },
+        "finalizer": null
+      }
     ]
   },
   "comments": [
@@ -34,24 +91,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 36,
       "end": 37,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'try'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 43,
-      "end": 46,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 72,
-      "end": 73,
       "labels": [
       ]
     }

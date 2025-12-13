@@ -498,6 +498,40 @@ pub const SwitchCase = struct {
     consequent: IndexRange,
 };
 
+/// `return;` or `return expression;`
+/// https://tc39.es/ecma262/#sec-return-statement
+pub const ReturnStatement = struct {
+    /// Expression (optional, may be null_node)
+    argument: NodeIndex,
+};
+
+/// `throw expression;`
+/// https://tc39.es/ecma262/#sec-throw-statement
+pub const ThrowStatement = struct {
+    /// Expression (required)
+    argument: NodeIndex,
+};
+
+/// `try { } catch { } finally { }`
+/// https://tc39.es/ecma262/#sec-try-statement
+pub const TryStatement = struct {
+    /// BlockStatement
+    block: NodeIndex,
+    /// CatchClause (optional, may be null_node)
+    handler: NodeIndex,
+    /// BlockStatement (optional, may be null_node)
+    finalizer: NodeIndex,
+};
+
+/// `catch (param) { body }`
+/// https://tc39.es/ecma262/#prod-Catch
+pub const CatchClause = struct {
+    /// BindingPattern (optional, may be null_node for `catch { }`)
+    param: NodeIndex,
+    /// BlockStatement
+    body: NodeIndex,
+};
+
 /// https://tc39.es/ecma262/#sec-literals-string-literals
 pub const StringLiteral = struct {
     raw_start: u32,
@@ -885,6 +919,11 @@ pub const NodeData = union(enum) {
     break_statement: BreakStatement,
     continue_statement: ContinueStatement,
     labeled_statement: LabeledStatement,
+    return_statement: ReturnStatement,
+    throw_statement: ThrowStatement,
+    try_statement: TryStatement,
+    catch_clause: CatchClause,
+    debugger_statement,
     empty_statement,
     variable_declaration: VariableDeclaration,
     variable_declarator: VariableDeclarator,

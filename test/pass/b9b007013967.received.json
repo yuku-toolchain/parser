@@ -36,6 +36,53 @@
           "start": 17,
           "end": 44,
           "body": [
+            {
+              "type": "ReturnStatement",
+              "start": 21,
+              "end": 42,
+              "argument": {
+                "type": "BinaryExpression",
+                "start": 28,
+                "end": 41,
+                "left": {
+                  "type": "Identifier",
+                  "start": 28,
+                  "end": 29,
+                  "name": "b"
+                },
+                "operator": "<<",
+                "right": {
+                  "type": "ParenthesizedExpression",
+                  "start": 33,
+                  "end": 41,
+                  "expression": {
+                    "type": "UnaryExpression",
+                    "start": 34,
+                    "end": 40,
+                    "operator": "!",
+                    "prefix": true,
+                    "argument": {
+                      "type": "ParenthesizedExpression",
+                      "start": 35,
+                      "end": 40,
+                      "expression": {
+                        "type": "UpdateExpression",
+                        "start": 36,
+                        "end": 39,
+                        "operator": "--",
+                        "prefix": true,
+                        "argument": {
+                          "type": "Identifier",
+                          "start": 38,
+                          "end": 39,
+                          "name": "c"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           ]
         },
         "expression": false
@@ -45,14 +92,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 21,
-      "end": 27,
-      "labels": [
-      ]
-    }
   ]
 }

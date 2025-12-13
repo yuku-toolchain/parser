@@ -35,6 +35,39 @@
                   "start": 14,
                   "end": 49,
                   "body": [
+                    {
+                      "type": "IfStatement",
+                      "start": 18,
+                      "end": 47,
+                      "test": {
+                        "type": "Identifier",
+                        "start": 22,
+                        "end": 23,
+                        "name": "a"
+                      },
+                      "consequent": {
+                        "type": "ThrowStatement",
+                        "start": 25,
+                        "end": 33,
+                        "argument": {
+                          "type": "Identifier",
+                          "start": 31,
+                          "end": 32,
+                          "name": "b"
+                        }
+                      },
+                      "alternate": {
+                        "type": "ThrowStatement",
+                        "start": 39,
+                        "end": 47,
+                        "argument": {
+                          "type": "Identifier",
+                          "start": 45,
+                          "end": 46,
+                          "name": "c"
+                        }
+                      }
+                    }
                   ]
                 },
                 "expression": false
@@ -51,23 +84,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'throw'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 25,
-      "end": 30,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'else'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 34,
-      "end": 38,
-      "labels": [
-      ]
-    }
   ]
 }

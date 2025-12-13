@@ -8,7 +8,7 @@
       {
         "type": "FunctionDeclaration",
         "start": 0,
-        "end": 22,
+        "end": 27,
         "id": {
           "type": "Identifier",
           "start": 9,
@@ -22,8 +22,33 @@
         "body": {
           "type": "BlockStatement",
           "start": 12,
-          "end": 22,
+          "end": 27,
           "body": [
+            {
+              "type": "ReturnStatement",
+              "start": 13,
+              "end": 26,
+              "argument": {
+                "type": "BinaryExpression",
+                "start": 20,
+                "end": 26,
+                "left": {
+                  "type": "ObjectExpression",
+                  "start": 20,
+                  "end": 22,
+                  "properties": [
+                  ]
+                },
+                "operator": "/",
+                "right": {
+                  "type": "Literal",
+                  "start": 25,
+                  "end": 26,
+                  "value": 1,
+                  "raw": "1"
+                }
+              }
+            }
           ]
         },
         "expression": false
@@ -33,23 +58,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 13,
-      "end": 19,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unterminated regular expression literal",
-      "help": "Try adding a closing slash (/) here, optionally followed by flags (g, i, m, etc.)",
-      "start": 23,
-      "end": 24,
-      "labels": [
-      ]
-    }
   ]
 }

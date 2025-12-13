@@ -35,6 +35,11 @@
                 "start": 185,
                 "end": 218,
                 "body": [
+                  {
+                    "type": "DebuggerStatement",
+                    "start": 199,
+                    "end": 208
+                  }
                 ]
               },
               "alternate": null
@@ -84,15 +89,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 159,
       "end": 163,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'debugger'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 199,
-      "end": 207,
       "labels": [
       ]
     },

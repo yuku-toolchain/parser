@@ -5,6 +5,18 @@
     "end": 69,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ReturnStatement",
+        "start": 45,
+        "end": 54,
+        "argument": {
+          "type": "Literal",
+          "start": 52,
+          "end": 53,
+          "value": 2,
+          "raw": "2"
+        }
+      }
     ]
   },
   "comments": [
@@ -25,15 +37,6 @@
       "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
       "start": 42,
       "end": 43,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 45,
-      "end": 51,
       "labels": [
       ]
     },

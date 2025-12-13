@@ -31,6 +31,52 @@
                 "start": 11,
                 "end": 54,
                 "body": [
+                  {
+                    "type": "IfStatement",
+                    "start": 17,
+                    "end": 32,
+                    "test": {
+                      "type": "Identifier",
+                      "start": 20,
+                      "end": 21,
+                      "name": "a"
+                    },
+                    "consequent": {
+                      "type": "ReturnStatement",
+                      "start": 23,
+                      "end": 32,
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 30,
+                        "end": 31,
+                        "name": "b"
+                      }
+                    },
+                    "alternate": null
+                  },
+                  {
+                    "type": "IfStatement",
+                    "start": 37,
+                    "end": 52,
+                    "test": {
+                      "type": "Identifier",
+                      "start": 40,
+                      "end": 41,
+                      "name": "b"
+                    },
+                    "consequent": {
+                      "type": "ReturnStatement",
+                      "start": 43,
+                      "end": 52,
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 50,
+                        "end": 51,
+                        "name": "c"
+                      }
+                    },
+                    "alternate": null
+                  }
                 ]
               },
               "expression": false
@@ -46,23 +92,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 23,
-      "end": 29,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 43,
-      "end": 49,
-      "labels": [
-      ]
-    }
   ]
 }

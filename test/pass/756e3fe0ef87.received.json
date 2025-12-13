@@ -61,6 +61,25 @@
                 ],
                 "optional": false
               }
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 37,
+              "end": 48,
+              "argument": {
+                "type": "CallExpression",
+                "start": 44,
+                "end": 47,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 44,
+                  "end": 45,
+                  "name": "d"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
             }
           ]
         },
@@ -122,6 +141,24 @@
                 ],
                 "optional": false
               }
+            },
+            {
+              "type": "ThrowStatement",
+              "start": 88,
+              "end": 102,
+              "argument": {
+                "type": "NewExpression",
+                "start": 94,
+                "end": 101,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 98,
+                  "end": 99,
+                  "name": "f"
+                },
+                "arguments": [
+                ]
+              }
             }
           ]
         },
@@ -132,23 +169,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 37,
-      "end": 43,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'throw'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 88,
-      "end": 93,
-      "labels": [
-      ]
-    }
   ]
 }

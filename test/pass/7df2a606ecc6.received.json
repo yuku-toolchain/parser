@@ -27,6 +27,23 @@
               "start": 11,
               "end": 35,
               "body": [
+                {
+                  "type": "ReturnStatement",
+                  "start": 13,
+                  "end": 19,
+                  "argument": null
+                },
+                {
+                  "type": "ExpressionStatement",
+                  "start": 31,
+                  "end": 33,
+                  "expression": {
+                    "type": "Identifier",
+                    "start": 31,
+                    "end": 32,
+                    "name": "a"
+                  }
+                }
               ]
             },
             "expression": false
@@ -44,14 +61,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'return'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 13,
-      "end": 19,
-      "labels": [
-      ]
-    }
   ]
 }
