@@ -30,3 +30,5 @@
 //  It is a Syntax Error if the syntactic goal symbol is not Module.
 // It is a Syntax Error if this BreakStatement is not nested, directly or indirectly (but not crossing function or static initialization block boundaries), within an IterationStatement or a SwitchStatement.
 // It is a Syntax Error if this ContinueStatement is not nested, directly or indirectly (but not crossing function or static initialization block boundaries), within an IterationStatement.
+// It is a Syntax Error if any element of the BoundNames of ForDeclaration also occurs in the VarDeclaredNames of Statement.
+// It is a Syntax Error if the BoundNames of ForDeclaration contains any duplicate entries.
