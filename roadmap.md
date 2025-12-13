@@ -51,7 +51,7 @@
 ### 1.4 Statements
 **Control Flow:**
 - [x] If statement (IfStatement)
-- [ ] Switch statement (SwitchStatement, SwitchCase)
+- [x] Switch statement (SwitchStatement, SwitchCase)
 - [ ] For statement (ForStatement)
 - [ ] For-in statement (ForInStatement)
 - [ ] For-of statement (ForOfStatement)
