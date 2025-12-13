@@ -508,7 +508,6 @@ fn parseReturnStatement(parser: *Parser) Error!?ast.NodeIndex {
     var argument: ast.NodeIndex = ast.null_node;
 
     // return [no LineTerminator here] Expression?
-    // Only parse expression if we're not at a statement terminator
     if (!canInsertSemicolon(parser) and parser.current_token.type != .semicolon) {
         if (try expressions.parseExpression(parser, 0, .{})) |expr| {
             argument = expr;
@@ -534,10 +533,7 @@ fn parseThrowStatement(parser: *Parser) Error!?ast.NodeIndex {
         return null;
     }
 
-    const argument = try expressions.parseExpression(parser, 0, .{}) orelse {
-        try parser.report(parser.current_token.span, "Expected expression after 'throw'", .{});
-        return null;
-    };
+    const argument = try expressions.parseExpression(parser, 0, .{}) orelse return null;
 
     const end = try parser.eatSemicolon(parser.getSpan(argument).end);
 
@@ -555,20 +551,17 @@ fn parseTryStatement(parser: *Parser) Error!?ast.NodeIndex {
     var finalizer: ast.NodeIndex = ast.null_node;
     var end = parser.getSpan(block).end;
 
-    // parse catch clause
     if (parser.current_token.type == .@"catch") {
         handler = try parseCatchClause(parser) orelse return null;
         end = parser.getSpan(handler).end;
     }
 
-    // parse finally clause
     if (parser.current_token.type == .finally) {
         try parser.advance(); // consume 'finally'
         finalizer = try parseBlockStatement(parser) orelse return null;
         end = parser.getSpan(finalizer).end;
     }
 
-    // must have at least catch or finally
     if (ast.isNull(handler) and ast.isNull(finalizer)) {
         try parser.report(parser.current_token.span, "Try statement requires catch or finally clause", .{});
         return null;

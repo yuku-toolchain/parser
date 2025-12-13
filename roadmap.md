@@ -61,16 +61,16 @@
 **Jump Statements:**
 - [x] Break statement
 - [x] Continue statement
-- [ ] Return statement
-- [ ] Throw statement
+- [x] Return statement
+- [x] Throw statement
 
 **Exception Handling:**
-- [ ] Try-catch-finally (TryStatement, CatchClause)
+- [x] Try-catch-finally (TryStatement, CatchClause)
 
 **Other Statements:**
 - [x] Block statement (BlockStatement)
 - [x] Empty statement (EmptyStatement)
-- [ ] Debugger statement
+- [x] Debugger statement
 - [ ] With statement (WithStatement)
 - [x] Labeled statement (LabeledStatement)
 - [x] Expression statement
