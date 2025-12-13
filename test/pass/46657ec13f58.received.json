@@ -6,30 +6,119 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 77,
-        "end": 84,
-        "expression": {
-          "type": "CallExpression",
-          "start": 77,
-          "end": 83,
-          "callee": {
-            "type": "Identifier",
-            "start": 77,
-            "end": 78,
-            "name": "b"
-          },
-          "arguments": [
-            {
+        "type": "SwitchStatement",
+        "start": 0,
+        "end": 86,
+        "discriminant": {
+          "type": "Identifier",
+          "start": 8,
+          "end": 9,
+          "name": "a"
+        },
+        "cases": [
+          {
+            "type": "SwitchCase",
+            "start": 13,
+            "end": 84,
+            "test": {
               "type": "Literal",
-              "start": 79,
-              "end": 82,
-              "value": "d",
-              "raw": "\"d\""
-            }
-          ],
-          "optional": false
-        }
+              "start": 18,
+              "end": 19,
+              "value": 1,
+              "raw": "1"
+            },
+            "consequent": [
+              {
+                "type": "ExpressionStatement",
+                "start": 40,
+                "end": 74,
+                "expression": {
+                  "type": "ParenthesizedExpression",
+                  "start": 40,
+                  "end": 73,
+                  "expression": {
+                    "type": "CallExpression",
+                    "start": 41,
+                    "end": 72,
+                    "callee": {
+                      "type": "FunctionExpression",
+                      "start": 41,
+                      "end": 70,
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [
+                      ],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 53,
+                        "end": 70,
+                        "body": [
+                          {
+                            "type": "ExpressionStatement",
+                            "start": 59,
+                            "end": 66,
+                            "expression": {
+                              "type": "CallExpression",
+                              "start": 59,
+                              "end": 65,
+                              "callee": {
+                                "type": "Identifier",
+                                "start": 59,
+                                "end": 60,
+                                "name": "b"
+                              },
+                              "arguments": [
+                                {
+                                  "type": "Literal",
+                                  "start": 61,
+                                  "end": 64,
+                                  "value": "c",
+                                  "raw": "\"c\""
+                                }
+                              ],
+                              "optional": false
+                            }
+                          }
+                        ]
+                      },
+                      "expression": false
+                    },
+                    "arguments": [
+                    ],
+                    "optional": false
+                  }
+                }
+              },
+              {
+                "type": "ExpressionStatement",
+                "start": 77,
+                "end": 84,
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 77,
+                  "end": 83,
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 77,
+                    "end": 78,
+                    "name": "b"
+                  },
+                  "arguments": [
+                    {
+                      "type": "Literal",
+                      "start": 79,
+                      "end": 82,
+                      "value": "d",
+                      "raw": "\"d\""
+                    }
+                  ],
+                  "optional": false
+                }
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -42,41 +131,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'switch'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 6,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Function declaration requires a name",
-      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
-      "start": 50,
-      "end": 51,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 69,
-      "end": 70,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 85,
-      "end": 86,
-      "labels": [
-      ]
-    }
   ]
 }

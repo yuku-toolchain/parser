@@ -6,22 +6,49 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "VariableDeclaration",
-        "start": 27,
-        "end": 33,
-        "kind": "let",
-        "declarations": [
+        "type": "SwitchStatement",
+        "start": 0,
+        "end": 35,
+        "discriminant": {
+          "type": "Identifier",
+          "start": 8,
+          "end": 9,
+          "name": "a"
+        },
+        "cases": [
           {
-            "type": "VariableDeclarator",
-            "start": 31,
-            "end": 32,
-            "id": {
-              "type": "Identifier",
-              "start": 31,
-              "end": 32,
-              "name": "b"
+            "type": "SwitchCase",
+            "start": 15,
+            "end": 33,
+            "test": {
+              "type": "Literal",
+              "start": 20,
+              "end": 21,
+              "value": 1,
+              "raw": "1"
             },
-            "init": null
+            "consequent": [
+              {
+                "type": "VariableDeclaration",
+                "start": 27,
+                "end": 33,
+                "kind": "let",
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 31,
+                    "end": 32,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 31,
+                      "end": 32,
+                      "name": "b"
+                    },
+                    "init": null
+                  }
+                ]
+              }
+            ]
           }
         ]
       }
@@ -30,23 +57,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'switch'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 6,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 34,
-      "end": 35,
-      "labels": [
-      ]
-    }
   ]
 }

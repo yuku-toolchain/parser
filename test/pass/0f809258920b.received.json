@@ -121,15 +121,6 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'switch'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 18,
-      "end": 24,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token 'break'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 73,
@@ -140,6 +131,15 @@
     {
       "severity": "error",
       "message": "Expected statement after if condition",
+      "help": null,
+      "start": 73,
+      "end": 78,
+      "labels": [
+      ]
+    },
+    {
+      "severity": "error",
+      "message": "Expected '}' to close switch body",
       "help": null,
       "start": 73,
       "end": 78,

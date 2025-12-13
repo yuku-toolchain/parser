@@ -5,37 +5,6 @@
     "end": 53,
     "sourceType": "script",
     "body": [
-      {
-        "type": "VariableDeclaration",
-        "start": 27,
-        "end": 39,
-        "kind": "let",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 31,
-            "end": 38,
-            "id": {
-              "type": "Identifier",
-              "start": 31,
-              "end": 32,
-              "name": "b"
-            },
-            "init": {
-              "type": "ParenthesizedExpression",
-              "start": 35,
-              "end": 38,
-              "expression": {
-                "type": "Literal",
-                "start": 36,
-                "end": 37,
-                "value": 2,
-                "raw": "2"
-              }
-            }
-          }
-        ]
-      }
     ]
   },
   "comments": [
@@ -43,17 +12,17 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'switch'",
+      "message": "Unexpected token 'break'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 6,
+      "start": 44,
+      "end": 49,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected '}' to close switch body",
+      "help": null,
       "start": 44,
       "end": 49,
       "labels": [

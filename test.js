@@ -1,3 +1,4 @@
-if (10) {
-  console.log('nice')
+switch (10) {
+  default:
+    haha
 }

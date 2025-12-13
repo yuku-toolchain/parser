@@ -5,6 +5,95 @@
     "end": 94,
     "sourceType": "script",
     "body": [
+      {
+        "type": "SwitchStatement",
+        "start": 0,
+        "end": 93,
+        "discriminant": {
+          "type": "Identifier",
+          "start": 8,
+          "end": 9,
+          "name": "a"
+        },
+        "cases": [
+          {
+            "type": "SwitchCase",
+            "start": 15,
+            "end": 91,
+            "test": {
+              "type": "Literal",
+              "start": 20,
+              "end": 21,
+              "value": 1,
+              "raw": "1"
+            },
+            "consequent": [
+              {
+                "type": "ExpressionStatement",
+                "start": 53,
+                "end": 91,
+                "expression": {
+                  "type": "ParenthesizedExpression",
+                  "start": 53,
+                  "end": 90,
+                  "expression": {
+                    "type": "CallExpression",
+                    "start": 54,
+                    "end": 89,
+                    "callee": {
+                      "type": "FunctionExpression",
+                      "start": 54,
+                      "end": 87,
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [
+                      ],
+                      "body": {
+                        "type": "BlockStatement",
+                        "start": 66,
+                        "end": 87,
+                        "body": [
+                          {
+                            "type": "ExpressionStatement",
+                            "start": 74,
+                            "end": 81,
+                            "expression": {
+                              "type": "CallExpression",
+                              "start": 74,
+                              "end": 80,
+                              "callee": {
+                                "type": "Identifier",
+                                "start": 74,
+                                "end": 75,
+                                "name": "b"
+                              },
+                              "arguments": [
+                                {
+                                  "type": "Literal",
+                                  "start": 76,
+                                  "end": 79,
+                                  "value": "c",
+                                  "raw": "'c'"
+                                }
+                              ],
+                              "optional": false
+                            }
+                          }
+                        ]
+                      },
+                      "expression": false
+                    },
+                    "arguments": [
+                    ],
+                    "optional": false
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
     ]
   },
   "comments": [
@@ -16,41 +105,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'switch'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 6,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Function declaration requires a name",
-      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
-      "start": 63,
-      "end": 64,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 86,
-      "end": 87,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 92,
-      "end": 93,
-      "labels": [
-      ]
-    }
   ]
 }

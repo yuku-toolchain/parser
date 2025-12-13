@@ -8,7 +8,7 @@
       {
         "type": "IfStatement",
         "start": 16,
-        "end": 95,
+        "end": 119,
         "test": {
           "type": "Identifier",
           "start": 20,
@@ -18,11 +18,84 @@
         "consequent": {
           "type": "BlockStatement",
           "start": 23,
-          "end": 95,
+          "end": 119,
           "body": [
+            {
+              "type": "SwitchStatement",
+              "start": 33,
+              "end": 95,
+              "discriminant": {
+                "type": "Literal",
+                "start": 41,
+                "end": 45,
+                "value": true,
+                "raw": "true"
+              },
+              "cases": [
+                {
+                  "type": "SwitchCase",
+                  "start": 59,
+                  "end": 85,
+                  "test": {
+                    "type": "CallExpression",
+                    "start": 64,
+                    "end": 67,
+                    "callee": {
+                      "type": "Identifier",
+                      "start": 64,
+                      "end": 65,
+                      "name": "c"
+                    },
+                    "arguments": [
+                    ],
+                    "optional": false
+                  },
+                  "consequent": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 81,
+                      "end": 85,
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 81,
+                        "end": 84,
+                        "callee": {
+                          "type": "Identifier",
+                          "start": 81,
+                          "end": 82,
+                          "name": "d"
+                        },
+                        "arguments": [
+                        ],
+                        "optional": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
           ]
         },
         "alternate": null
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 124,
+        "end": 128,
+        "expression": {
+          "type": "CallExpression",
+          "start": 124,
+          "end": 127,
+          "callee": {
+            "type": "Identifier",
+            "start": 124,
+            "end": 125,
+            "name": "e"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
       }
     ]
   },
@@ -40,28 +113,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'switch'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 33,
-      "end": 39,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token 'continue'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 104,
       "end": 112,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 118,
-      "end": 119,
       "labels": [
       ]
     },

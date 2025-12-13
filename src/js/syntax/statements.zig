@@ -26,6 +26,7 @@ pub fn parseStatement(parser: *Parser) Error!?ast.NodeIndex {
         },
         .left_brace => parseBlockStatement(parser),
         .@"if" => parseIfStatement(parser),
+        .@"switch" => parseSwitchStatement(parser),
 
         else => parseExpressionStatementOrDirective(parser),
     };
@@ -89,6 +90,94 @@ pub fn parseBlockStatement(parser: *Parser) Error!?ast.NodeIndex {
     )) return null;
 
     return try parser.addNode(.{ .block_statement = .{ .body = body } }, .{ .start = start, .end = end });
+}
+
+/// https://tc39.es/ecma262/#sec-switch-statement
+pub fn parseSwitchStatement(parser: *Parser) Error!?ast.NodeIndex {
+    const start = parser.current_token.span.start;
+    try parser.advance(); // consume 'switch'
+
+    if (!try parser.expect(.left_paren, "Expected '(' after 'switch'", null)) return null;
+
+    const discriminant = try expressions.parseExpression(parser, 0, .{}) orelse {
+        try parser.report(parser.current_token.span, "Expected expression in switch", .{});
+        return null;
+    };
+
+    if (!try parser.expect(.right_paren, "Expected ')' after switch expression", null)) return null;
+    if (!try parser.expect(.left_brace, "Expected '{' to start switch body", null)) return null;
+
+    const cases = try parseSwitchCases(parser);
+
+    const end = parser.current_token.span.end;
+    if (!try parser.expect(.right_brace, "Expected '}' to close switch body", null)) return null;
+
+    return try parser.addNode(.{
+        .switch_statement = .{
+            .discriminant = discriminant,
+            .cases = cases,
+        },
+    }, .{ .start = start, .end = end });
+}
+
+fn parseSwitchCases(parser: *Parser) Error!ast.IndexRange {
+    const checkpoint = parser.scratch_a.begin();
+
+    while (parser.current_token.type == .case or parser.current_token.type == .default) {
+        const case_node = try parseSwitchCase(parser) orelse continue;
+        try parser.scratch_a.append(parser.allocator(), case_node);
+    }
+
+    return parser.addExtra(parser.scratch_a.take(checkpoint));
+}
+
+fn parseSwitchCase(parser: *Parser) Error!?ast.NodeIndex {
+    const start = parser.current_token.span.start;
+    const is_default = parser.current_token.type == .default;
+
+    try parser.advance(); // consume 'case' or 'default'
+
+    var test_expr: ast.NodeIndex = ast.null_node;
+    if (!is_default) {
+        test_expr = try expressions.parseExpression(parser, 0, .{}) orelse {
+            try parser.report(parser.current_token.span, "Expected expression after 'case'", .{});
+            return null;
+        };
+    }
+
+    const colon_end = parser.current_token.span.end;
+    if (!try parser.expect(.colon, "Expected ':' after case", null)) return null;
+
+    const consequent = try parseCaseConsequent(parser);
+    const end = if (consequent.len > 0)
+        parser.getSpan(parser.getExtra(consequent)[consequent.len - 1]).end
+    else
+        colon_end;
+
+    return try parser.addNode(.{
+        .switch_case = .{
+            .@"test" = test_expr,
+            .consequent = consequent,
+        },
+    }, .{ .start = start, .end = end });
+}
+
+fn parseCaseConsequent(parser: *Parser) Error!ast.IndexRange {
+    const checkpoint = parser.scratch_b.begin();
+
+    while (parser.current_token.type != .case and
+        parser.current_token.type != .default and
+        parser.current_token.type != .right_brace and
+        parser.current_token.type != .eof)
+    {
+        if (try parseStatement(parser)) |stmt| {
+            try parser.scratch_b.append(parser.allocator(), stmt);
+        } else {
+            break;
+        }
+    }
+
+    return parser.addExtra(parser.scratch_b.take(checkpoint));
 }
 
 /// https://tc39.es/ecma262/#sec-if-statement

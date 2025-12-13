@@ -420,6 +420,24 @@ pub const IfStatement = struct {
     alternate: NodeIndex,
 };
 
+/// `switch (discriminant) { cases }`
+/// https://tc39.es/ecma262/#sec-switch-statement
+pub const SwitchStatement = struct {
+    /// Expression (the value to match)
+    discriminant: NodeIndex,
+    /// SwitchCase[]
+    cases: IndexRange,
+};
+
+/// `case test: consequent` or `default: consequent`
+/// https://tc39.es/ecma262/#prod-CaseClause
+pub const SwitchCase = struct {
+    /// Expression (optional, null_node for default case)
+    @"test": NodeIndex,
+    /// Statement[]
+    consequent: IndexRange,
+};
+
 /// https://tc39.es/ecma262/#sec-literals-string-literals
 pub const StringLiteral = struct {
     raw_start: u32,
@@ -792,6 +810,8 @@ pub const NodeData = union(enum) {
     identifier_name: IdentifierName,
     expression_statement: ExpressionStatement,
     if_statement: IfStatement,
+    switch_statement: SwitchStatement,
+    switch_case: SwitchCase,
     variable_declaration: VariableDeclaration,
     variable_declarator: VariableDeclarator,
     directive: Directive,

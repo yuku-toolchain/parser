@@ -209,6 +209,48 @@
             }
           }
         }
+      },
+      {
+        "type": "SwitchStatement",
+        "start": 117,
+        "end": 130,
+        "discriminant": {
+          "type": "Identifier",
+          "start": 125,
+          "end": 126,
+          "name": "b"
+        },
+        "cases": [
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 131,
+        "end": 139,
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 131,
+          "end": 138,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 131,
+            "end": 132,
+            "name": "a"
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "start": 135,
+            "end": 138,
+            "expression": {
+              "type": "Literal",
+              "start": 136,
+              "end": 137,
+              "value": 8,
+              "raw": "8"
+            }
+          }
+        }
       }
     ]
   },
@@ -248,15 +290,6 @@
       "help": "Try inserting a semicolon here",
       "start": 96,
       "end": 96,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'switch'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 117,
-      "end": 123,
       "labels": [
       ]
     },

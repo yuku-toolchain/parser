@@ -12,17 +12,17 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'switch'",
+      "message": "Unexpected token 'break'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 6,
+      "start": 26,
+      "end": 31,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
+      "message": "Expected '}' to close switch body",
+      "help": null,
       "start": 26,
       "end": 31,
       "labels": [

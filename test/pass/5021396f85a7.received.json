@@ -5,19 +5,37 @@
     "end": 18,
     "sourceType": "script",
     "body": [
+      {
+        "type": "SwitchStatement",
+        "start": 0,
+        "end": 18,
+        "discriminant": {
+          "type": "Identifier",
+          "start": 7,
+          "end": 8,
+          "name": "a"
+        },
+        "cases": [
+          {
+            "type": "SwitchCase",
+            "start": 10,
+            "end": 17,
+            "test": {
+              "type": "Literal",
+              "start": 15,
+              "end": 16,
+              "value": 1,
+              "raw": "1"
+            },
+            "consequent": [
+            ]
+          }
+        ]
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'switch'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 6,
-      "labels": [
-      ]
-    }
   ]
 }
