@@ -5,6 +5,21 @@
     "end": 52,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ForStatement",
+        "start": 0,
+        "end": 49,
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "BlockStatement",
+          "start": 9,
+          "end": 49,
+          "body": [
+          ]
+        }
+      }
     ]
   },
   "comments": [
@@ -12,19 +27,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'for'",
+      "message": "Unexpected token 'with'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 6,
-      "end": 7,
+      "start": 15,
+      "end": 19,
       "labels": [
       ]
     },
@@ -32,8 +38,8 @@
       "severity": "error",
       "message": "Unexpected token '}'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 48,
-      "end": 49,
+      "start": 50,
+      "end": 51,
       "labels": [
       ]
     }

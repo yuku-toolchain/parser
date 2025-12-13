@@ -150,7 +150,7 @@ pub const Parser = struct {
             .strict_mode = options.is_strict,
             .lexer = undefined,
             .current_token = undefined,
-            .context = .{ .in_async = false, .in_generator = false, .allow_in = false },
+            .context = .{ .in_async = false, .in_generator = false, .allow_in = true },
         };
     }
 

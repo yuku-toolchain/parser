@@ -23,6 +23,12 @@
           ],
           "optional": false
         }
+      },
+      {
+        "type": "ContinueStatement",
+        "start": 34,
+        "end": 43,
+        "label": null
       }
     ]
   },
@@ -35,15 +41,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 0,
       "end": 5,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'continue'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 34,
-      "end": 42,
       "labels": [
       ]
     },

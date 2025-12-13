@@ -25,24 +25,40 @@
           "end": 37,
           "body": [
             {
-              "type": "VariableDeclaration",
-              "start": 22,
-              "end": 27,
-              "kind": "var",
-              "declarations": [
-                {
-                  "type": "VariableDeclarator",
-                  "start": 26,
-                  "end": 27,
-                  "id": {
-                    "type": "Identifier",
+              "type": "ForInStatement",
+              "start": 17,
+              "end": 35,
+              "left": {
+                "type": "VariableDeclaration",
+                "start": 22,
+                "end": 27,
+                "kind": "var",
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
                     "start": 26,
                     "end": 27,
-                    "name": "b"
-                  },
-                  "init": null
-                }
-              ]
+                    "id": {
+                      "type": "Identifier",
+                      "start": 26,
+                      "end": 27,
+                      "name": "b"
+                    },
+                    "init": null
+                  }
+                ]
+              },
+              "right": {
+                "type": "Identifier",
+                "start": 31,
+                "end": 32,
+                "name": "c"
+              },
+              "body": {
+                "type": "EmptyStatement",
+                "start": 34,
+                "end": 35
+              }
             }
           ]
         },
@@ -53,23 +69,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 17,
-      "end": 20,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'in'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 28,
-      "end": 30,
-      "labels": [
-      ]
-    }
   ]
 }

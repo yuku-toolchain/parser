@@ -50,24 +50,36 @@
               }
             },
             {
-              "type": "VariableDeclaration",
-              "start": 27,
-              "end": 33,
-              "kind": "var",
-              "declarations": [
-                {
-                  "type": "VariableDeclarator",
-                  "start": 31,
-                  "end": 32,
-                  "id": {
-                    "type": "Identifier",
+              "type": "ForStatement",
+              "start": 22,
+              "end": 37,
+              "init": {
+                "type": "VariableDeclaration",
+                "start": 27,
+                "end": 32,
+                "kind": "var",
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
                     "start": 31,
                     "end": 32,
-                    "name": "c"
-                  },
-                  "init": null
-                }
-              ]
+                    "id": {
+                      "type": "Identifier",
+                      "start": 31,
+                      "end": 32,
+                      "name": "c"
+                    },
+                    "init": null
+                  }
+                ]
+              },
+              "test": null,
+              "update": null,
+              "body": {
+                "type": "EmptyStatement",
+                "start": 36,
+                "end": 37
+              }
             }
           ]
         },
@@ -78,23 +90,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 22,
-      "end": 25,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 33,
-      "end": 34,
-      "labels": [
-      ]
-    }
   ]
 }

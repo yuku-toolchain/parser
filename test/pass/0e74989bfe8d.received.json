@@ -6,6 +6,37 @@
     "sourceType": "script",
     "body": [
       {
+        "type": "ForStatement",
+        "start": 39,
+        "end": 63,
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "IfStatement",
+          "start": 48,
+          "end": 63,
+          "test": {
+            "type": "Identifier",
+            "start": 52,
+            "end": 53,
+            "name": "b"
+          },
+          "consequent": {
+            "type": "BreakStatement",
+            "start": 55,
+            "end": 63,
+            "label": {
+              "type": "Identifier",
+              "start": 61,
+              "end": 62,
+              "name": "c"
+            }
+          },
+          "alternate": null
+        }
+      },
+      {
         "type": "ExpressionStatement",
         "start": 68,
         "end": 72,
@@ -35,42 +66,6 @@
       "help": "Try inserting a semicolon here",
       "start": 1,
       "end": 1,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 39,
-      "end": 42,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 45,
-      "end": 46,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 55,
-      "end": 60,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 55,
-      "end": 60,
       "labels": [
       ]
     },

@@ -1101,10 +1101,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 295,
-      "end": 298,
+      "message": "Expected ';' after for-loop init",
+      "help": null,
+      "start": 310,
+      "end": 311,
       "labels": [
       ]
     },
@@ -1155,10 +1155,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 765,
-      "end": 768,
+      "message": "Expected ';' after for-loop init",
+      "help": null,
+      "start": 781,
+      "end": 782,
       "labels": [
       ]
     },

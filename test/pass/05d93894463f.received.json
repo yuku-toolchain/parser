@@ -5,6 +5,25 @@
     "end": 124,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ForStatement",
+        "start": 104,
+        "end": 123,
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "ContinueStatement",
+          "start": 112,
+          "end": 123,
+          "label": {
+            "type": "Identifier",
+            "start": 121,
+            "end": 122,
+            "name": "a"
+          }
+        }
+      }
     ]
   },
   "comments": [
@@ -28,24 +47,6 @@
       "help": "Try inserting a semicolon here",
       "start": 102,
       "end": 102,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 104,
-      "end": 107,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 109,
-      "end": 110,
       "labels": [
       ]
     }

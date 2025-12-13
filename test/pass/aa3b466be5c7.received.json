@@ -5,64 +5,49 @@
     "end": 48,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ForStatement",
+        "start": 0,
+        "end": 47,
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "BlockStatement",
+          "start": 9,
+          "end": 47,
+          "body": [
+            {
+              "type": "IfStatement",
+              "start": 15,
+              "end": 31,
+              "test": {
+                "type": "Identifier",
+                "start": 19,
+                "end": 20,
+                "name": "a"
+              },
+              "consequent": {
+                "type": "ContinueStatement",
+                "start": 22,
+                "end": 31,
+                "label": null
+              },
+              "alternate": null
+            },
+            {
+              "type": "ContinueStatement",
+              "start": 36,
+              "end": 45,
+              "label": null
+            }
+          ]
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 6,
-      "end": 7,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'continue'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 22,
-      "end": 30,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 22,
-      "end": 30,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'continue'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 36,
-      "end": 44,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 46,
-      "end": 47,
-      "labels": [
-      ]
-    }
   ]
 }

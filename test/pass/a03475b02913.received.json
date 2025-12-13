@@ -6,10 +6,11 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 6,
-        "end": 10,
-        "expression": {
+        "type": "ForStatement",
+        "start": 0,
+        "end": 31,
+        "init": null,
+        "test": {
           "type": "CallExpression",
           "start": 6,
           "end": 9,
@@ -22,6 +23,33 @@
           "arguments": [
           ],
           "optional": false
+        },
+        "update": null,
+        "body": {
+          "type": "IfStatement",
+          "start": 16,
+          "end": 31,
+          "test": {
+            "type": "CallExpression",
+            "start": 20,
+            "end": 23,
+            "callee": {
+              "type": "Identifier",
+              "start": 20,
+              "end": 21,
+              "name": "b"
+            },
+            "arguments": [
+            ],
+            "optional": false
+          },
+          "consequent": {
+            "type": "BreakStatement",
+            "start": 25,
+            "end": 31,
+            "label": null
+          },
+          "alternate": null
         }
       }
     ]
@@ -29,41 +57,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 10,
-      "end": 11,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 25,
-      "end": 30,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 25,
-      "end": 30,
-      "labels": [
-      ]
-    }
   ]
 }

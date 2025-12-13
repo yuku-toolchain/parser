@@ -6,46 +6,72 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "IfStatement",
-        "start": 57,
-        "end": 143,
-        "test": {
-          "type": "Identifier",
-          "start": 61,
-          "end": 62,
-          "name": "a"
-        },
-        "consequent": {
+        "type": "ForStatement",
+        "start": 42,
+        "end": 145,
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
           "type": "BlockStatement",
-          "start": 64,
-          "end": 120,
+          "start": 51,
+          "end": 145,
           "body": [
             {
               "type": "IfStatement",
-              "start": 74,
-              "end": 114,
+              "start": 57,
+              "end": 143,
               "test": {
                 "type": "Identifier",
-                "start": 78,
-                "end": 79,
-                "name": "b"
+                "start": 61,
+                "end": 62,
+                "name": "a"
               },
               "consequent": {
                 "type": "BlockStatement",
-                "start": 81,
-                "end": 114,
+                "start": 64,
+                "end": 120,
                 "body": [
+                  {
+                    "type": "IfStatement",
+                    "start": 74,
+                    "end": 114,
+                    "test": {
+                      "type": "Identifier",
+                      "start": 78,
+                      "end": 79,
+                      "name": "b"
+                    },
+                    "consequent": {
+                      "type": "BlockStatement",
+                      "start": 81,
+                      "end": 114,
+                      "body": [
+                        {
+                          "type": "ContinueStatement",
+                          "start": 95,
+                          "end": 104,
+                          "label": null
+                        }
+                      ]
+                    },
+                    "alternate": null
+                  }
                 ]
               },
-              "alternate": null
+              "alternate": {
+                "type": "BlockStatement",
+                "start": 126,
+                "end": 143,
+                "body": [
+                  {
+                    "type": "EmptyStatement",
+                    "start": 136,
+                    "end": 137
+                  }
+                ]
+              }
             }
-          ]
-        },
-        "alternate": {
-          "type": "BlockStatement",
-          "start": 126,
-          "end": 143,
-          "body": [
           ]
         }
       }
@@ -60,50 +86,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 42,
-      "end": 45,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 48,
-      "end": 49,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'continue'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 95,
-      "end": 103,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 136,
-      "end": 137,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 144,
-      "end": 145,
-      "labels": [
-      ]
-    }
   ]
 }

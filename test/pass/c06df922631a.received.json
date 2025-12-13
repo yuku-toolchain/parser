@@ -6,50 +6,49 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "FunctionDeclaration",
-        "start": 13,
+        "type": "IfStatement",
+        "start": 0,
         "end": 27,
-        "id": {
-          "type": "Identifier",
-          "start": 22,
-          "end": 23,
-          "name": "a"
+        "test": {
+          "type": "Literal",
+          "start": 4,
+          "end": 5,
+          "value": 1,
+          "raw": "1"
         },
-        "generator": false,
-        "async": false,
-        "params": [
-        ],
-        "body": {
-          "type": "BlockStatement",
-          "start": 25,
+        "consequent": {
+          "type": "EmptyStatement",
+          "start": 6,
+          "end": 7
+        },
+        "alternate": {
+          "type": "FunctionDeclaration",
+          "start": 13,
           "end": 27,
-          "body": [
-          ]
-        },
-        "expression": false
+          "id": {
+            "type": "Identifier",
+            "start": 22,
+            "end": 23,
+            "name": "a"
+          },
+          "generator": false,
+          "async": false,
+          "params": [
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start": 25,
+            "end": 27,
+            "body": [
+            ]
+          },
+          "expression": false
+        }
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 6,
-      "end": 7,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 6,
-      "end": 7,
-      "labels": [
-      ]
-    }
   ]
 }

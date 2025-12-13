@@ -52,6 +52,11 @@
                 ]
               },
               "expression": false
+            },
+            {
+              "type": "EmptyStatement",
+              "start": 42,
+              "end": 43
             }
           ]
         },
@@ -68,15 +73,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 19,
       "end": 25,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 42,
-      "end": 43,
       "labels": [
       ]
     }

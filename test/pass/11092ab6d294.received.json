@@ -8,7 +8,7 @@
       {
         "type": "FunctionDeclaration",
         "start": 0,
-        "end": 180,
+        "end": 182,
         "id": {
           "type": "Identifier",
           "start": 9,
@@ -22,7 +22,7 @@
         "body": {
           "type": "BlockStatement",
           "start": 13,
-          "end": 180,
+          "end": 182,
           "body": [
             {
               "type": "ExpressionStatement",
@@ -75,7 +75,7 @@
             {
               "type": "IfStatement",
               "start": 48,
-              "end": 171,
+              "end": 180,
               "test": {
                 "type": "Identifier",
                 "start": 52,
@@ -85,7 +85,7 @@
               "consequent": {
                 "type": "BlockStatement",
                 "start": 55,
-                "end": 171,
+                "end": 180,
                 "body": [
                   {
                     "type": "ExpressionStatement",
@@ -150,47 +150,98 @@
                     "expression": false
                   },
                   {
-                    "type": "VariableDeclaration",
-                    "start": 129,
-                    "end": 135,
-                    "kind": "var",
-                    "declarations": [
-                      {
-                        "type": "VariableDeclarator",
-                        "start": 133,
-                        "end": 134,
-                        "id": {
-                          "type": "Identifier",
-                          "start": 133,
-                          "end": 134,
-                          "name": "f"
-                        },
-                        "init": null
-                      }
-                    ]
+                    "type": "EmptyStatement",
+                    "start": 101,
+                    "end": 102
                   },
                   {
-                    "type": "FunctionDeclaration",
-                    "start": 142,
-                    "end": 157,
-                    "id": {
-                      "type": "Identifier",
-                      "start": 151,
-                      "end": 152,
-                      "name": "e"
-                    },
-                    "generator": false,
-                    "async": false,
-                    "params": [
-                    ],
-                    "body": {
-                      "type": "BlockStatement",
-                      "start": 155,
-                      "end": 157,
-                      "body": [
-                      ]
-                    },
-                    "expression": false
+                    "type": "ExpressionStatement",
+                    "start": 107,
+                    "end": 176,
+                    "expression": {
+                      "type": "ParenthesizedExpression",
+                      "start": 107,
+                      "end": 175,
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 108,
+                        "end": 174,
+                        "callee": {
+                          "type": "ParenthesizedExpression",
+                          "start": 108,
+                          "end": 172,
+                          "expression": {
+                            "type": "FunctionExpression",
+                            "start": 109,
+                            "end": 171,
+                            "id": null,
+                            "generator": false,
+                            "async": false,
+                            "params": [
+                            ],
+                            "body": {
+                              "type": "BlockStatement",
+                              "start": 121,
+                              "end": 171,
+                              "body": [
+                                {
+                                  "type": "VariableDeclaration",
+                                  "start": 129,
+                                  "end": 135,
+                                  "kind": "var",
+                                  "declarations": [
+                                    {
+                                      "type": "VariableDeclarator",
+                                      "start": 133,
+                                      "end": 134,
+                                      "id": {
+                                        "type": "Identifier",
+                                        "start": 133,
+                                        "end": 134,
+                                        "name": "f"
+                                      },
+                                      "init": null
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "FunctionDeclaration",
+                                  "start": 142,
+                                  "end": 157,
+                                  "id": {
+                                    "type": "Identifier",
+                                    "start": 151,
+                                    "end": 152,
+                                    "name": "e"
+                                  },
+                                  "generator": false,
+                                  "async": false,
+                                  "params": [
+                                  ],
+                                  "body": {
+                                    "type": "BlockStatement",
+                                    "start": 155,
+                                    "end": 157,
+                                    "body": [
+                                    ]
+                                  },
+                                  "expression": false
+                                },
+                                {
+                                  "type": "EmptyStatement",
+                                  "start": 164,
+                                  "end": 165
+                                }
+                              ]
+                            },
+                            "expression": false
+                          }
+                        },
+                        "arguments": [
+                        ],
+                        "optional": false
+                      }
+                    }
                   }
                 ]
               },
@@ -211,51 +262,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 35,
       "end": 40,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 101,
-      "end": 102,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Function declaration requires a name",
-      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
-      "start": 118,
-      "end": 119,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 164,
-      "end": 165,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 171,
-      "end": 172,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 181,
-      "end": 182,
       "labels": [
       ]
     }

@@ -12,19 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'for'",
+      "message": "Unexpected token 'let'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ')' in binding pattern",
-      "help": "Expected an identifier, array pattern ([a, b]), or object pattern ({a, b}).",
-      "start": 13,
-      "end": 14,
+      "start": 10,
+      "end": 13,
       "labels": [
       ]
     }

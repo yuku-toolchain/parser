@@ -49,53 +49,53 @@
         "expression": false
       },
       {
-        "type": "VariableDeclaration",
-        "start": 85,
-        "end": 100,
-        "kind": "var",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 89,
-            "end": 96,
-            "id": {
-              "type": "Identifier",
+        "type": "ForStatement",
+        "start": 80,
+        "end": 166,
+        "init": {
+          "type": "VariableDeclaration",
+          "start": 85,
+          "end": 99,
+          "kind": "var",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
               "start": 89,
-              "end": 90,
-              "name": "c"
-            },
-            "init": {
-              "type": "ParenthesizedExpression",
-              "start": 93,
               "end": 96,
-              "expression": {
-                "type": "Literal",
-                "start": 94,
-                "end": 95,
-                "value": 1,
-                "raw": "1"
+              "id": {
+                "type": "Identifier",
+                "start": 89,
+                "end": 90,
+                "name": "c"
+              },
+              "init": {
+                "type": "ParenthesizedExpression",
+                "start": 93,
+                "end": 96,
+                "expression": {
+                  "type": "Literal",
+                  "start": 94,
+                  "end": 95,
+                  "value": 1,
+                  "raw": "1"
+                }
               }
-            }
-          },
-          {
-            "type": "VariableDeclarator",
-            "start": 98,
-            "end": 99,
-            "id": {
-              "type": "Identifier",
+            },
+            {
+              "type": "VariableDeclarator",
               "start": 98,
               "end": 99,
-              "name": "g"
-            },
-            "init": null
-          }
-        ]
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 101,
-        "end": 134,
-        "expression": {
+              "id": {
+                "type": "Identifier",
+                "start": 98,
+                "end": 99,
+                "name": "g"
+              },
+              "init": null
+            }
+          ]
+        },
+        "test": {
           "type": "LogicalExpression",
           "start": 101,
           "end": 133,
@@ -170,46 +170,85 @@
               }
             }
           }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 151,
-        "end": 155,
-        "expression": {
-          "type": "CallExpression",
-          "start": 151,
-          "end": 154,
-          "callee": {
+        },
+        "update": {
+          "type": "UpdateExpression",
+          "start": 135,
+          "end": 138,
+          "operator": "++",
+          "prefix": true,
+          "argument": {
             "type": "Identifier",
-            "start": 151,
-            "end": 152,
-            "name": "a"
-          },
-          "arguments": [
-          ],
-          "optional": false
-        }
-      },
-      {
-        "type": "VariableDeclaration",
-        "start": 158,
-        "end": 164,
-        "kind": "var",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 162,
-            "end": 163,
-            "id": {
-              "type": "Identifier",
-              "start": 162,
-              "end": 163,
-              "name": "i"
-            },
-            "init": null
+            "start": 137,
+            "end": 138,
+            "name": "c"
           }
-        ]
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start": 140,
+          "end": 166,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 144,
+              "end": 148,
+              "expression": {
+                "type": "CallExpression",
+                "start": 144,
+                "end": 147,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 144,
+                  "end": 145,
+                  "name": "h"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 151,
+              "end": 155,
+              "expression": {
+                "type": "CallExpression",
+                "start": 151,
+                "end": 154,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 151,
+                  "end": 152,
+                  "name": "a"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
+              "type": "VariableDeclaration",
+              "start": 158,
+              "end": 164,
+              "kind": "var",
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 162,
+                  "end": 163,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 162,
+                    "end": 163,
+                    "name": "i"
+                  },
+                  "init": null
+                }
+              ]
+            }
+          ]
+        }
       }
     ]
   },
@@ -231,33 +270,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 78,
       "end": 79,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 80,
-      "end": 83,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 138,
-      "end": 138,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 165,
-      "end": 166,
       "labels": [
       ]
     }

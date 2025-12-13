@@ -6,24 +6,41 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "VariableDeclaration",
-        "start": 5,
-        "end": 10,
-        "kind": "var",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 9,
-            "end": 10,
-            "id": {
-              "type": "Identifier",
+        "type": "ForInStatement",
+        "start": 0,
+        "end": 26,
+        "left": {
+          "type": "VariableDeclaration",
+          "start": 5,
+          "end": 10,
+          "kind": "var",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
               "start": 9,
               "end": 10,
-              "name": "a"
-            },
-            "init": null
-          }
-        ]
+              "id": {
+                "type": "Identifier",
+                "start": 9,
+                "end": 10,
+                "name": "a"
+              },
+              "init": null
+            }
+          ]
+        },
+        "right": {
+          "type": "Identifier",
+          "start": 14,
+          "end": 15,
+          "name": "b"
+        },
+        "body": {
+          "type": "ContinueStatement",
+          "start": 17,
+          "end": 26,
+          "label": null
+        }
       }
     ]
   },
@@ -36,23 +53,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'in'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 11,
-      "end": 13,
-      "labels": [
-      ]
-    }
   ]
 }

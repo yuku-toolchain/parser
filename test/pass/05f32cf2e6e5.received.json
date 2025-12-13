@@ -63,6 +63,19 @@
                           }
                         }
                       }
+                    },
+                    {
+                      "type": "ForStatement",
+                      "start": 29,
+                      "end": 39,
+                      "init": null,
+                      "test": null,
+                      "update": null,
+                      "body": {
+                        "type": "EmptyStatement",
+                        "start": 38,
+                        "end": 39
+                      }
                     }
                   ]
                 },
@@ -80,23 +93,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 29,
-      "end": 32,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 35,
-      "end": 36,
-      "labels": [
-      ]
-    }
   ]
 }

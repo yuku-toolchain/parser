@@ -5,6 +5,34 @@
     "end": 41,
     "sourceType": "script",
     "body": [
+      {
+        "type": "IfStatement",
+        "start": 17,
+        "end": 38,
+        "test": {
+          "type": "Identifier",
+          "start": 21,
+          "end": 22,
+          "name": "a"
+        },
+        "consequent": {
+          "type": "BreakStatement",
+          "start": 24,
+          "end": 30,
+          "label": null
+        },
+        "alternate": {
+          "type": "ExpressionStatement",
+          "start": 36,
+          "end": 38,
+          "expression": {
+            "type": "Identifier",
+            "start": 36,
+            "end": 37,
+            "name": "b"
+          }
+        }
+      }
     ]
   },
   "comments": [
@@ -16,33 +44,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 0,
       "end": 5,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 24,
-      "end": 29,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 24,
-      "end": 29,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'else'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 31,
-      "end": 35,
       "labels": [
       ]
     },

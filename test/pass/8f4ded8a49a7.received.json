@@ -5,46 +5,44 @@
     "end": 25,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ForStatement",
+        "start": 0,
+        "end": 24,
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "IfStatement",
+          "start": 9,
+          "end": 24,
+          "test": {
+            "type": "CallExpression",
+            "start": 13,
+            "end": 16,
+            "callee": {
+              "type": "Identifier",
+              "start": 13,
+              "end": 14,
+              "name": "a"
+            },
+            "arguments": [
+            ],
+            "optional": false
+          },
+          "consequent": {
+            "type": "BreakStatement",
+            "start": 18,
+            "end": 24,
+            "label": null
+          },
+          "alternate": null
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 6,
-      "end": 7,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 18,
-      "end": 23,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 18,
-      "end": 23,
-      "labels": [
-      ]
-    }
   ]
 }

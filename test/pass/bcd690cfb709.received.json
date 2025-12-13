@@ -12,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
+      "message": "Shorthand property cannot have a default value in object expression",
+      "help": "Use '{ a: a = 1 }' syntax or this is only valid in destructuring patterns.",
+      "start": 6,
+      "end": 11,
       "labels": [
       ]
     }

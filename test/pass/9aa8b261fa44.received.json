@@ -6,14 +6,26 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 7,
-        "end": 9,
-        "expression": {
+        "type": "ForStatement",
+        "start": 0,
+        "end": 14,
+        "init": null,
+        "test": {
           "type": "Identifier",
           "start": 7,
           "end": 8,
           "name": "a"
+        },
+        "update": {
+          "type": "Identifier",
+          "start": 10,
+          "end": 11,
+          "name": "b"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 13,
+          "end": 14
         }
       }
     ]
@@ -21,23 +33,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 11,
-      "end": 11,
-      "labels": [
-      ]
-    }
   ]
 }

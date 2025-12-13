@@ -76,6 +76,13 @@ pub const Serializer = struct {
             .if_statement => |d| self.writeIfStatement(d, span),
             .switch_statement => |d| self.writeSwitchStatement(d, span),
             .switch_case => |d| self.writeSwitchCase(d, span),
+            .for_statement => |d| self.writeForStatement(d, span),
+            .for_in_statement => |d| self.writeForInStatement(d, span),
+            .for_of_statement => |d| self.writeForOfStatement(d, span),
+            .break_statement => |d| self.writeBreakStatement(d, span),
+            .continue_statement => |d| self.writeContinueStatement(d, span),
+            .labeled_statement => |d| self.writeLabeledStatement(d, span),
+            .empty_statement => self.writeEmptyStatement(span),
             .variable_declaration => |d| self.writeVariableDeclaration(d, span),
             .variable_declarator => |d| self.writeVariableDeclarator(d, span),
             .binary_expression => |d| self.writeBinaryExpression(d, span),
@@ -263,6 +270,70 @@ pub const Serializer = struct {
         try self.fieldSpan(span);
         try self.fieldNode("test", data.@"test");
         try self.fieldNodeArray("consequent", data.consequent);
+        try self.endObject();
+    }
+
+    fn writeForStatement(self: *Self, data: ast.ForStatement, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ForStatement");
+        try self.fieldSpan(span);
+        try self.fieldNode("init", data.init);
+        try self.fieldNode("test", data.@"test");
+        try self.fieldNode("update", data.update);
+        try self.fieldNode("body", data.body);
+        try self.endObject();
+    }
+
+    fn writeForInStatement(self: *Self, data: ast.ForInStatement, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ForInStatement");
+        try self.fieldSpan(span);
+        try self.fieldNode("left", data.left);
+        try self.fieldNode("right", data.right);
+        try self.fieldNode("body", data.body);
+        try self.endObject();
+    }
+
+    fn writeForOfStatement(self: *Self, data: ast.ForOfStatement, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ForOfStatement");
+        try self.fieldSpan(span);
+        try self.fieldNode("left", data.left);
+        try self.fieldNode("right", data.right);
+        try self.fieldNode("body", data.body);
+        try self.fieldBool("await", data.@"await");
+        try self.endObject();
+    }
+
+    fn writeBreakStatement(self: *Self, data: ast.BreakStatement, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("BreakStatement");
+        try self.fieldSpan(span);
+        try self.fieldNode("label", data.label);
+        try self.endObject();
+    }
+
+    fn writeContinueStatement(self: *Self, data: ast.ContinueStatement, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ContinueStatement");
+        try self.fieldSpan(span);
+        try self.fieldNode("label", data.label);
+        try self.endObject();
+    }
+
+    fn writeLabeledStatement(self: *Self, data: ast.LabeledStatement, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("LabeledStatement");
+        try self.fieldSpan(span);
+        try self.fieldNode("label", data.label);
+        try self.fieldNode("body", data.body);
+        try self.endObject();
+    }
+
+    fn writeEmptyStatement(self: *Self, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("EmptyStatement");
+        try self.fieldSpan(span);
         try self.endObject();
     }
 

@@ -5,6 +5,33 @@
     "end": 33,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ForStatement",
+        "start": 3,
+        "end": 32,
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "ForStatement",
+          "start": 12,
+          "end": 32,
+          "init": null,
+          "test": null,
+          "update": null,
+          "body": {
+            "type": "ContinueStatement",
+            "start": 21,
+            "end": 32,
+            "label": {
+              "type": "Identifier",
+              "start": 30,
+              "end": 31,
+              "name": "a"
+            }
+          }
+        }
+      }
     ]
   },
   "comments": [
@@ -16,42 +43,6 @@
       "help": "Try inserting a semicolon here",
       "start": 1,
       "end": 1,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 3,
-      "end": 6,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 9,
-      "end": 10,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 12,
-      "end": 15,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 18,
-      "end": 19,
       "labels": [
       ]
     }

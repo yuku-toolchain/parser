@@ -6,10 +6,11 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 7,
-        "end": 11,
-        "expression": {
+        "type": "ForStatement",
+        "start": 0,
+        "end": 62,
+        "init": null,
+        "test": {
           "type": "CallExpression",
           "start": 7,
           "end": 10,
@@ -22,63 +23,116 @@
           "arguments": [
           ],
           "optional": false
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 24,
-        "end": 28,
-        "expression": {
-          "type": "CallExpression",
-          "start": 24,
-          "end": 27,
-          "callee": {
-            "type": "Identifier",
-            "start": 24,
-            "end": 25,
-            "name": "c"
-          },
-          "arguments": [
-          ],
-          "optional": false
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 49,
-        "end": 53,
-        "expression": {
-          "type": "CallExpression",
-          "start": 49,
-          "end": 52,
-          "callee": {
-            "type": "Identifier",
-            "start": 49,
-            "end": 50,
-            "name": "e"
-          },
-          "arguments": [
-          ],
-          "optional": false
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 56,
-        "end": 60,
-        "expression": {
-          "type": "CallExpression",
-          "start": 56,
-          "end": 59,
-          "callee": {
-            "type": "Identifier",
-            "start": 56,
-            "end": 57,
-            "name": "f"
-          },
-          "arguments": [
-          ],
-          "optional": false
+        },
+        "update": null,
+        "body": {
+          "type": "BlockStatement",
+          "start": 13,
+          "end": 62,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 17,
+              "end": 21,
+              "expression": {
+                "type": "CallExpression",
+                "start": 17,
+                "end": 20,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 17,
+                  "end": 18,
+                  "name": "b"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 24,
+              "end": 28,
+              "expression": {
+                "type": "CallExpression",
+                "start": 24,
+                "end": 27,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 24,
+                  "end": 25,
+                  "name": "c"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
+              "type": "IfStatement",
+              "start": 31,
+              "end": 46,
+              "test": {
+                "type": "CallExpression",
+                "start": 35,
+                "end": 38,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 35,
+                  "end": 36,
+                  "name": "d"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              },
+              "consequent": {
+                "type": "BreakStatement",
+                "start": 40,
+                "end": 46,
+                "label": null
+              },
+              "alternate": null
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 49,
+              "end": 53,
+              "expression": {
+                "type": "CallExpression",
+                "start": 49,
+                "end": 52,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 49,
+                  "end": 50,
+                  "name": "e"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 56,
+              "end": 60,
+              "expression": {
+                "type": "CallExpression",
+                "start": 56,
+                "end": 59,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 56,
+                  "end": 57,
+                  "name": "f"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            }
+          ]
         }
       }
     ]
@@ -86,50 +140,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 11,
-      "end": 12,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 40,
-      "end": 45,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 40,
-      "end": 45,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 61,
-      "end": 62,
-      "labels": [
-      ]
-    }
   ]
 }

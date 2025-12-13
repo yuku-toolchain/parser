@@ -6,24 +6,46 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "VariableDeclaration",
-        "start": 108,
-        "end": 113,
-        "kind": "var",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 112,
-            "end": 113,
-            "id": {
-              "type": "Identifier",
+        "type": "ForInStatement",
+        "start": 104,
+        "end": 131,
+        "left": {
+          "type": "VariableDeclaration",
+          "start": 108,
+          "end": 113,
+          "kind": "var",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
               "start": 112,
               "end": 113,
-              "name": "a"
-            },
-            "init": null
+              "id": {
+                "type": "Identifier",
+                "start": 112,
+                "end": 113,
+                "name": "a"
+              },
+              "init": null
+            }
+          ]
+        },
+        "right": {
+          "type": "Identifier",
+          "start": 117,
+          "end": 118,
+          "name": "b"
+        },
+        "body": {
+          "type": "ContinueStatement",
+          "start": 120,
+          "end": 131,
+          "label": {
+            "type": "Identifier",
+            "start": 129,
+            "end": 130,
+            "name": "c"
           }
-        ]
+        }
       }
     ]
   },
@@ -48,24 +70,6 @@
       "help": "Try inserting a semicolon here",
       "start": 102,
       "end": 102,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 104,
-      "end": 107,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'in'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 114,
-      "end": 116,
       "labels": [
       ]
     }

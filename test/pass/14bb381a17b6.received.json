@@ -5,28 +5,59 @@
     "end": 23,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ForInStatement",
+        "start": 0,
+        "end": 22,
+        "left": {
+          "type": "VariableDeclaration",
+          "start": 5,
+          "end": 15,
+          "kind": "var",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start": 9,
+              "end": 15,
+              "id": {
+                "type": "ArrayPattern",
+                "start": 9,
+                "end": 15,
+                "elements": [
+                  {
+                    "type": "Identifier",
+                    "start": 10,
+                    "end": 11,
+                    "name": "a"
+                  },
+                  {
+                    "type": "Identifier",
+                    "start": 13,
+                    "end": 14,
+                    "name": "b"
+                  }
+                ]
+              },
+              "init": null
+            }
+          ]
+        },
+        "right": {
+          "type": "Identifier",
+          "start": 19,
+          "end": 20,
+          "name": "c"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 21,
+          "end": 22
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Destructuring declaration must have an initializer",
-      "help": "Add '= value' to provide the object or array to destructure from.",
-      "start": 9,
-      "end": 15,
-      "labels": [
-      ]
-    }
   ]
 }

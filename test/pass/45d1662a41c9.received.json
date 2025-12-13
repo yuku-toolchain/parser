@@ -5,6 +5,20 @@
     "end": 49,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ForStatement",
+        "start": 0,
+        "end": 18,
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "ContinueStatement",
+          "start": 9,
+          "end": 18,
+          "label": null
+        }
+      }
     ]
   },
   "comments": [
@@ -16,23 +30,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 6,
-      "end": 7,
-      "labels": [
-      ]
-    }
   ]
 }

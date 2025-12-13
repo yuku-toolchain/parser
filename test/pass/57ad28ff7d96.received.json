@@ -6,56 +6,58 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "VariableDeclaration",
-        "start": 5,
-        "end": 10,
-        "kind": "var",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 9,
-            "end": 10,
-            "id": {
-              "type": "Identifier",
+        "type": "ForInStatement",
+        "start": 0,
+        "end": 25,
+        "left": {
+          "type": "VariableDeclaration",
+          "start": 5,
+          "end": 10,
+          "kind": "var",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
               "start": 9,
               "end": 10,
-              "name": "a"
-            },
-            "init": null
-          }
-        ]
+              "id": {
+                "type": "Identifier",
+                "start": 9,
+                "end": 10,
+                "name": "a"
+              },
+              "init": null
+            }
+          ]
+        },
+        "right": {
+          "type": "Identifier",
+          "start": 14,
+          "end": 15,
+          "name": "b"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start": 17,
+          "end": 25,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 21,
+              "end": 23,
+              "expression": {
+                "type": "Identifier",
+                "start": 21,
+                "end": 22,
+                "name": "c"
+              }
+            }
+          ]
+        }
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'in'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 11,
-      "end": 13,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 24,
-      "end": 25,
-      "labels": [
-      ]
-    }
   ]
 }

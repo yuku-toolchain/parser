@@ -12,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
+      "message": "Expected ']' after computed property",
+      "help": "Computed member access must end with ']'.",
+      "start": 9,
+      "end": 11,
       "labels": [
       ]
     }

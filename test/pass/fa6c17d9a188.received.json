@@ -31,6 +31,50 @@
                 "start": 13,
                 "end": 36,
                 "body": [
+                  {
+                    "type": "IfStatement",
+                    "start": 19,
+                    "end": 34,
+                    "test": {
+                      "type": "LogicalExpression",
+                      "start": 23,
+                      "end": 32,
+                      "left": {
+                        "type": "UnaryExpression",
+                        "start": 23,
+                        "end": 25,
+                        "operator": "!",
+                        "prefix": true,
+                        "argument": {
+                          "type": "Identifier",
+                          "start": 24,
+                          "end": 25,
+                          "name": "a"
+                        }
+                      },
+                      "operator": "||",
+                      "right": {
+                        "type": "CallExpression",
+                        "start": 29,
+                        "end": 32,
+                        "callee": {
+                          "type": "Identifier",
+                          "start": 29,
+                          "end": 30,
+                          "name": "b"
+                        },
+                        "arguments": [
+                        ],
+                        "optional": false
+                      }
+                    },
+                    "consequent": {
+                      "type": "EmptyStatement",
+                      "start": 33,
+                      "end": 34
+                    },
+                    "alternate": null
+                  }
                 ]
               },
               "expression": false
@@ -46,23 +90,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 33,
-      "end": 34,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 33,
-      "end": 34,
-      "labels": [
-      ]
-    }
   ]
 }

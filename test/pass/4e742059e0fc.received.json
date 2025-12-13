@@ -5,6 +5,11 @@
     "end": 12,
     "sourceType": "script",
     "body": [
+      {
+        "type": "EmptyStatement",
+        "start": 9,
+        "end": 10
+      }
     ]
   },
   "comments": [
@@ -12,19 +17,19 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
+      "message": "Expected ';' after for-loop init",
+      "help": null,
+      "start": 5,
+      "end": 6,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token ';'",
+      "message": "Unexpected token ')'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 9,
-      "end": 10,
+      "start": 10,
+      "end": 11,
       "labels": [
       ]
     }

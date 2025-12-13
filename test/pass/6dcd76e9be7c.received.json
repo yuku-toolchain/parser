@@ -6,6 +6,29 @@
     "sourceType": "script",
     "body": [
       {
+        "type": "IfStatement",
+        "start": 9,
+        "end": 24,
+        "test": {
+          "type": "Identifier",
+          "start": 13,
+          "end": 14,
+          "name": "a"
+        },
+        "consequent": {
+          "type": "BreakStatement",
+          "start": 16,
+          "end": 24,
+          "label": {
+            "type": "Identifier",
+            "start": 22,
+            "end": 23,
+            "name": "b"
+          }
+        },
+        "alternate": null
+      },
+      {
         "type": "ExpressionStatement",
         "start": 29,
         "end": 38,
@@ -55,24 +78,6 @@
       "help": "Try inserting a semicolon here",
       "start": 1,
       "end": 1,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 16,
-      "end": 21,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 16,
-      "end": 21,
       "labels": [
       ]
     },

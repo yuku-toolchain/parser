@@ -5,6 +5,28 @@
     "end": 56,
     "sourceType": "script",
     "body": [
+      {
+        "type": "BreakStatement",
+        "start": 17,
+        "end": 25,
+        "label": {
+          "type": "Identifier",
+          "start": 23,
+          "end": 24,
+          "name": "c"
+        }
+      },
+      {
+        "type": "BreakStatement",
+        "start": 45,
+        "end": 53,
+        "label": {
+          "type": "Identifier",
+          "start": 51,
+          "end": 52,
+          "name": "c"
+        }
+      }
     ]
   },
   "comments": [
@@ -21,28 +43,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 17,
-      "end": 22,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token '}'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 26,
       "end": 27,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 45,
-      "end": 50,
       "labels": [
       ]
     },

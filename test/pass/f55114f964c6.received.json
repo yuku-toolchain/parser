@@ -5,20 +5,16 @@
     "end": 16,
     "sourceType": "script",
     "body": [
+      {
+        "type": "EmptyStatement",
+        "start": 11,
+        "end": 12
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
     {
       "severity": "error",
       "message": "Unexpected token '(' in binding pattern",
@@ -30,10 +26,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token ';'",
+      "message": "Unexpected token ')'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 11,
-      "end": 12,
+      "start": 12,
+      "end": 13,
       "labels": [
       ]
     }

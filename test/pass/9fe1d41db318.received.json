@@ -5,26 +5,6 @@
     "end": 14,
     "sourceType": "script",
     "body": [
-      {
-        "type": "VariableDeclaration",
-        "start": 4,
-        "end": 10,
-        "kind": "let",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 8,
-            "end": 10,
-            "id": {
-              "type": "Identifier",
-              "start": 8,
-              "end": 10,
-              "name": "in"
-            },
-            "init": null
-          }
-        ]
-      }
     ]
   },
   "comments": [
@@ -32,18 +12,9 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 12,
+      "message": "Expected ';' after for-loop init",
+      "help": null,
+      "start": 11,
       "end": 12,
       "labels": [
       ]

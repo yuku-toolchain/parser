@@ -429,6 +429,66 @@ pub const SwitchStatement = struct {
     cases: IndexRange,
 };
 
+/// `for (init; test; update) body`
+/// https://tc39.es/ecma262/#sec-for-statement
+pub const ForStatement = struct {
+    /// VariableDeclaration | Expression | null
+    init: NodeIndex,
+    /// Expression | null
+    @"test": NodeIndex,
+    /// Expression | null
+    update: NodeIndex,
+    /// Statement
+    body: NodeIndex,
+};
+
+/// `for (left in right) body`
+/// https://tc39.es/ecma262/#sec-for-in-and-for-of-statements
+pub const ForInStatement = struct {
+    /// VariableDeclaration | AssignmentTarget (IdentifierReference | MemberExpression | ArrayPattern | ObjectPattern)
+    left: NodeIndex,
+    /// Expression
+    right: NodeIndex,
+    /// Statement
+    body: NodeIndex,
+};
+
+/// `for (left of right) body` or `for await (left of right) body`
+/// https://tc39.es/ecma262/#sec-for-in-and-for-of-statements
+pub const ForOfStatement = struct {
+    /// VariableDeclaration | AssignmentTarget (IdentifierReference | MemberExpression | ArrayPattern | ObjectPattern)
+    left: NodeIndex,
+    /// Expression
+    right: NodeIndex,
+    /// Statement
+    body: NodeIndex,
+    /// true for `for await (...)`
+    @"await": bool,
+};
+
+/// `break;` or `break label;`
+/// https://tc39.es/ecma262/#sec-break-statement
+pub const BreakStatement = struct {
+    /// BindingIdentifier (optional label, may be null_node)
+    label: NodeIndex,
+};
+
+/// `continue;` or `continue label;`
+/// https://tc39.es/ecma262/#sec-continue-statement
+pub const ContinueStatement = struct {
+    /// BindingIdentifier (optional label, may be null_node)
+    label: NodeIndex,
+};
+
+/// `label: statement`
+/// https://tc39.es/ecma262/#sec-labelled-statements
+pub const LabeledStatement = struct {
+    /// IdentifierName (the label)
+    label: NodeIndex,
+    /// Statement
+    body: NodeIndex,
+};
+
 /// `case test: consequent` or `default: consequent`
 /// https://tc39.es/ecma262/#prod-CaseClause
 pub const SwitchCase = struct {
@@ -812,6 +872,13 @@ pub const NodeData = union(enum) {
     if_statement: IfStatement,
     switch_statement: SwitchStatement,
     switch_case: SwitchCase,
+    for_statement: ForStatement,
+    for_in_statement: ForInStatement,
+    for_of_statement: ForOfStatement,
+    break_statement: BreakStatement,
+    continue_statement: ContinueStatement,
+    labeled_statement: LabeledStatement,
+    empty_statement,
     variable_declaration: VariableDeclaration,
     variable_declarator: VariableDeclarator,
     directive: Directive,

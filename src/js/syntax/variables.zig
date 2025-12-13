@@ -4,6 +4,11 @@ const Error = @import("../parser.zig").Error;
 const expressions = @import("expressions.zig");
 const patterns = @import("patterns.zig");
 
+/// Used by for-loop parsing - delegates to patterns module
+pub fn parseBindingPatternForLoop(parser: *Parser) Error!?ast.NodeIndex {
+    return patterns.parseBindingPattern(parser);
+}
+
 pub fn parseVariableDeclaration(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     const kind = parseVariableKind(parser) orelse return null;

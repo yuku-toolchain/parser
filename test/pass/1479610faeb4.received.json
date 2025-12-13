@@ -90,6 +90,30 @@
           ]
         },
         "expression": false
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 88,
+        "end": 89
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 90,
+        "end": 94,
+        "expression": {
+          "type": "CallExpression",
+          "start": 90,
+          "end": 93,
+          "callee": {
+            "type": "Identifier",
+            "start": 90,
+            "end": 91,
+            "name": "a"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
       }
     ]
   },
@@ -111,15 +135,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 72,
       "end": 78,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 88,
-      "end": 89,
       "labels": [
       ]
     }

@@ -6,24 +6,36 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "VariableDeclaration",
-        "start": 4,
-        "end": 10,
-        "kind": "let",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 8,
-            "end": 9,
-            "id": {
-              "type": "Identifier",
+        "type": "ForStatement",
+        "start": 0,
+        "end": 13,
+        "init": {
+          "type": "VariableDeclaration",
+          "start": 4,
+          "end": 9,
+          "kind": "let",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
               "start": 8,
               "end": 9,
-              "name": "a"
-            },
-            "init": null
-          }
-        ]
+              "id": {
+                "type": "Identifier",
+                "start": 8,
+                "end": 9,
+                "name": "a"
+              },
+              "init": null
+            }
+          ]
+        },
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 12,
+          "end": 13
+        }
       },
       {
         "type": "VariableDeclaration",
@@ -50,23 +62,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 10,
-      "end": 11,
-      "labels": [
-      ]
-    }
   ]
 }

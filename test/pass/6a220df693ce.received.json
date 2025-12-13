@@ -12,10 +12,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
+      "message": "Expected ')' after function arguments",
+      "help": "Function calls must end with ')'. Check for missing commas or unclosed parentheses.",
+      "start": 9,
+      "end": 11,
       "labels": [
       ]
     }

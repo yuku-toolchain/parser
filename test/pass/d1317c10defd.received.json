@@ -6,22 +6,62 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 32,
-        "end": 36,
-        "expression": {
-          "type": "CallExpression",
-          "start": 32,
-          "end": 35,
-          "callee": {
-            "type": "Identifier",
-            "start": 32,
-            "end": 33,
-            "name": "b"
-          },
-          "arguments": [
-          ],
-          "optional": false
+        "type": "ForStatement",
+        "start": 0,
+        "end": 38,
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "BlockStatement",
+          "start": 9,
+          "end": 38,
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 13,
+              "end": 17,
+              "expression": {
+                "type": "CallExpression",
+                "start": 13,
+                "end": 16,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 13,
+                  "end": 14,
+                  "name": "a"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            },
+            {
+              "type": "ContinueStatement",
+              "start": 20,
+              "end": 29,
+              "label": null
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 32,
+              "end": 36,
+              "expression": {
+                "type": "CallExpression",
+                "start": 32,
+                "end": 35,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 32,
+                  "end": 33,
+                  "name": "b"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            }
+          ]
         }
       }
     ]
@@ -29,41 +69,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 6,
-      "end": 7,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'continue'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 20,
-      "end": 28,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 37,
-      "end": 38,
-      "labels": [
-      ]
-    }
   ]
 }

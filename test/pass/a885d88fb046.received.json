@@ -32,24 +32,41 @@
                 "end": 39,
                 "body": [
                   {
-                    "type": "VariableDeclaration",
-                    "start": 24,
-                    "end": 29,
-                    "kind": "var",
-                    "declarations": [
-                      {
-                        "type": "VariableDeclarator",
-                        "start": 28,
-                        "end": 29,
-                        "id": {
-                          "type": "Identifier",
+                    "type": "ForInStatement",
+                    "start": 19,
+                    "end": 37,
+                    "left": {
+                      "type": "VariableDeclaration",
+                      "start": 24,
+                      "end": 29,
+                      "kind": "var",
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
                           "start": 28,
                           "end": 29,
-                          "name": "a"
-                        },
-                        "init": null
-                      }
-                    ]
+                          "id": {
+                            "type": "Identifier",
+                            "start": 28,
+                            "end": 29,
+                            "name": "a"
+                          },
+                          "init": null
+                        }
+                      ]
+                    },
+                    "right": {
+                      "type": "ArrayExpression",
+                      "start": 33,
+                      "end": 35,
+                      "elements": [
+                      ]
+                    },
+                    "body": {
+                      "type": "EmptyStatement",
+                      "start": 36,
+                      "end": 37
+                    }
                   }
                 ]
               },
@@ -66,23 +83,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 19,
-      "end": 22,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'in'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 30,
-      "end": 32,
-      "labels": [
-      ]
-    }
   ]
 }

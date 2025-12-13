@@ -5,28 +5,46 @@
     "end": 20,
     "sourceType": "script",
     "body": [
+      {
+        "type": "IfStatement",
+        "start": 0,
+        "end": 20,
+        "test": {
+          "type": "Literal",
+          "start": 4,
+          "end": 8,
+          "value": true,
+          "raw": "true"
+        },
+        "consequent": {
+          "type": "ExpressionStatement",
+          "start": 10,
+          "end": 14,
+          "expression": {
+            "type": "CallExpression",
+            "start": 10,
+            "end": 13,
+            "callee": {
+              "type": "Identifier",
+              "start": 10,
+              "end": 11,
+              "name": "a"
+            },
+            "arguments": [
+            ],
+            "optional": false
+          }
+        },
+        "alternate": {
+          "type": "EmptyStatement",
+          "start": 19,
+          "end": 20
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 19,
-      "end": 20,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after 'else'",
-      "help": null,
-      "start": 19,
-      "end": 20,
-      "labels": [
-      ]
-    }
   ]
 }

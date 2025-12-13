@@ -6,41 +6,62 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "IfStatement",
-        "start": 15,
-        "end": 47,
-        "test": {
-          "type": "Identifier",
-          "start": 19,
-          "end": 20,
-          "name": "a"
-        },
-        "consequent": {
+        "type": "ForStatement",
+        "start": 0,
+        "end": 90,
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
           "type": "BlockStatement",
-          "start": 22,
-          "end": 47,
+          "start": 9,
+          "end": 90,
           "body": [
+            {
+              "type": "IfStatement",
+              "start": 15,
+              "end": 47,
+              "test": {
+                "type": "Identifier",
+                "start": 19,
+                "end": 20,
+                "name": "a"
+              },
+              "consequent": {
+                "type": "BlockStatement",
+                "start": 22,
+                "end": 47,
+                "body": [
+                  {
+                    "type": "ContinueStatement",
+                    "start": 32,
+                    "end": 41,
+                    "label": null
+                  }
+                ]
+              },
+              "alternate": null
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 52,
+              "end": 56,
+              "expression": {
+                "type": "CallExpression",
+                "start": 52,
+                "end": 55,
+                "callee": {
+                  "type": "Identifier",
+                  "start": 52,
+                  "end": 53,
+                  "name": "b"
+                },
+                "arguments": [
+                ],
+                "optional": false
+              }
+            }
           ]
-        },
-        "alternate": null
-      },
-      {
-        "type": "ExpressionStatement",
-        "start": 52,
-        "end": 56,
-        "expression": {
-          "type": "CallExpression",
-          "start": 52,
-          "end": 55,
-          "callee": {
-            "type": "Identifier",
-            "start": 52,
-            "end": 53,
-            "name": "b"
-          },
-          "arguments": [
-          ],
-          "optional": false
         }
       }
     ]
@@ -54,41 +75,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 6,
-      "end": 7,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'continue'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 32,
-      "end": 40,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 89,
-      "end": 90,
-      "labels": [
-      ]
-    }
   ]
 }

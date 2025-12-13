@@ -5,6 +5,40 @@
     "end": 89,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ForStatement",
+        "start": 0,
+        "end": 49,
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "BlockStatement",
+          "start": 9,
+          "end": 49,
+          "body": [
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 54,
+        "end": 58,
+        "expression": {
+          "type": "CallExpression",
+          "start": 54,
+          "end": 57,
+          "callee": {
+            "type": "Identifier",
+            "start": 54,
+            "end": 55,
+            "name": "b"
+          },
+          "arguments": [
+          ],
+          "optional": false
+        }
+      }
     ]
   },
   "comments": [
@@ -18,28 +52,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'for'",
+      "message": "Unexpected token 'with'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 6,
-      "end": 7,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 48,
-      "end": 49,
+      "start": 15,
+      "end": 19,
       "labels": [
       ]
     },

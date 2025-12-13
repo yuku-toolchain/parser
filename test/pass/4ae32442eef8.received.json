@@ -5,6 +5,11 @@
     "end": 6,
     "sourceType": "script",
     "body": [
+      {
+        "type": "EmptyStatement",
+        "start": 5,
+        "end": 6
+      }
     ]
   },
   "comments": [
@@ -16,14 +21,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 5,
-      "end": 6,
-      "labels": [
-      ]
-    }
   ]
 }

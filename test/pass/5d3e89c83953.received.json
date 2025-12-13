@@ -25,24 +25,40 @@
           "end": 66,
           "body": [
             {
-              "type": "VariableDeclaration",
-              "start": 52,
-              "end": 57,
-              "kind": "var",
-              "declarations": [
-                {
-                  "type": "VariableDeclarator",
-                  "start": 56,
-                  "end": 57,
-                  "id": {
-                    "type": "Identifier",
+              "type": "ForInStatement",
+              "start": 47,
+              "end": 64,
+              "left": {
+                "type": "VariableDeclaration",
+                "start": 52,
+                "end": 57,
+                "kind": "var",
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
                     "start": 56,
                     "end": 57,
-                    "name": "b"
-                  },
-                  "init": null
-                }
-              ]
+                    "id": {
+                      "type": "Identifier",
+                      "start": 56,
+                      "end": 57,
+                      "name": "b"
+                    },
+                    "init": null
+                  }
+                ]
+              },
+              "right": {
+                "type": "Identifier",
+                "start": 61,
+                "end": 62,
+                "name": "c"
+              },
+              "body": {
+                "type": "EmptyStatement",
+                "start": 63,
+                "end": 64
+              }
             }
           ]
         },
@@ -59,23 +75,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 47,
-      "end": 50,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'in'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 58,
-      "end": 60,
-      "labels": [
-      ]
-    }
   ]
 }

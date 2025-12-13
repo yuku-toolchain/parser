@@ -5,6 +5,75 @@
     "end": 316,
     "sourceType": "script",
     "body": [
+      {
+        "type": "IfStatement",
+        "start": 221,
+        "end": 236,
+        "test": {
+          "type": "Identifier",
+          "start": 225,
+          "end": 226,
+          "name": "a"
+        },
+        "consequent": {
+          "type": "BreakStatement",
+          "start": 228,
+          "end": 236,
+          "label": {
+            "type": "Identifier",
+            "start": 234,
+            "end": 235,
+            "name": "c"
+          }
+        },
+        "alternate": null
+      },
+      {
+        "type": "IfStatement",
+        "start": 249,
+        "end": 264,
+        "test": {
+          "type": "Identifier",
+          "start": 253,
+          "end": 254,
+          "name": "a"
+        },
+        "consequent": {
+          "type": "BreakStatement",
+          "start": 256,
+          "end": 264,
+          "label": {
+            "type": "Identifier",
+            "start": 262,
+            "end": 263,
+            "name": "c"
+          }
+        },
+        "alternate": null
+      },
+      {
+        "type": "IfStatement",
+        "start": 277,
+        "end": 292,
+        "test": {
+          "type": "Identifier",
+          "start": 281,
+          "end": 282,
+          "name": "a"
+        },
+        "consequent": {
+          "type": "BreakStatement",
+          "start": 284,
+          "end": 292,
+          "label": {
+            "type": "Identifier",
+            "start": 290,
+            "end": 291,
+            "name": "c"
+          }
+        },
+        "alternate": null
+      }
     ]
   },
   "comments": [
@@ -39,24 +108,6 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 50,
-      "end": 55,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 50,
-      "end": 55,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
       "help": "Try inserting a semicolon here",
       "start": 83,
@@ -66,118 +117,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 106,
-      "end": 111,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 106,
-      "end": 111,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 134,
-      "end": 139,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 134,
-      "end": 139,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 162,
-      "end": 167,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 162,
-      "end": 167,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Expected ',' or ')' in parenthesized expression",
       "help": "Add a comma between elements or close with ')'.",
       "start": 204,
       "end": 205,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 228,
-      "end": 233,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 228,
-      "end": 233,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 256,
-      "end": 261,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 256,
-      "end": 261,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 284,
-      "end": 289,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 284,
-      "end": 289,
       "labels": [
       ]
     },

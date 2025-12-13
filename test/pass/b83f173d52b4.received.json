@@ -6,65 +6,107 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "VariableDeclaration",
-        "start": 5,
-        "end": 10,
-        "kind": "var",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 9,
-            "end": 10,
-            "id": {
-              "type": "Identifier",
+        "type": "ForInStatement",
+        "start": 0,
+        "end": 49,
+        "left": {
+          "type": "VariableDeclaration",
+          "start": 5,
+          "end": 10,
+          "kind": "var",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
               "start": 9,
               "end": 10,
-              "name": "a"
-            },
-            "init": null
+              "id": {
+                "type": "Identifier",
+                "start": 9,
+                "end": 10,
+                "name": "a"
+              },
+              "init": null
+            }
+          ]
+        },
+        "right": {
+          "type": "Identifier",
+          "start": 14,
+          "end": 15,
+          "name": "b"
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "start": 17,
+          "end": 49,
+          "expression": {
+            "type": "ParenthesizedExpression",
+            "start": 17,
+            "end": 48,
+            "expression": {
+              "type": "CallExpression",
+              "start": 18,
+              "end": 47,
+              "callee": {
+                "type": "ParenthesizedExpression",
+                "start": 18,
+                "end": 45,
+                "expression": {
+                  "type": "FunctionExpression",
+                  "start": 19,
+                  "end": 44,
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start": 31,
+                    "end": 44,
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start": 35,
+                        "end": 42,
+                        "expression": {
+                          "type": "CallExpression",
+                          "start": 35,
+                          "end": 41,
+                          "callee": {
+                            "type": "Identifier",
+                            "start": 35,
+                            "end": 36,
+                            "name": "c"
+                          },
+                          "arguments": [
+                            {
+                              "type": "Literal",
+                              "start": 37,
+                              "end": 40,
+                              "value": "d",
+                              "raw": "\"d\""
+                            }
+                          ],
+                          "optional": false
+                        }
+                      }
+                    ]
+                  },
+                  "expression": false
+                }
+              },
+              "arguments": [
+              ],
+              "optional": false
+            }
           }
-        ]
+        }
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'in'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 11,
-      "end": 13,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Function declaration requires a name",
-      "help": "Add a name after 'function', e.g. 'function myFunc() {}'.",
-      "start": 28,
-      "end": 29,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 43,
-      "end": 44,
-      "labels": [
-      ]
-    }
   ]
 }

@@ -5,28 +5,46 @@
     "end": 18,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ForInStatement",
+        "start": 0,
+        "end": 18,
+        "left": {
+          "type": "VariableDeclaration",
+          "start": 4,
+          "end": 11,
+          "kind": "const",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start": 10,
+              "end": 11,
+              "id": {
+                "type": "Identifier",
+                "start": 10,
+                "end": 11,
+                "name": "a"
+              },
+              "init": null
+            }
+          ]
+        },
+        "right": {
+          "type": "Identifier",
+          "start": 15,
+          "end": 16,
+          "name": "b"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 17,
+          "end": 18
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "'const' declarations must be initialized",
-      "help": "Add '= value' to initialize the constant, or use 'let' if you need to assign it later.",
-      "start": 10,
-      "end": 11,
-      "labels": [
-      ]
-    }
   ]
 }

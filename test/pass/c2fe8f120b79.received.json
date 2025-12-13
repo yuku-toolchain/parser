@@ -5,19 +5,32 @@
     "end": 12,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ForInStatement",
+        "start": 0,
+        "end": 12,
+        "left": {
+          "type": "Identifier",
+          "start": 4,
+          "end": 5,
+          "name": "a"
+        },
+        "right": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 10,
+          "name": "b"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 11,
+          "end": 12
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    }
   ]
 }

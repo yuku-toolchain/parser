@@ -5,28 +5,30 @@
     "end": 8,
     "sourceType": "script",
     "body": [
+      {
+        "type": "EmptyStatement",
+        "start": 0,
+        "end": 1
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 2,
+        "end": 3
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 4,
+        "end": 5
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 6,
+        "end": 7
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 1,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 4,
-      "end": 5,
-      "labels": [
-      ]
-    }
   ]
 }

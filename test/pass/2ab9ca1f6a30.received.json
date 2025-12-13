@@ -138,36 +138,36 @@
           "end": 144,
           "body": [
             {
-              "type": "VariableDeclaration",
-              "start": 100,
-              "end": 110,
-              "kind": "var",
-              "declarations": [
-                {
-                  "type": "VariableDeclarator",
-                  "start": 104,
-                  "end": 109,
-                  "id": {
-                    "type": "Identifier",
+              "type": "ForStatement",
+              "start": 95,
+              "end": 142,
+              "init": {
+                "type": "VariableDeclaration",
+                "start": 100,
+                "end": 109,
+                "kind": "var",
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
                     "start": 104,
-                    "end": 105,
-                    "name": "e"
-                  },
-                  "init": {
-                    "type": "Literal",
-                    "start": 108,
                     "end": 109,
-                    "value": 1,
-                    "raw": "1"
+                    "id": {
+                      "type": "Identifier",
+                      "start": 104,
+                      "end": 105,
+                      "name": "e"
+                    },
+                    "init": {
+                      "type": "Literal",
+                      "start": 108,
+                      "end": 109,
+                      "value": 1,
+                      "raw": "1"
+                    }
                   }
-                }
-              ]
-            },
-            {
-              "type": "ExpressionStatement",
-              "start": 111,
-              "end": 117,
-              "expression": {
+                ]
+              },
+              "test": {
                 "type": "BinaryExpression",
                 "start": 111,
                 "end": 116,
@@ -185,38 +185,51 @@
                   "value": 2,
                   "raw": "2"
                 }
-              }
-            },
-            {
-              "type": "IfStatement",
-              "start": 131,
-              "end": 142,
-              "test": {
-                "type": "Identifier",
-                "start": 135,
-                "end": 136,
-                "name": "b"
               },
-              "consequent": {
-                "type": "ExpressionStatement",
-                "start": 138,
-                "end": 142,
-                "expression": {
-                  "type": "CallExpression",
-                  "start": 138,
-                  "end": 141,
-                  "callee": {
-                    "type": "Identifier",
-                    "start": 138,
-                    "end": 139,
-                    "name": "c"
-                  },
-                  "arguments": [
-                  ],
-                  "optional": false
+              "update": {
+                "type": "UpdateExpression",
+                "start": 118,
+                "end": 121,
+                "operator": "++",
+                "prefix": true,
+                "argument": {
+                  "type": "Identifier",
+                  "start": 120,
+                  "end": 121,
+                  "name": "e"
                 }
               },
-              "alternate": null
+              "body": {
+                "type": "IfStatement",
+                "start": 131,
+                "end": 142,
+                "test": {
+                  "type": "Identifier",
+                  "start": 135,
+                  "end": 136,
+                  "name": "b"
+                },
+                "consequent": {
+                  "type": "ExpressionStatement",
+                  "start": 138,
+                  "end": 142,
+                  "expression": {
+                    "type": "CallExpression",
+                    "start": 138,
+                    "end": 141,
+                    "callee": {
+                      "type": "Identifier",
+                      "start": 138,
+                      "end": 139,
+                      "name": "c"
+                    },
+                    "arguments": [
+                    ],
+                    "optional": false
+                  }
+                },
+                "alternate": null
+              }
             }
           ]
         },
@@ -264,23 +277,5 @@
     }
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 95,
-      "end": 98,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 121,
-      "end": 121,
-      "labels": [
-      ]
-    }
   ]
 }

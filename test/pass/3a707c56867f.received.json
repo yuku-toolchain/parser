@@ -25,6 +25,17 @@
         }
       },
       {
+        "type": "BreakStatement",
+        "start": 37,
+        "end": 45,
+        "label": {
+          "type": "Identifier",
+          "start": 43,
+          "end": 44,
+          "name": "d"
+        }
+      },
+      {
         "type": "ExpressionStatement",
         "start": 50,
         "end": 54,
@@ -82,15 +93,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 3,
       "end": 8,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 37,
-      "end": 42,
       "labels": [
       ]
     },

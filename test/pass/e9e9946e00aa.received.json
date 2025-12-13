@@ -6,91 +6,182 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 54,
-        "end": 58,
-        "expression": {
-          "type": "CallExpression",
-          "start": 54,
-          "end": 57,
-          "callee": {
-            "type": "Identifier",
-            "start": 54,
-            "end": 55,
-            "name": "c"
+        "type": "SwitchStatement",
+        "start": 0,
+        "end": 118,
+        "discriminant": {
+          "type": "Literal",
+          "start": 8,
+          "end": 9,
+          "value": 1,
+          "raw": "1"
+        },
+        "cases": [
+          {
+            "type": "SwitchCase",
+            "start": 15,
+            "end": 69,
+            "test": {
+              "type": "Literal",
+              "start": 20,
+              "end": 21,
+              "value": 2,
+              "raw": "2"
+            },
+            "consequent": [
+              {
+                "type": "ExpressionStatement",
+                "start": 27,
+                "end": 31,
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 27,
+                  "end": 30,
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 27,
+                    "end": 28,
+                    "name": "a"
+                  },
+                  "arguments": [
+                  ],
+                  "optional": false
+                }
+              },
+              {
+                "type": "IfStatement",
+                "start": 36,
+                "end": 49,
+                "test": {
+                  "type": "Identifier",
+                  "start": 40,
+                  "end": 41,
+                  "name": "b"
+                },
+                "consequent": {
+                  "type": "BreakStatement",
+                  "start": 43,
+                  "end": 49,
+                  "label": null
+                },
+                "alternate": null
+              },
+              {
+                "type": "ExpressionStatement",
+                "start": 54,
+                "end": 58,
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 54,
+                  "end": 57,
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 54,
+                    "end": 55,
+                    "name": "c"
+                  },
+                  "arguments": [
+                  ],
+                  "optional": false
+                }
+              },
+              {
+                "type": "BreakStatement",
+                "start": 63,
+                "end": 69,
+                "label": null
+              }
+            ]
           },
-          "arguments": [
-          ],
-          "optional": false
-        }
+          {
+            "type": "SwitchCase",
+            "start": 72,
+            "end": 96,
+            "test": {
+              "type": "BinaryExpression",
+              "start": 77,
+              "end": 86,
+              "left": {
+                "type": "ParenthesizedExpression",
+                "start": 77,
+                "end": 80,
+                "expression": {
+                  "type": "Literal",
+                  "start": 78,
+                  "end": 79,
+                  "value": 3,
+                  "raw": "3"
+                }
+              },
+              "operator": "+",
+              "right": {
+                "type": "ParenthesizedExpression",
+                "start": 83,
+                "end": 86,
+                "expression": {
+                  "type": "Literal",
+                  "start": 84,
+                  "end": 85,
+                  "value": 4,
+                  "raw": "4"
+                }
+              }
+            },
+            "consequent": [
+              {
+                "type": "ExpressionStatement",
+                "start": 92,
+                "end": 96,
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 92,
+                  "end": 95,
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 92,
+                    "end": 93,
+                    "name": "d"
+                  },
+                  "arguments": [
+                  ],
+                  "optional": false
+                }
+              }
+            ]
+          },
+          {
+            "type": "SwitchCase",
+            "start": 99,
+            "end": 116,
+            "test": null,
+            "consequent": [
+              {
+                "type": "ExpressionStatement",
+                "start": 112,
+                "end": 116,
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 112,
+                  "end": 115,
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 112,
+                    "end": 113,
+                    "name": "e"
+                  },
+                  "arguments": [
+                  ],
+                  "optional": false
+                }
+              }
+            ]
+          }
+        ]
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 43,
-      "end": 48,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 43,
-      "end": 48,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected '}' to close switch body",
-      "help": null,
-      "start": 43,
-      "end": 48,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 63,
-      "end": 68,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'case'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 72,
-      "end": 76,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'default'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 99,
-      "end": 106,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 117,
-      "end": 118,
-      "labels": [
-      ]
-    }
   ]
 }

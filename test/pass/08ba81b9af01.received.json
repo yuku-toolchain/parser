@@ -32,30 +32,30 @@
                 "end": 45,
                 "body": [
                   {
-                    "type": "VariableDeclaration",
-                    "start": 24,
-                    "end": 30,
-                    "kind": "var",
-                    "declarations": [
-                      {
-                        "type": "VariableDeclarator",
-                        "start": 28,
-                        "end": 29,
-                        "id": {
-                          "type": "Identifier",
+                    "type": "ForStatement",
+                    "start": 19,
+                    "end": 43,
+                    "init": {
+                      "type": "VariableDeclaration",
+                      "start": 24,
+                      "end": 29,
+                      "kind": "var",
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
                           "start": 28,
                           "end": 29,
-                          "name": "a"
-                        },
-                        "init": null
-                      }
-                    ]
-                  },
-                  {
-                    "type": "ExpressionStatement",
-                    "start": 31,
-                    "end": 37,
-                    "expression": {
+                          "id": {
+                            "type": "Identifier",
+                            "start": 28,
+                            "end": 29,
+                            "name": "a"
+                          },
+                          "init": null
+                        }
+                      ]
+                    },
+                    "test": {
                       "type": "BinaryExpression",
                       "start": 31,
                       "end": 36,
@@ -73,6 +73,24 @@
                         "value": 1,
                         "raw": "1"
                       }
+                    },
+                    "update": {
+                      "type": "UpdateExpression",
+                      "start": 38,
+                      "end": 41,
+                      "operator": "++",
+                      "prefix": true,
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 40,
+                        "end": 41,
+                        "name": "a"
+                      }
+                    },
+                    "body": {
+                      "type": "EmptyStatement",
+                      "start": 42,
+                      "end": 43
                     }
                   }
                 ]
@@ -90,23 +108,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 19,
-      "end": 22,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 41,
-      "end": 41,
-      "labels": [
-      ]
-    }
   ]
 }

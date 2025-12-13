@@ -83,10 +83,11 @@
               }
             },
             {
-              "type": "ExpressionStatement",
-              "start": 46,
-              "end": 52,
-              "expression": {
+              "type": "ForStatement",
+              "start": 39,
+              "end": 65,
+              "init": null,
+              "test": {
                 "type": "BinaryExpression",
                 "start": 46,
                 "end": 51,
@@ -103,6 +104,57 @@
                   "end": 51,
                   "name": "d"
                 }
+              },
+              "update": {
+                "type": "UpdateExpression",
+                "start": 53,
+                "end": 56,
+                "operator": "++",
+                "prefix": true,
+                "argument": {
+                  "type": "Identifier",
+                  "start": 55,
+                  "end": 56,
+                  "name": "b"
+                }
+              },
+              "body": {
+                "type": "ExpressionStatement",
+                "start": 58,
+                "end": 65,
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 58,
+                  "end": 64,
+                  "callee": {
+                    "type": "MemberExpression",
+                    "start": 58,
+                    "end": 61,
+                    "object": {
+                      "type": "Identifier",
+                      "start": 58,
+                      "end": 59,
+                      "name": "f"
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "start": 60,
+                      "end": 61,
+                      "name": "g"
+                    },
+                    "computed": false,
+                    "optional": false
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "start": 62,
+                      "end": 63,
+                      "name": "b"
+                    }
+                  ],
+                  "optional": false
+                }
               }
             }
           ]
@@ -114,23 +166,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 39,
-      "end": 42,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 56,
-      "end": 56,
-      "labels": [
-      ]
-    }
   ]
 }

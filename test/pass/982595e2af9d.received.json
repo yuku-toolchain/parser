@@ -6,10 +6,29 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 11,
-        "end": 17,
-        "expression": {
+        "type": "ForStatement",
+        "start": 0,
+        "end": 28,
+        "init": {
+          "type": "AssignmentExpression",
+          "start": 4,
+          "end": 9,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 5,
+            "name": "a"
+          },
+          "right": {
+            "type": "Literal",
+            "start": 8,
+            "end": 9,
+            "value": 1,
+            "raw": "1"
+          }
+        },
+        "test": {
           "type": "BinaryExpression",
           "start": 11,
           "end": 16,
@@ -27,6 +46,44 @@
             "value": 2,
             "raw": "2"
           }
+        },
+        "update": {
+          "type": "UpdateExpression",
+          "start": 18,
+          "end": 21,
+          "operator": "++",
+          "prefix": false,
+          "argument": {
+            "type": "Identifier",
+            "start": 18,
+            "end": 19,
+            "name": "a"
+          }
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "start": 23,
+          "end": 28,
+          "expression": {
+            "type": "CallExpression",
+            "start": 23,
+            "end": 27,
+            "callee": {
+              "type": "Identifier",
+              "start": 23,
+              "end": 24,
+              "name": "b"
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "start": 25,
+                "end": 26,
+                "name": "a"
+              }
+            ],
+            "optional": false
+          }
         }
       }
     ]
@@ -34,23 +91,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 21,
-      "end": 21,
-      "labels": [
-      ]
-    }
   ]
 }

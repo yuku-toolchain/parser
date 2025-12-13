@@ -6,39 +6,15 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "VariableDeclaration",
-        "start": 5,
-        "end": 10,
-        "kind": "let",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 9,
-            "end": 10,
-            "id": {
-              "type": "Identifier",
-              "start": 9,
-              "end": 10,
-              "name": "a"
-            },
-            "init": null
-          }
-        ]
+        "type": "EmptyStatement",
+        "start": 19,
+        "end": 20
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
     {
       "severity": "error",
       "message": "Unexpected token 'let'",
@@ -50,19 +26,19 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token ')' in binding pattern",
-      "help": "Expected an identifier, array pattern ([a, b]), or object pattern ({a, b}).",
-      "start": 17,
-      "end": 18,
+      "message": "Expected ';' after for-loop init",
+      "help": null,
+      "start": 14,
+      "end": 17,
       "labels": [
       ]
     },
     {
       "severity": "error",
-      "message": "Unexpected token ';'",
+      "message": "Unexpected token ')'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 19,
-      "end": 20,
+      "start": 20,
+      "end": 21,
       "labels": [
       ]
     }

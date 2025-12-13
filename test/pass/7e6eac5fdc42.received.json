@@ -6,10 +6,16 @@
     "sourceType": "script",
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start": 7,
-        "end": 13,
-        "expression": {
+        "type": "ForStatement",
+        "start": 0,
+        "end": 15,
+        "init": {
+          "type": "Identifier",
+          "start": 4,
+          "end": 5,
+          "name": "a"
+        },
+        "test": {
           "type": "BinaryExpression",
           "start": 7,
           "end": 12,
@@ -27,6 +33,12 @@
             "value": 1,
             "raw": "1"
           }
+        },
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 14,
+          "end": 15
         }
       }
     ]
@@ -34,23 +46,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 0,
-      "end": 3,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 13,
-      "end": 14,
-      "labels": [
-      ]
-    }
   ]
 }

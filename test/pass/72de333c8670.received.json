@@ -44,15 +44,22 @@
         }
       },
       {
-        "type": "ExpressionStatement",
-        "start": 17,
-        "end": 23,
-        "expression": {
+        "type": "ForStatement",
+        "start": 10,
+        "end": 26,
+        "init": null,
+        "test": {
           "type": "Literal",
           "start": 17,
           "end": 22,
           "value": false,
           "raw": "false"
+        },
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 25,
+          "end": 26
         }
       },
       {
@@ -94,15 +101,45 @@
         }
       },
       {
-        "type": "ExpressionStatement",
-        "start": 51,
-        "end": 57,
-        "expression": {
+        "type": "ForStatement",
+        "start": 37,
+        "end": 60,
+        "init": {
+          "type": "AssignmentExpression",
+          "start": 42,
+          "end": 49,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 42,
+            "end": 43,
+            "name": "c"
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "start": 46,
+            "end": 49,
+            "expression": {
+              "type": "Literal",
+              "start": 47,
+              "end": 48,
+              "value": 1,
+              "raw": "1"
+            }
+          }
+        },
+        "test": {
           "type": "Literal",
           "start": 51,
           "end": 56,
           "value": false,
           "raw": "false"
+        },
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 59,
+          "end": 60
         }
       },
       {
@@ -146,15 +183,22 @@
         }
       },
       {
-        "type": "ExpressionStatement",
-        "start": 82,
-        "end": 88,
-        "expression": {
+        "type": "ForStatement",
+        "start": 75,
+        "end": 91,
+        "init": null,
+        "test": {
           "type": "Literal",
           "start": 82,
           "end": 87,
           "value": false,
           "raw": "false"
+        },
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 90,
+          "end": 91
         }
       },
       {
@@ -198,15 +242,45 @@
         }
       },
       {
-        "type": "ExpressionStatement",
-        "start": 120,
-        "end": 126,
-        "expression": {
+        "type": "ForStatement",
+        "start": 106,
+        "end": 129,
+        "init": {
+          "type": "AssignmentExpression",
+          "start": 111,
+          "end": 118,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 111,
+            "end": 112,
+            "name": "d"
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "start": 115,
+            "end": 118,
+            "expression": {
+              "type": "Literal",
+              "start": 116,
+              "end": 117,
+              "value": 2,
+              "raw": "2"
+            }
+          }
+        },
+        "test": {
           "type": "Literal",
           "start": 120,
           "end": 125,
           "value": false,
           "raw": "false"
+        },
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 128,
+          "end": 129
         }
       }
     ]
@@ -214,77 +288,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 10,
-      "end": 13,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 23,
-      "end": 24,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 37,
-      "end": 40,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 57,
-      "end": 58,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 75,
-      "end": 78,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 88,
-      "end": 89,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 106,
-      "end": 109,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 126,
-      "end": 127,
-      "labels": [
-      ]
-    }
   ]
 }

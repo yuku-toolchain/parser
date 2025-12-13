@@ -95,10 +95,34 @@
         }
       },
       {
-        "type": "ExpressionStatement",
-        "start": 44,
-        "end": 52,
-        "expression": {
+        "type": "ForStatement",
+        "start": 30,
+        "end": 67,
+        "init": {
+          "type": "AssignmentExpression",
+          "start": 35,
+          "end": 42,
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 35,
+            "end": 36,
+            "name": "d"
+          },
+          "right": {
+            "type": "ParenthesizedExpression",
+            "start": 39,
+            "end": 42,
+            "expression": {
+              "type": "Literal",
+              "start": 40,
+              "end": 41,
+              "value": 3,
+              "raw": "3"
+            }
+          }
+        },
+        "test": {
           "type": "BinaryExpression",
           "start": 44,
           "end": 51,
@@ -120,6 +144,62 @@
               "value": 4,
               "raw": "4"
             }
+          }
+        },
+        "update": {
+          "type": "UpdateExpression",
+          "start": 53,
+          "end": 56,
+          "operator": "++",
+          "prefix": false,
+          "argument": {
+            "type": "Identifier",
+            "start": 53,
+            "end": 54,
+            "name": "d"
+          }
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "start": 58,
+          "end": 67,
+          "expression": {
+            "type": "CallExpression",
+            "start": 58,
+            "end": 66,
+            "callee": {
+              "type": "ParenthesizedExpression",
+              "start": 58,
+              "end": 63,
+              "expression": {
+                "type": "MemberExpression",
+                "start": 59,
+                "end": 62,
+                "object": {
+                  "type": "Identifier",
+                  "start": 59,
+                  "end": 60,
+                  "name": "e"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 61,
+                  "end": 62,
+                  "name": "f"
+                },
+                "computed": false,
+                "optional": false
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "start": 64,
+                "end": 65,
+                "name": "d"
+              }
+            ],
+            "optional": false
           }
         }
       },
@@ -153,10 +233,11 @@
         }
       },
       {
-        "type": "ExpressionStatement",
-        "start": 84,
-        "end": 92,
-        "expression": {
+        "type": "ForStatement",
+        "start": 77,
+        "end": 107,
+        "init": null,
+        "test": {
           "type": "BinaryExpression",
           "start": 84,
           "end": 91,
@@ -178,6 +259,62 @@
               "value": 6,
               "raw": "6"
             }
+          }
+        },
+        "update": {
+          "type": "UpdateExpression",
+          "start": 93,
+          "end": 96,
+          "operator": "++",
+          "prefix": false,
+          "argument": {
+            "type": "Identifier",
+            "start": 93,
+            "end": 94,
+            "name": "d"
+          }
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "start": 98,
+          "end": 107,
+          "expression": {
+            "type": "CallExpression",
+            "start": 98,
+            "end": 106,
+            "callee": {
+              "type": "ParenthesizedExpression",
+              "start": 98,
+              "end": 103,
+              "expression": {
+                "type": "MemberExpression",
+                "start": 99,
+                "end": 102,
+                "object": {
+                  "type": "Identifier",
+                  "start": 99,
+                  "end": 100,
+                  "name": "e"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 101,
+                  "end": 102,
+                  "name": "f"
+                },
+                "computed": false,
+                "optional": false
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "start": 104,
+                "end": 105,
+                "name": "d"
+              }
+            ],
+            "optional": false
           }
         }
       },
@@ -257,42 +394,6 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 30,
-      "end": 33,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 56,
-      "end": 56,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'for'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 77,
-      "end": 80,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 96,
-      "end": 96,
-      "labels": [
-      ]
-    },
     {
       "severity": "error",
       "message": "Unexpected token 'with'",

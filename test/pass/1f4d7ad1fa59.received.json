@@ -10,6 +10,11 @@
         "start": 0,
         "end": 7,
         "body": [
+          {
+            "type": "EmptyStatement",
+            "start": 4,
+            "end": 5
+          }
         ]
       },
       {
@@ -37,6 +42,35 @@
         "end": 15,
         "body": [
         ]
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 16,
+        "end": 17
+      },
+      {
+        "type": "BlockStatement",
+        "start": 18,
+        "end": 30,
+        "body": [
+          {
+            "type": "BlockStatement",
+            "start": 22,
+            "end": 24,
+            "body": [
+            ]
+          },
+          {
+            "type": "EmptyStatement",
+            "start": 27,
+            "end": 28
+          }
+        ]
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 31,
+        "end": 32
       },
       {
         "type": "ExpressionStatement",
@@ -69,32 +103,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 4,
-      "end": 5,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ';'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 16,
-      "end": 17,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 29,
-      "end": 30,
-      "labels": [
-      ]
-    }
   ]
 }

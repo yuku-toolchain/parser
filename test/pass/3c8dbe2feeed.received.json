@@ -5,6 +5,98 @@
     "end": 96,
     "sourceType": "script",
     "body": [
+      {
+        "type": "IfStatement",
+        "start": 16,
+        "end": 31,
+        "test": {
+          "type": "Identifier",
+          "start": 20,
+          "end": 21,
+          "name": "a"
+        },
+        "consequent": {
+          "type": "BreakStatement",
+          "start": 23,
+          "end": 31,
+          "label": {
+            "type": "Identifier",
+            "start": 29,
+            "end": 30,
+            "name": "b"
+          }
+        },
+        "alternate": null
+      },
+      {
+        "type": "IfStatement",
+        "start": 36,
+        "end": 51,
+        "test": {
+          "type": "Identifier",
+          "start": 40,
+          "end": 41,
+          "name": "a"
+        },
+        "consequent": {
+          "type": "BreakStatement",
+          "start": 43,
+          "end": 51,
+          "label": {
+            "type": "Identifier",
+            "start": 49,
+            "end": 50,
+            "name": "b"
+          }
+        },
+        "alternate": null
+      },
+      {
+        "type": "IfStatement",
+        "start": 56,
+        "end": 71,
+        "test": {
+          "type": "Identifier",
+          "start": 60,
+          "end": 61,
+          "name": "a"
+        },
+        "consequent": {
+          "type": "BreakStatement",
+          "start": 63,
+          "end": 71,
+          "label": {
+            "type": "Identifier",
+            "start": 69,
+            "end": 70,
+            "name": "b"
+          }
+        },
+        "alternate": null
+      },
+      {
+        "type": "IfStatement",
+        "start": 78,
+        "end": 93,
+        "test": {
+          "type": "Identifier",
+          "start": 82,
+          "end": 83,
+          "name": "c"
+        },
+        "consequent": {
+          "type": "BreakStatement",
+          "start": 85,
+          "end": 93,
+          "label": {
+            "type": "Identifier",
+            "start": 91,
+            "end": 92,
+            "name": "d"
+          }
+        },
+        "alternate": null
+      }
     ]
   },
   "comments": [
@@ -21,82 +113,10 @@
     },
     {
       "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 23,
-      "end": 28,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 23,
-      "end": 28,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 43,
-      "end": 48,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 43,
-      "end": 48,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 63,
-      "end": 68,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 63,
-      "end": 68,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
       "message": "Unexpected token '}'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 74,
       "end": 75,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 85,
-      "end": 90,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected statement after if condition",
-      "help": null,
-      "start": 85,
-      "end": 90,
       "labels": [
       ]
     },

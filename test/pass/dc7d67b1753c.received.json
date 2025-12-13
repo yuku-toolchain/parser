@@ -20,9 +20,31 @@
           "start": 35,
           "end": 57,
           "body": [
+            {
+              "type": "BreakStatement",
+              "start": 43,
+              "end": 51,
+              "label": {
+                "type": "Identifier",
+                "start": 49,
+                "end": 50,
+                "name": "d"
+              }
+            }
           ]
         },
         "alternate": null
+      },
+      {
+        "type": "BreakStatement",
+        "start": 62,
+        "end": 70,
+        "label": {
+          "type": "Identifier",
+          "start": 68,
+          "end": 69,
+          "name": "e"
+        }
       }
     ]
   },
@@ -35,24 +57,6 @@
       "help": "Try inserting a semicolon here",
       "start": 1,
       "end": 1,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 43,
-      "end": 48,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'break'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 62,
-      "end": 67,
       "labels": [
       ]
     },

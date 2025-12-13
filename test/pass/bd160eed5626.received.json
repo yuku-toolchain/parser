@@ -25,6 +25,17 @@
         }
       },
       {
+        "type": "ContinueStatement",
+        "start": 37,
+        "end": 48,
+        "label": {
+          "type": "Identifier",
+          "start": 46,
+          "end": 47,
+          "name": "d"
+        }
+      },
+      {
         "type": "ExpressionStatement",
         "start": 53,
         "end": 57,
@@ -82,15 +93,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 3,
       "end": 8,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'continue'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 37,
-      "end": 45,
       "labels": [
       ]
     },
