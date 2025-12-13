@@ -5,6 +5,8 @@ const Error = @import("../parser.zig").Error;
 
 const expressions = @import("expressions.zig");
 const variables = @import("variables.zig");
+const literals = @import("literals.zig");
+const patterns = @import("patterns.zig");
 const functions = @import("functions.zig");
 const grammar = @import("../grammar.zig");
 
@@ -274,7 +276,7 @@ fn parseBreakStatement(parser: *Parser) Error!?ast.NodeIndex {
 
     // break [no LineTerminator here] LabelIdentifier;
     if (!parser.current_token.has_line_terminator_before and parser.current_token.type.isIdentifierLike()) {
-        const label_node = try parseLabelIdentifier(parser) orelse return null;
+        const label_node = try literals.parseLabelIdentifier(parser) orelse return null;
         label = label_node;
         end = parser.getSpan(label_node).end;
     }
@@ -294,7 +296,7 @@ fn parseContinueStatement(parser: *Parser) Error!?ast.NodeIndex {
 
     // continue [no LineTerminator here] LabelIdentifier;
     if (!parser.current_token.has_line_terminator_before and parser.current_token.type.isIdentifierLike()) {
-        const label_node = try parseLabelIdentifier(parser) orelse return null;
+        const label_node = try literals.parseLabelIdentifier(parser) orelse return null;
         label = label_node;
         end = parser.getSpan(label_node).end;
     }
@@ -304,24 +306,13 @@ fn parseContinueStatement(parser: *Parser) Error!?ast.NodeIndex {
     return try parser.addNode(.{ .continue_statement = .{ .label = label } }, .{ .start = start, .end = end });
 }
 
-fn parseLabelIdentifier(parser: *Parser) Error!?ast.NodeIndex {
-    const current = parser.current_token;
-    try parser.advance();
-    return try parser.addNode(.{
-        .label_identifier = .{
-            .name_start = current.span.start,
-            .name_len = @intCast(current.lexeme.len),
-        },
-    }, current.span);
-}
-
 /// https://tc39.es/ecma262/#sec-for-statement
 /// https://tc39.es/ecma262/#sec-for-in-and-for-of-statements
 fn parseForStatement(parser: *Parser, is_await: bool) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     try parser.advance(); // consume 'for'
 
-    // Check for `for await (...)`
+    // check for `for await (...)`
     if (parser.current_token.type == .await) {
         if (!parser.context.in_async and !parser.isModule()) {
             try parser.report(parser.current_token.span, "'for await' is only valid in async functions or modules", .{});
@@ -543,7 +534,7 @@ fn parseVariableKindForLoop(parser: *Parser) ?ast.VariableKind {
 /// Parse a single variable declarator for for loops (no required initializer for const in for-in/of)
 fn parseForLoopDeclarator(parser: *Parser) Error!?ast.NodeIndex {
     const decl_start = parser.current_token.span.start;
-    const id = try variables.parseBindingPatternForLoop(parser) orelse return null;
+    const id = try patterns.parseBindingPattern(parser) orelse return null;
 
     var init: ast.NodeIndex = ast.null_node;
     var end = parser.getSpan(id).end;

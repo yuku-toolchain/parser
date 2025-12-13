@@ -569,7 +569,6 @@ pub const IdentifierName = struct {
     name_len: u16,
 };
 
-/// used in break, continue, and labeled statements
 /// https://tc39.es/ecma262/#prod-LabelIdentifier
 pub const LabelIdentifier = struct {
     name_start: u32,

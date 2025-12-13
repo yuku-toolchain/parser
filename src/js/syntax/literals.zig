@@ -204,3 +204,14 @@ pub fn parseIdentifierName(parser: *Parser) Error!ast.NodeIndex {
         },
     }, tok.span);
 }
+
+pub fn parseLabelIdentifier(parser: *Parser) Error!?ast.NodeIndex {
+    const current = parser.current_token;
+    try parser.advance();
+    return try parser.addNode(.{
+        .label_identifier = .{
+            .name_start = current.span.start,
+            .name_len = @intCast(current.lexeme.len),
+        },
+    }, current.span);
+}
