@@ -456,7 +456,6 @@ pub const Lexer = struct {
 
         const c = self.source[self.cursor];
 
-        // Line continuation: backslash followed by line terminator
         // LineTerminatorSequence :: <LF> | <CR> [lookahead != <LF>] | <LS> | <PS> | <CR><LF>
         if (c == '\r') {
             self.cursor += 1;
@@ -470,7 +469,8 @@ pub const Lexer = struct {
             self.cursor += 1;
             return;
         }
-        // Check for multi-byte line terminators (LS U+2028, PS U+2029)
+
+        // multi-byte line terminators (LS U+2028, PS U+2029)
         const lt_len = util.Utf.lineTerminatorLen(self.source, self.cursor);
         if (lt_len > 0) {
             self.cursor += lt_len;
@@ -537,7 +537,7 @@ pub const Lexer = struct {
         self.cursor += 1; // skip 'u'
 
         if (self.cursor < self.source_len and self.source[self.cursor] == '{') {
-            // \u{XXXXX} format - allows any number of hex digits as long as value <= 0x10FFFF
+            // \u{XXXXX}
             self.cursor += 1;
             const start = self.cursor;
             const end = std.mem.indexOfScalarPos(u8, self.source, self.cursor, '}') orelse
@@ -548,13 +548,12 @@ pub const Lexer = struct {
                 return error.InvalidUnicodeEscape;
             }
 
-            // Validate all characters are hex digits and compute value
             var value: u32 = 0;
             for (hex_str) |c| {
                 if (!std.ascii.isHex(c)) {
                     return error.InvalidUnicodeEscape;
                 }
-                // Check for overflow before shifting
+                // check for overflow before shifting
                 if (value > 0x10FFFF) {
                     return error.InvalidUnicodeEscape;
                 }
@@ -567,7 +566,7 @@ pub const Lexer = struct {
                 value = (value << 4) | digit;
             }
 
-            // Validate code point is in valid Unicode range
+            // code point is in valid Unicode range
             if (value > 0x10FFFF) {
                 return error.InvalidUnicodeEscape;
             }
@@ -933,10 +932,10 @@ pub const Lexer = struct {
                     if (self.cursor == bin_start) return error.InvalidBinaryLiteral;
                 },
                 '0'...'7' => {
-                    // Potential legacy octal: 01, 07, etc.
+                    // potential legacy octal: 01, 07, etc.
                     is_legacy_octal = true;
                     try self.consumeDecimalDigits();
-                    // Check if any digit 8 or 9 was consumed (makes it decimal, not octal)
+
                     for (self.source[start..self.cursor]) |c| {
                         if (c == '8' or c == '9') {
                             is_legacy_octal = false;
@@ -952,17 +951,15 @@ pub const Lexer = struct {
             try self.consumeDecimalDigits();
         }
 
-        // handle decimal point (only for regular numbers, not legacy octals)
+        // handle decimal point only for regular numbers, not legacy octals
         if (token_type == .numeric_literal and
             self.cursor < self.source_len and self.source[self.cursor] == '.')
         {
             const next = self.peek(1);
             if (next == '_') return error.NumericSeparatorMisuse;
 
-            // Legacy octals (like 01) can't have a decimal point
-            // If followed by a non-digit, the '.' is member access (e.g., 01.toString())
             if (is_legacy_octal and !std.ascii.isDigit(next)) {
-                // Don't consume the '.', it's member access
+                // don't consume the '.', it's member access (e.g., 01.toString())
             } else {
                 self.cursor += 1;
                 if (std.ascii.isDigit(next)) try self.consumeDecimalDigits();
@@ -1114,8 +1111,8 @@ pub const Lexer = struct {
     }
 
     inline fn skipSkippable(self: *Lexer) LexicalError!void {
-        // Track if we're at a logical line start (start of file OR after newline)
-        // This persists through whitespace/comment skipping for HTML close comment detection
+        // track if we're at a logical line start (start of file OR after newline)
+        // this persists through whitespace/comment skipping for HTML close comment detection
         var at_line_start = self.cursor == 0 or self.has_line_terminator_before;
 
         while (self.cursor < self.source_len) {
@@ -1160,7 +1157,7 @@ pub const Lexer = struct {
                     },
                     '-' => {
                         // HTML-style close comment --> is only valid at line start in script mode
-                        // "Line start" means start of file OR after newline, with only whitespace/comments before
+                        // "line start" means start of file or after newline, with only whitespace/comments before
                         if (self.source_type == .script and at_line_start) {
                             const c1 = self.peek(1);
                             const c2 = self.peek(2);

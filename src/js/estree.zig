@@ -1234,7 +1234,6 @@ fn decodeEscapes(input: []const u8, out: *std.ArrayList(u8), allocator: std.mem.
                 i += 1;
                 if (i < input.len and input[i] == '{') {
                     i += 1;
-                    // Allow up to 16 hex digits (for leading zeros like \u{0000000000F8})
                     if (util.Utf.parseHexVariable(input, i, 16)) |r| {
                         if (r.has_digits and r.end < input.len and input[r.end] == '}') {
                             try appendUtf8(out, allocator, r.value);

@@ -88,8 +88,8 @@ pub fn parseHex4(input: []const u8, start: usize) ?struct { value: u21, end: usi
     return .{ .value = value, .end = start + 4 };
 }
 
-/// Variable-length hex digits until closing brace (for \u{H...} escape sequences)
-/// Allows leading zeros but validates the value is <= 0x10FFFF
+/// variable-length hex digits until closing brace (for \u{H...} escape sequences)
+/// allows leading zeros but validates the value is <= 0x10FFFF
 pub fn parseHexVariable(input: []const u8, start: usize, max_digits: usize) ?struct { value: u21, end: usize, has_digits: bool } {
     var value: u32 = 0;
     var i = start;
@@ -98,9 +98,9 @@ pub fn parseHexVariable(input: []const u8, start: usize, max_digits: usize) ?str
 
     while (i < input.len and count < max_digits) {
         if (hexVal(input[i])) |d| {
-            // Check for overflow before shifting
+            // check for overflow before shifting
             if (value > 0x10FFFF) {
-                // Continue scanning but mark as overflow
+                // continue scanning but mark as overflow
                 value = 0xFFFFFFFF;
             } else {
                 value = (value << 4) | d;
@@ -114,7 +114,6 @@ pub fn parseHexVariable(input: []const u8, start: usize, max_digits: usize) ?str
     }
 
     if (!has_digits) return null;
-    // Validate code point is in valid Unicode range
     if (value > 0x10FFFF) return null;
     return .{ .value = @intCast(value), .end = i, .has_digits = has_digits };
 }

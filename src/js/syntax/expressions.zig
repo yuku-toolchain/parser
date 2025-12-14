@@ -441,8 +441,8 @@ fn parseUpdateExpression(parser: *Parser, prefix: bool, left: ast.NodeIndex) Err
         const argument = try parseExpression(parser, 14, .{}) orelse return null;
         const span = parser.getSpan(argument);
 
-        // Unwrap parenthesized expression for validation and use as argument
         const unwrapped = parenthesized.unwrapParenthesized(parser, argument);
+
         if (!isSimpleAssignmentTarget(parser, unwrapped)) {
             try parser.report(
                 span,
@@ -458,8 +458,8 @@ fn parseUpdateExpression(parser: *Parser, prefix: bool, left: ast.NodeIndex) Err
         );
     }
 
-    // Unwrap parenthesized expression for validation and use as argument
     const unwrapped = parenthesized.unwrapParenthesized(parser, left);
+
     if (!isSimpleAssignmentTarget(parser, unwrapped)) {
         const span = parser.getSpan(left);
         try parser.report(
@@ -728,7 +728,6 @@ fn parseMemberProperty(parser: *Parser, object_node: ast.NodeIndex, optional: bo
 fn parseComputedMemberExpression(parser: *Parser, object_node: ast.NodeIndex, optional: bool) Error!?ast.NodeIndex {
     try parser.advance(); // consume '['
 
-    // Enable 'in' operator inside brackets (e.g., for `a[b in c]` in for-in loops)
     const saved_allow_in = parser.context.allow_in;
     parser.context.allow_in = true;
     const property = try parseExpression(parser, 0, .{}) orelse {
@@ -777,7 +776,6 @@ fn parseCallExpression(parser: *Parser, callee_node: ast.NodeIndex, optional: bo
 fn parseArguments(parser: *Parser) Error!?ast.IndexRange {
     const checkpoint = parser.scratch_a.begin();
 
-    // Enable 'in' operator inside call arguments (e.g., for `a(b in c)` in for-in loops)
     const saved_allow_in = parser.context.allow_in;
     parser.context.allow_in = true;
 
