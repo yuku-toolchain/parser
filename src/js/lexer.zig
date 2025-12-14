@@ -42,7 +42,9 @@ pub const Lexer = struct {
     cursor: u32,
 
     template_depth: u32,
-    brace_depth: u32,
+    /// stack of brace depths for each template nesting level.
+    /// each entry tracks nested braces within that template's ${} expression.
+    brace_depth_stack: [16]u32,
 
     has_line_terminator_before: bool,
     comments: std.ArrayList(ast.Comment),
@@ -57,7 +59,7 @@ pub const Lexer = struct {
             .token_start = 0,
             .cursor = 0,
             .template_depth = 0,
-            .brace_depth = 0,
+            .brace_depth_stack = .{0} ** 16,
             .has_line_terminator_before = false,
             .comments = try .initCapacity(allocator, source.len / 3),
             .allocator = allocator,
@@ -106,7 +108,7 @@ pub const Lexer = struct {
             '{' => blk: {
                 // track nested braces inside template expressions
                 if (self.template_depth > 0) {
-                    self.brace_depth += 1;
+                    self.brace_depth_stack[self.template_depth - 1] += 1;
                 }
                 break :blk .left_brace;
             },
@@ -405,6 +407,8 @@ pub const Lexer = struct {
             if (c == '$' and self.peek(1) == '{') {
                 self.cursor += 2;
                 const end = self.cursor;
+                // initialize brace depth for this template level before incrementing depth
+                self.brace_depth_stack[self.template_depth] = 0;
                 self.template_depth += 1;
                 return self.createToken(.template_head, self.source[start..end], start, end);
             }
@@ -549,9 +553,10 @@ pub const Lexer = struct {
         // inside a template expression, check if this } closes a nested brace
         // or the template substitution itself
         if (self.template_depth > 0) {
-            if (self.brace_depth > 0) {
+            const depth_idx = self.template_depth - 1;
+            if (self.brace_depth_stack[depth_idx] > 0) {
                 // this } closes a nested brace (e.g., arrow function body, object literal)
-                self.brace_depth -= 1;
+                self.brace_depth_stack[depth_idx] -= 1;
             } else {
                 // this } closes the template substitution ${...}
                 return self.scanTemplateMiddleOrTail();
