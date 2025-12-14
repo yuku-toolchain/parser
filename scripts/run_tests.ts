@@ -99,15 +99,8 @@ async function runTests(folderPath: string): Promise<TestResult[]> {
   const glob = new Glob("*.js");
 
   for await (const file of glob.scan(folderPath)) {
-    const path = `test/pass/${file}`;
-    const text = await Bun.file(path).text();
-    if(!text.includes('import') && !text.includes('export')) {
-      const result = await testFile(folderPath, file);
-      if(!result.passed) {
-        console.log(`${path} -- ${result.reason}`);
-      }
-      results.push(result);
-    }
+    const result = await testFile(folderPath, file);
+    results.push(result);
   }
 
   return results;
