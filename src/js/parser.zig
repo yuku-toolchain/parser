@@ -278,6 +278,10 @@ pub const Parser = struct {
         return self.extra.items[range.start..][0..range.len];
     }
 
+    pub inline fn getSourceText(self: *const Parser, start: u32, len: u16) []const u8 {
+        return self.source[start..][0..len];
+    }
+
     pub fn advance(self: *Parser) Error!void {
         self.current_token = self.lexer.nextToken() catch |e| blk: {
             if (e == error.OutOfMemory) return error.OutOfMemory;

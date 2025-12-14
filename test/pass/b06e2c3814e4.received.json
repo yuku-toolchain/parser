@@ -8,7 +8,7 @@
       {
         "type": "FunctionDeclaration",
         "start": 0,
-        "end": 27,
+        "end": 28,
         "id": {
           "type": "Identifier",
           "start": 10,
@@ -22,8 +22,34 @@
         "body": {
           "type": "BlockStatement",
           "start": 13,
-          "end": 27,
+          "end": 28,
           "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 14,
+              "end": 27,
+              "expression": {
+                "type": "YieldExpression",
+                "start": 14,
+                "end": 27,
+                "delegate": false,
+                "argument": {
+                  "type": "ClassExpression",
+                  "start": 20,
+                  "end": 27,
+                  "decorators": [],
+                  "id": null,
+                  "superClass": null,
+                  "body": {
+                    "type": "ClassBody",
+                    "start": 25,
+                    "end": 27,
+                    "body": [
+                    ]
+                  }
+                }
+              }
+            }
           ]
         },
         "expression": false
@@ -33,23 +59,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'class'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 20,
-      "end": 25,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 27,
-      "end": 28,
-      "labels": [
-      ]
-    }
   ]
 }

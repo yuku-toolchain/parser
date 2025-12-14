@@ -8,20 +8,39 @@
       {
         "type": "VariableDeclaration",
         "start": 0,
-        "end": 5,
+        "end": 26,
         "kind": "var",
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 4,
-            "end": 5,
+            "end": 26,
             "id": {
               "type": "Identifier",
               "start": 4,
               "end": 5,
               "name": "a"
             },
-            "init": null
+            "init": {
+              "type": "ClassExpression",
+              "start": 8,
+              "end": 26,
+              "decorators": [],
+              "id": null,
+              "superClass": {
+                "type": "Identifier",
+                "start": 22,
+                "end": 23,
+                "name": "b"
+              },
+              "body": {
+                "type": "ClassBody",
+                "start": 24,
+                "end": 26,
+                "body": [
+                ]
+              }
+            }
           }
         ]
       }
@@ -30,23 +49,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'class'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 8,
-      "end": 13,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'class'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 8,
-      "end": 13,
-      "labels": [
-      ]
-    }
   ]
 }

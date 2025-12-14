@@ -8,7 +8,7 @@
       {
         "type": "FunctionDeclaration",
         "start": 0,
-        "end": 33,
+        "end": 37,
         "id": {
           "type": "Identifier",
           "start": 10,
@@ -22,8 +22,39 @@
         "body": {
           "type": "BlockStatement",
           "start": 14,
-          "end": 33,
+          "end": 37,
           "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 18,
+              "end": 35,
+              "expression": {
+                "type": "YieldExpression",
+                "start": 18,
+                "end": 34,
+                "delegate": false,
+                "argument": {
+                  "type": "ParenthesizedExpression",
+                  "start": 24,
+                  "end": 34,
+                  "expression": {
+                    "type": "ClassExpression",
+                    "start": 25,
+                    "end": 33,
+                    "decorators": [],
+                    "id": null,
+                    "superClass": null,
+                    "body": {
+                      "type": "ClassBody",
+                      "start": 31,
+                      "end": 33,
+                      "body": [
+                      ]
+                    }
+                  }
+                }
+              }
+            }
           ]
         },
         "expression": false
@@ -33,32 +64,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'class'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 25,
-      "end": 30,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token ')'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 33,
-      "end": 34,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token '}'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 36,
-      "end": 37,
-      "labels": [
-      ]
-    }
   ]
 }

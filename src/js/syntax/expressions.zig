@@ -8,6 +8,7 @@ const array = @import("array.zig");
 const object = @import("object.zig");
 const literals = @import("literals.zig");
 const functions = @import("functions.zig");
+const class = @import("class.zig");
 const parenthesized = @import("parenthesized.zig");
 const patterns = @import("patterns.zig");
 
@@ -120,6 +121,7 @@ inline fn parsePrimaryExpression(parser: *Parser, enable_validation: bool) Error
         .true, .false => literals.parseBooleanLiteral(parser),
         .null_literal => literals.parseNullLiteral(parser),
         .this => parseThisExpression(parser),
+        .super => parseSuperExpression(parser),
         .numeric_literal, .hex_literal, .octal_literal, .binary_literal => literals.parseNumericLiteral(parser),
         .bigint_literal => literals.parseBigIntLiteral(parser),
         .slash => literals.parseRegExpLiteral(parser),
@@ -128,6 +130,7 @@ inline fn parsePrimaryExpression(parser: *Parser, enable_validation: bool) Error
         .left_bracket => parseArrayExpression(parser, enable_validation),
         .left_brace => parseObjectExpression(parser, enable_validation),
         .function => functions.parseFunction(parser, .{ .is_expression = true }, null),
+        .class => class.parseClass(parser, .{ .is_expression = true }, null),
         .async => parseAsyncFunctionOrArrow(parser),
         else => {
             const tok = parser.current_token;
@@ -278,6 +281,14 @@ fn parseThisExpression(parser: *Parser) Error!?ast.NodeIndex {
     const this_token = parser.current_token;
     try parser.advance(); // consume 'this'
     return try parser.addNode(.this_expression, this_token.span);
+}
+
+/// `super`
+/// https://tc39.es/ecma262/#sec-super-keyword
+fn parseSuperExpression(parser: *Parser) Error!?ast.NodeIndex {
+    const super_token = parser.current_token;
+    try parser.advance(); // consume 'super'
+    return try parser.addNode(.super, super_token.span);
 }
 
 /// `import.meta` or `import(...)`

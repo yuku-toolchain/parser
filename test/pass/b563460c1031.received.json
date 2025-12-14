@@ -43,6 +43,37 @@
                     "start": 7,
                     "end": 21,
                     "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start": 9,
+                        "end": 19,
+                        "expression": {
+                          "type": "CallExpression",
+                          "start": 9,
+                          "end": 18,
+                          "callee": {
+                            "type": "MemberExpression",
+                            "start": 9,
+                            "end": 16,
+                            "object": {
+                              "type": "Super",
+                              "start": 9,
+                              "end": 14
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "start": 15,
+                              "end": 16,
+                              "name": "b"
+                            },
+                            "computed": false,
+                            "optional": false
+                          },
+                          "arguments": [
+                          ],
+                          "optional": false
+                        }
+                      }
                     ]
                   },
                   "expression": false
@@ -60,14 +91,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'super'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 9,
-      "end": 14,
-      "labels": [
-      ]
-    }
   ]
 }

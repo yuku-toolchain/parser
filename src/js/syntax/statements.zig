@@ -8,12 +8,14 @@ const variables = @import("variables.zig");
 const literals = @import("literals.zig");
 const patterns = @import("patterns.zig");
 const functions = @import("functions.zig");
+const class = @import("class.zig");
 const grammar = @import("../grammar.zig");
 
 pub fn parseStatement(parser: *Parser) Error!?ast.NodeIndex {
     return switch (parser.current_token.type) {
         .@"var", .@"const", .let, .using => variables.parseVariableDeclaration(parser),
         .function => functions.parseFunction(parser, .{}, null),
+        .class => class.parseClass(parser, .{}, null),
         .async => blk: {
             const start = parser.current_token.span.start;
             try parser.advance(); // consume 'async'
@@ -41,7 +43,6 @@ pub fn parseStatement(parser: *Parser) Error!?ast.NodeIndex {
         .@"try" => parseTryStatement(parser),
         .debugger => parseDebuggerStatement(parser),
         .semicolon => parseEmptyStatement(parser),
-
         else => parseExpressionStatementOrLabeledOrDirective(parser),
     };
 }
@@ -243,11 +244,6 @@ pub fn parseIfStatement(parser: *Parser) Error!?ast.NodeIndex {
             .alternate = alternate,
         },
     }, .{ .start = start, .end = end });
-}
-
-pub inline fn canInsertSemicolon(parser: *Parser) bool {
-    const current_token = parser.current_token;
-    return current_token.type == .eof or current_token.has_line_terminator_before or current_token.type == .right_brace;
 }
 
 /// https://tc39.es/ecma262/#sec-while-statement
@@ -728,4 +724,9 @@ fn createSingleDeclaration(parser: *Parser, kind: ast.VariableKind, declarator: 
             .kind = kind,
         },
     }, .{ .start = decl_start, .end = decl_end });
+}
+
+pub inline fn canInsertSemicolon(parser: *Parser) bool {
+    const current_token = parser.current_token;
+    return current_token.type == .eof or current_token.has_line_terminator_before or current_token.type == .right_brace;
 }

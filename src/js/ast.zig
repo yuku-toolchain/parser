@@ -318,6 +318,73 @@ pub const PropertyKind = enum {
     }
 };
 
+/// https://tc39.es/ecma262/#sec-class-definitions
+pub const ClassType = enum {
+    class_declaration,
+    class_expression,
+};
+
+/// https://tc39.es/ecma262/#prod-MethodDefinition
+pub const MethodDefinitionKind = enum {
+    constructor,
+    method,
+    get,
+    set,
+
+    pub fn toString(self: MethodDefinitionKind) []const u8 {
+        return switch (self) {
+            .constructor => "constructor",
+            .method => "method",
+            .get => "get",
+            .set => "set",
+        };
+    }
+};
+
+/// https://tc39.es/ecma262/#sec-class-definitions
+pub const Class = struct {
+    type: ClassType,
+    /// BindingIdentifier (optional, may be null_node for class expressions)
+    id: NodeIndex,
+    /// Expression (optional, may be null_node if no extends clause)
+    super_class: NodeIndex,
+    /// ClassBody
+    body: NodeIndex,
+};
+
+/// https://tc39.es/ecma262/#prod-ClassBody
+pub const ClassBody = struct {
+    /// ClassElement[]
+    body: IndexRange,
+};
+
+/// https://tc39.es/ecma262/#prod-MethodDefinition
+pub const MethodDefinition = struct {
+    /// PropertyKey (IdentifierName | PrivateIdentifier | Expression)
+    key: NodeIndex,
+    /// Function
+    value: NodeIndex,
+    kind: MethodDefinitionKind,
+    computed: bool,
+    @"static": bool,
+};
+
+/// https://tc39.es/ecma262/#prod-FieldDefinition
+pub const PropertyDefinition = struct {
+    /// PropertyKey (IdentifierName | PrivateIdentifier | Expression)
+    key: NodeIndex,
+    /// Expression (optional, may be null_node)
+    value: NodeIndex,
+    computed: bool,
+    @"static": bool,
+};
+
+/// https://tc39.es/ecma262/#prod-ClassStaticBlock
+pub const StaticBlock = struct {
+    /// Statement[]
+    body: IndexRange,
+};
+
 /// https://tc39.es/ecma262/#prod-FormalParameters
 pub const FormalParameterKind = enum {
     /// https://tc39.es/ecma262/#prod-FormalParameters
@@ -922,6 +989,12 @@ pub const NodeData = union(enum) {
     await_expression: AwaitExpression,
     yield_expression: YieldExpression,
     meta_property: MetaProperty,
+    class: Class,
+    class_body: ClassBody,
+    method_definition: MethodDefinition,
+    property_definition: PropertyDefinition,
+    static_block: StaticBlock,
+    super,
     string_literal: StringLiteral,
     numeric_literal: NumericLiteral,
     bigint_literal: BigIntLiteral,

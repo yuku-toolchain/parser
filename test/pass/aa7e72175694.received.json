@@ -49,6 +49,56 @@
                     "start": 12,
                     "end": 31,
                     "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start": 14,
+                        "end": 29,
+                        "expression": {
+                          "type": "AssignmentExpression",
+                          "start": 14,
+                          "end": 28,
+                          "operator": "=",
+                          "left": {
+                            "type": "MemberExpression",
+                            "start": 14,
+                            "end": 24,
+                            "object": {
+                              "type": "MemberExpression",
+                              "start": 14,
+                              "end": 21,
+                              "object": {
+                                "type": "Super",
+                                "start": 14,
+                                "end": 19
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "start": 20,
+                                "end": 21,
+                                "name": "c"
+                              },
+                              "computed": false,
+                              "optional": false
+                            },
+                            "property": {
+                              "type": "Literal",
+                              "start": 22,
+                              "end": 23,
+                              "value": 1,
+                              "raw": "1"
+                            },
+                            "computed": true,
+                            "optional": false
+                          },
+                          "right": {
+                            "type": "Literal",
+                            "start": 27,
+                            "end": 28,
+                            "value": 2,
+                            "raw": "2"
+                          }
+                        }
+                      }
                     ]
                   },
                   "expression": false
@@ -66,14 +116,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'super'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 14,
-      "end": 19,
-      "labels": [
-      ]
-    }
   ]
 }

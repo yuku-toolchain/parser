@@ -6,6 +6,31 @@
     "sourceType": "module",
     "body": [
       {
+        "type": "ClassDeclaration",
+        "start": 7,
+        "end": 16,
+        "decorators": [],
+        "id": {
+          "type": "Identifier",
+          "start": 13,
+          "end": 14,
+          "name": "a"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 14,
+          "end": 16,
+          "body": [
+          ]
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 16,
+        "end": 17
+      },
+      {
         "type": "ExpressionStatement",
         "start": 17,
         "end": 18,
@@ -28,15 +53,6 @@
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
       "start": 0,
       "end": 6,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'class'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 7,
-      "end": 12,
       "labels": [
       ]
     }

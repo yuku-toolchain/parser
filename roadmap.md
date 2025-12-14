@@ -87,17 +87,17 @@
 - [x] Parameter destructuring
 
 **Classes:**
-- [ ] Class declarations (ClassDeclaration)
-- [ ] Class expressions
-- [ ] Class body (ClassBody)
-- [ ] Method definitions (MethodDefinition)
-- [ ] Property definitions (PropertyDefinition)
-- [ ] Constructor
-- [ ] Static members
-- [ ] Private members (#field)
-- [ ] Getters and setters
-- [ ] Super expressions
-- [ ] Class heritage (extends)
+- [x] Class declarations (ClassDeclaration)
+- [x] Class expressions
+- [x] Class body (ClassBody)
+- [x] Method definitions (MethodDefinition)
+- [x] Property definitions (PropertyDefinition)
+- [x] Constructor
+- [x] Static members
+- [x] Private members (#field)
+- [x] Getters and setters
+- [x] Super expressions
+- [x] Class heritage (extends)
 
 ## Phase 2: Modules & Advanced JavaScript
 

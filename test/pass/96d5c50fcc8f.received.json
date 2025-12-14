@@ -35,10 +35,10 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Unexpected token 'class'",
+      "message": "Unexpected token ')'",
       "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 19,
-      "end": 24,
+      "start": 39,
+      "end": 40,
       "labels": [
       ]
     },

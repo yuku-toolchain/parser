@@ -5,19 +5,35 @@
     "end": 12,
     "sourceType": "script",
     "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 11,
+        "expression": {
+          "type": "ParenthesizedExpression",
+          "start": 0,
+          "end": 10,
+          "expression": {
+            "type": "ClassExpression",
+            "start": 1,
+            "end": 9,
+            "decorators": [],
+            "id": null,
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start": 7,
+              "end": 9,
+              "body": [
+              ]
+            }
+          }
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'class'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 1,
-      "end": 6,
-      "labels": [
-      ]
-    }
   ]
 }

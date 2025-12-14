@@ -133,6 +133,12 @@ pub const Serializer = struct {
             .parenthesized_expression => |d| self.writeParenthesizedExpression(d, span),
             .arrow_function_expression => |d| self.writeArrowFunctionExpression(d, span),
             .sequence_expression => |d| self.writeSequenceExpression(d, span),
+            .class => |d| self.writeClass(d, span),
+            .class_body => |d| self.writeClassBody(d, span),
+            .method_definition => |d| self.writeMethodDefinition(d, span),
+            .property_definition => |d| self.writePropertyDefinition(d, span),
+            .static_block => |d| self.writeStaticBlock(d, span),
+            .super => self.writeSuper(span),
         };
     }
 
@@ -760,6 +766,68 @@ pub const Serializer = struct {
         try self.endObject();
     }
 
+    fn writeClass(self: *Self, data: ast.Class, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType(switch (data.type) {
+            .class_declaration => "ClassDeclaration",
+            .class_expression => "ClassExpression",
+        });
+        try self.fieldSpan(span);
+        try self.fieldEmptyArray("decorators");
+        try self.fieldNode("id", data.id);
+        try self.fieldNode("superClass", data.super_class);
+        try self.fieldNode("body", data.body);
+        try self.endObject();
+    }
+
+    fn writeClassBody(self: *Self, data: ast.ClassBody, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ClassBody");
+        try self.fieldSpan(span);
+        try self.fieldNodeArray("body", data.body);
+        try self.endObject();
+    }
+
+    fn writeMethodDefinition(self: *Self, data: ast.MethodDefinition, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("MethodDefinition");
+        try self.fieldSpan(span);
+        try self.fieldEmptyArray("decorators");
+        try self.fieldNode("key", data.key);
+        try self.fieldNode("value", data.value);
+        try self.fieldString("kind", data.kind.toString());
+        try self.fieldBool("computed", data.computed);
+        try self.fieldBool("static", data.@"static");
+        try self.endObject();
+    }
+
+    fn writePropertyDefinition(self: *Self, data: ast.PropertyDefinition, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("PropertyDefinition");
+        try self.fieldSpan(span);
+        try self.fieldEmptyArray("decorators");
+        try self.fieldNode("key", data.key);
+        try self.fieldNode("value", data.value);
+        try self.fieldBool("computed", data.computed);
+        try self.fieldBool("static", data.@"static");
+        try self.endObject();
+    }
+
+    fn writeStaticBlock(self: *Self, data: ast.StaticBlock, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("StaticBlock");
+        try self.fieldSpan(span);
+        try self.fieldNodeArray("body", data.body);
+        try self.endObject();
+    }
+
+    fn writeSuper(self: *Self, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("Super");
+        try self.fieldSpan(span);
+        try self.endObject();
+    }
+
     fn writeMemberExpression(self: *Self, data: ast.MemberExpression, span: ast.Span) !void {
         try self.beginObject();
         try self.fieldType("MemberExpression");
@@ -986,6 +1054,11 @@ pub const Serializer = struct {
     fn fieldEmptyObject(self: *Self, key: []const u8) !void {
         try self.field(key);
         try self.write("{}");
+    }
+
+    fn fieldEmptyArray(self: *Self, key: []const u8) !void {
+        try self.field(key);
+        try self.write("[]");
     }
 
     fn fieldRaw(self: *Self, key: []const u8, value: []const u8) !void {

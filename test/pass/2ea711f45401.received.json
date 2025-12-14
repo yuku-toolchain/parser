@@ -8,20 +8,62 @@
       {
         "type": "VariableDeclaration",
         "start": 0,
-        "end": 5,
+        "end": 34,
         "kind": "var",
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 4,
-            "end": 5,
+            "end": 33,
             "id": {
               "type": "Identifier",
               "start": 4,
               "end": 5,
               "name": "a"
             },
-            "init": null
+            "init": {
+              "type": "ParenthesizedExpression",
+              "start": 8,
+              "end": 33,
+              "expression": {
+                "type": "ClassExpression",
+                "start": 9,
+                "end": 32,
+                "decorators": [],
+                "id": null,
+                "superClass": {
+                  "type": "ParenthesizedExpression",
+                  "start": 23,
+                  "end": 29,
+                  "expression": {
+                    "type": "SequenceExpression",
+                    "start": 24,
+                    "end": 28,
+                    "expressions": [
+                      {
+                        "type": "Identifier",
+                        "start": 24,
+                        "end": 25,
+                        "name": "b"
+                      },
+                      {
+                        "type": "Identifier",
+                        "start": 27,
+                        "end": 28,
+                        "name": "c"
+                      }
+                    ]
+                  }
+                },
+                "body": {
+                  "type": "ClassBody",
+                  "start": 30,
+                  "end": 32,
+                  "body": [
+                  ]
+                }
+              }
+            }
           }
         ]
       }
@@ -30,23 +72,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Unexpected token 'class'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 9,
-      "end": 14,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Unexpected token 'class'",
-      "help": "Expected an expression (identifier, literal, array, object, or parenthesized expression).",
-      "start": 9,
-      "end": 14,
-      "labels": [
-      ]
-    }
   ]
 }

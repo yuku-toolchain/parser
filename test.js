@@ -1,0 +1,4 @@
+class Name {
+  name
+  another
+}
