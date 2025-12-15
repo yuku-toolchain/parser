@@ -478,9 +478,25 @@ fn parseForWithDeclaration(parser: *Parser, start: u32, is_await: bool) Error!?a
         end = parser.getSpan(declarator).end;
     }
 
+    const declarators = parser.scratch_a.take(checkpoint);
+
+    const declarators_range = try parser.addExtra(declarators);
+
+    // init is required for non idenitifer id's in regular loop
+    // for example, this is an error:
+    // for (let { a: b = let };;) {}
+    for (declarators) |decl| {
+        const data = parser.getData(decl).variable_declarator;
+        const id_data = parser.getData(data.id);
+        if(ast.isNull(data.init) and id_data != .binding_identifier) {
+            try parser.report(parser.getSpan(data.id), "Missing initializer in destructuring declaration", .{ .help = "Add an initializer (e.g. ` = undefined`) here" });
+            return null;
+        }
+    }
+
     const decl = try parser.addNode(.{
         .variable_declaration = .{
-            .declarators = try parser.addExtra(parser.scratch_a.take(checkpoint)),
+            .declarators = declarators_range,
             .kind = kind,
         },
     }, .{ .start = decl_start, .end = end });
