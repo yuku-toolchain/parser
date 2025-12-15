@@ -11,7 +11,7 @@ const functions = @import("functions.zig");
 const class = @import("class.zig");
 const parenthesized = @import("parenthesized.zig");
 const patterns = @import("patterns.zig");
-const module = @import("module.zig");
+const modules = @import("modules.zig");
 
 const ParseExpressionOpts = packed struct {
     /// whether to enable "expression -> pattern" validations, for example ObjectExpression -> ObjectPattern
@@ -303,7 +303,7 @@ fn parseImportExpression(parser: *Parser) Error!?ast.NodeIndex {
 
     return switch (parser.current_token.type) {
         .dot => parseImportMetaOrPhaseImport(parser, name),
-        .left_paren => module.parseDynamicImport(parser, name, null),
+        .left_paren => modules.parseDynamicImport(parser, name, null),
         else => {
             try parser.report(
                 parser.current_token.span,
@@ -324,12 +324,12 @@ fn parseImportMetaOrPhaseImport(parser: *Parser, name: u32) Error!?ast.NodeIndex
     // import.source() or import.defer()
     if (parser.current_token.type == .source) {
         try parser.advance(); // consume 'source'
-        return module.parseDynamicImport(parser, name, .source);
+        return modules.parseDynamicImport(parser, name, .source);
     }
 
     if (parser.current_token.type == .@"defer") {
         try parser.advance(); // consume 'defer'
-        return module.parseDynamicImport(parser, name, .@"defer");
+        return modules.parseDynamicImport(parser, name, .@"defer");
     }
 
     // import.meta

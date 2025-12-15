@@ -962,12 +962,7 @@ pub const MetaProperty = struct {
     property: NodeIndex,
 };
 
-// =============================================================================
-// Module System
-// https://tc39.es/ecma262/#sec-modules
-// =============================================================================
-
-/// Import or Export kind for TypeScript
+/// import or export kind for TypeScript
 pub const ImportOrExportKind = enum {
     value,
     type,
@@ -980,8 +975,9 @@ pub const ImportOrExportKind = enum {
     }
 };
 
-/// Import phase for source phase imports and deferred imports
-/// https://github.com/nicolo-ribaudo/ecma262/blob/4f4fcd1a5dee25cd28c2e38e8a9b1de8c9d3d7c9/spec.html
+/// import phase for source phase imports and deferred imports
+/// https://github.com/estree/estree/blob/master/stage3/source-phase-imports.md
+/// https://github.com/estree/estree/blob/master/stage3/defer-import-eval.md
 pub const ImportPhase = enum {
     /// `import source x from "x"` or `import.source("x")`
     source,
@@ -996,7 +992,7 @@ pub const ImportExpression = struct {
     source: NodeIndex,
     /// Expression (optional, may be null_node) - import options/attributes
     options: NodeIndex,
-    /// Import phase: source, defer, or null (regular import)
+    /// import phase: source, defer, or null (regular import)
     phase: ?ImportPhase,
 };
 
@@ -1009,11 +1005,12 @@ pub const ImportDeclaration = struct {
     source: NodeIndex,
     /// ImportAttribute[] - import attributes/assertions
     attributes: IndexRange,
-    /// Import phase: source, defer, or null (regular import)
+    /// import phase: source, defer, or null (regular import)
     phase: ?ImportPhase,
 };
 
 /// `import {imported as local} from "source"`
+///          ~~~~~~~~~~~~~~~~~
 /// https://tc39.es/ecma262/#prod-ImportSpecifier
 pub const ImportSpecifier = struct {
     /// ModuleExportName (IdentifierName or StringLiteral) - imported symbol
@@ -1023,6 +1020,7 @@ pub const ImportSpecifier = struct {
 };
 
 /// `import local from "source"`
+///         ~~~~~
 /// https://tc39.es/ecma262/#prod-ImportedDefaultBinding
 pub const ImportDefaultSpecifier = struct {
     /// BindingIdentifier - local binding
@@ -1037,7 +1035,6 @@ pub const ImportNamespaceSpecifier = struct {
 };
 
 /// `type: "json"` in import attributes
-/// https://tc39.es/ecma262/#prod-ImportAttribute
 pub const ImportAttribute = struct {
     /// ImportAttributeKey (IdentifierName or StringLiteral)
     key: NodeIndex,
@@ -1085,13 +1082,13 @@ pub const ExportSpecifier = struct {
     exported: NodeIndex,
 };
 
-/// TypeScript: `export = expression`
+/// `export = expression`
 pub const TSExportAssignment = struct {
     /// Expression
     expression: NodeIndex,
 };
 
-/// TypeScript: `export as namespace name`
+/// `export as namespace name`
 pub const TSNamespaceExportDeclaration = struct {
     /// IdentifierName
     id: NodeIndex,
