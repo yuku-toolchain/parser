@@ -3,7 +3,7 @@ import { join } from "path";
 import equal from "fast-deep-equal";
 import { diff } from "jest-diff";
 
-const FOLDERS = ["test/pass"];
+const FOLDERS = ["test/pass", "test/fuzz"];
 
 interface TestResult {
   file: string;
@@ -100,6 +100,9 @@ async function runTests(folderPath: string): Promise<TestResult[]> {
 
   for await (const file of glob.scan(folderPath)) {
     const result = await testFile(folderPath, file);
+    if(!result.passed) {
+      console.log(file)
+    }
     results.push(result);
   }
 
