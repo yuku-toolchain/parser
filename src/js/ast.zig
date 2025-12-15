@@ -1169,7 +1169,6 @@ pub const NodeData = union(enum) {
     object_pattern: ObjectPattern,
     binding_property: BindingProperty,
     program: Program,
-    // Module system
     import_expression: ImportExpression,
     import_declaration: ImportDeclaration,
     import_specifier: ImportSpecifier,
@@ -1180,7 +1179,6 @@ pub const NodeData = union(enum) {
     export_default_declaration: ExportDefaultDeclaration,
     export_all_declaration: ExportAllDeclaration,
     export_specifier: ExportSpecifier,
-    // TypeScript module exports
     ts_export_assignment: TSExportAssignment,
     ts_namespace_export_declaration: TSNamespaceExportDeclaration,
 };
