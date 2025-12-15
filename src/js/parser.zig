@@ -239,17 +239,6 @@ pub const Parser = struct {
         return self.source_type == .module;
     }
 
-    /// Check if current token is a strict mode reserved word
-    /// (implements, interface, let, package, private, protected, public, static, yield)
-    pub inline fn isStrictModeReservedToken(self: *const Parser) bool {
-        return self.current_token.type.isStrictModeReserved();
-    }
-
-    /// Check if current token is an unconditionally reserved word
-    pub inline fn isReservedToken(self: *const Parser) bool {
-        return self.current_token.type.isReserved();
-    }
-
     // utils
 
     pub fn lookAhead(self: *Parser) ?token.Token {

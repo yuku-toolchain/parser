@@ -5,10 +5,9 @@ pub const Mask = struct {
     pub const IsUnaryOp: u32 = 1 << 15;
     pub const IsAssignmentOp: u32 = 1 << 16;
     pub const IsIdentifierLike: u32 = 1 << 17;
-    /// Reserved words that are ALWAYS reserved (cannot be used as identifiers in any context)
+    /// reserved words that are always reserved
     pub const IsReserved: u32 = 1 << 18;
-    /// Reserved words that are only reserved in strict mode:
-    /// implements, interface, let, package, private, protected, public, static, yield
+    /// reserved words that are only reserved in strict mode
     pub const IsStrictModeReserved: u32 = 1 << 19;
 
     pub const PrecShift: u32 = 7;

@@ -139,7 +139,6 @@ pub const Serializer = struct {
             .property_definition => |d| self.writePropertyDefinition(d, span),
             .static_block => |d| self.writeStaticBlock(d, span),
             .super => self.writeSuper(span),
-            // Module system
             .import_expression => |d| self.writeImportExpression(d, span),
             .import_declaration => |d| self.writeImportDeclaration(d, span),
             .import_specifier => |d| self.writeImportSpecifier(d, span),
@@ -841,10 +840,6 @@ pub const Serializer = struct {
         try self.fieldSpan(span);
         try self.endObject();
     }
-
-    // =========================================================================
-    // Module System Serialization
-    // =========================================================================
 
     fn writeImportExpression(self: *Self, data: ast.ImportExpression, span: ast.Span) !void {
         try self.beginObject();
