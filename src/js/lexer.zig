@@ -345,6 +345,12 @@ pub const Lexer = struct {
                         break :blk2 self.createToken(.nullish_coalescing, self.source[start..self.cursor], start, self.cursor);
                     },
                     '.' => blk2: {
+                        // if next char is a digit, this is not optional chaining
+                        // it's ? followed by a decimal number like .5
+                        if (std.ascii.isDigit(c2)) {
+                            self.cursor += 1;
+                            break :blk2 self.createToken(.question, self.source[start..self.cursor], start, self.cursor);
+                        }
                         self.cursor += 2;
                         break :blk2 self.createToken(.optional_chaining, self.source[start..self.cursor], start, self.cursor);
                     },
