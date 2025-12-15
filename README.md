@@ -26,8 +26,6 @@ A very fast JavaScript/TypeScript parser written in Zig to enable JavaScript too
 
 <br/>
 
-We are passing 100% of [Test262](https://github.com/tc39/test262) conformance tests so far. We'll get there.
-
 <br/>
 
 ```zig
