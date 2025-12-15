@@ -962,6 +962,141 @@ pub const MetaProperty = struct {
     property: NodeIndex,
 };
 
+// =============================================================================
+// Module System
+// https://tc39.es/ecma262/#sec-modules
+// =============================================================================
+
+/// Import or Export kind for TypeScript
+pub const ImportOrExportKind = enum {
+    value,
+    type,
+
+    pub fn toString(self: ImportOrExportKind) []const u8 {
+        return switch (self) {
+            .value => "value",
+            .type => "type",
+        };
+    }
+};
+
+/// Import phase for source phase imports and deferred imports
+/// https://github.com/nicolo-ribaudo/ecma262/blob/4f4fcd1a5dee25cd28c2e38e8a9b1de8c9d3d7c9/spec.html
+pub const ImportPhase = enum {
+    /// `import source x from "x"` or `import.source("x")`
+    source,
+    /// `import defer * as x from "x"` or `import.defer("x")`
+    @"defer",
+};
+
+/// `import(source)` or `import(source, options)` or `import.source(source)` or `import.defer(source)`
+/// https://tc39.es/ecma262/#sec-import-calls
+pub const ImportExpression = struct {
+    /// Expression - the module specifier
+    source: NodeIndex,
+    /// Expression (optional, may be null_node) - import options/attributes
+    options: NodeIndex,
+    /// Import phase: source, defer, or null (regular import)
+    phase: ?ImportPhase,
+};
+
+/// `import ... from 'source'` or `import 'source'`
+/// https://tc39.es/ecma262/#sec-imports
+pub const ImportDeclaration = struct {
+    /// ImportDeclarationSpecifier[] - null for side-effect imports (import 'foo')
+    specifiers: IndexRange,
+    /// StringLiteral - the module specifier
+    source: NodeIndex,
+    /// ImportAttribute[] - import attributes/assertions
+    attributes: IndexRange,
+    /// Import phase: source, defer, or null (regular import)
+    phase: ?ImportPhase,
+};
+
+/// `import {imported as local} from "source"`
+/// https://tc39.es/ecma262/#prod-ImportSpecifier
+pub const ImportSpecifier = struct {
+    /// ModuleExportName (IdentifierName or StringLiteral) - imported symbol
+    imported: NodeIndex,
+    /// BindingIdentifier - local binding
+    local: NodeIndex,
+};
+
+/// `import local from "source"`
+/// https://tc39.es/ecma262/#prod-ImportedDefaultBinding
+pub const ImportDefaultSpecifier = struct {
+    /// BindingIdentifier - local binding
+    local: NodeIndex,
+};
+
+/// `import * as local from "source"`
+/// https://tc39.es/ecma262/#prod-NameSpaceImport
+pub const ImportNamespaceSpecifier = struct {
+    /// BindingIdentifier - local binding
+    local: NodeIndex,
+};
+
+/// `type: "json"` in import attributes
+/// https://tc39.es/ecma262/#prod-ImportAttribute
+pub const ImportAttribute = struct {
+    /// ImportAttributeKey (IdentifierName or StringLiteral)
+    key: NodeIndex,
+    /// StringLiteral
+    value: NodeIndex,
+};
+
+/// `export { foo, bar }` or `export { foo } from 'source'` or `export var/let/const/function/class`
+/// https://tc39.es/ecma262/#prod-ExportDeclaration
+pub const ExportNamedDeclaration = struct {
+    /// Declaration (optional, may be null_node) - for `export var x`
+    declaration: NodeIndex,
+    /// ExportSpecifier[]
+    specifiers: IndexRange,
+    /// StringLiteral (optional, may be null_node) - for re-exports
+    source: NodeIndex,
+    /// ImportAttribute[] - export attributes/assertions
+    attributes: IndexRange,
+};
+
+/// `export default expression`
+/// https://tc39.es/ecma262/#prod-ExportDeclaration
+pub const ExportDefaultDeclaration = struct {
+    /// Expression | FunctionDeclaration | ClassDeclaration
+    declaration: NodeIndex,
+};
+
+/// `export * from 'source'` or `export * as name from 'source'`
+/// https://tc39.es/ecma262/#prod-ExportDeclaration
+pub const ExportAllDeclaration = struct {
+    /// ModuleExportName (optional, may be null_node) - for `export * as name`
+    exported: NodeIndex,
+    /// StringLiteral - the module specifier
+    source: NodeIndex,
+    /// ImportAttribute[] - export attributes/assertions
+    attributes: IndexRange,
+};
+
+/// `export { local as exported }`
+/// https://tc39.es/ecma262/#prod-ExportSpecifier
+pub const ExportSpecifier = struct {
+    /// ModuleExportName (IdentifierName/IdentifierReference or StringLiteral) - local binding
+    local: NodeIndex,
+    /// ModuleExportName (IdentifierName or StringLiteral) - exported name
+    exported: NodeIndex,
+};
+
+/// TypeScript: `export = expression`
+pub const TSExportAssignment = struct {
+    /// Expression
+    expression: NodeIndex,
+};
+
+/// TypeScript: `export as namespace name`
+pub const TSNamespaceExportDeclaration = struct {
+    /// IdentifierName
+    id: NodeIndex,
+};
+
 pub const NodeData = union(enum) {
     sequence_expression: SequenceExpression,
     parenthesized_expression: ParenthesizedExpression,
@@ -1037,6 +1172,20 @@ pub const NodeData = union(enum) {
     object_pattern: ObjectPattern,
     binding_property: BindingProperty,
     program: Program,
+    // Module system
+    import_expression: ImportExpression,
+    import_declaration: ImportDeclaration,
+    import_specifier: ImportSpecifier,
+    import_default_specifier: ImportDefaultSpecifier,
+    import_namespace_specifier: ImportNamespaceSpecifier,
+    import_attribute: ImportAttribute,
+    export_named_declaration: ExportNamedDeclaration,
+    export_default_declaration: ExportDefaultDeclaration,
+    export_all_declaration: ExportAllDeclaration,
+    export_specifier: ExportSpecifier,
+    // TypeScript module exports
+    ts_export_assignment: TSExportAssignment,
+    ts_namespace_export_declaration: TSNamespaceExportDeclaration,
 };
 
 pub const Node = struct {

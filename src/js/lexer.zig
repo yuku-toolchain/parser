@@ -821,6 +821,8 @@ pub const Lexer = struct {
                         if (lexeme[1] == 'a' and lexeme[2] == 't' and lexeme[3] == 'c' and lexeme[4] == 'h')
                             return .@"catch";
                     },
+                    'd' => if (lexeme[1] == 'e' and lexeme[2] == 'f' and lexeme[3] == 'e' and lexeme[4] == 'r')
+                        return .@"defer",
                     'f' => if (lexeme[1] == 'a' and lexeme[2] == 'l' and lexeme[3] == 's' and lexeme[4] == 'e')
                         return .false,
                     's' => if (lexeme[1] == 'u' and lexeme[2] == 'p' and lexeme[3] == 'e' and lexeme[4] == 'r')
@@ -838,6 +840,8 @@ pub const Lexer = struct {
             },
             6 => {
                 switch (lexeme[0]) {
+                    'a' => if (lexeme[1] == 's' and lexeme[2] == 's' and lexeme[3] == 'e' and lexeme[4] == 'r' and lexeme[5] == 't')
+                        return .assert,
                     'd' => if (lexeme[1] == 'e' and lexeme[2] == 'l' and lexeme[3] == 'e' and lexeme[4] == 't' and lexeme[5] == 'e')
                         return .delete,
                     'e' => if (lexeme[1] == 'x' and lexeme[2] == 'p' and lexeme[3] == 'o' and lexeme[4] == 'r' and lexeme[5] == 't')
@@ -853,6 +857,8 @@ pub const Lexer = struct {
                             return .@"switch";
                         if (lexeme[1] == 't' and lexeme[2] == 'a' and lexeme[3] == 't' and lexeme[4] == 'i' and lexeme[5] == 'c')
                             return .static;
+                        if (lexeme[1] == 'o' and lexeme[2] == 'u' and lexeme[3] == 'r' and lexeme[4] == 'c' and lexeme[5] == 'e')
+                            return .source;
                     },
                     't' => if (lexeme[1] == 'y' and lexeme[2] == 'p' and lexeme[3] == 'e' and lexeme[4] == 'o' and lexeme[5] == 'f')
                         return .typeof,
@@ -867,7 +873,10 @@ pub const Lexer = struct {
                     },
                     'e' => if (std.mem.eql(u8, lexeme, "extends")) return .extends,
                     'f' => if (std.mem.eql(u8, lexeme, "finally")) return .finally,
-                    'p' => if (std.mem.eql(u8, lexeme, "private")) return .private,
+                    'p' => {
+                        if (std.mem.eql(u8, lexeme, "private")) return .private;
+                        if (std.mem.eql(u8, lexeme, "package")) return .package;
+                    },
                     else => {},
                 }
             },
@@ -882,6 +891,7 @@ pub const Lexer = struct {
             9 => {
                 switch (lexeme[0]) {
                     'i' => if (std.mem.eql(u8, lexeme, "interface")) return .interface,
+                    'n' => if (std.mem.eql(u8, lexeme, "namespace")) return .@"namespace",
                     'p' => if (std.mem.eql(u8, lexeme, "protected")) return .protected,
                     else => {},
                 }

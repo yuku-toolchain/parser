@@ -9,6 +9,8 @@ const ParseFunctionOpts = packed struct {
     is_async: bool = false,
     is_expression: bool = false,
     is_declare: bool = false,
+    /// For export default function - allows optional name but produces FunctionDeclaration
+    is_default_export: bool = false,
 };
 
 pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts, start_from_param: ?u32) Error!?ast.NodeIndex {
@@ -25,7 +27,14 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts, start_from_param:
         null,
     )) return null;
 
-    const function_type: ast.FunctionType = if (opts.is_expression) .function_expression else if (opts.is_declare) .ts_declare_function else .function_declaration;
+    // export default function produces a declaration with optional name
+    // regular function expression allows optional name but produces expression
+    const function_type: ast.FunctionType = if (opts.is_expression and !opts.is_default_export)
+        .function_expression
+    else if (opts.is_declare)
+        .ts_declare_function
+    else
+        .function_declaration;
 
     var is_generator = false;
 
@@ -46,7 +55,10 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts, start_from_param:
     else
         ast.null_node;
 
-    if (!opts.is_expression and ast.isNull(id)) {
+    // Name is required for regular function declarations, but optional for:
+    // - function expressions (is_expression = true)
+    // - export default function (is_default_export = true)
+    if (!opts.is_expression and !opts.is_default_export and ast.isNull(id)) {
         try parser.report(
             parser.current_token.span,
             "Function declaration requires a name",

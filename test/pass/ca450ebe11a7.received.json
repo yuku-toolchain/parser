@@ -5,19 +5,27 @@
     "end": 10,
     "sourceType": "module",
     "body": [
+      {
+        "type": "ImportDeclaration",
+        "start": 0,
+        "end": 10,
+        "specifiers": [
+        ],
+        "source": {
+          "type": "Literal",
+          "start": 7,
+          "end": 10,
+          "value": "a",
+          "raw": "\"a\""
+        },
+        "phase": null,
+        "attributes": [
+        ]
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "'import' keyword is not allowed here",
-      "help": "Use 'import.meta' for module metadata or 'import()' for dynamic imports.",
-      "start": 7,
-      "end": 10,
-      "labels": [
-      ]
-    }
   ]
 }

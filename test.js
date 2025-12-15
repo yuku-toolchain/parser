@@ -1,1 +1,1 @@
-const num = 10
+const ok = ""

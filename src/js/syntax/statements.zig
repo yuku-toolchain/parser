@@ -11,6 +11,7 @@ const patterns = @import("patterns.zig");
 const functions = @import("functions.zig");
 const class = @import("class.zig");
 const grammar = @import("../grammar.zig");
+const module = @import("module.zig");
 
 pub fn parseStatement(parser: *Parser) Error!?ast.NodeIndex {
     return switch (parser.current_token.type) {
@@ -29,6 +30,26 @@ pub fn parseStatement(parser: *Parser) Error!?ast.NodeIndex {
             const start = parser.current_token.span.start;
             try parser.advance(); // consume 'declare'
             break :blk try functions.parseFunction(parser, .{ .is_declare = true }, start);
+        },
+        .import => blk: {
+            // import statement only valid in module mode
+            if (!parser.isModule()) {
+                try parser.report(parser.current_token.span, "'import' statement is only valid in module mode", .{
+                    .help = "Use dynamic import() for script mode, or set sourceType to 'module'",
+                });
+                break :blk null;
+            }
+            break :blk module.parseImportDeclaration(parser);
+        },
+        .@"export" => blk: {
+            // export statement only valid in module mode
+            if (!parser.isModule()) {
+                try parser.report(parser.current_token.span, "'export' statement is only valid in module mode", .{
+                    .help = "Export declarations can only appear in module mode",
+                });
+                break :blk null;
+            }
+            break :blk module.parseExportDeclaration(parser);
         },
         .left_brace => parseBlockStatement(parser),
         .@"if" => parseIfStatement(parser),

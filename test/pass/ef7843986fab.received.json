@@ -5,19 +5,21 @@
     "end": 18,
     "sourceType": "module",
     "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
+        "end": 17,
+        "declaration": {
+          "type": "Identifier",
+          "start": 15,
+          "end": 16,
+          "name": "a"
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 6,
-      "end": 6,
-      "labels": [
-      ]
-    }
   ]
 }

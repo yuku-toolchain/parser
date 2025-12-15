@@ -5,19 +5,22 @@
     "end": 19,
     "sourceType": "module",
     "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
+        "end": 18,
+        "declaration": {
+          "type": "ArrayExpression",
+          "start": 15,
+          "end": 17,
+          "elements": [
+          ]
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 6,
-      "end": 6,
-      "labels": [
-      ]
-    }
   ]
 }

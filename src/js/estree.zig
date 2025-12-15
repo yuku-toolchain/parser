@@ -139,6 +139,19 @@ pub const Serializer = struct {
             .property_definition => |d| self.writePropertyDefinition(d, span),
             .static_block => |d| self.writeStaticBlock(d, span),
             .super => self.writeSuper(span),
+            // Module system
+            .import_expression => |d| self.writeImportExpression(d, span),
+            .import_declaration => |d| self.writeImportDeclaration(d, span),
+            .import_specifier => |d| self.writeImportSpecifier(d, span),
+            .import_default_specifier => |d| self.writeImportDefaultSpecifier(d, span),
+            .import_namespace_specifier => |d| self.writeImportNamespaceSpecifier(d, span),
+            .import_attribute => |d| self.writeImportAttribute(d, span),
+            .export_named_declaration => |d| self.writeExportNamedDeclaration(d, span),
+            .export_default_declaration => |d| self.writeExportDefaultDeclaration(d, span),
+            .export_all_declaration => |d| self.writeExportAllDeclaration(d, span),
+            .export_specifier => |d| self.writeExportSpecifier(d, span),
+            .ts_export_assignment => |d| self.writeTSExportAssignment(d, span),
+            .ts_namespace_export_declaration => |d| self.writeTSNamespaceExportDeclaration(d, span),
         };
     }
 
@@ -826,6 +839,140 @@ pub const Serializer = struct {
         try self.beginObject();
         try self.fieldType("Super");
         try self.fieldSpan(span);
+        try self.endObject();
+    }
+
+    // =========================================================================
+    // Module System Serialization
+    // =========================================================================
+
+    fn writeImportExpression(self: *Self, data: ast.ImportExpression, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ImportExpression");
+        try self.fieldSpan(span);
+        try self.fieldNode("source", data.source);
+        try self.fieldNode("options", data.options);
+        try self.writeImportPhase(data.phase);
+        try self.endObject();
+    }
+
+    fn writeImportDeclaration(self: *Self, data: ast.ImportDeclaration, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ImportDeclaration");
+        try self.fieldSpan(span);
+        try self.fieldNodeArray("specifiers", data.specifiers);
+        try self.fieldNode("source", data.source);
+        try self.writeImportPhase(data.phase);
+        try self.field("attributes");
+        try self.beginArray();
+        for (self.getExtra(data.attributes)) |idx| try self.elemNode(idx);
+        try self.endArray();
+        try self.endObject();
+    }
+
+    fn writeImportPhase(self: *Self, phase: ?ast.ImportPhase) !void {
+        try self.field("phase");
+        if (phase) |p| {
+            try self.writeString(switch (p) {
+                .source => "source",
+                .@"defer" => "defer",
+            });
+        } else {
+            try self.writeNull();
+        }
+    }
+
+    fn writeImportSpecifier(self: *Self, data: ast.ImportSpecifier, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ImportSpecifier");
+        try self.fieldSpan(span);
+        try self.fieldNode("imported", data.imported);
+        try self.fieldNode("local", data.local);
+        try self.endObject();
+    }
+
+    fn writeImportDefaultSpecifier(self: *Self, data: ast.ImportDefaultSpecifier, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ImportDefaultSpecifier");
+        try self.fieldSpan(span);
+        try self.fieldNode("local", data.local);
+        try self.endObject();
+    }
+
+    fn writeImportNamespaceSpecifier(self: *Self, data: ast.ImportNamespaceSpecifier, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ImportNamespaceSpecifier");
+        try self.fieldSpan(span);
+        try self.fieldNode("local", data.local);
+        try self.endObject();
+    }
+
+    fn writeImportAttribute(self: *Self, data: ast.ImportAttribute, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ImportAttribute");
+        try self.fieldSpan(span);
+        try self.fieldNode("key", data.key);
+        try self.fieldNode("value", data.value);
+        try self.endObject();
+    }
+
+    fn writeExportNamedDeclaration(self: *Self, data: ast.ExportNamedDeclaration, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ExportNamedDeclaration");
+        try self.fieldSpan(span);
+        try self.fieldNode("declaration", data.declaration);
+        try self.fieldNodeArray("specifiers", data.specifiers);
+        try self.fieldNode("source", data.source);
+        try self.field("attributes");
+        try self.beginArray();
+        for (self.getExtra(data.attributes)) |idx| try self.elemNode(idx);
+        try self.endArray();
+        try self.endObject();
+    }
+
+    fn writeExportDefaultDeclaration(self: *Self, data: ast.ExportDefaultDeclaration, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ExportDefaultDeclaration");
+        try self.fieldSpan(span);
+        try self.fieldNode("declaration", data.declaration);
+        try self.endObject();
+    }
+
+    fn writeExportAllDeclaration(self: *Self, data: ast.ExportAllDeclaration, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ExportAllDeclaration");
+        try self.fieldSpan(span);
+        try self.fieldNode("exported", data.exported);
+        try self.fieldNode("source", data.source);
+        try self.field("attributes");
+        try self.beginArray();
+        for (self.getExtra(data.attributes)) |idx| try self.elemNode(idx);
+        try self.endArray();
+        try self.endObject();
+    }
+
+    fn writeExportSpecifier(self: *Self, data: ast.ExportSpecifier, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("ExportSpecifier");
+        try self.fieldSpan(span);
+        try self.fieldNode("local", data.local);
+        try self.fieldNode("exported", data.exported);
+        try self.endObject();
+    }
+
+    fn writeTSExportAssignment(self: *Self, data: ast.TSExportAssignment, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("TSExportAssignment");
+        try self.fieldSpan(span);
+        try self.fieldNode("expression", data.expression);
+        try self.endObject();
+    }
+
+    fn writeTSNamespaceExportDeclaration(self: *Self, data: ast.TSNamespaceExportDeclaration, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("TSNamespaceExportDeclaration");
+        try self.fieldSpan(span);
+        try self.fieldNode("id", data.id);
         try self.endObject();
     }
 

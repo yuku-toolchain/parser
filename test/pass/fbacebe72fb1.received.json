@@ -6,6 +6,41 @@
     "sourceType": "module",
     "body": [
       {
+        "type": "ExportNamedDeclaration",
+        "start": 0,
+        "end": 16,
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start": 7,
+          "end": 16,
+          "decorators": [],
+          "id": {
+            "type": "Identifier",
+            "start": 13,
+            "end": 14,
+            "name": "a"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 14,
+            "end": 16,
+            "body": [
+            ]
+          }
+        },
+        "specifiers": [
+        ],
+        "source": null,
+        "attributes": [
+        ]
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 16,
+        "end": 17
+      },
+      {
         "type": "ExpressionStatement",
         "start": 17,
         "end": 18,
@@ -22,14 +57,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 6,
-      "end": 6,
-      "labels": [
-      ]
-    }
   ]
 }

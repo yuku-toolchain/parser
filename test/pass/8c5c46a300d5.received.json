@@ -6,6 +6,44 @@
     "sourceType": "module",
     "body": [
       {
+        "type": "ExportNamedDeclaration",
+        "start": 0,
+        "end": 21,
+        "declaration": {
+          "type": "FunctionDeclaration",
+          "start": 7,
+          "end": 21,
+          "id": {
+            "type": "Identifier",
+            "start": 16,
+            "end": 17,
+            "name": "a"
+          },
+          "generator": false,
+          "async": false,
+          "params": [
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start": 19,
+            "end": 21,
+            "body": [
+            ]
+          },
+          "expression": false
+        },
+        "specifiers": [
+        ],
+        "source": null,
+        "attributes": [
+        ]
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 21,
+        "end": 22
+      },
+      {
         "type": "ExpressionStatement",
         "start": 22,
         "end": 23,
@@ -22,14 +60,5 @@
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 6,
-      "end": 6,
-      "labels": [
-      ]
-    }
   ]
 }

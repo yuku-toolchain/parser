@@ -12,6 +12,8 @@ const statements = @import("statements.zig");
 
 pub const ParseClassOpts = packed struct {
     is_expression: bool = false,
+    /// For export default class - allows optional name but produces ClassDeclaration
+    is_default_export: bool = false,
 };
 
 /// class declaration or expression
@@ -21,7 +23,9 @@ pub fn parseClass(parser: *Parser, opts: ParseClassOpts, start_from_param: ?u32)
 
     if (!try parser.expect(.class, "Expected 'class' keyword", null)) return null;
 
-    const class_type: ast.ClassType = if (opts.is_expression) .class_expression else .class_declaration;
+    // export default class produces a declaration with optional name
+    // regular class expression allows optional name but produces expression
+    const class_type: ast.ClassType = if (opts.is_expression and !opts.is_default_export) .class_expression else .class_declaration;
 
     // optional class name
     var id: ast.NodeIndex = ast.null_node;
@@ -30,7 +34,10 @@ pub fn parseClass(parser: *Parser, opts: ParseClassOpts, start_from_param: ?u32)
         id = try patterns.parseBindingIdentifier(parser) orelse ast.null_node;
     }
 
-    if (!opts.is_expression and ast.isNull(id)) {
+    // Name is required for regular class declarations, but optional for:
+    // - class expressions (is_expression = true)
+    // - export default class (is_default_export = true)
+    if (!opts.is_expression and !opts.is_default_export and ast.isNull(id)) {
         try parser.report(
             parser.current_token.span,
             "Class declaration requires a name",

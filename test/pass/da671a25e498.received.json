@@ -6,41 +6,37 @@
     "sourceType": "module",
     "body": [
       {
-        "type": "FunctionDeclaration",
-        "start": 15,
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
         "end": 30,
-        "id": {
-          "type": "Identifier",
-          "start": 24,
-          "end": 25,
-          "name": "a"
-        },
-        "generator": false,
-        "async": false,
-        "params": [
-        ],
-        "body": {
-          "type": "BlockStatement",
-          "start": 28,
+        "declaration": {
+          "type": "FunctionDeclaration",
+          "start": 15,
           "end": 30,
-          "body": [
-          ]
-        },
-        "expression": false
+          "id": {
+            "type": "Identifier",
+            "start": 24,
+            "end": 25,
+            "name": "a"
+          },
+          "generator": false,
+          "async": false,
+          "params": [
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start": 28,
+            "end": 30,
+            "body": [
+            ]
+          },
+          "expression": false
+        }
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 6,
-      "end": 6,
-      "labels": [
-      ]
-    }
   ]
 }

@@ -5,19 +5,44 @@
     "end": 29,
     "sourceType": "module",
     "body": [
+      {
+        "type": "ImportDeclaration",
+        "start": 0,
+        "end": 29,
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start": 9,
+            "end": 18,
+            "imported": {
+              "type": "Identifier",
+              "start": 9,
+              "end": 13,
+              "name": "null"
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 17,
+              "end": 18,
+              "name": "a"
+            }
+          }
+        ],
+        "source": {
+          "type": "Literal",
+          "start": 26,
+          "end": 29,
+          "value": "b",
+          "raw": "\"b\""
+        },
+        "phase": null,
+        "attributes": [
+        ]
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "'import' keyword is not allowed here",
-      "help": "Use 'import.meta' for module metadata or 'import()' for dynamic imports.",
-      "start": 7,
-      "end": 8,
-      "labels": [
-      ]
-    }
   ]
 }

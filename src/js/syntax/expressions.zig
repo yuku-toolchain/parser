@@ -11,6 +11,7 @@ const functions = @import("functions.zig");
 const class = @import("class.zig");
 const parenthesized = @import("parenthesized.zig");
 const patterns = @import("patterns.zig");
+const module = @import("module.zig");
 
 const ParseExpressionOpts = packed struct {
     /// whether to enable "expression -> pattern" validations, for example ObjectExpression -> ObjectPattern
@@ -301,7 +302,7 @@ fn parseImportExpression(parser: *Parser) Error!?ast.NodeIndex {
     const name = try literals.parseIdentifierName(parser);
 
     return switch (parser.current_token.type) {
-        .dot => parseImportMeta(parser, name),
+        .dot => parseImportMetaOrPhaseImport(parser, name),
         .left_paren => parseDynamicImport(parser, name),
         else => {
             try parser.report(
@@ -314,17 +315,28 @@ fn parseImportExpression(parser: *Parser) Error!?ast.NodeIndex {
     };
 }
 
-/// `import.meta`
-fn parseImportMeta(parser: *Parser, name: u32) Error!?ast.NodeIndex {
+/// `import.meta`, `import.source()`, or `import.defer()`
+fn parseImportMetaOrPhaseImport(parser: *Parser, name: u32) Error!?ast.NodeIndex {
     try parser.advance(); // consume '.'
 
     const name_span = parser.getSpan(name);
 
-    if (!std.mem.eql(u8, parser.current_token.lexeme, "meta")) {
+    // Check for phase imports: import.source() or import.defer()
+    if (parser.current_token.type == .source) {
+        try parser.advance(); // consume 'source'
+        return module.parseDynamicImport(parser, name, .source);
+    }
+    if (parser.current_token.type == .@"defer") {
+        try parser.advance(); // consume 'defer'
+        return module.parseDynamicImport(parser, name, .@"defer");
+    }
+
+    // Check for import.meta
+    if (parser.current_token.type != .identifier or !std.mem.eql(u8, parser.current_token.lexeme, "meta")) {
         try parser.report(
             parser.current_token.span,
-            "The only valid meta property for 'import' is 'import.meta'",
-            .{ .help = "Did you mean 'import.meta'?" },
+            "The only valid meta properties for 'import' are 'import.meta', 'import.source()', or 'import.defer()'",
+            .{ .help = "Did you mean 'import.meta', 'import.source(\"...\")' or 'import.defer(\"...\")'?" },
         );
         return null;
     }
@@ -339,10 +351,7 @@ fn parseImportMeta(parser: *Parser, name: u32) Error!?ast.NodeIndex {
 
 /// `import(source)` or `import(source, options)`
 fn parseDynamicImport(parser: *Parser, name: u32) Error!?ast.NodeIndex {
-    _ = parser;
-    _ = name;
-    // TODO: implement dynamic import
-    unreachable;
+    return module.parseDynamicImport(parser, name, null);
 }
 
 /// `new.target`

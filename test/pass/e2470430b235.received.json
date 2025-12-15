@@ -6,27 +6,32 @@
     "sourceType": "module",
     "body": [
       {
-        "type": "FunctionDeclaration",
-        "start": 15,
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
         "end": 29,
-        "id": {
-          "type": "Identifier",
-          "start": 24,
-          "end": 25,
-          "name": "a"
-        },
-        "generator": false,
-        "async": false,
-        "params": [
-        ],
-        "body": {
-          "type": "BlockStatement",
-          "start": 27,
+        "declaration": {
+          "type": "FunctionDeclaration",
+          "start": 15,
           "end": 29,
-          "body": [
-          ]
-        },
-        "expression": false
+          "id": {
+            "type": "Identifier",
+            "start": 24,
+            "end": 25,
+            "name": "a"
+          },
+          "generator": false,
+          "async": false,
+          "params": [
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start": 27,
+            "end": 29,
+            "body": [
+            ]
+          },
+          "expression": false
+        }
       },
       {
         "type": "VariableDeclaration",
@@ -47,29 +52,39 @@
             "init": null
           }
         ]
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 37,
+        "end": 53,
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 45,
+            "end": 51,
+            "local": {
+              "type": "Identifier",
+              "start": 45,
+              "end": 46,
+              "name": "b"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 50,
+              "end": 51,
+              "name": "a"
+            }
+          }
+        ],
+        "source": null,
+        "attributes": [
+        ]
       }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 6,
-      "end": 6,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 43,
-      "end": 43,
-      "labels": [
-      ]
-    }
   ]
 }

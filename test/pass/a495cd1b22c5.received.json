@@ -5,28 +5,30 @@
     "end": 24,
     "sourceType": "module",
     "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
+        "end": 23,
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start": 15,
+          "end": 23,
+          "decorators": [],
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 21,
+            "end": 23,
+            "body": [
+            ]
+          }
+        }
+      }
     ]
   },
   "comments": [
   ],
   "errors": [
-    {
-      "severity": "error",
-      "message": "Expected a semicolon or an implicit semicolon after a statement, but found none",
-      "help": "Try inserting a semicolon here",
-      "start": 6,
-      "end": 6,
-      "labels": [
-      ]
-    },
-    {
-      "severity": "error",
-      "message": "Class declaration requires a name",
-      "help": "Add a name after 'class', e.g. 'class MyClass {}'.",
-      "start": 21,
-      "end": 22,
-      "labels": [
-      ]
-    }
   ]
 }
