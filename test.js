@@ -1,1 +1,3 @@
-const nice = [const]
+function *a() {
+  yield 10
+}

@@ -28,6 +28,15 @@ pub fn parseExpression(parser: *Parser, precedence: u5, opts: ParseExpressionOpt
 
         if (current_type == .in and !parser.context.allow_in) break;
 
+        if (parser.current_token.has_line_terminator_before) {
+            const left_data = parser.getData(left);
+
+            // yield [no LineTerminator here]
+            if (left_data == .yield_expression) {
+                break;
+            }
+        }
+
         const left_binding_power = parser.current_token.leftBindingPower();
         if (precedence > left_binding_power or left_binding_power == 0) break;
 
@@ -261,22 +270,24 @@ fn parseYieldExpression(parser: *Parser) Error!?ast.NodeIndex {
 
     var argument: ast.NodeIndex = ast.null_node;
 
-    if (!parser.current_token.has_line_terminator_before and parser.current_token.type != .semicolon) {
-        // because if parseExpression can't parse an expression
-        // it will emit errors, but we don't those errors since yield argument is optional
-        // so revert any errors after parsed expression
-        const saved_diagnostics = parser.diagnostics;
-        if (try parseExpression(parser, 2, .{})) |expr| {
-            argument = expr;
-            end = parser.getSpan(expr).end;
-        }
-        parser.diagnostics = saved_diagnostics;
+    if ((!parser.current_token.has_line_terminator_before and parser.current_token.type != .semicolon) or delegate) {
+        argument = try parseExpression(parser, 2, .{}) orelse return null;
+        end = parser.getSpan(argument).end;
     }
 
     return try parser.addNode(
         .{ .yield_expression = .{ .argument = argument, .delegate = delegate } },
         .{ .start = start, .end = end },
     );
+}
+
+pub inline fn canStartArgument(parser: *Parser) bool {
+    return
+        parser.current_token.type.isIdentifierLike() or
+        parser.current_token.type.isNumericLiteral() or
+        parser.current_token.type == .left_brace or
+        parser.current_token.type == .left_bracket or
+        parser.current_token.type == .left_paren;
 }
 
 /// `this`

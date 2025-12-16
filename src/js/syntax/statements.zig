@@ -635,15 +635,8 @@ fn parseReturnStatement(parser: *Parser) Error!?ast.NodeIndex {
 
     // return [no LineTerminator here] Expression?
     if (!canInsertSemicolon(parser) and parser.current_token.type != .semicolon) {
-        // because if parseExpression can't parse an expression
-        // it will emit errors, but we don't need those errors since return argument is optional
-        // so revert any errors after parsed expression
-        const saved_diagnostics = parser.diagnostics;
-        if (try expressions.parseExpression(parser, 0, .{})) |expr| {
-            argument = expr;
-            end = parser.getSpan(expr).end;
-        }
-        parser.diagnostics = saved_diagnostics;
+        argument = try expressions.parseExpression(parser, 0, .{}) orelse return null;
+        end = parser.getSpan(argument).end;
     }
 
     end = try parser.eatSemicolon(end);
