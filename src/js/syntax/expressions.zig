@@ -656,7 +656,7 @@ pub fn parseArrayExpression(parser: *Parser, enable_validation: bool) Error!?ast
     const cover = try array.parseCover(parser) orelse return null;
     const needs_validation = enable_validation and parser.state.cover_has_init_name;
 
-    if(enable_validation) {
+    if (enable_validation) {
         parser.state.cover_has_init_name = false;
     }
 
@@ -677,7 +677,7 @@ pub fn parseObjectExpression(parser: *Parser, enable_validation: bool) Error!?as
     const cover = try object.parseCover(parser) orelse return null;
     const needs_validation = enable_validation and parser.state.cover_has_init_name;
 
-    if(enable_validation) {
+    if (enable_validation) {
         parser.state.cover_has_init_name = false;
     }
 

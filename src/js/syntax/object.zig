@@ -2,6 +2,7 @@ const std = @import("std");
 const Parser = @import("../parser.zig").Parser;
 const Error = @import("../parser.zig").Error;
 const ast = @import("../ast.zig");
+const token = @import("../token.zig");
 
 const literals = @import("literals.zig");
 const grammar = @import("../grammar.zig");
@@ -93,8 +94,9 @@ fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
     var is_generator = false;
     var kind: ast.PropertyKind = .init;
     var computed = false;
+
     var key: ast.NodeIndex = ast.null_node;
-    var is_key_reserved = false;
+    var key_identifier_token_type: ?token.TokenType = null;
 
     // check for async, consume it, then decide if it's a modifier or key based on what follows
     if (parser.current_token.type == .async) {
@@ -147,9 +149,7 @@ fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
                 return null;
             }
         } else if (parser.current_token.type.isIdentifierLike()) {
-            if(parser.current_token.type.isReserved()) {
-                is_key_reserved = true;
-            }
+            key_identifier_token_type = parser.current_token.type;
             key = try literals.parseIdentifierName(parser);
         } else if (parser.current_token.type == .string_literal) {
             key = try literals.parseStringLiteral(parser) orelse return null;
@@ -246,15 +246,10 @@ fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
 
     // shorthand property: { a }
 
-    if (is_key_reserved) {
-        const key_name = parser.source[key_span.start..key_span.end];
-        try parser.reportFmt(
-            key_span,
-            "Reserved word '{s}' cannot be used in shorthand property",
-            .{key_name},
-            .{ .help = "Use the full property syntax with ':' instead. For example: '{s}: value' in object literals, or '{s}: variableName' in destructuring." },
-        );
-        return null;
+    if (key_identifier_token_type) |key_token| {
+        if (!try literals.validateIdentifier(parser, "as a shorthand property", key_token)) {
+            return null;
+        }
     }
 
     const key_data = parser.getData(key);
