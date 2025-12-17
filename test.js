@@ -1,3 +1,3 @@
 function *a() {
-  yield 10
+  (yield)
 }

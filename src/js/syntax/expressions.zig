@@ -4,6 +4,7 @@ const Error = @import("../parser.zig").Error;
 const token = @import("../token.zig");
 const std = @import("std");
 
+const statements = @import("statements.zig");
 const array = @import("array.zig");
 const object = @import("object.zig");
 const literals = @import("literals.zig");
@@ -17,10 +18,14 @@ const ParseExpressionOpts = packed struct {
     /// whether to enable "expression -> pattern" validations, for example ObjectExpression -> ObjectPattern
     /// disable this when parsing expressions in cover contexts, where we don't need validations, where we do validations on top level
     enable_validation: bool = true,
+    /// whether to parse the expression optionally.
+    /// when true, silently returns null on immediate expression parsing failure, which means no expression found.
+    /// but still reports errors on subsequent parsing failures if an expression is detected.
+    optional: bool = false,
 };
 
 pub fn parseExpression(parser: *Parser, precedence: u5, opts: ParseExpressionOpts) Error!?ast.NodeIndex {
-    var left = try parsePrefix(parser, opts.enable_validation) orelse return null;
+    var left = try parsePrefix(parser, opts) orelse return null;
 
     while (true) {
         const current_type = parser.current_token.type;
@@ -82,7 +87,7 @@ fn parseInfix(parser: *Parser, precedence: u5, left: ast.NodeIndex) Error!?ast.N
     return null;
 }
 
-fn parsePrefix(parser: *Parser, enable_validation: bool) Error!?ast.NodeIndex {
+fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts) Error!?ast.NodeIndex {
     const token_type = parser.current_token.type;
 
     if (token_type == .increment or token_type == .decrement) {
@@ -113,10 +118,10 @@ fn parsePrefix(parser: *Parser, enable_validation: bool) Error!?ast.NodeIndex {
         return parseImportExpression(parser);
     }
 
-    return parsePrimaryExpression(parser, enable_validation);
+    return parsePrimaryExpression(parser, opts);
 }
 
-inline fn parsePrimaryExpression(parser: *Parser, enable_validation: bool) Error!?ast.NodeIndex {
+inline fn parsePrimaryExpression(parser: *Parser, opts: ParseExpressionOpts) Error!?ast.NodeIndex {
     return switch (parser.current_token.type) {
         .private_identifier => literals.parsePrivateIdentifier(parser),
         .string_literal => literals.parseStringLiteral(parser),
@@ -129,8 +134,8 @@ inline fn parsePrimaryExpression(parser: *Parser, enable_validation: bool) Error
         .slash, .slash_assign => literals.parseRegExpLiteral(parser),
         .template_head => literals.parseTemplateLiteral(parser),
         .no_substitution_template => literals.parseNoSubstitutionTemplate(parser),
-        .left_bracket => parseArrayExpression(parser, enable_validation),
-        .left_brace => parseObjectExpression(parser, enable_validation),
+        .left_bracket => parseArrayExpression(parser, opts.enable_validation),
+        .left_brace => parseObjectExpression(parser, opts.enable_validation),
         .function => functions.parseFunction(parser, .{ .is_expression = true }, null),
         .class => class.parseClass(parser, .{ .is_expression = true }, null),
         .async => parseAsyncFunctionOrArrow(parser),
@@ -139,13 +144,16 @@ inline fn parsePrimaryExpression(parser: *Parser, enable_validation: bool) Error
                 return parseIdentifierOrArrowFunction(parser);
             }
 
-            const tok = parser.current_token;
-            try parser.reportFmt(
-                tok.span,
-                "Unexpected token '{s}'",
-                .{tok.lexeme},
-                .{ .help = "Expected an expression (identifier, literal, array, object, or parenthesized expression)." },
-            );
+            if (!opts.optional) {
+                const tok = parser.current_token;
+                try parser.reportFmt(
+                    tok.span,
+                    "Unexpected token '{s}'",
+                    .{tok.lexeme},
+                    .{ .help = "Expected an expression (identifier, literal, array, object, or parenthesized expression)." },
+                );
+            }
+
             return null;
         },
     };
@@ -258,36 +266,35 @@ fn parseAwaitExpression(parser: *Parser) Error!?ast.NodeIndex {
 fn parseYieldExpression(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     var end = parser.current_token.span.end;
-    try parser.advance(); // consume 'yield'
+    try parser.advance();
 
-    // check for delegate: yield*
     var delegate = false;
     if (parser.current_token.type == .star and !parser.current_token.has_line_terminator_before) {
         delegate = true;
         end = parser.current_token.span.end;
-        try parser.advance(); // consume '*'
+        try parser.advance();
     }
 
     var argument: ast.NodeIndex = ast.null_node;
 
-    if ((!parser.current_token.has_line_terminator_before and parser.current_token.type != .semicolon) or delegate) {
-        argument = try parseExpression(parser, 2, .{}) orelse return null;
-        end = parser.getSpan(argument).end;
+    if (!statements.canInsertSemicolon(parser) and
+        parser.current_token.type != .semicolon)
+    {
+        if (try parseExpression(parser, 2, .{ .optional = true })) |expr| {
+            argument = expr;
+            end = parser.getSpan(argument).end;
+        }
+    }
+
+    if (delegate and ast.isNull(argument)) {
+        try parser.report(parser.current_token.span, "Expected expression after 'yield*'", .{});
+        return null;
     }
 
     return try parser.addNode(
         .{ .yield_expression = .{ .argument = argument, .delegate = delegate } },
         .{ .start = start, .end = end },
     );
-}
-
-pub inline fn canStartArgument(parser: *Parser) bool {
-    return
-        parser.current_token.type.isIdentifierLike() or
-        parser.current_token.type.isNumericLiteral() or
-        parser.current_token.type == .left_brace or
-        parser.current_token.type == .left_bracket or
-        parser.current_token.type == .left_paren;
 }
 
 /// `this`
@@ -406,7 +413,7 @@ fn parseNewExpression(parser: *Parser) Error!?ast.NodeIndex {
         }
 
         // otherwise, start with a primary expression
-        break :blk try parsePrimaryExpression(parser, true) orelse return null;
+        break :blk try parsePrimaryExpression(parser, .{}) orelse return null;
     };
 
     // member expression chain (. [] and tagged templates)
