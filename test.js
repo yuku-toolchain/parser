@@ -1,3 +1,1 @@
-function *a() {
-  ({nice: nice?.cool} = x)
-}
+'use strict'; `\00`;

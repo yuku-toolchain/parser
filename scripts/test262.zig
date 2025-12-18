@@ -57,7 +57,7 @@ fn runDiagnosticTest(allocator: std.mem.Allocator, dir: std.fs.Dir, name: []cons
     defer allocator.free(source);
 
     const is_module = std.mem.indexOf(u8, name, ".module.") != null;
-    const tree = js.parse(allocator, source, .{ .source_type = if (is_module) .module else .script }) catch return true;
+    const tree = js.parse(allocator, source, .{ .source_type = if (is_module) .module else .script, .is_strict = true }) catch return true;
     defer tree.deinit();
 
     return tree.hasDiagnostics();
