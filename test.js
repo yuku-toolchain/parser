@@ -1,1 +1,1 @@
-hello
+const nice = ""

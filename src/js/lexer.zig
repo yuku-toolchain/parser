@@ -993,12 +993,12 @@ pub const Lexer = struct {
         return self.createToken(token_type, self.source[start..self.cursor], start, self.cursor);
     }
 
-    inline fn consumeDecimalDigits(self: *Lexer) LexicalError!void {
+    inline fn consumeDigits(self: *Lexer, comptime isValidDigit: fn (u8) bool) LexicalError!void {
         var last_was_separator = false;
 
         while (self.cursor < self.source_len) {
             const c = self.source[self.cursor];
-            if (std.ascii.isDigit(c)) {
+            if (isValidDigit(c)) {
                 self.cursor += 1;
                 last_was_separator = false;
             } else if (c == '_') {
@@ -1015,78 +1015,27 @@ pub const Lexer = struct {
         if (last_was_separator) {
             return error.NumericSeparatorMisuse;
         }
+    }
+
+    inline fn consumeDecimalDigits(self: *Lexer) LexicalError!void {
+        return self.consumeDigits(std.ascii.isDigit);
     }
 
     inline fn consumeHexDigits(self: *Lexer) LexicalError!void {
-        var last_was_separator = false;
-
-        while (self.cursor < self.source_len) {
-            const c = self.source[self.cursor];
-            if (std.ascii.isHex(c)) {
-                self.cursor += 1;
-                last_was_separator = false;
-            } else if (c == '_') {
-                if (last_was_separator) {
-                    return error.ConsecutiveNumericSeparators;
-                }
-                self.cursor += 1;
-                last_was_separator = true;
-            } else {
-                break;
-            }
-        }
-
-        if (last_was_separator) {
-            return error.NumericSeparatorMisuse;
-        }
+        return self.consumeDigits(std.ascii.isHex);
     }
 
     inline fn consumeOctalDigits(self: *Lexer) LexicalError!void {
-        var last_was_separator = false;
-
-        while (self.cursor < self.source_len) {
-            const c = self.source[self.cursor];
-            if (util.Utf.isOctalDigit(c)) {
-                self.cursor += 1;
-                last_was_separator = false;
-            } else if (c == '_') {
-                if (last_was_separator) {
-                    return error.ConsecutiveNumericSeparators;
-                }
-                self.cursor += 1;
-                last_was_separator = true;
-            } else {
-                break;
-            }
-        }
-
-        if (last_was_separator) {
-            return error.NumericSeparatorMisuse;
-        }
+        return self.consumeDigits(util.Utf.isOctalDigit);
     }
 
     inline fn consumeBinaryDigits(self: *Lexer) LexicalError!void {
-        var last_was_separator = false;
-
-        while (self.cursor < self.source_len) {
-            const c = self.source[self.cursor];
-            if (c == '0' or c == '1') {
-                self.cursor += 1;
-                last_was_separator = false;
-            } else if (c == '_') {
-                if (last_was_separator) {
-                    return error.ConsecutiveNumericSeparators;
-                }
-                self.cursor += 1;
-                last_was_separator = true;
-            } else {
-                break;
+        const isBinary = struct {
+            fn check(c: u8) bool {
+                return c == '0' or c == '1';
             }
-        }
-
-        if (last_was_separator) {
-            return error.NumericSeparatorMisuse;
-        }
+        }.check;
+        return self.consumeDigits(isBinary);
     }
 
     fn consumeExponent(self: *Lexer) LexicalError!void {
