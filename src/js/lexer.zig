@@ -12,6 +12,7 @@ pub const LexicalError = error{
     InvalidRegexLineTerminator,
     InvalidRegex,
     InvalidIdentifierStart,
+    InvalidIdentifierContinue,
     UnterminatedMultiLineComment,
     InvalidUnicodeEscape,
     InvalidHexEscape,
@@ -383,7 +384,7 @@ pub const Lexer = struct {
                 return self.createToken(.string_literal, self.source[start..self.cursor], start, self.cursor);
             }
 
-            if (c == '\n' or c == '\r' or c == '\u{2028}' or c == '\u{2029}') {
+            if (c == '\n' or c == '\r') {
                 return error.UnterminatedString;
             }
 
@@ -513,31 +514,19 @@ pub const Lexer = struct {
     }
 
     fn consumeOctal(self: *Lexer) LexicalError!void {
-        var count: u8 = 0;
-
-        while (self.cursor < self.source_len and count < 3) {
-            const c = self.source[self.cursor];
-
-            if (util.Utf.isOctalDigit(c)) {
-                self.cursor += 1;
-                count += 1;
-            } else {
-                break;
-            }
+        const result = util.Utf.parseOctal(self.source, self.cursor);
+        if (result.end == self.cursor) {
+            return error.InvalidOctalEscape;
         }
-
-        if (count == 0) return error.InvalidOctalEscape;
+        self.cursor = @intCast(result.end);
     }
 
     fn consumeHex(self: *Lexer) LexicalError!void {
-        const c1 = self.peek(1);
-        const c2 = self.peek(2);
-
-        if (!std.ascii.isHex(c1) or !std.ascii.isHex(c2)) {
+        if (util.Utf.parseHex2(self.source, self.cursor + 1)) |r| {
+            self.cursor = @intCast(r.end);
+        } else {
             return error.InvalidHexEscape;
         }
-
-        self.cursor += 3;
     }
 
     fn consumeUnicodeEscape(self: *Lexer) LexicalError!void {
@@ -550,49 +539,22 @@ pub const Lexer = struct {
             const end = std.mem.indexOfScalarPos(u8, self.source, self.cursor, '}') orelse
                 return error.InvalidUnicodeEscape;
 
-            const hex_str = self.source[start..end];
-            if (hex_str.len == 0) {
-                return error.InvalidUnicodeEscape;
-            }
-
-            var value: u32 = 0;
-            for (hex_str) |c| {
-                if (!std.ascii.isHex(c)) {
+            if (util.Utf.parseHexVariable(self.source, start, end - start)) |r| {
+                if (r.has_digits and r.end == end) {
+                    self.cursor = @intCast(end + 1); // skip past '}'
+                } else {
                     return error.InvalidUnicodeEscape;
                 }
-                // check for overflow before shifting
-                if (value > 0x10FFFF) {
-                    return error.InvalidUnicodeEscape;
-                }
-                const digit: u32 = switch (c) {
-                    '0'...'9' => c - '0',
-                    'a'...'f' => c - 'a' + 10,
-                    'A'...'F' => c - 'A' + 10,
-                    else => unreachable,
-                };
-                value = (value << 4) | digit;
-            }
-
-            // code point is in valid Unicode range
-            if (value > 0x10FFFF) {
+            } else {
                 return error.InvalidUnicodeEscape;
             }
-
-            self.cursor = @intCast(end + 1);
         } else {
             // \uXXXX format
-            const end = self.cursor + 4;
-            if (end > self.source_len) {
+            if (util.Utf.parseHex4(self.source, self.cursor)) |r| {
+                self.cursor = @intCast(r.end);
+            } else {
                 return error.InvalidUnicodeEscape;
             }
-
-            for (self.source[self.cursor..end]) |c| {
-                if (!std.ascii.isHex(c)) {
-                    return error.InvalidUnicodeEscape;
-                }
-            }
-
-            self.cursor = end;
         }
     }
 
@@ -698,6 +660,15 @@ pub const Lexer = struct {
                     if (self.peek(1) != 'u') {
                         return error.InvalidUnicodeEscape;
                     }
+                    const c2 = self.peek(2);
+                    if (c2 != '{') {
+                        // \uXXXX format - decode and validate
+                        if (util.Utf.parseHex4(self.source, self.cursor + 2)) |r| {
+                            if (!util.UnicodeId.canContinueIdentifier(r.value)) {
+                                return error.InvalidIdentifierContinue;
+                            }
+                        }
+                    }
                     self.cursor += 1; // consume backslash to get to 'u'
                     try self.consumeUnicodeEscape();
                 } else {
@@ -737,6 +708,14 @@ pub const Lexer = struct {
             if (first_char == '\\') {
                 if (self.peek(1) != 'u') {
                     return error.InvalidUnicodeEscape;
+                }
+                const c2 = self.peek(2);
+                if (c2 != '{') {
+                    if (util.Utf.parseHex4(self.source, self.cursor + 2)) |r| {
+                        if (!util.UnicodeId.canStartIdentifier(r.value)) {
+                            return error.InvalidIdentifierStart;
+                        }
+                    }
                 }
                 self.cursor += 1; // consume backslash to get to 'u'
                 try self.consumeUnicodeEscape();
@@ -1336,6 +1315,7 @@ pub fn getLexicalErrorMessage(error_type: LexicalError) []const u8 {
         error.InvalidRegexLineTerminator => "Line terminator not allowed in regular expression literal",
         error.InvalidRegex => "Invalid regular expression",
         error.InvalidIdentifierStart => "Invalid character at start of identifier",
+        error.InvalidIdentifierContinue => "Invalid character in identifier",
         error.UnterminatedMultiLineComment => "Unterminated multi-line comment",
         error.InvalidUnicodeEscape => "Invalid Unicode escape sequence",
         error.InvalidOctalEscape => "Invalid octal escape sequence",
@@ -1364,6 +1344,7 @@ pub fn getLexicalErrorHelp(error_type: LexicalError) []const u8 {
         error.InvalidRegexLineTerminator => "Try removing the line break here or escaping it within the regex pattern",
         error.InvalidRegex => "Try checking the regex syntax here for unclosed groups, invalid escapes, or malformed patterns",
         error.InvalidIdentifierStart => "Try starting the identifier here with a letter (a-z, A-Z), underscore (_), or dollar sign ($)",
+        error.InvalidIdentifierContinue => "Try using a valid identifier character here (letters, digits, underscore, or dollar sign)",
         error.UnterminatedMultiLineComment => "Try adding the closing delimiter (*/) here to complete the comment",
         error.InvalidUnicodeEscape => "Try using \\uHHHH (4 hex digits) or \\u{HHHHHH} (1-6 hex digits) here",
         error.InvalidOctalEscape => "Try using a valid octal sequence here (\\0-7, \\00-77, or \\000-377)",
