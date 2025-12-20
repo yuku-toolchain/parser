@@ -1,7 +1,7 @@
 const std = @import("std");
 const js = @import("js");
 
-const TestKind = enum { snapshot, diagnostic };
+const TestKind = enum { snapshot, should_pass, should_fail };
 
 const TestFolder = struct {
     name: []const u8,
@@ -12,7 +12,8 @@ const TestFolder = struct {
 const test_folders = [_]TestFolder{
     .{ .name = "Pass", .path = "test/pass", .kind = .snapshot },
     .{ .name = "Fuzz", .path = "test/fuzz", .kind = .snapshot },
-    .{ .name = "Fail", .path = "test/fail", .kind = .diagnostic },
+    .{ .name = "Real", .path = "test/real", .kind = .should_pass },
+    .{ .name = "Fail", .path = "test/fail", .kind = .should_fail },
 };
 
 fn readFile(allocator: std.mem.Allocator, dir: std.fs.Dir, name: []const u8) ![]const u8 {
@@ -52,15 +53,17 @@ fn runSnapshotTest(allocator: std.mem.Allocator, dir: std.fs.Dir, name: []const 
     return std.mem.eql(u8, actual, expected);
 }
 
-fn runDiagnosticTest(allocator: std.mem.Allocator, dir: std.fs.Dir, name: []const u8) !bool {
+fn runPassOrFailTest(allocator: std.mem.Allocator, dir: std.fs.Dir, name: []const u8, should_pass: bool) !bool {
     const source = try readFile(allocator, dir, name);
     defer allocator.free(source);
 
     const is_module = std.mem.indexOf(u8, name, ".module.") != null;
-    const tree = js.parse(allocator, source, .{ .source_type = if (is_module) .module else .script, .is_strict = true }) catch return true;
+    const tree = js.parse(allocator, source, .{ .source_type = if (is_module) .module else .script, .is_strict = true }) catch return !should_pass;
     defer tree.deinit();
 
-    return tree.hasDiagnostics();
+    const has_diagnostics = tree.hasDiagnostics();
+
+    return if (should_pass) !has_diagnostics else has_diagnostics;
 }
 
 pub fn main() !void {
@@ -93,7 +96,8 @@ pub fn main() !void {
 
             const ok = switch (folder.kind) {
                 .snapshot => runSnapshotTest(allocator, dir, entry.name) catch false,
-                .diagnostic => runDiagnosticTest(allocator, dir, entry.name) catch false,
+                .should_pass => runPassOrFailTest(allocator, dir, entry.name, true) catch false,
+                .should_fail => runPassOrFailTest(allocator, dir, entry.name, false) catch false,
             };
 
             if (ok) {
