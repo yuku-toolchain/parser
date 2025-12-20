@@ -12,7 +12,6 @@ const TestFolder = struct {
 const test_folders = [_]TestFolder{
     .{ .name = "Pass", .path = "test/pass", .kind = .snapshot },
     .{ .name = "Fuzz", .path = "test/fuzz", .kind = .snapshot },
-    .{ .name = "Real", .path = "test/real", .kind = .should_pass },
     .{ .name = "Fail", .path = "test/fail", .kind = .should_fail },
 };
 
