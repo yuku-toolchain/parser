@@ -56,6 +56,10 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
         // comma or end
         if (parser.current_token.type == .comma) {
             try parser.advance();
+            // then it's a trailing comma
+            if(parser.current_token.type == .right_brace) {
+                parser.state.cover_has_trailing_comma = start;
+            }
         } else if (parser.current_token.type != .right_brace) {
             try parser.report(
                 parser.current_token.span,
@@ -414,11 +418,21 @@ pub fn coverToPattern(parser: *Parser, cover: ObjectCover, context: grammar.Patt
 }
 
 /// convert ObjectExpression to ObjectPattern.
-pub fn toObjectPattern(parser: *Parser, expr_node: ast.NodeIndex, properties_range: ast.IndexRange, context: grammar.PatternContext) Error!?ast.NodeIndex {
-    return toObjectPatternImpl(parser, expr_node, properties_range, undefined, context);
+pub fn toObjectPattern(parser: *Parser, expr_node: ast.NodeIndex, properties_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?ast.NodeIndex {
+    return toObjectPatternImpl(parser, expr_node, properties_range, span, context);
 }
 
 fn toObjectPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, properties_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?ast.NodeIndex {
+    if (parser.state.cover_has_trailing_comma == span.start) {
+        try parser.report(span, "Rest element cannot have a trailing comma in object destructuring.", .{
+            .help = "Remove the trailing comma after the rest element",
+        });
+
+        parser.state.cover_has_trailing_comma = null;
+
+        return null;
+    }
+
     const properties = parser.getExtra(properties_range);
 
     var rest: ast.NodeIndex = ast.null_node;
@@ -440,7 +454,7 @@ fn toObjectPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, properties_
 
             if (arg_data != .identifier_reference) {
                 try parser.report(parser.getSpan(arg), "Rest element argument must be an identifier", .{
-                    .help = "Object rest patterns only accept simple identifiers, not nested patterns.",
+                    .help = "Object rest patterns only accept simple identifiers.",
                 });
                 return null;
             }

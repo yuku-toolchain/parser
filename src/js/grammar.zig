@@ -139,11 +139,11 @@ pub fn expressionToPattern(
         },
 
         .array_expression => |arr| {
-            return array.toArrayPattern(parser, expr, arr.elements, context);
+            return array.toArrayPattern(parser, expr, arr.elements, parser.getSpan(expr), context);
         },
 
         .object_expression => |obj| {
-            return object.toObjectPattern(parser, expr, obj.properties, context);
+            return object.toObjectPattern(parser, expr, obj.properties, parser.getSpan(expr), context);
         },
 
         .chain_expression => {

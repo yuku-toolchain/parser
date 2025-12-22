@@ -1,2 +1,1 @@
-[{cool: [...nice]}, ...cool,] = x
-const nice = [...cool] = y
+({...a = 1} = (2));

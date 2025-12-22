@@ -118,9 +118,11 @@ const ParserContext = struct {
 };
 
 const ParserState = struct {
+    /// tracks if the cover (array or object) we are parsing has a trailing comma
+    /// value is the start index of the cover
+    cover_has_trailing_comma: ?u32 = null,
     /// tracks if CoverInitializedName ({a = 1}) was parsed in current cover context.
     cover_has_init_name: bool = false,
-    array_cover_has_trailing_comma: bool = false,
     /// tracks if we're still in the directive prologue of a function/script body.
     in_directive_prologue: bool = true,
 };

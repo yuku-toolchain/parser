@@ -16,8 +16,6 @@ A very fast JavaScript/TypeScript parser written in Zig to enable JavaScript too
 
 <br/>
 
-<br/>
-
 - Full ECMAScript spec compliance
 - Very fast, built with performance in mind from the start, competitive with established parsers like Oxc.
 - Robust error recovery, partial ASTs on recoverable errors.
