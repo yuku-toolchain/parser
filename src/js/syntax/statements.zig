@@ -34,39 +34,9 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
         .@"var", .@"const", .let, .using => variables.parseVariableDeclaration(parser),
         .function => functions.parseFunction(parser, .{}, null),
         .class => class.parseClass(parser, .{}, null),
-        .async => blk: {
-            const start = parser.current_token.span.start;
-            try parser.advance(); // consume 'async'
-            break :blk try functions.parseFunction(parser, .{ .is_async = true }, start);
-        },
-        .declare => blk: {
-            if (!parser.isTs()) {
-                break :blk try parseExpressionStatementOrLabeledOrDirective(parser);
-            }
-            const start = parser.current_token.span.start;
-            try parser.advance(); // consume 'declare'
-            break :blk try functions.parseFunction(parser, .{ .is_declare = true }, start);
-        },
-        .import => blk: {
-            if (!parser.isModule()) {
-                try parser.report(parser.current_token.span, "'import' statement is only valid in module mode", .{
-                    .help = "Use dynamic import() for script mode",
-                });
-                break :blk null;
-            }
-
-            break :blk modules.parseImportDeclaration(parser);
-        },
-        .@"export" => blk: {
-            if (!parser.isModule()) {
-                try parser.report(parser.current_token.span, "'export' statement is only valid in module mode", .{
-                    .help = "Export declarations can only appear in module mode",
-                });
-                break :blk null;
-            }
-
-            break :blk modules.parseExportDeclaration(parser);
-        },
+        .async => parseAsyncFunction(parser),
+        .import => modules.parseImportDeclaration(parser),
+        .@"export" => modules.parseExportDeclaration(parser),
         .@"if" => parseIfStatement(parser),
         .@"switch" => parseSwitchStatement(parser),
         .@"for" => parseForStatement(parser, false),
@@ -86,6 +56,21 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
     parser.context.in_single_statement_context = false;
 
     return statement;
+}
+
+fn parseAsyncFunction(parser: *Parser) Error!?ast.NodeIndex {
+    const start = parser.current_token.span.start;
+    const async_id = try literals.parseIdentifier(parser) orelse return null;
+
+    if (!parser.current_token.has_line_terminator_before) {
+        return functions.parseFunction(parser, .{ .is_async = true }, start);
+    }
+
+    // then the 'async' is a regular identifier
+    return try parser.addNode(
+        .{ .expression_statement = .{ .expression = async_id } },
+        parser.getSpan(async_id),
+    );
 }
 
 fn parseExpressionStatementOrLabeledOrDirective(parser: *Parser) Error!?ast.NodeIndex {

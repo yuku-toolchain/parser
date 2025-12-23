@@ -13,6 +13,13 @@ const class = @import("class.zig");
 const variables = @import("variables.zig");
 
 pub fn parseImportDeclaration(parser: *Parser) Error!?ast.NodeIndex {
+    if (!parser.isModule()) {
+                    try parser.report(parser.current_token.span, "'import' statement is only valid in module mode", .{
+                        .help = "Use dynamic import() for script mode",
+                    });
+                    return null;
+                }
+
     const start = parser.current_token.span.start;
     try parser.advance(); // consume 'import'
 
@@ -340,6 +347,13 @@ fn parseImportedBinding(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 pub fn parseExportDeclaration(parser: *Parser) Error!?ast.NodeIndex {
+    if (!parser.isModule()) {
+        try parser.report(parser.current_token.span, "'export' statement is only valid in module mode", .{
+            .help = "Export declarations can only appear in module mode",
+        });
+        return null;
+    }
+
     const start = parser.current_token.span.start;
     try parser.advance(); // consume 'export'
 

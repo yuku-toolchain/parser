@@ -202,12 +202,12 @@ fn parseAsyncFunctionOrArrow(parser: *Parser) Error!?ast.NodeIndex {
     const async_id = try literals.parseIdentifier(parser); // save as id and consume 'async'
 
     // async function ...
-    if (parser.current_token.type == .function) {
+    if (!parser.current_token.has_line_terminator_before and parser.current_token.type == .function) {
         return functions.parseFunction(parser, .{ .is_expression = true, .is_async = true }, start);
     }
 
     // async (params) => ...
-    if (parser.current_token.type == .left_paren) {
+    if (!parser.current_token.has_line_terminator_before and parser.current_token.type == .left_paren) {
         return parseParenthesizedOrArrowFunction(parser, true, start);
     }
 

@@ -1,1 +1,2 @@
-(class extends a {})
+const nice = async
+nice => {}
