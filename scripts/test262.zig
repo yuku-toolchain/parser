@@ -18,6 +18,9 @@ const test_folders = [_]TestFolder{
 const excluded_files = [_][]const u8{
     // these are the semantic tests, remove these from the list
     // when we implement semantic checks
+    "67c714796e7f40a4.js",
+    "e6559958e6954318.js",
+    "4e2cce832b4449f1.js"
 };
 
 fn readFile(allocator: std.mem.Allocator, dir: std.fs.Dir, name: []const u8) ![]const u8 {

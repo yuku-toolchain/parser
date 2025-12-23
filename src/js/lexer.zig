@@ -363,6 +363,10 @@ pub const Lexer = struct {
                 if (self.strict_mode) return error.OctalEscapeInStrict;
                 try self.consumeOctal();
             },
+            '8'...'9' => {
+                if (self.strict_mode) return error.InvalidOctalEscape;
+                self.cursor += 1;
+            },
             else => {
                 self.cursor += 1;
             },

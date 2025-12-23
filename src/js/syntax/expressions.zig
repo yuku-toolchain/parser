@@ -121,7 +121,7 @@ fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts) Error!?ast.NodeIndex 
     return parsePrimaryExpression(parser, opts);
 }
 
-inline fn parsePrimaryExpression(parser: *Parser, opts: ParseExpressionOpts) Error!?ast.NodeIndex {
+pub inline fn parsePrimaryExpression(parser: *Parser, opts: ParseExpressionOpts) Error!?ast.NodeIndex {
     return switch (parser.current_token.type) {
         .private_identifier => literals.parsePrivateIdentifier(parser),
         .string_literal => literals.parseStringLiteral(parser),
@@ -150,7 +150,7 @@ inline fn parsePrimaryExpression(parser: *Parser, opts: ParseExpressionOpts) Err
                     tok.span,
                     "Unexpected token '{s}'",
                     .{tok.lexeme},
-                    .{ .help = "Expected an expression (identifier, literal, array, object, or parenthesized expression)." },
+                    .{ .help = "Expected an expression" },
                 );
             }
 
@@ -927,4 +927,39 @@ fn parseOptionalChainElement(parser: *Parser, object_node: ast.NodeIndex, option
             return null;
         },
     };
+}
+
+/// https://tc39.es/ecma262/#sec-left-hand-side-expressions
+/// used to parse `extends` clause, where we only need left hand side expression
+pub inline fn parseLeftHandSideExpression(parser: *Parser) Error!?ast.NodeIndex {
+    // base expression
+    var expr: ast.NodeIndex = blk: {
+        if (parser.current_token.type == .left_paren) {
+            break :blk try parseParenthesizedExpression(parser) orelse return null;
+        }
+
+        if (parser.current_token.type == .new) {
+            break :blk try parseNewExpression(parser) orelse return null;
+        }
+
+        if (parser.current_token.type == .import) {
+            break :blk try parseImportExpression(parser) orelse return null;
+        }
+
+        break :blk try parsePrimaryExpression(parser, .{}) orelse return null;
+    };
+
+    // chain LeftHandSide operations: member access, calls, optional chaining
+    while (true) {
+        expr = switch (parser.current_token.type) {
+            .dot => try parseStaticMemberExpression(parser, expr, false) orelse return null,
+            .left_bracket => try parseComputedMemberExpression(parser, expr, false) orelse return null,
+            .left_paren => try parseCallExpression(parser, expr, false) orelse return null,
+            .template_head, .no_substitution_template => try parseTaggedTemplateExpression(parser, expr) orelse return null,
+            .optional_chaining => try parseOptionalChain(parser, expr) orelse return null,
+            else => break,
+        };
+    }
+
+    return expr;
 }

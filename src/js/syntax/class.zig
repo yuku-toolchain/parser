@@ -50,7 +50,7 @@ pub fn parseClass(parser: *Parser, opts: ParseClassOpts, start_from_param: ?u32)
     var super_class: ast.NodeIndex = ast.null_node;
     if (parser.current_token.type == .extends) {
         try parser.advance(); // consume 'extends'
-        super_class = try expressions.parseExpression(parser, 17, .{}) orelse return null;
+        super_class = try expressions.parseLeftHandSideExpression(parser) orelse return null;
     }
 
     // class body
