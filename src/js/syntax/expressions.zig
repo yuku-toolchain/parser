@@ -310,6 +310,10 @@ fn parseThisExpression(parser: *Parser) Error!?ast.NodeIndex {
 fn parseSuperExpression(parser: *Parser) Error!?ast.NodeIndex {
     const super_token = parser.current_token;
     try parser.advance(); // consume 'super'
+    if (parser.current_token.type != .left_paren and parser.current_token.type != .dot and parser.current_token.type != .left_bracket) {
+        try parser.report(parser.current_token.span, "'super' must be followed by a call or property access", .{ .help = "use 'super()' to call parent constructor, 'super.property' or 'super[property]' to access parent members" });
+        return null;
+    }
     return try parser.addNode(.super, super_token.span);
 }
 

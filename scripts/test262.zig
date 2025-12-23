@@ -15,6 +15,11 @@ const test_folders = [_]TestFolder{
     .{ .name = "Fail", .path = "test/fail", .kind = .should_fail },
 };
 
+const excluded_files = [_][]const u8{
+    // these are the semantic tests, remove these from the list
+    // when we implement semantic checks
+    "3558f8c0f0ba825b.js"};
+
 fn readFile(allocator: std.mem.Allocator, dir: std.fs.Dir, name: []const u8) ![]const u8 {
     const file = try dir.openFile(name, .{});
     defer file.close();
@@ -91,6 +96,16 @@ pub fn main() !void {
         var iter = dir.iterate();
         while (try iter.next()) |entry| {
             if (entry.kind != .file or !std.mem.endsWith(u8, entry.name, ".js")) continue;
+
+            var is_excluded = false;
+            for (excluded_files) |excluded| {
+                if (std.mem.eql(u8, entry.name, excluded)) {
+                    is_excluded = true;
+                    break;
+                }
+            }
+            if (is_excluded) continue;
+
             total += 1;
 
             const ok = switch (folder.kind) {

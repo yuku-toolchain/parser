@@ -57,7 +57,7 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
         if (parser.current_token.type == .comma) {
             try parser.advance();
             // then it's a trailing comma
-            if(parser.current_token.type == .right_brace) {
+            if (parser.current_token.type == .right_brace) {
                 parser.state.cover_has_trailing_comma = start;
             }
         } else if (parser.current_token.type != .right_brace) {
@@ -423,16 +423,6 @@ pub fn toObjectPattern(parser: *Parser, expr_node: ast.NodeIndex, properties_ran
 }
 
 fn toObjectPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, properties_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?ast.NodeIndex {
-    if (parser.state.cover_has_trailing_comma == span.start) {
-        try parser.report(span, "Rest element cannot have a trailing comma in object destructuring.", .{
-            .help = "Remove the trailing comma after the rest element",
-        });
-
-        parser.state.cover_has_trailing_comma = null;
-
-        return null;
-    }
-
     const properties = parser.getExtra(properties_range);
 
     var rest: ast.NodeIndex = ast.null_node;
@@ -442,6 +432,16 @@ fn toObjectPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, properties_
         const prop_data = parser.getData(prop);
 
         if (prop_data == .spread_element) {
+            if (parser.state.cover_has_trailing_comma == span.start) {
+                try parser.report(span, "Rest element cannot have a trailing comma in object destructuring.", .{
+                    .help = "Remove the trailing comma after the rest element",
+                });
+
+                parser.state.cover_has_trailing_comma = null;
+
+                return null;
+            }
+
             if (i != properties.len - 1) {
                 try parser.report(parser.getSpan(prop), "Rest element must be the last property", .{
                     .help = "No properties can follow the rest element in a destructuring pattern.",

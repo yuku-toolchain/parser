@@ -1,1 +1,1 @@
-({...a = 1} = (2));
+class A extends B { constructor() { (super).a(); } }
