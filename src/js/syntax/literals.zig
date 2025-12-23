@@ -217,6 +217,7 @@ pub fn parseLabelIdentifier(parser: *Parser) Error!?ast.NodeIndex {
 
     const current = parser.current_token;
     try parser.advance();
+
     return try parser.addNode(.{
         .label_identifier = .{
             .name_start = current.span.start,
@@ -226,6 +227,17 @@ pub fn parseLabelIdentifier(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 pub inline fn validateIdentifier(parser: *Parser, comptime as_what: []const u8, token: Token) Error!bool {
+    if (!token.type.isIdentifierLike()) {
+        try parser.reportFmt(
+            token.span,
+            "Expected identifier {s}, found '{s}'",
+            .{ as_what, token.lexeme },
+            .{ .help = "Identifiers must start with a letter, underscore (_), or dollar sign ($)" },
+        );
+
+        return false;
+    }
+
     if (token.type.isReserved()) {
         try parser.reportFmt(
             token.span,
