@@ -23,8 +23,15 @@ pub fn parseImportDeclaration(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     const import_name = try literals.parseIdentifierName(parser);
 
-    // then it's a import expression or meta property
-    if(parser.current_token.type == .left_paren or parser.current_token.type == .dot) {
+    // if the next token is '(' or '.', this is either an import expression (import(...))
+    // or an import meta property (import.meta), not an import declaration.
+    //
+    // we avoid doing lookahead in the top-level statement parser to distinguish between
+    // import declarations and expressions. Instead, we parse it as an import statement first,
+    // and only after parsing `import` do we check for '(' or '.'.
+    //
+    // if present, we treat it as an expression statement, which lets us avoid lookahead.
+    if (parser.current_token.type == .left_paren or parser.current_token.type == .dot) {
         const expression = try expressions.parseImportExpression(parser, import_name) orelse return null;
         return try parser.addNode(.{ .expression_statement = .{ .expression = expression } }, parser.getSpan(expression));
     }
