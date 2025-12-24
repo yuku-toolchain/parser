@@ -104,7 +104,10 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
         try parser.report(
             .{ .start = start, .end = end },
             "Unterminated parenthesized expression",
-            .{ .help = "Add a closing ')' to complete the expression." },
+            .{
+                .help = "Add a closing ')' to complete the expression.",
+                .labels = try parser.makeLabels(&.{parser.label(.{ .start = start, .end = start + 1 }, "Opened here")}),
+            },
         );
         parser.scratch_cover.reset(checkpoint);
         return null;

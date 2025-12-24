@@ -451,13 +451,23 @@ fn parseNewExpression(parser: *Parser) Error!?ast.NodeIndex {
     var arguments = ast.IndexRange.empty;
 
     const end = if (parser.current_token.type == .left_paren) blk: {
+        const open_paren_span = parser.current_token.span;
         try parser.advance();
         arguments = try parseArguments(parser) orelse return null;
         const arguments_end = parser.current_token.span.end;
 
-        if (!try parser.expect(.right_paren, "Expected ')' after constructor arguments", "Constructor calls must end with ')'.")) {
+        if (parser.current_token.type != .right_paren) {
+            try parser.report(
+                parser.current_token.span,
+                "Expected ')' after constructor arguments",
+                .{
+                    .help = "Constructor calls must end with ')'.",
+                    .labels = try parser.makeLabels(&.{parser.label(open_paren_span, "Opened here")}),
+                },
+            );
             return null;
         }
+        try parser.advance(); // consume ')'
 
         break :blk arguments_end;
     } else parser.getSpan(callee).end;
@@ -765,6 +775,7 @@ fn parseMemberProperty(parser: *Parser, object_node: ast.NodeIndex, optional: bo
 
 /// obj[expr]
 fn parseComputedMemberExpression(parser: *Parser, object_node: ast.NodeIndex, optional: bool) Error!?ast.NodeIndex {
+    const open_bracket_span = parser.current_token.span;
     try parser.advance(); // consume '['
 
     const saved_allow_in = parser.context.allow_in;
@@ -776,9 +787,18 @@ fn parseComputedMemberExpression(parser: *Parser, object_node: ast.NodeIndex, op
     parser.context.allow_in = saved_allow_in;
 
     const end = parser.current_token.span.end; // ']' position
-    if (!try parser.expect(.right_bracket, "Expected ']' after computed property", "Computed member access must end with ']'.")) {
+    if (parser.current_token.type != .right_bracket) {
+        try parser.report(
+            parser.current_token.span,
+            "Expected ']' after computed property",
+            .{
+                .help = "Computed member access must end with ']'.",
+                .labels = try parser.makeLabels(&.{parser.label(open_bracket_span, "Opened here")}),
+            },
+        );
         return null;
     }
+    try parser.advance(); // consume ']'
 
     return try parser.addNode(.{
         .member_expression = .{
@@ -793,14 +813,24 @@ fn parseComputedMemberExpression(parser: *Parser, object_node: ast.NodeIndex, op
 /// func(args)
 fn parseCallExpression(parser: *Parser, callee_node: ast.NodeIndex, optional: bool) Error!?ast.NodeIndex {
     const start = parser.getSpan(callee_node).start;
+    const open_paren_span = parser.current_token.span;
     try parser.advance(); // consume '('
 
     const args = try parseArguments(parser) orelse return null;
 
     const end = parser.current_token.span.end; // ')' position
-    if (!try parser.expect(.right_paren, "Expected ')' after function arguments", "Function calls must end with ')'. Check for missing commas or unclosed parentheses.")) {
+    if (parser.current_token.type != .right_paren) {
+        try parser.report(
+            parser.current_token.span,
+            "Expected ')' after function arguments",
+            .{
+                .help = "Function calls must end with ')'. Check for missing commas or unclosed parentheses.",
+                .labels = try parser.makeLabels(&.{parser.label(open_paren_span, "Opened here")}),
+            },
+        );
         return null;
     }
+    try parser.advance(); // consume ')'
 
     return try parser.addNode(.{
         .call_expression = .{

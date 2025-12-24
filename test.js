@@ -1,1 +1,1 @@
-console.log(typeof async d => {});
+const hello = [

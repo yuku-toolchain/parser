@@ -75,7 +75,10 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
         try parser.report(
             .{ .start = start, .end = end },
             "Unterminated object",
-            .{ .help = "Add a closing '}' to complete the object." },
+            .{
+                .help = "Add a closing '}' to complete the object.",
+                .labels = try parser.makeLabels(&.{parser.label(.{ .start = start, .end = start + 1 }, "Opened here")}),
+            },
         );
         parser.scratch_cover.reset(checkpoint);
         return null;

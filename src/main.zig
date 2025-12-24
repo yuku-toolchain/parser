@@ -46,6 +46,14 @@ pub fn main() !void {
 
             std.debug.print("\nError: {s} at test.js:{d}:{d} to test.js:{d}:{d}\n", .{ err.message, start_pos.line, start_pos.col, end_pos.line, end_pos.col });
             if (err.help) |help| std.debug.print("  Help: {s}\n\n", .{help});
+            if (err.labels.len > 0) {
+                for (err.labels) |label| {
+                    const label_start_pos = getLineAndColumn(contents, label.span.start);
+                    const label_end_pos = getLineAndColumn(contents, label.span.end);
+
+                    std.debug.print("  Label: {s} at test.js:{d}:{d} to test.js:{d}:{d}\n", .{ label.message, label_start_pos.line, label_start_pos.col, label_end_pos.line, label_end_pos.col });
+                }
+            }
         }
     }
 
