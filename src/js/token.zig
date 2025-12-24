@@ -166,7 +166,7 @@ pub const TokenType = enum(u32) {
 
     eof = 127, // end of file
 
-    pub fn precedence(self: TokenType) u5 {
+    pub fn precedence(self: TokenType) u8 {
         return @intCast((@intFromEnum(self) >> Mask.PrecShift) & Mask.PrecOverlap);
     }
 
@@ -380,7 +380,7 @@ pub const Token = struct {
         return Token{ .lexeme = "", .span = .{ .start = pos, .end = pos }, .type = .eof, .has_line_terminator_before = false };
     }
 
-    pub fn leftBindingPower(self: *const Token) u5 {
+    pub fn leftBindingPower(self: *const Token) u8 {
         // handle: [no LineTerminator here] ++ --
         if ((self.type == .increment or self.type == .decrement) and self.has_line_terminator_before) {
             return 0; // can't be infix, start new expression

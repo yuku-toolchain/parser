@@ -129,7 +129,7 @@ pub fn coverToExpression(parser: *Parser, cover: ParenthesizedCover) Error!?ast.
         try parser.report(
             .{ .start = cover.start, .end = cover.end },
             "Empty parentheses are only valid as arrow function parameters",
-            .{ .help = "Use '() => ...' for arrow functions or add an expression inside." },
+            .{},
         );
         return null;
     }

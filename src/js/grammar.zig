@@ -11,7 +11,7 @@ const array = @import("syntax/array.zig");
 /// without validation. validation is deferred until the top-level context is known:
 /// - if parent becomes an expression -> validate at top level
 /// - if parent becomes a pattern -> no validation needed
-pub inline fn parseCoverExpression(parser: *Parser, precedence: u5) Error!?ast.NodeIndex {
+pub inline fn parseCoverExpression(parser: *Parser, precedence: u8) Error!?ast.NodeIndex {
     return expressions.parseExpression(parser, precedence, .{ .enable_validation = false });
 }
 

@@ -24,7 +24,7 @@ const ParseExpressionOpts = packed struct {
     optional: bool = false,
 };
 
-pub fn parseExpression(parser: *Parser, precedence: u5, opts: ParseExpressionOpts) Error!?ast.NodeIndex {
+pub fn parseExpression(parser: *Parser, precedence: u8, opts: ParseExpressionOpts) Error!?ast.NodeIndex {
     var left = try parsePrefix(parser, opts, precedence) orelse return null;
 
     while (true) {
@@ -51,7 +51,7 @@ pub fn parseExpression(parser: *Parser, precedence: u5, opts: ParseExpressionOpt
     return left;
 }
 
-fn parseInfix(parser: *Parser, precedence: u5, left: ast.NodeIndex) Error!?ast.NodeIndex {
+fn parseInfix(parser: *Parser, precedence: u8, left: ast.NodeIndex) Error!?ast.NodeIndex {
     const current = parser.current_token;
 
     if (current.type.isBinaryOperator()) {
@@ -87,7 +87,7 @@ fn parseInfix(parser: *Parser, precedence: u5, left: ast.NodeIndex) Error!?ast.N
     return null;
 }
 
-fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts, precedence: u5) Error!?ast.NodeIndex {
+fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts, precedence: u8) Error!?ast.NodeIndex {
     const token_type = parser.current_token.type;
 
     if (token_type == .increment or token_type == .decrement) {
@@ -99,7 +99,7 @@ fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts, precedence: u5) Error
     }
 
     if (token_type == .left_paren) {
-        return parseParenthesizedOrArrowFunction(parser, false, null);
+        return parseParenthesizedOrArrowFunction(parser, false, null, precedence);
     }
 
     if (token_type == .await and (parser.context.in_async or parser.isModule())) {
@@ -120,10 +120,10 @@ fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts, precedence: u5) Error
         return parseImportExpression(parser, null);
     }
 
-    return parsePrimaryExpression(parser, opts);
+    return parsePrimaryExpression(parser, opts, precedence);
 }
 
-pub inline fn parsePrimaryExpression(parser: *Parser, opts: ParseExpressionOpts) Error!?ast.NodeIndex {
+pub inline fn parsePrimaryExpression(parser: *Parser, opts: ParseExpressionOpts, precedence: u8) Error!?ast.NodeIndex {
     return switch (parser.current_token.type) {
         .private_identifier => literals.parsePrivateIdentifier(parser),
         .string_literal => literals.parseStringLiteral(parser),
@@ -140,7 +140,7 @@ pub inline fn parsePrimaryExpression(parser: *Parser, opts: ParseExpressionOpts)
         .left_brace => parseObjectExpression(parser, opts.enable_validation),
         .function => functions.parseFunction(parser, .{ .is_expression = true }, null),
         .class => class.parseClass(parser, .{ .is_expression = true }, null),
-        .async => parseAsyncFunctionOrArrow(parser),
+        .async => parseAsyncFunctionOrArrow(parser, precedence),
         else => {
             if (parser.current_token.type.isIdentifierLike()) {
                 return parseIdentifierOrArrowFunction(parser);
@@ -170,13 +170,14 @@ fn parseParenthesizedExpression(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 /// (a) or (a, b) => ...
-fn parseParenthesizedOrArrowFunction(parser: *Parser, is_async: bool, arrow_start: ?u32) Error!?ast.NodeIndex {
+fn parseParenthesizedOrArrowFunction(parser: *Parser, is_async: bool, arrow_start: ?u32, precedence: u8) Error!?ast.NodeIndex {
     const start = arrow_start orelse parser.current_token.span.start;
 
     const cover = try parenthesized.parseCover(parser) orelse return null;
 
-    //  [no LineTerminator here] => ConciseBody
-    if (parser.current_token.type == .arrow and !parser.current_token.has_line_terminator_before) {
+    // [no LineTerminator here] => ConciseBody
+    // arrow function's precedence is 2
+    if (parser.current_token.type == .arrow and !parser.current_token.has_line_terminator_before and precedence <= 2) {
         return parenthesized.coverToArrowFunction(parser, cover, is_async, start);
     }
 
@@ -198,7 +199,7 @@ fn parseIdentifierOrArrowFunction(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 /// async function or async arrow function
-fn parseAsyncFunctionOrArrow(parser: *Parser) Error!?ast.NodeIndex {
+fn parseAsyncFunctionOrArrow(parser: *Parser, precedence: u8) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
     const async_id = try literals.parseIdentifier(parser); // save as id and consume 'async'
@@ -210,11 +211,12 @@ fn parseAsyncFunctionOrArrow(parser: *Parser) Error!?ast.NodeIndex {
 
     // async (params) => ...
     if (!parser.current_token.has_line_terminator_before and parser.current_token.type == .left_paren) {
-        return parseParenthesizedOrArrowFunction(parser, true, start);
+        return parseParenthesizedOrArrowFunction(parser, true, start, precedence);
     }
 
-    //  [no LineTerminator here] => ConciseBody
-    if (parser.current_token.type == .identifier and !parser.current_token.has_line_terminator_before) {
+    // [no LineTerminator here] => ConciseBody
+    // arrow function's precedence is 2
+    if (parser.current_token.type == .identifier and !parser.current_token.has_line_terminator_before and precedence <= 2) {
         const id = try literals.parseIdentifier(parser) orelse return null;
 
         if (parser.current_token.type == .arrow and !parser.current_token.has_line_terminator_before) {
@@ -424,7 +426,7 @@ fn parseNewExpression(parser: *Parser) Error!?ast.NodeIndex {
         }
 
         // otherwise, start with a primary expression
-        break :blk try parsePrimaryExpression(parser, .{}) orelse return null;
+        break :blk try parsePrimaryExpression(parser, .{}, 0) orelse return null;
     };
 
     // member expression chain (. [] and tagged templates)
@@ -510,7 +512,7 @@ fn parseUpdateExpression(parser: *Parser, prefix: bool, left: ast.NodeIndex) Err
     );
 }
 
-fn parseBinaryExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) Error!?ast.NodeIndex {
+fn parseBinaryExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) Error!?ast.NodeIndex {
     const operator_token = parser.current_token;
     const operator = ast.BinaryOperator.fromToken(operator_token.type);
     try parser.advance();
@@ -525,7 +527,7 @@ fn parseBinaryExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) E
     );
 }
 
-fn parseLogicalExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) Error!?ast.NodeIndex {
+fn parseLogicalExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) Error!?ast.NodeIndex {
     const operator_token = parser.current_token;
     try parser.advance();
 
@@ -564,7 +566,7 @@ fn parseLogicalExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) 
 
 /// `a, b, c` - comma operator / sequence expression
 /// https://tc39.es/ecma262/#sec-comma-operator
-fn parseSequenceExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) Error!?ast.NodeIndex {
+fn parseSequenceExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) Error!?ast.NodeIndex {
     const checkpoint = parser.scratch_a.begin();
     try parser.scratch_a.append(parser.allocator(), left);
 
@@ -589,7 +591,7 @@ fn parseSequenceExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex)
     );
 }
 
-fn parseAssignmentExpression(parser: *Parser, precedence: u5, left: ast.NodeIndex) Error!?ast.NodeIndex {
+fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) Error!?ast.NodeIndex {
     const left_unwraped = parenthesized.unwrapParenthesized(parser, left);
 
     const operator_token = parser.current_token;
@@ -629,7 +631,7 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u5, left: ast.NodeInde
 
 /// `test ? consequent : alternate`
 /// https://tc39.es/ecma262/#sec-conditional-operator
-fn parseConditionalExpression(parser: *Parser, precedence: u5, @"test": ast.NodeIndex) Error!?ast.NodeIndex {
+fn parseConditionalExpression(parser: *Parser, precedence: u8, @"test": ast.NodeIndex) Error!?ast.NodeIndex {
     const test_span = parser.getSpan(@"test");
 
     try parser.advance(); // consume '?'
@@ -954,7 +956,7 @@ pub inline fn parseLeftHandSideExpression(parser: *Parser) Error!?ast.NodeIndex 
             break :blk try parseImportExpression(parser, null) orelse return null;
         }
 
-        break :blk try parsePrimaryExpression(parser, .{}) orelse return null;
+        break :blk try parsePrimaryExpression(parser, .{}, 0) orelse return null;
     };
 
     // chain LeftHandSide operations: member access, calls, optional chaining
