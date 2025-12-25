@@ -1,1 +1,1 @@
-const nice = async()
+export default async function () { }

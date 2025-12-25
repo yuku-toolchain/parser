@@ -352,7 +352,7 @@ pub const Parser = struct {
 
     pub inline fn describeToken(self: *Parser, tok: token.Token) []const u8 {
         _ = self;
-        return if (tok.type == .eof) "none" else tok.lexeme;
+        return if (tok.type == .eof) "end of file" else tok.lexeme;
     }
 
     pub const ReportOptions = struct {
