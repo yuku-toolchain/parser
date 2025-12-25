@@ -34,19 +34,29 @@ pub fn parseExpression(parser: *Parser, precedence: u8, opts: ParseExpressionOpt
 
         if (current_type == .in and !parser.context.allow_in) break;
 
-        if (parser.current_token.has_line_terminator_before) {
-            const left_data = parser.getData(left);
+        const left_data = parser.getData(left);
 
-            // yield [no LineTerminator here]
+        // yield [no LineTerminator here]
+        if (parser.current_token.has_line_terminator_before) {
             if (left_data == .yield_expression) {
                 break;
             }
         }
 
-        const left_binding_power = parser.current_token.leftBindingPower();
-        if (precedence > left_binding_power or left_binding_power == 0) break;
+        const lbp = parser.current_token.leftBindingPower();
+        if (lbp < precedence or lbp == 0) break;
 
-        left = try parseInfix(parser, left_binding_power, left) orelse return null;
+        // only LeftHandSideExpressions can have postfix operations applied.
+        //   a++()        <- can't call an update expression
+        //   () => {}()   <- can't call an arrow function
+        // breaking here produces natural "expected semicolon" error.
+        if (isPostfixOperation(current_type)) {
+            if (!isLeftHandSideExpression(left_data)) {
+                break;
+            }
+        }
+
+        left = try parseInfix(parser, lbp, left) orelse return null;
     }
 
     return left;
@@ -916,18 +926,6 @@ fn parseOptionalChain(parser: *Parser, left: ast.NodeIndex) Error!?ast.NodeIndex
                 try parser.advance();
                 expr = try parseOptionalChainElement(parser, expr, true) orelse return null;
             },
-            .template_head, .no_substitution_template => {
-                // tagged template in optional chain, not allowed (unless line terminator separates)
-                if (!parser.current_token.has_line_terminator_before) {
-                    try parser.report(
-                        parser.current_token.span,
-                        "Tagged template expressions are not permitted in an optional chain",
-                        .{ .help = "Remove the optional chaining operator '?.' before the template literal or add parentheses." },
-                    );
-                    return null;
-                }
-                break;
-            },
             else => break,
         }
     }
@@ -949,14 +947,6 @@ fn parseOptionalChainElement(parser: *Parser, object_node: ast.NodeIndex, option
     return switch (tok_type) {
         .left_bracket => parseComputedMemberExpression(parser, object_node, optional),
         .left_paren => parseCallExpression(parser, object_node, optional),
-        .template_head, .no_substitution_template => {
-            try parser.report(
-                parser.current_token.span,
-                "Tagged template expressions are not permitted in an optional chain",
-                .{ .help = "Remove the optional chaining operator '?.' before the template literal." },
-            );
-            return null;
-        },
         else => {
             try parser.report(
                 parser.current_token.span,
@@ -1001,4 +991,41 @@ pub inline fn parseLeftHandSideExpression(parser: *Parser) Error!?ast.NodeIndex 
     }
 
     return expr;
+}
+
+/// checks if a token represents a postfix operation that requires the left operand
+/// to be a LeftHandSideExpression.
+///
+/// postfix operations are operations that:
+/// 1. bind tightly to their left operand (high precedence)
+/// 2. can only be applied to LeftHandSideExpressions (not to binary expressions,
+///    update expressions, etc. without parentheses)
+///
+/// example of invalid usage without parentheses:
+/// - `a++.prop` - can't access property of update expression
+///
+/// this operation is valid when the left side is wrapped in parentheses,
+/// which creates a `parenthesized_expression` (which is a LeftHandSideExpression):
+/// - `(a++).prop` - valid
+///
+/// just explaining things xD
+fn isPostfixOperation(token_type: token.TokenType) bool {
+    return switch (token_type) {
+        .dot, // obj.prop
+        .left_bracket, // obj[prop]
+        .left_paren, // func()
+        .optional_chaining, // obj?.prop
+        .template_head, // tag`template`
+        .no_substitution_template, // tag`template`
+        => true,
+        else => false,
+    };
+}
+
+/// https://tc39.es/ecma262/#sec-left-hand-side-expressions
+fn isLeftHandSideExpression(data: ast.NodeData) bool {
+    return switch (data) {
+        .arrow_function_expression, .update_expression, .unary_expression, .await_expression, .yield_expression, .binary_expression, .logical_expression, .conditional_expression, .assignment_expression, .sequence_expression => false,
+        else => true,
+    };
 }

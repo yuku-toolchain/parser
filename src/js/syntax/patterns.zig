@@ -29,16 +29,6 @@ pub inline fn parseBindingPattern(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 pub inline fn parseBindingIdentifier(parser: *Parser) Error!?ast.NodeIndex {
-    if (!parser.current_token.type.isIdentifierLike()) {
-        try parser.reportFmt(
-            parser.current_token.span,
-            "Expected identifier, found '{s}'",
-            .{parser.current_token.lexeme},
-            .{ .help = "A variable name must be a valid JavaScript identifier." },
-        );
-        return null;
-    }
-
     if (!try literals.validateIdentifier(parser, "an identifier", parser.current_token)) {
         return null;
     }

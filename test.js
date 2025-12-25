@@ -1,1 +1,1 @@
-const hello = [
+export let[a] = 0 export let[b] = 0

@@ -310,6 +310,8 @@ fn parseNamedImports(parser: *Parser) Error!?ast.IndexRange {
 fn parseImportSpecifier(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
+    const imported_token = parser.current_token;
+
     // parse imported name
     const imported = try parseModuleExportName(parser) orelse return null;
 
@@ -333,6 +335,11 @@ fn parseImportSpecifier(parser: *Parser) Error!?ast.NodeIndex {
         }
 
         // convert identifier_name to binding_identifier
+        // since it is now a binding identifier, we need to validate like reserved words, etc.
+        if(!try literals.validateIdentifier(parser, "an imported binding", imported_token)) {
+            return null;
+        }
+
         const id_data = imported_data.identifier_name;
 
         parser.setData(imported, .{
@@ -701,6 +708,7 @@ fn parseModuleExportName(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     try parser.report(parser.current_token.span, "Expected identifier or string literal", .{});
+
     return null;
 }
 
