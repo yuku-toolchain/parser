@@ -420,8 +420,6 @@ pub const Parser = struct {
 
     // this is very basic now
     fn synchronize(self: *Parser, terminator: ?token.TokenType) Error!void {
-        try self.advance();
-
         while (self.current_token.type != .eof) {
             // stop at the block terminator to avoid consuming the closing brace
             if (terminator) |t| {

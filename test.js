@@ -1,1 +1,1 @@
-await cool()
+const nice = [await cool()]
