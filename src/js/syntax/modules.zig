@@ -32,7 +32,7 @@ pub fn parseImportDeclaration(parser: *Parser) Error!?ast.NodeIndex {
     // check for import phase: source or defer
     var phase: ?ast.ImportPhase = null;
 
-    const next = parser.lookAhead();
+    const next = try parser.lookAhead();
 
     if (parser.current_token.type == .source and next.type.isIdentifierLike() and next.type != .from) {
         phase = .source;

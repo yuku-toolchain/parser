@@ -36,17 +36,17 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
     // then it's a "await using" variable declaration
     // if it's not, then expression statement parsing automatically handle it as await expression
     if(parser.current_token.type == .await) {
-        const next = parser.lookAhead();
+        const next = try parser.lookAhead();
         if (next.type == .using) {
             try parser.advance();
             return variables.parseVariableDeclaration(parser, true);
         }
     }
 
-    // if it's import and next token is left paren, then it means a regular import declaration
+    // if it's import and next token is not a left paren, then it means a regular import declaration
     // if the next token is left paren, then it's a import expression which will handle automatically in expression statement parsing
     if(parser.current_token.type == .import) {
-        const next = parser.lookAhead();
+        const next = try parser.lookAhead();
         if (next.type != .left_paren) {
             return modules.parseImportDeclaration(parser);
         }

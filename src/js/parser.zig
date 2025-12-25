@@ -304,16 +304,28 @@ pub const Parser = struct {
         } else {
             self.current_token = try self.nextTokenOrEof();
         }
-
-        // prefetch next token
-        if (self.current_token.type != .eof) {
-            self.next_token = try self.nextTokenOrEof();
-            if (self.next_token.?.type == .eof) self.next_token = null;
-        }
     }
 
-    pub inline fn lookAhead(self: *Parser) token.Token {
-        return self.next_token orelse token.Token.eof(0);
+    // lazy next token prefetching for lookahead.
+    // if lookahead has already cached the next token, `advance` will use it,
+    // so there's no extra cost for lookAhead.
+    pub fn lookAhead(self: *Parser) Error!token.Token {
+        if (self.next_token) |tok| {
+            return tok;
+        }
+
+        if (self.current_token.type == .eof) {
+            return token.Token.eof(0);
+        }
+
+        self.next_token = try self.nextTokenOrEof();
+
+        if (self.next_token.?.type == .eof) {
+            self.next_token = null;
+            return token.Token.eof(0);
+        }
+
+        return self.next_token.?;
     }
 
     pub inline fn replaceTokenAndAdvance(self: *Parser, tok: token.Token) Error!void {
