@@ -1,1 +1,1 @@
-export default async function () { }
+import defer from "cool";
