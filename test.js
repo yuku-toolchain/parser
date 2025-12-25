@@ -1,1 +1,1 @@
-const nice = async(wow, ...wow)
+await cool()
