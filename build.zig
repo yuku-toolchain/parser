@@ -72,4 +72,51 @@ pub fn build(b: *std.Build) void {
     const run_test262 = b.addRunArtifact(test262);
     run_test262.step.dependOn(b.getInstallStep());
     test262_step.dependOn(&run_test262.step);
+
+    {
+        const wasm_target = b.resolveTargetQuery(.{
+            .cpu_arch = .wasm32,
+            .os_tag = .freestanding,
+            .cpu_features_add = std.Target.wasm.featureSet(&.{
+                .bulk_memory,
+                .mutable_globals,
+                .nontrapping_fptoint,
+                .sign_ext,
+            }),
+        });
+
+        const wasm_util_module = b.addModule("util", .{
+            .root_source_file = b.path("src/util/root.zig"),
+            .target = wasm_target,
+            .optimize = .ReleaseSmall,
+        });
+
+        const wasm_js_module = b.addModule("js", .{
+            .root_source_file = b.path("src/js/root.zig"),
+            .target = wasm_target,
+            .optimize = .ReleaseSmall,
+        });
+
+        wasm_js_module.addImport("util", wasm_util_module);
+
+        const wasm_module = b.createModule(.{
+            .root_source_file = b.path("src/wasm.zig"),
+            .target = wasm_target,
+            .optimize = .ReleaseSmall,
+        });
+
+        wasm_module.addImport("js", wasm_js_module);
+
+        const js_wasm = b.addExecutable(.{
+            .name = "yuku_js",
+            .root_module = wasm_module,
+        });
+
+        js_wasm.entry = .disabled;
+        js_wasm.rdynamic = true;
+
+        b.installArtifact(js_wasm);
+        const js_wasm_file = b.addInstallFile(js_wasm.getEmittedBin(), js_wasm.out_filename);
+        b.getInstallStep().dependOn(&js_wasm_file.step);
+    }
 }
