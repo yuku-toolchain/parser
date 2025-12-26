@@ -419,7 +419,7 @@ pub const Parser = struct {
     }
 
     fn synchronize(self: *Parser, terminator: ?token.TokenType) Error!void {
-        try self.advance();
+        var has_advanced = false;
 
         while (self.current_token.type != .eof) {
             // stop at the block terminator to avoid consuming the closing brace
@@ -432,6 +432,8 @@ pub const Parser = struct {
                 return;
             }
 
+            // check for statement-starting keywords at statement boundaries
+            // these are recovery points when they appear after a line terminator
             if (self.current_token.has_line_terminator_before) {
                 switch (self.current_token.type) {
                     .class, .function, .@"var", .@"for", .@"if", .@"while", .@"return", .let, .@"const", .using, .@"try", .@"throw", .debugger, .@"break", .@"continue", .@"switch", .do, .with, .async, .@"export", .import => return,
@@ -439,7 +441,22 @@ pub const Parser = struct {
                 }
             }
 
+            // also check for statement-starting keywords and block starts
+            // block starts are always safe recovery points
+            switch (self.current_token.type) {
+                .left_brace => return,
+                .class, .function, .@"var", .@"for", .@"if", .@"while", .@"return", .let, .@"const", .using, .@"try", .@"throw", .debugger, .@"break", .@"continue", .@"switch", .do, .with, .async, .@"export", .import => {
+                    // if we've advanced past the error location, statement-starting keywords
+                    // are likely the start of a new statement and safe to stop at
+                    if (has_advanced) {
+                        return;
+                    }
+                },
+                else => {},
+            }
+
             try self.advance();
+            has_advanced = true;
         }
     }
 
