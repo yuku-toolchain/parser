@@ -1,6 +1,8 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/utils/cn";
 import { Button as BaseButton } from "@base-ui/react";
+import { LinkProps } from "next/link";
+import { Link } from "./link";
 
 const buttonVariants = cva(
   [
@@ -52,11 +54,15 @@ const buttonVariants = cva(
   },
 );
 
-export type ButtonProps = BaseButton.Props & VariantProps<typeof buttonVariants>;
+export type ButtonProps<RouteType> = BaseButton.Props & VariantProps<typeof buttonVariants> & {
+  href?: LinkProps<RouteType>['href'];
+}
 
-export function Button({ children, size, variant, color, className, ...props }: ButtonProps) {
+export function Button<RouteType>({ children, size, variant, color, className, ...props }: ButtonProps<RouteType>) {
+  const Render = (props.href ? Link : BaseButton) as typeof BaseButton;
+
   return (
-    <BaseButton
+    <Render
       {...props}
       className={cn(
         buttonVariants({
@@ -68,6 +74,6 @@ export function Button({ children, size, variant, color, className, ...props }: 
       )}
     >
       {children}
-    </BaseButton>
+    </Render>
   );
 }

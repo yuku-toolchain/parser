@@ -25,7 +25,7 @@ const fontSerif = Libre_Baskerville({
 });
 
 export const metadata: Metadata = {
-  title: "Yuku",
+  title: "Yuku - JavaScript/TypeScript Parser",
   description: "Very fast JavaScript/TypeScript parser, written in Zig.",
 };
 
