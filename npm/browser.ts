@@ -42,11 +42,10 @@ let wasmInstance: WasmExports | null = null;
 async function getWasmInstance(): Promise<WasmExports> {
   if (wasmInstance) return wasmInstance;
 
-  const wasmUrl = new URL('./yuku.wasm', import.meta.url);
-  const wasmBuffer = await fetch(wasmUrl).then((r) => r.arrayBuffer());
-  const wasmModule = await WebAssembly.instantiate(wasmBuffer);
+  const wasmModule = await WebAssembly.instantiateStreaming(fetch("./yuku.wasm"));
 
   wasmInstance = wasmModule.instance.exports as unknown as WasmExports;
+
   return wasmInstance;
 }
 
