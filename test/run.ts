@@ -11,6 +11,8 @@ await preload()
 
 console.clear()
 
+const isCI = !!process.env.CI
+
 type TestType = "should_pass" | "should_fail" | "snapshot"
 type Language = "js" | "ts" | "jsx" | "tsx" | "dts"
 
@@ -169,7 +171,9 @@ const runTest = async (
 
       if (!equal(parsed, snapshot)) {
         const difference = diff(snapshot, parsed, { contextLines: 2 })
-        console.log(`\nx ${file}\n${difference}\n`)
+        if (!isCI) {
+          console.log(`\nx ${file}\n${difference}\n`)
+        }
         result.failures.push(file)
         return
       }
@@ -199,17 +203,26 @@ const runCategory = async (config: TestConfig) => {
 
   if (result.total === 0) return
 
-  process.stdout.write(`${config.path} `)
+  if (!isCI) {
+    process.stdout.write(`${config.path} `)
+  }
 
   for (const file of files) {
     await runTest(file, config.type, result)
-    process.stdout.write(`\r${config.path} ${result.passed}/${result.total}`)
+    if (!isCI) {
+      process.stdout.write(`\r${config.path} ${result.passed}/${result.total}`)
+    }
   }
 
   result.failed = result.failures.length
 
   const status = result.failed === 0 ? "✓" : "x"
-  console.log(`\r${status} ${config.path} ${result.passed}/${result.total}`)
+
+  if (!isCI) {
+    console.log(`\r${status} ${config.path} ${result.passed}/${result.total}`)
+  } else {
+    console.log(`${status} ${config.path} ${result.passed}/${result.total}`)
+  }
 
   if (result.failures.length > 0) {
     result.failures.forEach(f => console.log(`  x ${f}`))
