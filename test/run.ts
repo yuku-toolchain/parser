@@ -5,6 +5,7 @@ import { Glob } from "bun"
 import equal from "fast-deep-equal"
 import { diff } from "jest-diff"
 import { basename, dirname, join } from "path"
+import { mkdir } from "fs/promises"
 
 await preload()
 
@@ -56,7 +57,7 @@ const configs: TestConfig[] = [
       "5059efc702f08060.js",
       "f063969b23239390.module.js"
   ] },
-  { path: "test/js/snapshot", type: "snapshot", languages: ["js"] },
+  { path: "test/js/misc", type: "snapshot", languages: ["js"] },
 ]
 
 interface TestResult {
@@ -94,7 +95,9 @@ const getBaseName = (file: string): string => {
 const isTestArtifact = (path: string): boolean => {
   return (
     path.endsWith(".snapshot.json") ||
-    path.includes(".snap")
+    path.includes(".snap") ||
+    path.includes("/snapshots/") ||
+    path.includes("\\snapshots\\")
   )
 }
 
@@ -150,11 +153,13 @@ const runTest = async (
 
     if (type === "snapshot") {
       const dir = dirname(file)
+      const snapshotsDir = join(dir, "snapshots")
       const base = getBaseName(file)
-      const snapshotFile = join(dir, `${base}.snapshot.json`)
+      const snapshotFile = join(snapshotsDir, `${base}.snapshot.json`)
       const snapshotExists = await Bun.file(snapshotFile).exists()
 
       if (!snapshotExists) {
+        await mkdir(snapshotsDir, { recursive: true })
         await Bun.write(snapshotFile, JSON.stringify(parsed, null, 2))
         result.passed++
         return
