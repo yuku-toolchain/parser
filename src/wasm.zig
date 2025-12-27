@@ -23,7 +23,7 @@ pub export fn parse(
     source_type: u32,
     lang: u32,
 ) u32 {
-    const source: []const u8 = source_bytes[0..len];
+    const source: []const u8 = if (len == 0) &[_]u8{} else source_bytes[0..len];
 
     const st: js.SourceType = if (source_type == 0) .script else .module;
     const l: js.Lang = switch (lang) {

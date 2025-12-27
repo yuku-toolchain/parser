@@ -53,26 +53,6 @@ pub fn build(b: *std.Build) void {
     const gen_unicode_id_table_step = b.step("generate-unicode-id", "Run unicode identifier table and utils generation");
     gen_unicode_id_table_step.dependOn(&run_gen_unicode_id_table.step);
 
-    const test262_module = b.createModule(.{
-        .root_source_file = b.path("scripts/test262.zig"),
-        .target = target,
-        .optimize = optimize,
-    });
-
-    test262_module.addImport("js", js_module);
-
-    const test262 = b.addExecutable(.{
-        .name = "test262",
-        .root_module = test262_module,
-    });
-
-    b.installArtifact(test262);
-
-    const test262_step = b.step("test262", "Run Test262 parser tests suite");
-    const run_test262 = b.addRunArtifact(test262);
-    run_test262.step.dependOn(b.getInstallStep());
-    test262_step.dependOn(&run_test262.step);
-
     {
         const wasm_target = b.resolveTargetQuery(.{
             .cpu_arch = .wasm32,
@@ -114,6 +94,9 @@ pub fn build(b: *std.Build) void {
 
         js_wasm.entry = .disabled;
         js_wasm.rdynamic = true;
+        js_wasm.initial_memory = 64 * 1024 * 1024; // 64MB initial
+        js_wasm.max_memory = 256 * 1024 * 1024;   // 256MB max
+        js_wasm.stack_size = 1024 * 1024;
 
         b.installArtifact(js_wasm);
         const js_wasm_file = b.addInstallFile(js_wasm.getEmittedBin(), js_wasm.out_filename);

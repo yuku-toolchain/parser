@@ -40,7 +40,6 @@ pub const Lang = enum { js, ts, jsx, tsx, dts };
 pub const Options = struct {
     source_type: SourceType = .module,
     lang: Lang = .js,
-    is_strict: bool = false,
 };
 
 /// Must be deinitialized to free the arena-allocated memory.
@@ -156,7 +155,7 @@ pub const Parser = struct {
             .arena = std.heap.ArenaAllocator.init(backing_allocator),
             .source_type = options.source_type,
             .lang = options.lang,
-            .strict_mode = options.is_strict or options.source_type == .module,
+            .strict_mode = options.source_type == .module,
             .lexer = undefined,
             .current_token = undefined,
         };

@@ -22,7 +22,11 @@ export interface YukuNode {
 }
 
 // we will expand it later
-export type YukuAST = YukuNode;
+export type YukuAST = {
+  program: YukuNode[];
+  errors: Record<string, unknown>[];
+  comments: Record<string, unknown>[];
+};
 
 interface WasmExports {
   // allocate in wasm memory
@@ -42,7 +46,7 @@ let wasmInstance: WasmExports | null = null;
 async function getWasmInstance(): Promise<WasmExports> {
   if (wasmInstance) return wasmInstance;
 
-  const wasmModule = await WebAssembly.instantiateStreaming(fetch("./yuku.wasm"));
+  const wasmModule = await WebAssembly.instantiateStreaming(fetch(new URL('./yuku.wasm', import.meta.url)));
 
   wasmInstance = wasmModule.instance.exports as unknown as WasmExports;
 
@@ -70,16 +74,18 @@ function parseInternal(
   const sourceBytes = encoder.encode(source);
   const sourceLen = sourceBytes.length;
 
-  // allocate source code buffer
-  const sourcePtr = wasm.alloc(sourceLen);
+  // allocate source code buffer, allow empty source by not requiring allocation when length is 0
+  const sourcePtr = sourceLen > 0 ? wasm.alloc(sourceLen) : 0;
 
-  if (!sourcePtr) {
+  if (sourceLen > 0 && !sourcePtr) {
     throw new Error('Failed to allocate memory for source code');
   }
 
   try {
-    const wasmMemory = new Uint8Array(wasm.memory.buffer, sourcePtr, sourceLen);
-    wasmMemory.set(sourceBytes);
+    if (sourceLen > 0 && sourcePtr) {
+      const wasmMemory = new Uint8Array(wasm.memory.buffer, sourcePtr, sourceLen);
+      wasmMemory.set(sourceBytes);
+    }
 
     // options are numbers, so normalize them to pass to wasm
     const sourceType = normalizeSourceType(options.sourceType);
@@ -91,10 +97,19 @@ function parseInternal(
       throw new Error('Failed to parse source code');
     }
 
+    if (!Number.isInteger(resultPtr) || resultPtr < 0 || resultPtr >= wasm.memory.buffer.byteLength || resultPtr + 4 > wasm.memory.buffer.byteLength) {
+      throw new Error('Invalid result pointer from WASM parser');
+    }
+
     const { length: jsonLen, dataPtr: jsonDataPtr } = readLengthPrefixedData(
       wasm.memory,
       resultPtr
     );
+
+    if (!Number.isInteger(jsonDataPtr) || jsonDataPtr < 0 || jsonDataPtr >= wasm.memory.buffer.byteLength || jsonDataPtr + jsonLen > wasm.memory.buffer.byteLength) {
+      wasm.free(resultPtr, jsonLen + 4);
+      throw new Error('Invalid result pointer from WASM parser');
+    }
 
     try {
       // decode the json to string that can be parsed by JSON.parse
@@ -108,7 +123,9 @@ function parseInternal(
       wasm.free(resultPtr, jsonLen + 4);
     }
   } finally {
-    wasm.free(sourcePtr, sourceLen);
+    if (sourceLen > 0 && sourcePtr) {
+      wasm.free(sourcePtr, sourceLen);
+    }
   }
 }
 
