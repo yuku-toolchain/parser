@@ -350,6 +350,7 @@ fn convertToFormalParameter(parser: *Parser, expr: ast.NodeIndex) Error!?ast.Nod
         parser.getSpan(expr),
     );
 }
+
 pub fn unwrapParenthesized(parser: *Parser, node: ast.NodeIndex) ast.NodeIndex {
     const data = parser.getData(node);
 

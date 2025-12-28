@@ -637,14 +637,14 @@ fn parseSequenceExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex)
 }
 
 fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) Error!?ast.NodeIndex {
-    // const left_unwrapped = parenthesized.unwrapParenthesized(parser, left);
+    const left_unwraped = parenthesized.unwrapParenthesized(parser, left);
 
     const operator_token = parser.current_token;
     const operator = ast.AssignmentOperator.fromToken(operator_token.type);
     const left_span = parser.getSpan(left);
 
     // validate that left side can be assigned to
-    if (!isValidAssignmentTarget(parser, left)) {
+    if (!isValidAssignmentTarget(parser, left_unwraped)) {
         try parser.report(
             left_span,
             "Invalid left-hand side in assignment",
@@ -655,7 +655,7 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeInde
 
     // logical assignments (&&=, ||=, ??=) require simple targets
     const is_logical = operator == .logical_and_assign or operator == .logical_or_assign or operator == .nullish_assign;
-    if (is_logical and !isSimpleAssignmentTarget(parser, left)) {
+    if (is_logical and !isSimpleAssignmentTarget(parser, left_unwraped)) {
         try parser.report(
             left_span,
             "Invalid left-hand side in logical assignment",
@@ -669,7 +669,7 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeInde
     const right = try parseExpression(parser, precedence, .{}) orelse return null;
 
     return try parser.addNode(
-        .{ .assignment_expression = .{ .left = left, .right = right, .operator = operator } },
+        .{ .assignment_expression = .{ .left = left_unwraped, .right = right, .operator = operator } },
         .{ .start = left_span.start, .end = parser.getSpan(right).end },
     );
 }
@@ -710,17 +710,12 @@ pub fn isValidAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
     const data = parser.getData(index);
     return switch (data) {
         // SimpleAssignmentTarget
-        .identifier_reference, .binding_identifier => true,
+        .identifier_reference => true,
         .member_expression => |m| !m.optional, // optional chaining is not a valid assignment target
-
-        .parenthesized_expression => isValidAssignmentTarget(parser, data.parenthesized_expression.expression),
 
         // AssignmentPattern (destructuring)
         .array_pattern,
         .object_pattern,
-        // these expressions will be later converted to patterns on the top level
-        .array_expression,
-        .object_expression,
         => true,
 
         else => false,
@@ -730,7 +725,7 @@ pub fn isValidAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
 /// SimpleAssignmentTarget: only identifier and member expressions (no destructuring)
 pub fn isSimpleAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
     return switch (parser.getData(index)) {
-        .identifier_reference, .binding_identifier => true,
+        .identifier_reference => true,
         .member_expression => |m| !m.optional, // optional chaining is not a valid assignment target
         else => false,
     };
@@ -747,11 +742,7 @@ pub fn parseArrayExpression(parser: *Parser, in_cover: bool) Error!?ast.NodeInde
         parser.state.cover_has_init_name = false;
     }
 
-    if (isPartOfPattern(parser) and
-        // only covert to pattern if we are not in cover context,
-        // which means we are at top level and good to covert to pattern
-        // since we understood the top-level context because of isPartOfPattern
-        !in_cover)
+    if (isPartOfPattern(parser))
     {
         // since it's part of a pattern, we covert to pattern as assignable context early
         return try array.coverToPattern(parser, cover, .assignable);
@@ -771,11 +762,7 @@ pub fn parseObjectExpression(parser: *Parser, in_cover: bool) Error!?ast.NodeInd
         parser.state.cover_has_init_name = false;
     }
 
-    if (isPartOfPattern(parser) and
-        // only covert to pattern if we are not in cover context,
-        // which means we are at top lever and good to covert to pattern
-        // since we understood the top-level context because of isPartOfPattern
-        !in_cover)
+    if (isPartOfPattern(parser))
     {
         // since it's part of a pattern, we covert to pattern as assignable context early
         return try object.coverToPattern(parser, cover, .assignable);
