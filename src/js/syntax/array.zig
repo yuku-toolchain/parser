@@ -103,7 +103,7 @@ pub fn coverToExpression(parser: *Parser, cover: ArrayCover, validate: bool) Err
     if (validate) {
         for (cover.elements) |elem| {
             if (ast.isNull(elem)) continue;
-            if (!try grammar.validateNoInvalidCoverSyntax(parser, elem)) return null;
+            if (!try grammar.validateNoCoverInitializedSyntax(parser, elem)) return null;
         }
     }
     return try parser.addNode(
@@ -119,8 +119,8 @@ pub fn coverToPattern(parser: *Parser, cover: ArrayCover, context: grammar.Patte
 }
 
 /// convert ArrayExpression to ArrayPattern (mutates in-place).
-pub fn toArrayPattern(parser: *Parser, expr_node: ast.NodeIndex, elements_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?ast.NodeIndex {
-    return toArrayPatternImpl(parser, expr_node, elements_range, span, context);
+pub fn toArrayPattern(parser: *Parser, expr_node: ast.NodeIndex, elements_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?void {
+    _ = try toArrayPatternImpl(parser, expr_node, elements_range, span, context) orelse return null;
 }
 
 fn toArrayPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, elements_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?ast.NodeIndex {
@@ -151,15 +151,15 @@ fn toArrayPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, elements_ran
                 return null;
             }
 
-            const pattern = try grammar.expressionToPattern(parser, elem_data.spread_element.argument, context) orelse return null;
+            try grammar.expressionToPattern(parser, elem_data.spread_element.argument, context) orelse return null;
 
-            parser.setData(elem, .{ .binding_rest_element = .{ .argument = pattern } });
+            parser.setData(elem, .{ .binding_rest_element = .{ .argument = elem_data.spread_element.argument } });
             rest = elem;
             elements_len = @intCast(i);
             break;
         }
 
-        _ = try grammar.expressionToPattern(parser, elem, context) orelse return null;
+        try grammar.expressionToPattern(parser, elem, context) orelse return null;
     }
 
     const pattern_data: ast.NodeData = .{ .array_pattern = .{

@@ -1,1 +1,1 @@
-'use strict'; `\00`;
+const hello = ([(a) = []] = []) => {}

@@ -408,7 +408,7 @@ pub fn coverToExpression(parser: *Parser, cover: ObjectCover, validate: bool) Er
         .{ .start = cover.start, .end = cover.end },
     );
 
-    if (validate and !try grammar.validateNoInvalidCoverSyntax(parser, object_expression)) {
+    if (validate and !try grammar.validateNoCoverInitializedSyntax(parser, object_expression)) {
         return null;
     }
 
@@ -421,9 +421,9 @@ pub fn coverToPattern(parser: *Parser, cover: ObjectCover, context: grammar.Patt
     return toObjectPatternImpl(parser, null, properties_range, .{ .start = cover.start, .end = cover.end }, context);
 }
 
-/// convert ObjectExpression to ObjectPattern.
-pub fn toObjectPattern(parser: *Parser, expr_node: ast.NodeIndex, properties_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?ast.NodeIndex {
-    return toObjectPatternImpl(parser, expr_node, properties_range, span, context);
+/// convert ObjectExpression to ObjectPattern (mutates in-place).
+pub fn toObjectPattern(parser: *Parser, expr_node: ast.NodeIndex, properties_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?void {
+    _ = try toObjectPatternImpl(parser, expr_node, properties_range, span, context) orelse return null;
 }
 
 fn toObjectPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, properties_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?ast.NodeIndex {
@@ -495,11 +495,11 @@ fn toObjectPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, properties_
             return null;
         }
 
-        const value_pattern = try grammar.expressionToPattern(parser, obj_prop.value, context) orelse return null;
+        try grammar.expressionToPattern(parser, obj_prop.value, context) orelse return null;
 
         parser.setData(prop, .{ .binding_property = .{
             .key = obj_prop.key,
-            .value = value_pattern,
+            .value = obj_prop.value,
             .shorthand = obj_prop.shorthand,
             .computed = obj_prop.computed,
         } });

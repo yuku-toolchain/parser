@@ -15,7 +15,7 @@ pub inline fn parseCoverExpression(parser: *Parser, precedence: u8) Error!?ast.N
 }
 
 /// validate that an expression doesn't contain CoverInitializedName.
-pub fn validateNoInvalidCoverSyntax(parser: *Parser, expr: ast.NodeIndex) Error!bool {
+pub fn validateNoCoverInitializedSyntax(parser: *Parser, expr: ast.NodeIndex) Error!bool {
     const data = parser.getData(expr);
 
     switch (data) {
@@ -33,12 +33,12 @@ pub fn validateNoInvalidCoverSyntax(parser: *Parser, expr: ast.NodeIndex) Error!
                             return false;
                         }
 
-                        if (!try validateNoInvalidCoverSyntax(parser, obj_prop.value)) {
+                        if (!try validateNoCoverInitializedSyntax(parser, obj_prop.value)) {
                             return false;
                         }
                     },
                     .spread_element => |spread| {
-                        if (!try validateNoInvalidCoverSyntax(parser, spread.argument)) {
+                        if (!try validateNoCoverInitializedSyntax(parser, spread.argument)) {
                             return false;
                         }
                     },
@@ -50,7 +50,7 @@ pub fn validateNoInvalidCoverSyntax(parser: *Parser, expr: ast.NodeIndex) Error!
             const elements = parser.getExtra(arr.elements);
             for (elements) |elem| {
                 if (ast.isNull(elem)) continue;
-                if (!try validateNoInvalidCoverSyntax(parser, elem)) {
+                if (!try validateNoCoverInitializedSyntax(parser, elem)) {
                     return false;
                 }
             }
@@ -62,14 +62,14 @@ pub fn validateNoInvalidCoverSyntax(parser: *Parser, expr: ast.NodeIndex) Error!
             }
         },
         .spread_element => |spread| {
-            return validateNoInvalidCoverSyntax(parser, spread.argument);
+            return validateNoCoverInitializedSyntax(parser, spread.argument);
         },
         .parenthesized_expression => |paren| {
-            return validateNoInvalidCoverSyntax(parser, paren.expression);
+            return validateNoCoverInitializedSyntax(parser, paren.expression);
         },
         .sequence_expression => |seq| {
             for (parser.getExtra(seq.expressions)) |e| {
-                if (!try validateNoInvalidCoverSyntax(parser, e)) return false;
+                if (!try validateNoCoverInitializedSyntax(parser, e)) return false;
             }
         },
         else => {},
@@ -100,13 +100,14 @@ pub const PatternContext = enum {
     assignable,
 };
 
-/// convert an expression node to a destructuring pattern.
+/// convert an expression node to a destructuring pattern (mutates in-place).
 /// the context determines what syntax is allowed.
 pub fn expressionToPattern(
     parser: *Parser,
     expr: ast.NodeIndex,
     context: PatternContext,
-) Error!?ast.NodeIndex {
+    // if return null, there is a error reported, so caller do 'orelse return null'
+) Error!?void {
     const data = parser.getData(expr);
 
     switch (data) {
@@ -115,7 +116,6 @@ pub fn expressionToPattern(
                 .name_start = id.name_start,
                 .name_len = id.name_len,
             } });
-            return expr;
         },
 
         .assignment_expression => |assign| {
@@ -128,21 +128,20 @@ pub fn expressionToPattern(
                 return null;
             }
 
-            const left_pattern = try expressionToPattern(parser, assign.left, context) orelse return null;
+            try expressionToPattern(parser, assign.left, context) orelse return null;
 
             parser.setData(expr, .{ .assignment_pattern = .{
-                .left = left_pattern,
+                .left = assign.left,
                 .right = assign.right,
             } });
-            return expr;
         },
 
         .array_expression => |arr| {
-            return array.toArrayPattern(parser, expr, arr.elements, parser.getSpan(expr), context);
+            try array.toArrayPattern(parser, expr, arr.elements, parser.getSpan(expr), context) orelse return null;
         },
 
         .object_expression => |obj| {
-            return object.toObjectPattern(parser, expr, obj.properties, parser.getSpan(expr), context);
+            try object.toObjectPattern(parser, expr, obj.properties, parser.getSpan(expr), context) orelse return null;
         },
 
         .chain_expression => {
@@ -151,6 +150,7 @@ pub fn expressionToPattern(
                 "Optional chaining is not allowed in destructuring pattern",
                 .{ .help = "Optional chaining ('?.') cannot be used as an assignment target in destructuring patterns." },
             );
+
             return null;
         },
 
@@ -163,8 +163,6 @@ pub fn expressionToPattern(
                 );
                 return null;
             }
-
-            return expr;
         },
 
         .parenthesized_expression => |paren| {
@@ -186,17 +184,13 @@ pub fn expressionToPattern(
                 return null;
             }
 
-            const inner_pattern = try expressionToPattern(parser, paren.expression, context) orelse return null;
+            try expressionToPattern(parser, paren.expression, context) orelse return null;
 
-            parser.setData(expr, parser.getData(inner_pattern));
-            parser.setSpan(expr, parser.getSpan(inner_pattern));
-
-            return inner_pattern;
+            parser.setData(expr, parser.getData(paren.expression));
+            parser.setSpan(expr, parser.getSpan(paren.expression));
         },
 
-        .binding_identifier, .array_pattern, .object_pattern, .assignment_pattern => {
-            return expr;
-        },
+        .binding_identifier, .array_pattern, .object_pattern, .assignment_pattern => {},
 
         else => {
             try parser.report(

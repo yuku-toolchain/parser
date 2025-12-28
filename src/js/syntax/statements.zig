@@ -15,7 +15,7 @@ const class = @import("class.zig");
 const grammar = @import("../grammar.zig");
 const modules = @import("modules.zig");
 
-const ParseStatementOpts = packed struct {
+const ParseStatementOpts = struct {
     can_be_single_statement_context: bool = false,
 };
 
@@ -26,15 +26,10 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
         return parseBlockStatement(parser);
     }
 
-    // if it's not a block statement and can be a single statement context
-    // then we are in single statement context
     if (opts.can_be_single_statement_context) {
         parser.context.in_single_statement_context = true;
     }
 
-    // if it's await and next type is using
-    // then it's a "await using" variable declaration
-    // if it's not, then expression statement parsing automatically handle it as await expression
     if (parser.current_token.type == .await) {
         const next = try parser.lookAhead();
         if (next.type == .using) {
@@ -43,8 +38,6 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
         }
     }
 
-    // if it's import and next token is not a left paren, then it means a regular import declaration
-    // if the next token is left paren, then it's a import expression which will handle automatically in expression statement parsing
     if (parser.current_token.type == .import) {
         const next = try parser.lookAhead();
         if (next.type != .left_paren) {
@@ -52,11 +45,19 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
         }
     }
 
+    if(parser.current_token.type == .async) {
+        const next = try parser.lookAhead();
+        if (next.type == .function and !next.has_line_terminator_before) {
+            const start = parser.current_token.span.start;
+            try parser.advance();
+            return functions.parseFunction(parser, .{ .is_async = true }, start);
+        }
+    }
+
     const statement = switch (parser.current_token.type) {
         .@"var", .@"const", .let, .using => variables.parseVariableDeclaration(parser, false),
         .function => functions.parseFunction(parser, .{}, null),
         .class => class.parseClass(parser, .{}, null),
-        .async => parseAsyncFunction(parser),
         .@"export" => modules.parseExportDeclaration(parser),
         .@"if" => parseIfStatement(parser),
         .@"switch" => parseSwitchStatement(parser),
@@ -77,21 +78,6 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
     parser.context.in_single_statement_context = false;
 
     return statement;
-}
-
-fn parseAsyncFunction(parser: *Parser) Error!?ast.NodeIndex {
-    const start = parser.current_token.span.start;
-    const async_id = try literals.parseIdentifier(parser) orelse return null;
-
-    if (!parser.current_token.has_line_terminator_before) {
-        return functions.parseFunction(parser, .{ .is_async = true }, start);
-    }
-
-    // then the 'async' is a regular identifier
-    return try parser.addNode(
-        .{ .expression_statement = .{ .expression = async_id } },
-        parser.getSpan(async_id),
-    );
 }
 
 fn parseExpressionStatementOrLabeledOrDirective(parser: *Parser) Error!?ast.NodeIndex {
@@ -544,15 +530,20 @@ fn parseForWithExpression(parser: *Parser, start: u32, is_await: bool) Error!?as
             return null;
         }
 
-        const pattern = try grammar.expressionToPattern(parser, expr, .assignable) orelse return null;
+        try grammar.expressionToPattern(parser, expr, .assignable) orelse return null;
 
-        return parseForInStatementRest(parser, start, pattern);
+        // expr is now pattern
+
+        return parseForInStatementRest(parser, start, expr);
     }
 
     if (parser.current_token.type == .of) {
         // for (expr of ...)
-        const pattern = try grammar.expressionToPattern(parser, expr, .assignable) orelse return null;
-        return parseForOfStatementRest(parser, start, pattern, is_await);
+        try grammar.expressionToPattern(parser, expr, .assignable) orelse return null;
+
+        // expr is now pattern
+
+        return parseForOfStatementRest(parser, start, expr, is_await);
     }
 
     // regular for statement

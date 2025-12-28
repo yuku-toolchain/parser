@@ -636,14 +636,14 @@ fn parseSequenceExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex)
 }
 
 fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) Error!?ast.NodeIndex {
-    const left_unwraped = parenthesized.unwrapParenthesized(parser, left);
+    const left_unwrapped = parenthesized.unwrapParenthesized(parser, left);
 
     const operator_token = parser.current_token;
     const operator = ast.AssignmentOperator.fromToken(operator_token.type);
     const left_span = parser.getSpan(left);
 
     // validate that left side can be assigned to
-    if (!isValidAssignmentTarget(parser, left_unwraped)) {
+    if (!isValidAssignmentTarget(parser, left_unwrapped)) {
         try parser.report(
             left_span,
             "Invalid left-hand side in assignment",
@@ -654,7 +654,7 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeInde
 
     // logical assignments (&&=, ||=, ??=) require simple targets
     const is_logical = operator == .logical_and_assign or operator == .logical_or_assign or operator == .nullish_assign;
-    if (is_logical and !isSimpleAssignmentTarget(parser, left_unwraped)) {
+    if (is_logical and !isSimpleAssignmentTarget(parser, left_unwrapped)) {
         try parser.report(
             left_span,
             "Invalid left-hand side in logical assignment",
@@ -668,7 +668,7 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeInde
     const right = try parseExpression(parser, precedence, .{}) orelse return null;
 
     return try parser.addNode(
-        .{ .assignment_expression = .{ .left = left_unwraped, .right = right, .operator = operator } },
+        .{ .assignment_expression = .{ .left = left_unwrapped, .right = right, .operator = operator } },
         .{ .start = left_span.start, .end = parser.getSpan(right).end },
     );
 }
