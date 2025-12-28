@@ -15,6 +15,7 @@ const class = @import("class.zig");
 const parenthesized = @import("parenthesized.zig");
 const patterns = @import("patterns.zig");
 const modules = @import("modules.zig");
+const grammar = @import("../grammar.zig");
 
 const ParseExpressionOpts = packed struct {
     /// whether to enable "expression -> pattern" validations, for example ObjectExpression -> ObjectPattern
@@ -156,8 +157,8 @@ pub inline fn parsePrimaryExpression(parser: *Parser, opts: ParseExpressionOpts,
         .slash, .slash_assign => literals.parseRegExpLiteral(parser),
         .template_head => literals.parseTemplateLiteral(parser),
         .no_substitution_template => literals.parseNoSubstitutionTemplate(parser),
-        .left_bracket => parseArrayExpression(parser, opts.enable_validation),
-        .left_brace => parseObjectExpression(parser, opts.enable_validation),
+        .left_bracket => parseArrayExpression(parser),
+        .left_brace => parseObjectExpression(parser),
         .function => functions.parseFunction(parser, .{ .is_expression = true }, null),
         .class => class.parseClass(parser, .{ .is_expression = true }, null),
         .async => parseAsyncFunctionOrArrow(parser, precedence),
@@ -517,6 +518,7 @@ fn parseUpdateExpression(parser: *Parser, prefix: bool, left: ast.NodeIndex) Err
     const operator = ast.UpdateOperator.fromToken(operator_token.type);
     try parser.advance();
 
+
     if (prefix) {
         const argument = try parseExpression(parser, 14, .{}) orelse return null;
         const span = parser.getSpan(argument);
@@ -636,14 +638,16 @@ fn parseSequenceExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex)
 }
 
 fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) Error!?ast.NodeIndex {
-    const left_unwraped = parenthesized.unwrapParenthesized(parser, left);
+    // get span before converting expression to pattern
+    const left_span = parser.getSpan(left);
+
+    try grammar.expressionToPattern(parser, left, .assignable) orelse return null;
 
     const operator_token = parser.current_token;
     const operator = ast.AssignmentOperator.fromToken(operator_token.type);
-    const left_span = parser.getSpan(left);
 
     // validate that left side can be assigned to
-    if (!isValidAssignmentTarget(parser, left_unwraped)) {
+    if (!isValidAssignmentTarget(parser, left)) {
         try parser.report(
             left_span,
             "Invalid left-hand side in assignment",
@@ -654,7 +658,7 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeInde
 
     // logical assignments (&&=, ||=, ??=) require simple targets
     const is_logical = operator == .logical_and_assign or operator == .logical_or_assign or operator == .nullish_assign;
-    if (is_logical and !isSimpleAssignmentTarget(parser, left_unwraped)) {
+    if (is_logical and !isSimpleAssignmentTarget(parser, left)) {
         try parser.report(
             left_span,
             "Invalid left-hand side in logical assignment",
@@ -668,7 +672,7 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeInde
     const right = try parseExpression(parser, precedence, .{}) orelse return null;
 
     return try parser.addNode(
-        .{ .assignment_expression = .{ .left = left_unwraped, .right = right, .operator = operator } },
+        .{ .assignment_expression = .{ .left = left, .right = right, .operator = operator } },
         .{ .start = left_span.start, .end = parser.getSpan(right).end },
     );
 }
@@ -709,7 +713,7 @@ pub fn isValidAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
     const data = parser.getData(index);
     return switch (data) {
         // SimpleAssignmentTarget
-        .identifier_reference => true,
+        .identifier_reference, .binding_identifier => true,
         .member_expression => |m| !m.optional, // optional chaining is not a valid assignment target
 
         // AssignmentPattern (destructuring)
@@ -722,54 +726,22 @@ pub fn isValidAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
 /// SimpleAssignmentTarget: only identifier and member expressions (no destructuring)
 pub fn isSimpleAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
     return switch (parser.getData(index)) {
-        .identifier_reference => true,
+        .identifier_reference, .binding_identifier => true,
         .member_expression => |m| !m.optional, // optional chaining is not a valid assignment target
         else => false,
     };
 }
 
-pub fn parseArrayExpression(parser: *Parser, enable_validation: bool) Error!?ast.NodeIndex {
+pub fn parseArrayExpression(parser: *Parser) Error!?ast.NodeIndex {
     const cover = try array.parseCover(parser) orelse return null;
-    const needs_validation = enable_validation and parser.state.cover_has_init_name;
 
-    if (enable_validation) {
-        parser.state.cover_has_init_name = false;
-    }
-
-    if (
-    // means this array is part of assignment expression/pattern
-    parser.current_token.type == .assign or
-        // means this array is part of for-in/of
-        parser.current_token.type == .in or parser.current_token.type == .of
-        // so convert to pattern
-    ) {
-        // since it's part og assignment expression, we covert to pattern as assignable context
-        return try array.coverToPattern(parser, cover, .assignable);
-    }
-
-    return array.coverToExpression(parser, cover, needs_validation);
+    return array.coverToExpression(parser, cover, false);
 }
 
-pub fn parseObjectExpression(parser: *Parser, enable_validation: bool) Error!?ast.NodeIndex {
+pub fn parseObjectExpression(parser: *Parser) Error!?ast.NodeIndex {
     const cover = try object.parseCover(parser) orelse return null;
-    const needs_validation = enable_validation and parser.state.cover_has_init_name;
 
-    if (enable_validation) {
-        parser.state.cover_has_init_name = false;
-    }
-
-    if (
-    // means this object is part of assignment expression/pattern
-    parser.current_token.type == .assign or
-        // means this object is part of for-in/of
-        parser.current_token.type == .in or parser.current_token.type == .of
-        // so convert to pattern
-    ) {
-        // since it's part og assignment expression, we covert to pattern as assignable context
-        return try object.coverToPattern(parser, cover, .assignable);
-    }
-
-    return object.coverToExpression(parser, cover, needs_validation);
+    return object.coverToExpression(parser, cover, false);
 }
 
 /// obj.prop or obj.#priv

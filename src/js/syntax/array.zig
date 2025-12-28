@@ -151,15 +151,15 @@ fn toArrayPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, elements_ran
                 return null;
             }
 
-            const pattern = try grammar.expressionToPattern(parser, elem_data.spread_element.argument, context) orelse return null;
+            try grammar.expressionToPattern(parser, elem_data.spread_element.argument, context) orelse return null;
 
-            parser.setData(elem, .{ .binding_rest_element = .{ .argument = pattern } });
+            parser.setData(elem, .{ .binding_rest_element = .{ .argument = elem_data.spread_element.argument } });
             rest = elem;
             elements_len = @intCast(i);
             break;
         }
 
-        _ = try grammar.expressionToPattern(parser, elem, context) orelse return null;
+        try grammar.expressionToPattern(parser, elem, context) orelse return null;
     }
 
     const pattern_data: ast.NodeData = .{ .array_pattern = .{

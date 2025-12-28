@@ -235,8 +235,6 @@ fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
             .{ .start = key_span.start, .end = parser.getSpan(default_value).end },
         );
 
-        parser.state.cover_has_init_name = true;
-
         return try parser.addNode(
             .{ .object_property = .{ .key = key, .value = assign_expr, .kind = .init, .method = false, .shorthand = true, .computed = false } },
             .{ .start = prop_start, .end = parser.getSpan(default_value).end },
@@ -495,11 +493,11 @@ fn toObjectPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, properties_
             return null;
         }
 
-        const value_pattern = try grammar.expressionToPattern(parser, obj_prop.value, context) orelse return null;
+        try grammar.expressionToPattern(parser, obj_prop.value, context) orelse return null;
 
         parser.setData(prop, .{ .binding_property = .{
             .key = obj_prop.key,
-            .value = value_pattern,
+            .value = obj_prop.value,
             .shorthand = obj_prop.shorthand,
             .computed = obj_prop.computed,
         } });

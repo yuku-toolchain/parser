@@ -1,10 +1,12 @@
 const Parser = @import("parser.zig").Parser;
 const Error = @import("parser.zig").Error;
 const ast = @import("ast.zig");
+const std = @import("std");
 
 const object = @import("syntax/object.zig");
 const expressions = @import("syntax/expressions.zig");
 const array = @import("syntax/array.zig");
+const parenthesized = @import("syntax/parenthesized.zig");
 
 /// parse an element within a cover grammar context (used for nested arrays/objects).
 /// without validation. validation is deferred until the top-level context is known:
@@ -100,13 +102,14 @@ pub const PatternContext = enum {
     assignable,
 };
 
-/// convert an expression node to a destructuring pattern.
+/// convert an expression node to a destructuring pattern in place.
 /// the context determines what syntax is allowed.
 pub fn expressionToPattern(
     parser: *Parser,
     expr: ast.NodeIndex,
     context: PatternContext,
-) Error!?ast.NodeIndex {
+    // returning null means, there was an error, so do 'orelse return null' where calling this
+) Error!?void {
     const data = parser.getData(expr);
 
     switch (data) {
@@ -115,7 +118,6 @@ pub fn expressionToPattern(
                 .name_start = id.name_start,
                 .name_len = id.name_len,
             } });
-            return expr;
         },
 
         .assignment_expression => |assign| {
@@ -128,21 +130,20 @@ pub fn expressionToPattern(
                 return null;
             }
 
-            const left_pattern = try expressionToPattern(parser, assign.left, context) orelse return null;
+            try expressionToPattern(parser, assign.left, context) orelse return null;
 
             parser.setData(expr, .{ .assignment_pattern = .{
-                .left = left_pattern,
+                .left = assign.left,
                 .right = assign.right,
             } });
-            return expr;
         },
 
         .array_expression => |arr| {
-            return array.toArrayPattern(parser, expr, arr.elements, parser.getSpan(expr), context);
+            _ = try array.toArrayPattern(parser, expr, arr.elements, parser.getSpan(expr), context);
         },
 
         .object_expression => |obj| {
-            return object.toObjectPattern(parser, expr, obj.properties, parser.getSpan(expr), context);
+            _ = try object.toObjectPattern(parser, expr, obj.properties, parser.getSpan(expr), context);
         },
 
         .chain_expression => {
@@ -151,6 +152,7 @@ pub fn expressionToPattern(
                 "Optional chaining is not allowed in destructuring pattern",
                 .{ .help = "Optional chaining ('?.') cannot be used as an assignment target in destructuring patterns." },
             );
+
             return null;
         },
 
@@ -161,10 +163,9 @@ pub fn expressionToPattern(
                     "Member expression is not allowed in binding pattern",
                     .{ .help = "Function parameters and variable declarations can only bind to identifiers, not member expressions like 'obj.prop' or 'obj[key]'. Use a simple identifier instead." },
                 );
+
                 return null;
             }
-
-            return expr;
         },
 
         .parenthesized_expression => |paren| {
@@ -174,8 +175,11 @@ pub fn expressionToPattern(
                     "Parentheses are not allowed in this binding pattern",
                     .{ .help = "Remove the extra parentheses. Binding patterns can only be identifiers, destructuring patterns, or assignment patterns, not parenthesized expressions." },
                 );
+
                 return null;
             }
+
+            try expressionToPattern(parser, paren.expression, context) orelse return null;
 
             if (!expressions.isSimpleAssignmentTarget(parser, paren.expression)) {
                 try parser.report(
@@ -183,20 +187,15 @@ pub fn expressionToPattern(
                     "Parenthesized expression in destructuring pattern must be a simple assignment target",
                     .{ .help = "Only identifiers or member expressions (without optional chaining) are allowed inside parentheses in destructuring patterns." },
                 );
+
                 return null;
             }
 
-            const inner_pattern = try expressionToPattern(parser, paren.expression, context) orelse return null;
-
-            parser.setData(expr, parser.getData(inner_pattern));
-            parser.setSpan(expr, parser.getSpan(inner_pattern));
-
-            return inner_pattern;
+            parser.setData(expr, parser.getData(paren.expression));
+            parser.setSpan(expr, parser.getSpan(paren.expression));
         },
 
-        .binding_identifier, .array_pattern, .object_pattern, .assignment_pattern => {
-            return expr;
-        },
+        .binding_identifier, .array_pattern, .object_pattern, .assignment_pattern => {},
 
         else => {
             try parser.report(
@@ -204,6 +203,7 @@ pub fn expressionToPattern(
                 "Invalid element in destructuring pattern",
                 .{ .help = "Expected an identifier, array pattern, object pattern, or assignment pattern." },
             );
+
             return null;
         },
     }

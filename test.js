@@ -1,1 +1,1 @@
-'use strict'; `\00`;
+obj = {x = 0}

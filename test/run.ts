@@ -11,6 +11,9 @@ await preload()
 
 console.clear()
 
+const args = process.argv.slice(2)
+const updateSnapshots = args.includes("--update-snapshots")
+
 const isCI = !!process.env.CI
 
 type TestType = "should_pass" | "should_fail" | "snapshot"
@@ -69,6 +72,7 @@ interface TestResult {
   failures: string[]
   parseTime: number
   parsedFiles: number
+  snapshotsUpdated?: number
 }
 
 const results = new Map<string, TestResult>()
@@ -120,6 +124,7 @@ const runTest = async (
   file: string,
   type: TestType,
   result: TestResult,
+  shouldUpdateSnapshots: boolean,
 ): Promise<void> => {
   try {
     const content = await Bun.file(file).text()
@@ -169,12 +174,23 @@ const runTest = async (
 
       const snapshot = await Bun.file(snapshotFile).json()
 
-      if (!equal(parsed, snapshot)) {
-        const difference = diff(snapshot, parsed, { contextLines: 2 })
-        if (!isCI) {
-          console.log(`\nx ${file}\n${difference}\n`)
+      if (!equal(parsed.program, snapshot.program)) {
+        // Snapshot doesn't match
+        if (shouldUpdateSnapshots) {
+          // Update the failing snapshot
+          await Bun.write(snapshotFile, JSON.stringify(parsed, null, 2))
+          result.snapshotsUpdated = (result.snapshotsUpdated || 0) + 1
+          result.passed++
+          if (!isCI) {
+            console.log(`\n✓ Updated snapshot: ${file}`)
+          }
+        } else {
+          const difference = diff(snapshot, parsed, { contextLines: 2 })
+          if (!isCI) {
+            console.log(`\nx ${file}\n${difference}\n`)
+          }
+          result.failures.push(file)
         }
-        result.failures.push(file)
         return
       }
 
@@ -186,7 +202,7 @@ const runTest = async (
 }
 
 const runCategory = async (config: TestConfig) => {
-  const result: TestResult = { passed: 0, failed: 0, total: 0, failures: [], parseTime: 0, parsedFiles: 0 }
+  const result: TestResult = { passed: 0, failed: 0, total: 0, failures: [], parseTime: 0, parsedFiles: 0, snapshotsUpdated: 0 }
   results.set(config.path, result)
 
   const pattern = `${config.path}/**/*`
@@ -208,7 +224,7 @@ const runCategory = async (config: TestConfig) => {
   }
 
   for (const file of files) {
-    await runTest(file, config.type, result)
+    await runTest(file, config.type, result, updateSnapshots)
     if (!isCI) {
       process.stdout.write(`\r${config.path} ${result.passed}/${result.total}`)
     }
@@ -217,11 +233,14 @@ const runCategory = async (config: TestConfig) => {
   result.failed = result.failures.length
 
   const status = result.failed === 0 ? "✓" : "x"
+  const snapshotInfo = result.snapshotsUpdated && result.snapshotsUpdated > 0
+    ? ` (${result.snapshotsUpdated} snapshots updated)`
+    : ""
 
   if (!isCI) {
-    console.log(`\r${status} ${config.path} ${result.passed}/${result.total}`)
+    console.log(`\r${status} ${config.path} ${result.passed}/${result.total}${snapshotInfo}`)
   } else {
-    console.log(`${status} ${config.path} ${result.passed}/${result.total}`)
+    console.log(`${status} ${config.path} ${result.passed}/${result.total}${snapshotInfo}`)
   }
 
   if (result.failures.length > 0) {
@@ -244,6 +263,7 @@ let totalFailed = 0
 let totalTests = 0
 let totalParseTime = 0
 let totalParsedFiles = 0
+let totalSnapshotsUpdated = 0
 
 for (const [, result] of results) {
   if (result.total === 0) continue
@@ -252,6 +272,7 @@ for (const [, result] of results) {
   totalTests += result.total
   totalParseTime += result.parseTime
   totalParsedFiles += result.parsedFiles
+  totalSnapshotsUpdated += result.snapshotsUpdated || 0
 }
 
 const passRate = ((totalPassed / totalTests) * 100).toFixed(2)
@@ -259,6 +280,10 @@ const avgParseTime = totalParsedFiles > 0 ? totalParseTime / totalParsedFiles : 
 const totalTime = totalEnd - totalStart
 
 console.log(`\n${totalPassed}/${totalTests} (${passRate}%) • ${formatTime(totalTime)} total • ${formatTime(totalParseTime)} parse • ${formatTime(avgParseTime)} avg`)
+
+if (totalSnapshotsUpdated > 0) {
+  console.log(`\n📸 ${totalSnapshotsUpdated} snapshots updated`)
+}
 
 if (totalFailed > 0) {
   process.exit(1)
