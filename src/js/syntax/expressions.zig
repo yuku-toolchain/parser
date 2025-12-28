@@ -15,6 +15,7 @@ const class = @import("class.zig");
 const parenthesized = @import("parenthesized.zig");
 const patterns = @import("patterns.zig");
 const modules = @import("modules.zig");
+const grammar = @import("../grammar.zig");
 
 const ParseExpressionOpts = struct {
     /// whether we are parsing this expression in a cover context.
@@ -637,14 +638,15 @@ fn parseSequenceExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex)
 }
 
 fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) Error!?ast.NodeIndex {
-    const left_unwraped = parenthesized.unwrapParenthesized(parser, left);
-
     const operator_token = parser.current_token;
     const operator = ast.AssignmentOperator.fromToken(operator_token.type);
+
     const left_span = parser.getSpan(left);
 
+    try grammar.expressionToPattern(parser, left, .assignable) orelse return null;
+
     // validate that left side can be assigned to
-    if (!isValidAssignmentTarget(parser, left_unwraped)) {
+    if (!isValidAssignmentTarget(parser, left, operator)) {
         try parser.report(
             left_span,
             "Invalid left-hand side in assignment",
@@ -655,7 +657,7 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeInde
 
     // logical assignments (&&=, ||=, ??=) require simple targets
     const is_logical = operator == .logical_and_assign or operator == .logical_or_assign or operator == .nullish_assign;
-    if (is_logical and !isSimpleAssignmentTarget(parser, left_unwraped)) {
+    if (is_logical and !isSimpleAssignmentTarget(parser, left)) {
         try parser.report(
             left_span,
             "Invalid left-hand side in logical assignment",
@@ -669,7 +671,7 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeInde
     const right = try parseExpression(parser, precedence, .{}) orelse return null;
 
     return try parser.addNode(
-        .{ .assignment_expression = .{ .left = left_unwraped, .right = right, .operator = operator } },
+        .{ .assignment_expression = .{ .left = left, .right = right, .operator = operator } },
         .{ .start = left_span.start, .end = parser.getSpan(right).end },
     );
 }
@@ -706,17 +708,18 @@ fn parseConditionalExpression(parser: *Parser, precedence: u8, @"test": ast.Node
 }
 
 /// AssignmentTarget: can be simple (identifier/member) or pattern (destructuring)
-pub fn isValidAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
+pub fn isValidAssignmentTarget(parser: *Parser, index: ast.NodeIndex, operator: ast.AssignmentOperator) bool {
     const data = parser.getData(index);
+
+    // object and array patterns as assignment targets are only
+    // valid if the operator is assignment (=)
+    if (operator == .assign and (data == .object_pattern or data == .array_pattern))
+        return true;
+
     return switch (data) {
         // SimpleAssignmentTarget
-        .identifier_reference => true,
-        .member_expression => |m| !m.optional, // optional chaining is not a valid assignment target
-
-        // AssignmentPattern (destructuring)
-        .array_pattern,
-        .object_pattern,
-        => true,
+        .identifier_reference, .binding_identifier => true,
+        .member_expression => |m| !m.optional,
 
         else => false,
     };
@@ -725,7 +728,7 @@ pub fn isValidAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
 /// SimpleAssignmentTarget: only identifier and member expressions (no destructuring)
 pub fn isSimpleAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
     return switch (parser.getData(index)) {
-        .identifier_reference => true,
+        .identifier_reference, .binding_identifier => true,
         .member_expression => |m| !m.optional, // optional chaining is not a valid assignment target
         else => false,
     };
@@ -734,18 +737,17 @@ pub fn isSimpleAssignmentTarget(parser: *Parser, index: ast.NodeIndex) bool {
 pub fn parseArrayExpression(parser: *Parser, in_cover: bool) Error!?ast.NodeIndex {
     const cover = try array.parseCover(parser) orelse return null;
 
+    const needs_validation =
     // only validate if are at the top level and not in a cover context
-    // and also if we found a init name when parsing this cover
-    const needs_validation = !in_cover and parser.state.cover_has_init_name;
+    !in_cover and
+    // and also only if we found a init name when parsing this cover
+    parser.state.cover_has_init_name and
+    // and also only if we are not in a pattern context, because this is going to be a pattern, so don't
+    // validate it as an expression
+    !isPartOfPattern(parser);
 
     if (!in_cover) {
         parser.state.cover_has_init_name = false;
-    }
-
-    if (isPartOfPattern(parser))
-    {
-        // since it's part of a pattern, we covert to pattern as assignable context early
-        return try array.coverToPattern(parser, cover, .assignable);
     }
 
     return array.coverToExpression(parser, cover, needs_validation);
@@ -754,18 +756,17 @@ pub fn parseArrayExpression(parser: *Parser, in_cover: bool) Error!?ast.NodeInde
 pub fn parseObjectExpression(parser: *Parser, in_cover: bool) Error!?ast.NodeIndex {
     const cover = try object.parseCover(parser) orelse return null;
 
+    const needs_validation =
     // only validate if are at the top level and not in a cover context
-    // and also if we found a init name when parsing this cover
-    const needs_validation = !in_cover and parser.state.cover_has_init_name;
+    !in_cover and
+    // and also only if we found a init name when parsing this cover
+    parser.state.cover_has_init_name and
+    // and also only if we are not in a pattern context, because this is going to be a pattern, so don't
+    // validate it as an expression
+    !isPartOfPattern(parser);
 
     if (!in_cover) {
         parser.state.cover_has_init_name = false;
-    }
-
-    if (isPartOfPattern(parser))
-    {
-        // since it's part of a pattern, we covert to pattern as assignable context early
-        return try object.coverToPattern(parser, cover, .assignable);
     }
 
     return object.coverToExpression(parser, cover, needs_validation);

@@ -173,6 +173,8 @@ pub fn expressionToPattern(
                 return null;
             }
 
+            try expressionToPattern(parser, paren.expression, context) orelse return null;
+
             if (!expressions.isSimpleAssignmentTarget(parser, paren.expression)) {
                 try parser.report(
                     parser.getSpan(paren.expression),
@@ -182,7 +184,6 @@ pub fn expressionToPattern(
                 return null;
             }
 
-            try expressionToPattern(parser, paren.expression, context) orelse return null;
 
             parser.setData(expr, parser.getData(paren.expression));
             parser.setSpan(expr, parser.getSpan(paren.expression));
