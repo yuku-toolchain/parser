@@ -749,11 +749,11 @@ pub fn parseArrayExpression(parser: *Parser, in_cover: bool) Error!?ast.NodeInde
 
     if (isPartOfPattern(parser) and
         // only covert to pattern if we are not in cover context,
-        // which means we are at top lever and good to covert to pattern
-        // since we understood the context because of isPartOfPattern
+        // which means we are at top level and good to covert to pattern
+        // since we understood the top-level context because of isPartOfPattern
         !in_cover)
     {
-        // since it's part og assignment expression, we covert to pattern as assignable context
+        // since it's part of a pattern, we covert to pattern as assignable context early
         return try array.coverToPattern(parser, cover, .assignable);
     }
 
@@ -774,7 +774,7 @@ pub fn parseObjectExpression(parser: *Parser, in_cover: bool) Error!?ast.NodeInd
     if (isPartOfPattern(parser) and
         // only covert to pattern if we are not in cover context,
         // which means we are at top lever and good to covert to pattern
-        // since we understood the context because of isPartOfPattern
+        // since we understood the top-level context because of isPartOfPattern
         !in_cover)
     {
         // since it's part of a pattern, we covert to pattern as assignable context early
