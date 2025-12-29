@@ -10,6 +10,6 @@ export default defineConfig([
     name: "browser",
     entry: "src/browser.ts",
     target: "browser",
-    plugins: [copy("../zig-out/yuku_js.wasm").to("yuku.wasm")]
+    plugins: [copy("../zig-out/yuku.wasm")]
   },
 ])

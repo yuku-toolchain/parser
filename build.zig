@@ -1,5 +1,7 @@
 const std = @import("std");
 
+const name = "yuku";
+
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
@@ -11,11 +13,26 @@ pub fn build(b: *std.Build) void {
     });
 
     const exe = b.addExecutable(.{
-        .name = "yuku",
+        .name = name,
         .root_module = exe_module,
     });
 
     b.installArtifact(exe);
+
+    const lib_module = b.createModule(.{
+        .root_source_file = b.path("src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
+
+    const lib = b.addLibrary(.{
+          .name = name,
+          .root_module = lib_module,
+          .linkage = .static,
+      });
+
+        b.installArtifact(lib);
 
     const util_module = b.addModule("util", .{
         .root_source_file = b.path("src/util/root.zig"),
@@ -29,6 +46,7 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    lib_module.addImport("js", js_module);
     js_module.addImport("util", util_module);
     exe_module.addImport("js", js_module);
 
@@ -88,7 +106,7 @@ pub fn build(b: *std.Build) void {
         wasm_module.addImport("js", wasm_js_module);
 
         const js_wasm = b.addExecutable(.{
-            .name = "yuku_js",
+            .name = name,
             .root_module = wasm_module,
         });
 
