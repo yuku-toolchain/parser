@@ -378,8 +378,7 @@ pub const Parser = struct {
         return current_token.type == .eof or current_token.has_line_terminator_before or current_token.type == .right_brace;
     }
 
-    pub inline fn describeToken(self: *Parser, tok: token.Token) []const u8 {
-        _ = self;
+    pub inline fn describeToken(_: *Parser, tok: token.Token) []const u8 {
         return if (tok.type == .eof) "end of file" else tok.lexeme;
     }
 
@@ -404,8 +403,7 @@ pub const Parser = struct {
         try self.report(span, message, opts);
     }
 
-    pub inline fn label(self: *Parser, span: ast.Span, message: []const u8) Label {
-        _ = self;
+    pub inline fn label(_: *Parser, span: ast.Span, message: []const u8) Label {
         return .{ .span = span, .message = message };
     }
 

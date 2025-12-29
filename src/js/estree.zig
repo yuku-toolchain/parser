@@ -250,8 +250,7 @@ pub const Serializer = struct {
         try self.endObject();
     }
 
-    fn writeFormalParameters(self: *Self, data: ast.FormalParameters, span: ast.Span) !void {
-        _ = span;
+    fn writeFormalParameters(self: *Self, data: ast.FormalParameters, _: ast.Span) !void {
         try self.beginArray();
         for (self.getExtra(data.items)) |idx| {
             try self.elemNode(self.tree.getData(idx).formal_parameter.pattern);

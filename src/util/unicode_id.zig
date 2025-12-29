@@ -28,7 +28,7 @@ const chunk_size = 512;
 const bits_per_word = 32;
 const leaf_chunk_width = 16;
 
-inline fn queryBitTable(cp: u32, root: []const u8, leaf: []const u64) bool {
+inline fn queryBitTable(cp: u32, comptime root: []const u8, comptime leaf: []const u64) bool {
     const chunk_idx = cp / chunk_size;
     const leaf_base = @as(u32, root[chunk_idx]) * leaf_chunk_width;
     const offset_in_chunk = cp - (chunk_idx * chunk_size);

@@ -596,8 +596,7 @@ pub const Lexer = struct {
         return self.createToken(token_type, lexeme, start, self.cursor);
     }
 
-    fn getKeywordType(self: *Lexer, lexeme: []const u8) token.TokenType {
-        _ = self;
+    fn getKeywordType(_: *Lexer, lexeme: []const u8) token.TokenType {
         switch (lexeme.len) {
             2 => {
                 switch (lexeme[1]) {
