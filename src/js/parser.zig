@@ -418,6 +418,7 @@ pub const Parser = struct {
         return try std.fmt.allocPrint(self.allocator(), format, args);
     }
 
+    // TODO(arshad): this is still not that much better, will improve it later
     fn synchronize(self: *Parser, terminator: ?token.TokenType) Error!void {
         var has_advanced = false;
 
