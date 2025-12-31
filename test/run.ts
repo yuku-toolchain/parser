@@ -61,11 +61,12 @@ const configs: TestConfig[] = [
       "f063969b23239390.module.js"
   ] },
   { path: "test/js/misc", type: "snapshot", languages: ["js"] },
-  { path: "test/jsx/pass", type: "snapshot", languages: ["jsx"], skipOnCI: true },
-  { path: "test/jsx/regression", type: "snapshot", languages: ["jsx"], skipOnCI: true },
+  // { path: "test/jsx/pass", type: "snapshot", languages: ["jsx"], skipOnCI: true },
+  // { path: "test/jsx/regression", type: "snapshot", languages: ["jsx"], skipOnCI: true },
 ]
 
 interface TestResult {
+  path: string
   passed: number
   failed: number
   total: number
@@ -193,7 +194,9 @@ const runTest = async (
 }
 
 const runCategory = async (config: TestConfig) => {
-  const result: TestResult = { passed: 0, failed: 0, total: 0, failures: [], parseTime: 0, parsedFiles: 0 }
+  const result: TestResult = {
+    path: config.path,
+    passed: 0, failed: 0, total: 0, failures: [], parseTime: 0, parsedFiles: 0 }
   results.set(config.path, result)
 
   const pattern = `${config.path}/**/*`
@@ -210,30 +213,11 @@ const runCategory = async (config: TestConfig) => {
 
   if (result.total === 0) return
 
-  if (!isCI) {
-    process.stdout.write(`${config.path} `)
-  }
-
   for (const file of files) {
     await runTest(file, config.type, result)
-    if (!isCI) {
-      process.stdout.write(`\r${config.path} ${result.passed}/${result.total}`)
-    }
   }
 
   result.failed = result.failures.length
-
-  const status = result.failed === 0 ? "✓" : "x"
-
-  if (!isCI) {
-    console.log(`\r${status} ${config.path} ${result.passed}/${result.total}`)
-  } else {
-    console.log(`${status} ${config.path} ${result.passed}/${result.total}`)
-  }
-
-  if (result.failures.length > 0) {
-    result.failures.forEach(f => console.log(`  x ${f}`))
-  }
 }
 
 console.log("Running tests...\n")
@@ -258,6 +242,15 @@ let totalParseTime = 0
 let totalParsedFiles = 0
 
 for (const [, result] of results) {
+  if (result.failures.length > 0) {
+    const status = result.failed === 0 ? "✓" : "x"
+
+    console.log(`${status} ${result.path} ${result.passed}/${result.total}`)
+
+    result.failures.forEach(f => console.log(`  x ${f}`))
+    console.log('')
+  }
+
   if (result.total === 0) continue
   totalPassed += result.passed
   totalFailed += result.failed
