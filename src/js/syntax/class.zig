@@ -134,7 +134,7 @@ fn parseClassElement(parser: *Parser) Error!?ast.NodeIndex {
 
         // If next token is '(' or nothing that could be a class element key, 'static' is the key
         // e.g., `static() {}` is a method named "static", not a static method
-        if (parser.current_token.type == .left_paren or !isClassElementStart(parser.current_token.type)) {
+        if (parser.current_token.type == .left_paren or !isClassElementKeyStart(parser.current_token.type)) {
             key = try parser.addNode(
                 .{ .identifier_name = .{ .name_start = static_token.span.start, .name_len = @intCast(static_token.lexeme.len) } },
                 static_token.span,
@@ -474,17 +474,7 @@ fn parseStaticBlock(parser: *Parser, start: u32) Error!?ast.NodeIndex {
     );
 }
 
-/// if token could start a class element
-inline fn isClassElementStart(tok_type: token.TokenType) bool {
-    return tok_type == .star or
-        tok_type == .left_bracket or
-        tok_type == .private_identifier or
-        tok_type == .string_literal or
-        tok_type.isNumericLiteral() or
-        tok_type.isIdentifierLike();
-}
-
-/// if token could be a class element key (after modifiers)
+/// if token could start a class element key (after modifiers like static/async/get/set)
 inline fn isClassElementKeyStart(tok_type: token.TokenType) bool {
     return tok_type == .star or
         tok_type == .left_bracket or
