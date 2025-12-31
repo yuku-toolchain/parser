@@ -25,7 +25,7 @@ interface TestConfig {
 
 const configs: TestConfig[] = [
   { path: "test/js/pass", type: "snapshot", languages: ["js"] },
-  { path: "test/js/fuzz", type: "snapshot", languages: ["js"] },
+  { path: "test/js/regression", type: "snapshot", languages: ["js"] },
   { path: "test/js/fail", type: "should_fail", languages: ["js"],
     exclude: [
       // these are the semantic tests, remove these from the list
