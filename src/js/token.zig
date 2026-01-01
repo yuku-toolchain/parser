@@ -1,25 +1,3 @@
-pub const Precedence = struct {
-    pub const Lowest: u8 = 0;
-    pub const Sequence: u8 = 1;
-    pub const Assignment: u8 = 2;
-    pub const Conditional: u8 = 3;
-    pub const Nullish: u8 = 4;
-    pub const LogicalOr: u8 = 5;
-    pub const LogicalAnd: u8 = 6;
-    pub const BitwiseOr: u8 = 7;
-    pub const BitwiseXor: u8 = 8;
-    pub const BitwiseAnd: u8 = 9;
-    pub const Equality: u8 = 10;
-    pub const Relational: u8 = 11;
-    pub const Shift: u8 = 12;
-    pub const Additive: u8 = 13;
-    pub const Multiplicative: u8 = 14;
-    pub const Exponent: u8 = 15;
-    pub const Unary: u8 = 16;
-    pub const Postfix: u8 = 17;
-    pub const Member: u8 = 18;
-};
-
 pub const Mask = struct {
     pub const IsNumericLiteral: u32 = 1 << 12;
     pub const IsBinaryOp: u32 = 1 << 13;
@@ -423,4 +401,26 @@ pub const Token = struct {
             else => 0, // can't be infix
         };
     }
+};
+
+pub const Precedence = struct {
+    pub const Lowest: u8 = 0;
+    pub const Comma: u8 = 1;
+    pub const Assignment: u8 = 2;
+    pub const LogicalOr: u8 = 3;
+    pub const LogicalAnd: u8 = 4;
+    pub const BitwiseOr: u8 = 5;
+    pub const BitwiseXor: u8 = 6;
+    pub const BitwiseAnd: u8 = 7;
+    pub const Equality: u8 = 8;
+    pub const Relational: u8 = 9;
+    pub const Shift: u8 = 10;
+    pub const Additive: u8 = 11;
+    pub const Multiplicative: u8 = 12;
+    pub const Exponentiation: u8 = 13;
+    pub const Unary: u8 = 14;
+    pub const Postfix: u8 = 15;
+    pub const New: u8 = 16;
+    pub const Call: u8 = 17;
+    pub const Grouping: u8 = 18;
 };

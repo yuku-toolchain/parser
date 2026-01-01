@@ -274,7 +274,7 @@ fn parseUnaryExpression(parser: *Parser) Error!?ast.NodeIndex {
     const operator_token = parser.current_token;
     try parser.advance();
 
-    const argument = try parseExpression(parser, 14, .{}) orelse return null;
+    const argument = try parseExpression(parser, Precedence.Unary, .{}) orelse return null;
 
     return try parser.addNode(
         .{
@@ -293,7 +293,7 @@ fn parseAwaitExpression(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     try parser.advance(); // consume 'await'
 
-    const argument = try parseExpression(parser, 14, .{}) orelse return null;
+    const argument = try parseExpression(parser, Precedence.Unary, .{}) orelse return null;
 
     return try parser.addNode(
         .{ .await_expression = .{ .argument = argument } },
@@ -520,7 +520,7 @@ fn parseUpdateExpression(parser: *Parser, prefix: bool, left: ast.NodeIndex) Err
     try parser.advance();
 
     if (prefix) {
-        const argument = try parseExpression(parser, Precedence.Multiplicative, .{}) orelse return null;
+        const argument = try parseExpression(parser, Precedence.Unary, .{}) orelse return null;
         const span = parser.getSpan(argument);
 
         const unwrapped = parenthesized.unwrapParens(parser, argument);
