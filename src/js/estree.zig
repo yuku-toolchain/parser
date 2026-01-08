@@ -1119,7 +1119,7 @@ pub const Serializer = struct {
         }
     }
 
-    fn sep(self: *Self) !void {
+    inline fn sep(self: *Self) !void {
         if (self.needsComma()) try self.writeByte(',');
         self.setNeedsComma(true);
     }
