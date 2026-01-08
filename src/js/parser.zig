@@ -431,7 +431,7 @@ pub const Parser = struct {
 
             if (self.current_token.has_line_terminator_before) {
                 const can_start_statement = switch (self.current_token.type) {
-                    .class, .function, .@"var", .@"for", .@"if", .@"while", .@"return", .let, .@"const", .@"try", .throw, .debugger, .@"break", .@"continue", .@"switch", .do, .with, .async, .@"export", .import => true,
+                    .class, .function, .@"var", .@"for", .@"if", .@"while", .@"return", .let, .@"const", .@"try", .throw, .debugger, .@"break", .@"continue", .@"switch", .do, .with, .async, .@"export", .import, .left_brace => true,
                     else => false,
                 };
 
