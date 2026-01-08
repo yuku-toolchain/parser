@@ -176,7 +176,9 @@ pub const Parser = struct {
         self.lexer = try lexer.Lexer.init(self.source, self.allocator(), self.source_type, self.strict_mode);
 
         // let's begin
-        try self.advance();
+        try self.advance() orelse {
+            self.current_token = token.Token.eof(0);
+        };
 
         errdefer {
             self.arena.deinit();
@@ -227,7 +229,7 @@ pub const Parser = struct {
                 }
             } else {
                 self.state.in_directive_prologue = false;
-                try self.synchronize(terminator);
+                try self.synchronize(terminator) orelse break;
             }
         }
 
@@ -286,69 +288,64 @@ pub const Parser = struct {
         return self.source[start..][0..len];
     }
 
-    inline fn nextTokenOrEof(self: *Parser) Error!token.Token {
+    inline fn nextToken(self: *Parser) Error!?token.Token {
         return self.lexer.nextToken() catch |e| blk: {
             if (e == error.OutOfMemory) return error.OutOfMemory;
+
             const lex_err: lexer.LexicalError = @errorCast(e);
+
             try self.diagnostics.append(self.allocator(), .{
                 .message = lexer.getLexicalErrorMessage(lex_err),
                 .span = .{ .start = self.lexer.token_start, .end = self.lexer.cursor },
                 .help = lexer.getLexicalErrorHelp(lex_err),
             });
-            break :blk token.Token.eof(0);
+
+            break :blk null;
         };
     }
 
-    pub fn advance(self: *Parser) Error!void {
-        if (self.next_token) |tok| {
-            self.current_token = tok;
+    pub fn advance(self: *Parser) Error!?void {
+        const new_token = if (self.next_token) |tok| blk: {
             self.next_token = null;
-        } else {
-            self.current_token = try self.nextTokenOrEof();
-        }
+            break :blk tok;
+        } else try self.nextToken() orelse return null;
+
+        self.current_token = new_token;
     }
 
     // lazy next token prefetching for lookahead.
     // if lookahead has already cached the next token, `advance` will use it,
     // so there's no extra cost for lookAhead.
-    pub fn lookAhead(self: *Parser) Error!token.Token {
+    pub fn lookAhead(self: *Parser) Error!?token.Token {
         if (self.next_token) |tok| {
             return tok;
         }
 
-        if (self.current_token.type == .eof) {
-            return token.Token.eof(0);
-        }
+        self.next_token = try self.nextToken() orelse return null;
 
-        self.next_token = try self.nextTokenOrEof();
-
-        if (self.next_token.?.type == .eof) {
-            self.next_token = null;
-            return token.Token.eof(0);
-        }
-
-        return self.next_token.?;
+        return self.next_token;
     }
 
-    pub inline fn replaceTokenAndAdvance(self: *Parser, tok: token.Token) Error!void {
+    pub inline fn replaceTokenAndAdvance(self: *Parser, tok: token.Token) Error!?void {
         self.current_token = tok;
-        try self.advance();
+        try self.advance() orelse return null;
     }
 
     pub inline fn expect(self: *Parser, token_type: token.TokenType, message: []const u8, help: ?[]const u8) Error!bool {
         if (self.current_token.type == token_type) {
-            try self.advance();
+            try self.advance() orelse return false;
             return true;
         }
 
         try self.report(self.current_token.span, message, .{ .help = help });
+
         return false;
     }
 
     pub inline fn eatSemicolon(self: *Parser, end: u32) Error!?u32 {
         if (self.current_token.type == .semicolon) {
             const semicolon_end = self.current_token.span.end;
-            try self.advance();
+            try self.advance() orelse return null;
             return semicolon_end;
         } else {
             if (!self.canInsertSemicolon()) {
@@ -362,14 +359,14 @@ pub const Parser = struct {
 
     /// lenient semicolon consumption for statements with special ASI exceptions.
     ///
-    /// ES2015+ ASI rule: "The previous token is ) and the inserted semicolon would
+    /// ES2015+ ASI: "The previous token is ) and the inserted semicolon would
     /// then be parsed as the terminating semicolon of a do-while statement (14.7.2)"
     ///
     /// allows `do {} while (false) foo()`, semicolon optional after the `)`.
-    pub inline fn eatSemicolonLenient(self: *Parser, end: u32) Error!u32 {
+    pub inline fn eatSemicolonLenient(self: *Parser, end: u32) Error!?u32 {
         if (self.current_token.type == .semicolon) {
             const semicolon_end = self.current_token.span.end;
-            try self.advance();
+            try self.advance() orelse return null;
             return semicolon_end;
         }
         return end;
@@ -418,46 +415,32 @@ pub const Parser = struct {
         return try std.fmt.allocPrint(self.allocator(), format, args);
     }
 
-    // TODO(arshad): this is still not that much better, will improve it later
-    fn synchronize(self: *Parser, terminator: ?token.TokenType) Error!void {
-        var has_advanced = false;
-
+    // returning null here means, break the top level statement parsing loop
+    // otherwise continue
+    fn synchronize(self: *Parser, terminator: ?token.TokenType) Error!?void {
         while (self.current_token.type != .eof) {
             // stop at the block terminator to avoid consuming the closing brace
             if (terminator) |t| {
                 if (self.current_token.type == t) return;
             }
 
-            if (self.current_token.type == .semicolon) {
-                try self.advance();
+            if (self.current_token.type == .semicolon or self.current_token.type == .right_brace) {
+                try self.advance() orelse return null;
                 return;
             }
 
-            // check for statement-starting keywords at statement boundaries
-            // these are recovery points when they appear after a line terminator
             if (self.current_token.has_line_terminator_before) {
-                switch (self.current_token.type) {
-                    .class, .function, .@"var", .@"for", .@"if", .@"while", .@"return", .let, .@"const", .using, .@"try", .throw, .debugger, .@"break", .@"continue", .@"switch", .do, .with, .async, .@"export", .import => return,
-                    else => {},
+                const can_start_statement = switch (self.current_token.type) {
+                    .class, .function, .@"var", .@"for", .@"if", .@"while", .@"return", .let, .@"const", .@"try", .throw, .debugger, .@"break", .@"continue", .@"switch", .do, .with, .async, .@"export", .import => true,
+                    else => false,
+                };
+
+                if (can_start_statement) {
+                    return;
                 }
             }
 
-            // also check for statement-starting keywords and block starts
-            // block starts are always safe recovery points
-            switch (self.current_token.type) {
-                .left_brace => return,
-                .class, .function, .@"var", .@"for", .@"if", .@"while", .@"return", .let, .@"const", .using, .@"try", .throw, .debugger, .@"break", .@"continue", .@"switch", .do, .with, .async, .@"export", .import => {
-                    // if we've advanced past the error location, statement-starting keywords
-                    // are likely the start of a new statement and safe to stop at
-                    if (has_advanced) {
-                        return;
-                    }
-                },
-                else => {},
-            }
-
-            try self.advance();
-            has_advanced = true;
+            try self.advance() orelse return null;
         }
     }
 
@@ -465,7 +448,14 @@ pub const Parser = struct {
         if (self.nodes.capacity > 0) return;
 
         const alloc = self.allocator();
-        const estimated_nodes = @max(1024, (self.source.len * 3) / 4);
+
+        const estimated_nodes = if (self.source.len < 10_000)
+            @max(1024, (self.source.len * 3) / 4)
+        else if (self.source.len < 100_000)
+            self.source.len / 2
+        else
+            self.source.len / 3;
+
         const estimated_extra = estimated_nodes / 2;
 
         try self.nodes.ensureTotalCapacity(alloc, estimated_nodes);

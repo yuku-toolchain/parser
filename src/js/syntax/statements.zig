@@ -31,25 +31,28 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
     }
 
     if (parser.current_token.type == .await) {
-        const next = try parser.lookAhead();
+        const next = try parser.lookAhead() orelse return null;
+
         if (next.type == .using) {
-            try parser.advance();
+            try parser.advance() orelse return null;
             return variables.parseVariableDeclaration(parser, true);
         }
     }
 
     if (parser.current_token.type == .import) {
-        const next = try parser.lookAhead();
+        const next = try parser.lookAhead() orelse return null;
+
         if (next.type != .left_paren) {
             return modules.parseImportDeclaration(parser);
         }
     }
 
     if (parser.current_token.type == .async) {
-        const next = try parser.lookAhead();
+        const next = try parser.lookAhead() orelse return null;
+
         if (next.type == .function and !next.has_line_terminator_before) {
             const start = parser.current_token.span.start;
-            try parser.advance();
+            try parser.advance() orelse return null;
             return functions.parseFunction(parser, .{ .is_async = true }, start);
         }
     }
@@ -129,7 +132,7 @@ fn parseLabeledStatement(parser: *Parser, identifier: ast.NodeIndex) Error!?ast.
         },
     }, id_span);
 
-    try parser.advance(); // consume ':'
+    try parser.advance() orelse return null; // consume ':'
 
     const body = try parseStatement(parser, .{ .can_be_single_statement_context = true }) orelse return null;
 
@@ -164,7 +167,7 @@ pub fn parseBlockStatement(parser: *Parser) Error!?ast.NodeIndex {
 /// https://tc39.es/ecma262/#sec-switch-statement
 pub fn parseSwitchStatement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume 'switch'
+    try parser.advance() orelse return null; // consume 'switch'
 
     if (!try parser.expect(.left_paren, "Expected '(' after 'switch'", null)) return null;
 
@@ -201,7 +204,7 @@ fn parseSwitchCase(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     const is_default = parser.current_token.type == .default;
 
-    try parser.advance(); // consume 'case' or 'default'
+    try parser.advance() orelse return null; // consume 'case' or 'default'
 
     var test_expr: ast.NodeIndex = ast.null_node;
 
@@ -247,7 +250,7 @@ fn parseCaseConsequent(parser: *Parser) Error!ast.IndexRange {
 /// https://tc39.es/ecma262/#sec-if-statement
 pub fn parseIfStatement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume 'if'
+    try parser.advance() orelse return null; // consume 'if'
 
     if (!try parser.expect(.left_paren, "Expected '(' after 'if'", null)) return null;
 
@@ -261,7 +264,7 @@ pub fn parseIfStatement(parser: *Parser) Error!?ast.NodeIndex {
     var alternate: ast.NodeIndex = ast.null_node;
 
     if (parser.current_token.type == .@"else") {
-        try parser.advance(); // consume 'else'
+        try parser.advance() orelse return null; // consume 'else'
         alternate = try parseStatement(parser, .{ .can_be_single_statement_context = true }) orelse return null;
         end = parser.getSpan(alternate).end;
     }
@@ -278,7 +281,7 @@ pub fn parseIfStatement(parser: *Parser) Error!?ast.NodeIndex {
 /// https://tc39.es/ecma262/#sec-while-statement
 fn parseWhileStatement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume 'while'
+    try parser.advance() orelse return null; // consume 'while'
 
     if (!try parser.expect(.left_paren, "Expected '(' after 'while'", null)) return null;
 
@@ -299,7 +302,7 @@ fn parseWhileStatement(parser: *Parser) Error!?ast.NodeIndex {
 /// https://tc39.es/ecma262/#sec-do-while-statement
 fn parseDoWhileStatement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume 'do'
+    try parser.advance() orelse return null; // consume 'do'
 
     const body = try parseStatement(parser, .{ .can_be_single_statement_context = true }) orelse return null;
 
@@ -311,7 +314,7 @@ fn parseDoWhileStatement(parser: *Parser) Error!?ast.NodeIndex {
     const rparen_end = parser.current_token.span.end;
     if (!try parser.expect(.right_paren, "Expected ')' after while condition", null)) return null;
 
-    const end = try parser.eatSemicolonLenient(rparen_end);
+    const end = try parser.eatSemicolonLenient(rparen_end) orelse return null;
 
     return try parser.addNode(.{
         .do_while_statement = .{
@@ -330,7 +333,7 @@ fn parseWithStatement(parser: *Parser) Error!?ast.NodeIndex {
         return null;
     }
 
-    try parser.advance(); // consume 'with'
+    try parser.advance() orelse return null; // consume 'with'
 
     if (!try parser.expect(.left_paren, "Expected '(' after 'with'", null)) return null;
 
@@ -351,7 +354,7 @@ fn parseWithStatement(parser: *Parser) Error!?ast.NodeIndex {
 /// EmptyStatement: `;`
 fn parseEmptyStatement(parser: *Parser) Error!?ast.NodeIndex {
     const span = parser.current_token.span;
-    try parser.advance(); // consume ';'
+    try parser.advance() orelse return null; // consume ';'
     return try parser.addNode(.empty_statement, span);
 }
 
@@ -359,7 +362,7 @@ fn parseEmptyStatement(parser: *Parser) Error!?ast.NodeIndex {
 fn parseBreakStatement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     var end = parser.current_token.span.end;
-    try parser.advance(); // consume 'break'
+    try parser.advance() orelse return null; // consume 'break'
 
     var label: ast.NodeIndex = ast.null_node;
 
@@ -379,7 +382,7 @@ fn parseBreakStatement(parser: *Parser) Error!?ast.NodeIndex {
 fn parseContinueStatement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     var end = parser.current_token.span.end;
-    try parser.advance(); // consume 'continue'
+    try parser.advance() orelse return null; // consume 'continue'
 
     var label: ast.NodeIndex = ast.null_node;
 
@@ -399,7 +402,7 @@ fn parseContinueStatement(parser: *Parser) Error!?ast.NodeIndex {
 /// https://tc39.es/ecma262/#sec-for-in-and-for-of-statements
 fn parseForStatement(parser: *Parser, is_await: bool) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume 'for'
+    try parser.advance() orelse return null; // consume 'for'
 
     // check for `for await (...)`
     if (parser.current_token.type == .await) {
@@ -407,7 +410,7 @@ fn parseForStatement(parser: *Parser, is_await: bool) Error!?ast.NodeIndex {
             try parser.report(parser.current_token.span, "'for await' is only valid in async functions or modules", .{});
             return null;
         }
-        try parser.advance(); // consume 'await'
+        try parser.advance() orelse return null; // consume 'await'
 
         // continue parsing with is_await = true
 
@@ -443,7 +446,7 @@ fn parseForHead(parser: *Parser, start: u32, is_await: bool) Error!?ast.NodeInde
 /// for loop starting with variable declaration
 fn parseForWithDeclaration(parser: *Parser, start: u32, is_await: bool) Error!?ast.NodeIndex {
     const decl_start = parser.current_token.span.start;
-    const kind = parseVariableKindForLoop(parser) orelse return null;
+    const kind = try parseVariableKindForLoop(parser) orelse return null;
 
     // first declarator
     const first_declarator = try parseForLoopDeclarator(parser) orelse return null;
@@ -476,7 +479,7 @@ fn parseForWithDeclaration(parser: *Parser, start: u32, is_await: bool) Error!?a
 
     // additional declarators: for (let a = 1, b = 2; ...)
     while (parser.current_token.type == .comma) {
-        try parser.advance();
+        try parser.advance() orelse return null;
         const declarator = try parseForLoopDeclarator(parser) orelse {
             parser.scratch_a.reset(checkpoint);
             return null;
@@ -584,7 +587,7 @@ fn parseForStatementRest(parser: *Parser, start: u32, init: ast.NodeIndex) Error
 
 /// rest of for-in statement after left
 fn parseForInStatementRest(parser: *Parser, start: u32, left: ast.NodeIndex) Error!?ast.NodeIndex {
-    try parser.advance(); // consume 'in'
+    try parser.advance() orelse return null; // consume 'in'
 
     const right = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
 
@@ -603,7 +606,7 @@ fn parseForInStatementRest(parser: *Parser, start: u32, left: ast.NodeIndex) Err
 
 /// rest of for-of statement after left
 fn parseForOfStatementRest(parser: *Parser, start: u32, left: ast.NodeIndex, is_await: bool) Error!?ast.NodeIndex {
-    try parser.advance(); // consume 'of'
+    try parser.advance() orelse return null; // consume 'of'
 
     // for-of right side is AssignmentExpression, not Expression (no comma)
     const right = try expressions.parseExpression(parser, Precedence.Assignment, .{}) orelse return null;
@@ -636,7 +639,7 @@ fn parseReturnStatement(parser: *Parser) Error!?ast.NodeIndex {
         return null;
     }
 
-    try parser.advance(); // consume 'return'
+    try parser.advance() orelse return null; // consume 'return'
 
     var argument: ast.NodeIndex = ast.null_node;
 
@@ -654,7 +657,7 @@ fn parseReturnStatement(parser: *Parser) Error!?ast.NodeIndex {
 /// https://tc39.es/ecma262/#sec-throw-statement
 fn parseThrowStatement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume 'throw'
+    try parser.advance() orelse return null; // consume 'throw'
 
     // throw [no LineTerminator here] Expression
     if (parser.current_token.has_line_terminator_before) {
@@ -674,7 +677,7 @@ fn parseThrowStatement(parser: *Parser) Error!?ast.NodeIndex {
 /// https://tc39.es/ecma262/#sec-try-statement
 fn parseTryStatement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume 'try'
+    try parser.advance() orelse return null; // consume 'try'
 
     const block = try parseBlockStatement(parser) orelse return null;
 
@@ -688,7 +691,7 @@ fn parseTryStatement(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     if (parser.current_token.type == .finally) {
-        try parser.advance(); // consume 'finally'
+        try parser.advance() orelse return null; // consume 'finally'
         finalizer = try parseBlockStatement(parser) orelse return null;
         end = parser.getSpan(finalizer).end;
     }
@@ -710,13 +713,13 @@ fn parseTryStatement(parser: *Parser) Error!?ast.NodeIndex {
 /// https://tc39.es/ecma262/#prod-Catch
 fn parseCatchClause(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume 'catch'
+    try parser.advance() orelse return null; // consume 'catch'
 
     var param: ast.NodeIndex = ast.null_node;
 
     // optional catch binding: catch (param) or catch
     if (parser.current_token.type == .left_paren) {
-        try parser.advance(); // consume '('
+        try parser.advance() orelse return null; // consume '('
         param = try patterns.parseBindingPattern(parser) orelse return null;
         if (!try parser.expect(.right_paren, "Expected ')' after catch parameter", null)) return null;
     }
@@ -735,15 +738,15 @@ fn parseCatchClause(parser: *Parser) Error!?ast.NodeIndex {
 fn parseDebuggerStatement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     var end = parser.current_token.span.end;
-    try parser.advance(); // consume 'debugger'
+    try parser.advance() orelse return null; // consume 'debugger'
     end = try parser.eatSemicolon(end) orelse return null;
     return try parser.addNode(.debugger_statement, .{ .start = start, .end = end });
 }
 
 /// variable kind for for loops
-fn parseVariableKindForLoop(parser: *Parser) ?ast.VariableKind {
+fn parseVariableKindForLoop(parser: *Parser) Error!?ast.VariableKind {
     const token_type = parser.current_token.type;
-    parser.advance() catch return null;
+    try parser.advance() orelse return null;
 
     return switch (token_type) {
         .let => .let,
@@ -762,7 +765,7 @@ fn parseForLoopDeclarator(parser: *Parser) Error!?ast.NodeIndex {
     var end = parser.getSpan(id).end;
 
     if (parser.current_token.type == .assign) {
-        try parser.advance();
+        try parser.advance() orelse return null;
         init = try expressions.parseExpression(parser, Precedence.Assignment, .{}) orelse return null;
         end = parser.getSpan(init).end;
     }

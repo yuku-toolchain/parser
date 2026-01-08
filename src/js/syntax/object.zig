@@ -21,7 +21,7 @@ pub const ObjectCover = struct {
 /// https://tc39.es/ecma262/#sec-object-initializer (covers ObjectAssignmentPattern)
 pub fn parseCover(parser: *Parser) Error!?ObjectCover {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume {
+    try parser.advance() orelse return null; // consume {
 
     const checkpoint = parser.scratch_cover.begin();
 
@@ -31,7 +31,7 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
         // spread: {...x}
         if (parser.current_token.type == .spread) {
             const spread_start = parser.current_token.span.start;
-            try parser.advance();
+            try parser.advance() orelse return null;
             const argument = try grammar.parseExpressionInCover(parser, Precedence.Assignment) orelse {
                 parser.scratch_cover.reset(checkpoint);
                 return null;
@@ -55,7 +55,7 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
 
         // comma or end
         if (parser.current_token.type == .comma) {
-            try parser.advance();
+            try parser.advance() orelse return null;
             // then it's a trailing comma
             if (parser.current_token.type == .right_brace) {
                 parser.state.cover_has_trailing_comma = start;
@@ -85,7 +85,7 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
     }
 
     end = parser.current_token.span.end;
-    try parser.advance(); // consume }
+    try parser.advance() orelse return null; // consume }
 
     return .{
         .properties = parser.scratch_cover.take(checkpoint),
@@ -108,7 +108,7 @@ fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
     // check for async, consume it, then decide if it's a modifier or key based on what follows
     if (parser.current_token.type == .async) {
         const async_token = parser.current_token;
-        try parser.advance();
+        try parser.advance() orelse return null;
 
         if (isPropertyKeyStart(parser.current_token.type)) {
             is_async = true;
@@ -124,7 +124,7 @@ fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
     // check for generator, only if we don't already have a key
     if (ast.isNull(key) and parser.current_token.type == .star) {
         is_generator = true;
-        try parser.advance();
+        try parser.advance() orelse return null;
     }
 
     // check for get/set, only if no async/generator modifiers and no key yet
@@ -133,7 +133,7 @@ fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
 
         if (std.mem.eql(u8, lexeme, "get") or std.mem.eql(u8, lexeme, "set")) {
             const get_set_token = parser.current_token;
-            try parser.advance();
+            try parser.advance() orelse return null;
 
             if (isPropertyKeyStart(parser.current_token.type)) {
                 kind = if (std.mem.eql(u8, lexeme, "get")) .get else .set;
@@ -150,14 +150,14 @@ fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
     if (ast.isNull(key)) {
         if (parser.current_token.type == .left_bracket) {
             computed = true;
-            try parser.advance();
+            try parser.advance() orelse return null;
             key = try grammar.parseExpressionInCover(parser, Precedence.Assignment) orelse return null;
             if (!try parser.expect(.right_bracket, "Expected ']' after computed property key", null)) {
                 return null;
             }
         } else if (parser.current_token.type.isIdentifierLike()) {
             key_identifier_token = parser.current_token;
-            key = try literals.parseIdentifierName(parser);
+            key = try literals.parseIdentifierName(parser) orelse return null;
         } else if (parser.current_token.type == .string_literal) {
             key = try literals.parseStringLiteral(parser) orelse return null;
         } else if (parser.current_token.type.isNumericLiteral()) {
@@ -192,7 +192,7 @@ fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
 
     // regular property: key: value
     if (parser.current_token.type == .colon) {
-        try parser.advance();
+        try parser.advance() orelse return null;
         const value = try grammar.parseExpressionInCover(parser, Precedence.Assignment) orelse return null;
         return try parser.addNode(
             .{ .object_property = .{ .key = key, .value = value, .kind = .init, .method = false, .shorthand = false, .computed = computed } },
@@ -221,7 +221,7 @@ fn parseCoverProperty(parser: *Parser) Error!?ast.NodeIndex {
             return null;
         }
 
-        try parser.advance();
+        try parser.advance() orelse return null;
         const default_value = try grammar.parseExpressionInCover(parser, Precedence.Assignment) orelse return null;
 
         const id_ref = try parser.addNode(

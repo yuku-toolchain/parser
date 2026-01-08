@@ -8,7 +8,7 @@ const expressions = @import("expressions.zig");
 
 pub inline fn parseStringLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
     return try parser.addNode(.{
         .string_literal = .{
             .raw_start = token.span.start,
@@ -19,7 +19,7 @@ pub inline fn parseStringLiteral(parser: *Parser) Error!?ast.NodeIndex {
 
 pub inline fn parseBooleanLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
     return try parser.addNode(.{
         .boolean_literal = .{ .value = token.type == .true },
     }, token.span);
@@ -27,13 +27,13 @@ pub inline fn parseBooleanLiteral(parser: *Parser) Error!?ast.NodeIndex {
 
 pub inline fn parseNullLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
     return try parser.addNode(.null_literal, token.span);
 }
 
 pub inline fn parseNumericLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
     return try parser.addNode(.{
         .numeric_literal = .{
             .raw_start = token.span.start,
@@ -44,7 +44,7 @@ pub inline fn parseNumericLiteral(parser: *Parser) Error!?ast.NodeIndex {
 
 pub inline fn parseBigIntLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
     return try parser.addNode(.{
         .bigint_literal = .{
             .raw_start = token.span.start,
@@ -55,16 +55,19 @@ pub inline fn parseBigIntLiteral(parser: *Parser) Error!?ast.NodeIndex {
 
 pub fn parseRegExpLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
+
     const regex = parser.lexer.reScanAsRegex(token) catch |e| {
         try parser.report(token.span, lexer.getLexicalErrorMessage(e), .{ .help = lexer.getLexicalErrorHelp(e) });
         return null;
     };
+
     try parser.replaceTokenAndAdvance(parser.lexer.createToken(
         .regex_literal,
         parser.source[regex.span.start..regex.span.end],
         regex.span.start,
         regex.span.end,
-    ));
+    )) orelse return null;
+
     return try parser.addNode(.{
         .regexp_literal = .{
             .pattern_start = @intCast(regex.span.start + 1),
@@ -77,7 +80,7 @@ pub fn parseRegExpLiteral(parser: *Parser) Error!?ast.NodeIndex {
 
 pub fn parseNoSubstitutionTemplate(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
     const element_span = getTemplateElementSpan(token);
     const element = try parser.addNode(.{
         .template_element = .{
@@ -111,7 +114,7 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
         },
     }, head_span));
 
-    try parser.advance();
+    try parser.advance() orelse return null;
 
     var end: u32 = undefined;
     while (true) {
@@ -138,10 +141,10 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
 
                 if (is_tail) {
                     end = token.span.end;
-                    try parser.advance();
+                    try parser.advance() orelse return null;
                     break;
                 }
-                try parser.advance();
+                try parser.advance() orelse return null;
             },
             else => {
                 try parser.report(
@@ -184,7 +187,7 @@ pub inline fn parseIdentifier(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     const tok = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
     return try parser.addNode(.{
         .identifier_reference = .{
             .name_start = tok.span.start,
@@ -195,7 +198,7 @@ pub inline fn parseIdentifier(parser: *Parser) Error!?ast.NodeIndex {
 
 pub inline fn parsePrivateIdentifier(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
     return try parser.addNode(.{
         .private_identifier = .{
             .name_start = token.span.start,
@@ -204,9 +207,9 @@ pub inline fn parsePrivateIdentifier(parser: *Parser) Error!?ast.NodeIndex {
     }, token.span);
 }
 
-pub fn parseIdentifierName(parser: *Parser) Error!ast.NodeIndex {
+pub fn parseIdentifierName(parser: *Parser) Error!?ast.NodeIndex {
     const tok = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
     return try parser.addNode(.{
         .identifier_name = .{
             .name_start = tok.span.start,
@@ -221,7 +224,7 @@ pub fn parseLabelIdentifier(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     const current = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
 
     return try parser.addNode(.{
         .label_identifier = .{

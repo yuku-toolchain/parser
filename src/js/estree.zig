@@ -24,7 +24,7 @@ pub const Serializer = struct {
     const max_depth = 512;
 
     pub fn serialize(tree: *const parser.ParseTree, allocator: std.mem.Allocator, options: EstreeJsonOptions) ![]u8 {
-        var buffer: std.ArrayList(u8) = try .initCapacity(allocator, tree.source.len * 3);
+        var buffer: std.ArrayList(u8) = try .initCapacity(allocator, tree.source.len * 4);
         errdefer buffer.deinit(allocator);
 
         const pos_map = try util.Utf.buildUtf16PosMap(allocator, tree.source);
@@ -35,7 +35,7 @@ pub const Serializer = struct {
             .buffer = &buffer,
             .allocator = allocator,
             .options = options,
-            .scratch = try .initCapacity(allocator, 256),
+            .scratch = try .initCapacity(allocator, 512),
             .isTs = switch (tree.lang) {
                 .ts, .tsx, .dts => true,
                 else => false,
@@ -1119,7 +1119,7 @@ pub const Serializer = struct {
         }
     }
 
-    fn sep(self: *Self) !void {
+    inline fn sep(self: *Self) !void {
         if (self.needsComma()) try self.writeByte(',');
         self.setNeedsComma(true);
     }
@@ -1239,22 +1239,43 @@ pub const Serializer = struct {
     }
 
     fn writeJsonEscaped(self: *Self, s: []const u8) !void {
-        for (s) |c| {
-            switch (c) {
-                '"' => try self.write("\\\""),
-                '\\' => try self.write("\\\\"),
-                '\n' => try self.write("\\n"),
-                '\r' => try self.write("\\r"),
-                '\t' => try self.write("\\t"),
-                0x08 => try self.write("\\b"),
-                0x0C => try self.write("\\f"),
-                else => if (c < 0x20) {
-                    var buf: [6]u8 = undefined;
-                    try self.write(std.fmt.bufPrint(&buf, "\\u{x:0>4}", .{c}) catch unreachable);
-                } else {
-                    try self.writeByte(c);
-                },
+        var start: usize = 0;
+        var i: usize = 0;
+
+        while (i < s.len) : (i += 1) {
+            const c = s[i];
+            const needs_escape = switch (c) {
+                '"', '\\', '\n', '\r', '\t', 0x08, 0x0C => true,
+                else => c < 0x20,
+            };
+
+            if (needs_escape) {
+                // accumulated safe characters
+                if (i > start) {
+                    try self.write(s[start..i]);
+                }
+
+                // escape sequence
+                switch (c) {
+                    '"' => try self.write("\\\""),
+                    '\\' => try self.write("\\\\"),
+                    '\n' => try self.write("\\n"),
+                    '\r' => try self.write("\\r"),
+                    '\t' => try self.write("\\t"),
+                    0x08 => try self.write("\\b"),
+                    0x0C => try self.write("\\f"),
+                    else => {
+                        var buf: [6]u8 = undefined;
+                        try self.write(std.fmt.bufPrint(&buf, "\\u{x:0>4}", .{c}) catch unreachable);
+                    },
+                }
+                start = i + 1;
             }
+        }
+
+        // remaining safe characters
+        if (start < s.len) {
+            try self.write(s[start..]);
         }
     }
 

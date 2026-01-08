@@ -4,10 +4,11 @@ const Error = @import("../parser.zig").Error;
 const Precedence = @import("../token.zig").Precedence;
 const expressions = @import("expressions.zig");
 const patterns = @import("patterns.zig");
+const std = @import("std");
 
 pub fn parseVariableDeclaration(parser: *Parser, await_using: bool) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    const kind = parseVariableKind(parser, await_using) orelse return null;
+    const kind = try parseVariableKind(parser, await_using) orelse return null;
 
     const checkpoint = parser.scratch_a.begin();
 
@@ -22,7 +23,7 @@ pub fn parseVariableDeclaration(parser: *Parser, await_using: bool) Error!?ast.N
 
     // additional declarators: let a, b, c;
     while (parser.current_token.type == .comma) {
-        try parser.advance();
+        try parser.advance() orelse return null;
         const declarator = try parseVariableDeclarator(parser, kind) orelse {
             parser.scratch_a.reset(checkpoint);
             return null;
@@ -61,9 +62,9 @@ pub fn parseVariableDeclaration(parser: *Parser, await_using: bool) Error!?ast.N
     );
 }
 
-inline fn parseVariableKind(parser: *Parser, await_using: bool) ?ast.VariableKind {
+inline fn parseVariableKind(parser: *Parser, await_using: bool) Error!?ast.VariableKind {
     const token_type = parser.current_token.type;
-    parser.advance() catch return null;
+    try parser.advance() orelse return null;
 
     return switch (token_type) {
         .let => .let,
@@ -89,7 +90,7 @@ fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) Error!?ast.N
 
     // initializer if present
     if (parser.current_token.type == .assign) {
-        try parser.advance();
+        try parser.advance() orelse return null;
         init = try expressions.parseExpression(parser, Precedence.Assignment, .{}) orelse return null;
         end = parser.getSpan(init).end;
     } else if (patterns.isDestructuringPattern(parser, id)) {

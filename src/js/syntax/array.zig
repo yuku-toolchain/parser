@@ -16,7 +16,7 @@ pub const ArrayCover = struct {
 /// https://tc39.es/ecma262/#sec-array-initializer (covers ArrayAssignmentPattern)
 pub fn parseCover(parser: *Parser) Error!?ArrayCover {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume [
+    try parser.advance() orelse return null; // consume [
 
     const checkpoint = parser.scratch_cover.begin();
 
@@ -26,14 +26,14 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
         // elision (holes): [,,,]
         if (parser.current_token.type == .comma) {
             try parser.scratch_cover.append(parser.allocator(), ast.null_node);
-            try parser.advance();
+            try parser.advance() orelse return null;
             continue;
         }
 
         // spread: [...x]
         if (parser.current_token.type == .spread) {
             const spread_start = parser.current_token.span.start;
-            try parser.advance();
+            try parser.advance() orelse return null;
             const argument = try grammar.parseExpressionInCover(parser, Precedence.Assignment) orelse {
                 parser.scratch_cover.reset(checkpoint);
                 return null;
@@ -57,7 +57,7 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
 
         // comma or end
         if (parser.current_token.type == .comma) {
-            try parser.advance();
+            try parser.advance() orelse return null;
             // then it's a trailing comma
             if (parser.current_token.type == .right_bracket) {
                 parser.state.cover_has_trailing_comma = start;
@@ -87,7 +87,7 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
     }
 
     end = parser.current_token.span.end;
-    try parser.advance(); // consume ]
+    try parser.advance() orelse return null; // consume ]
 
     return .{
         .elements = parser.scratch_cover.take(checkpoint),
