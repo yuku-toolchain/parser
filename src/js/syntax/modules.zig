@@ -21,7 +21,7 @@ pub fn parseImportDeclaration(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume 'import'
+    try parser.advance() orelse return null; // consume 'import'
 
     // side-effect import: import 'module'
     if (parser.current_token.type == .string_literal) {
@@ -30,17 +30,17 @@ pub fn parseImportDeclaration(parser: *Parser) Error!?ast.NodeIndex {
 
     var phase: ?ast.ImportPhase = null;
 
-    const next = try parser.lookAhead();
+    const next = try parser.lookAhead() orelse return null;
 
     // import source X from "X"
     if (parser.current_token.type == .source and next.type.isIdentifierLike() and next.type != .from) {
         phase = .source;
-        try parser.advance();
+        try parser.advance() orelse return null;
     }
     // import defer * as X from "X"
     else if (parser.current_token.type == .@"defer" and next.type == .star) {
         phase = .@"defer";
-        try parser.advance();
+        try parser.advance() orelse return null;
     }
 
     // regular import, parse import clause (specifiers)
@@ -53,7 +53,7 @@ pub fn parseImportDeclaration(parser: *Parser) Error!?ast.NodeIndex {
         return null;
     }
 
-    try parser.advance(); // consume 'from'
+    try parser.advance() orelse return null; // consume 'from'
 
     const source = try parseModuleSpecifier(parser) orelse return null;
 
@@ -123,7 +123,7 @@ fn parseImportClause(parser: *Parser) Error!?ast.IndexRange {
     //     import foo, * as bar from 'module'
     // or: import foo, { bar } from 'module'
     if (parser.current_token.type == .comma) {
-        try parser.advance(); // consume ','
+        try parser.advance() orelse return null; // consume ','
 
         if (parser.current_token.type == .star) {
             const ns = try parseImportNamespaceSpecifier(parser) orelse {
@@ -175,7 +175,7 @@ fn parseImportNamespaceSpecifier(parser: *Parser) Error!?ast.NodeIndex {
         });
         return null;
     }
-    try parser.advance(); // consume 'as'
+    try parser.advance() orelse return null; // consume 'as'
 
     const local = try parseImportedBinding(parser) orelse return null;
     const end = parser.getSpan(local).end;
@@ -199,7 +199,7 @@ fn parseNamedImports(parser: *Parser) Error!?ast.IndexRange {
         try parser.scratch_a.append(parser.allocator(), spec);
 
         if (parser.current_token.type == .comma) {
-            try parser.advance();
+            try parser.advance() orelse return null;
         } else {
             break;
         }
@@ -227,7 +227,7 @@ fn parseImportSpecifier(parser: *Parser) Error!?ast.NodeIndex {
 
     // check for 'as' alias
     if (parser.current_token.type == .as) {
-        try parser.advance(); // consume 'as'
+        try parser.advance() orelse return null; // consume 'as'
         local = try parseImportedBinding(parser) orelse return null;
     } else {
         // no alias - local is the same as imported
@@ -284,7 +284,7 @@ pub fn parseExportDeclaration(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume 'export'
+    try parser.advance() orelse return null; // consume 'export'
 
     // export = expression
     if (parser.isTs() and parser.current_token.type == .assign) {
@@ -319,7 +319,7 @@ pub fn parseExportDeclaration(parser: *Parser) Error!?ast.NodeIndex {
 
 /// export = expression
 fn parseTSExportAssignment(parser: *Parser, start: u32) Error!?ast.NodeIndex {
-    try parser.advance(); // consume '='
+    try parser.advance() orelse return null; // consume '='
 
     const expression = try expressions.parseExpression(parser, Precedence.Assignment, .{}) orelse return null;
     const end = try parser.eatSemicolon(parser.getSpan(expression).end) orelse return null;
@@ -331,16 +331,16 @@ fn parseTSExportAssignment(parser: *Parser, start: u32) Error!?ast.NodeIndex {
 
 /// export as namespace name
 fn parseTSNamespaceExportDeclaration(parser: *Parser, start: u32) Error!?ast.NodeIndex {
-    try parser.advance(); // consume 'as'
+    try parser.advance() orelse return null; // consume 'as'
 
     if (parser.current_token.type != .namespace) {
         try parser.report(parser.current_token.span, "Expected 'namespace' after 'export as'", .{});
         return null;
     }
 
-    try parser.advance(); // consume 'namespace'
+    try parser.advance() orelse return null; // consume 'namespace'
 
-    const id = try literals.parseIdentifierName(parser);
+    const id = try literals.parseIdentifierName(parser) orelse return null;
     const end = try parser.eatSemicolon(parser.getSpan(id).end) orelse return null;
 
     return try parser.addNode(.{
@@ -350,7 +350,7 @@ fn parseTSNamespaceExportDeclaration(parser: *Parser, start: u32) Error!?ast.Nod
 
 /// export default declaration
 fn parseExportDefaultDeclaration(parser: *Parser, start: u32) Error!?ast.NodeIndex {
-    try parser.advance(); // consume 'default'
+    try parser.advance() orelse return null; // consume 'default'
 
     var declaration: ast.NodeIndex = undefined;
     var is_decl = false;
@@ -364,7 +364,7 @@ fn parseExportDefaultDeclaration(parser: *Parser, start: u32) Error!?ast.NodeInd
     // export default async function [name]() {}
     else if (parser.current_token.type == .async and !parser.current_token.has_line_terminator_before) {
         const async_start = parser.current_token.span.start;
-        try parser.advance(); // consume 'async'
+        try parser.advance() orelse return null; // consume 'async'
         if (parser.current_token.type == .function) {
             declaration = try functions.parseFunction(parser, .{ .is_default_export = true, .is_async = true }, async_start) orelse return null;
             is_decl = true;
@@ -407,13 +407,13 @@ fn parseExportDefaultDeclaration(parser: *Parser, start: u32) Error!?ast.NodeInd
 
 /// export * from 'module' or export * as name from 'module'
 fn parseExportAllDeclaration(parser: *Parser, start: u32) Error!?ast.NodeIndex {
-    try parser.advance(); // consume '*'
+    try parser.advance() orelse return null; // consume '*'
 
     var exported: ast.NodeIndex = ast.null_node;
 
     // export * as name from 'module'
     if (parser.current_token.type == .as) {
-        try parser.advance(); // consume 'as'
+        try parser.advance() orelse return null; // consume 'as'
         exported = try parseModuleExportName(parser) orelse return null;
     }
 
@@ -424,7 +424,7 @@ fn parseExportAllDeclaration(parser: *Parser, start: u32) Error!?ast.NodeIndex {
         });
         return null;
     }
-    try parser.advance(); // consume 'from'
+    try parser.advance() orelse return null; // consume 'from'
 
     const source = try parseModuleSpecifier(parser) orelse return null;
     const attributes = try parseWithClause(parser);
@@ -450,7 +450,7 @@ fn parseExportNamedFromClause(parser: *Parser, start: u32) Error!?ast.NodeIndex 
 
     // re-export: export { foo } from 'module'
     if (parser.current_token.type == .from) {
-        try parser.advance(); // consume 'from'
+        try parser.advance() orelse return null; // consume 'from'
         source = try parseModuleSpecifier(parser) orelse return null;
         attributes = try parseWithClause(parser);
         end = parser.getSpan(source).end;
@@ -510,7 +510,7 @@ fn parseExportWithDeclaration(parser: *Parser, start: u32) Error!?ast.NodeIndex 
         },
         .async => {
             const async_start = parser.current_token.span.start;
-            try parser.advance(); // consume 'async'
+            try parser.advance() orelse return null; // consume 'async'
             declaration = try functions.parseFunction(parser, .{ .is_async = true }, async_start) orelse return null;
         },
         .class => {
@@ -560,7 +560,7 @@ fn parseExportSpecifiers(parser: *Parser) Error!?ExportSpecifiersResult {
         try parser.scratch_b.append(parser.allocator(), @intFromEnum(local_token_type));
 
         if (parser.current_token.type == .comma) {
-            try parser.advance();
+            try parser.advance() orelse return null;
         } else {
             break;
         }
@@ -588,7 +588,7 @@ fn parseExportSpecifier(parser: *Parser) Error!?ast.NodeIndex {
     var exported: ast.NodeIndex = undefined;
 
     if (parser.current_token.type == .as) {
-        try parser.advance(); // consume 'as'
+        try parser.advance() orelse return null; // consume 'as'
         exported = try parseModuleExportName(parser) orelse return null;
     } else {
         // exported is the same as local
@@ -612,7 +612,7 @@ fn parseModuleExportName(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     if (parser.current_token.type.isIdentifierLike()) {
-        return try literals.parseIdentifierName(parser);
+        return try literals.parseIdentifierName(parser) orelse return null;
     }
 
     try parser.report(parser.current_token.span, "Expected identifier or string literal", .{});
@@ -642,7 +642,7 @@ fn parseWithClause(parser: *Parser) Error!ast.IndexRange {
         return ast.IndexRange.empty;
     }
 
-    try parser.advance(); // consume 'with' or 'assert'
+    try parser.advance() orelse return ast.IndexRange.empty; // consume 'with' or 'assert'
 
     if (!try parser.expect(.left_brace, "Expected '{' after 'with' in import attributes", null)) {
         return ast.IndexRange.empty;
@@ -658,7 +658,7 @@ fn parseWithClause(parser: *Parser) Error!ast.IndexRange {
         try parser.scratch_a.append(parser.allocator(), attr);
 
         if (parser.current_token.type == .comma) {
-            try parser.advance();
+            try parser.advance() orelse return ast.IndexRange.empty;
         } else {
             break;
         }
@@ -704,7 +704,7 @@ fn parseAttributeKey(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     if (parser.current_token.type.isIdentifierLike()) {
-        return try literals.parseIdentifierName(parser);
+        return try literals.parseIdentifierName(parser) orelse return null;
     }
 
     try parser.report(parser.current_token.span, "Expected identifier or string literal for attribute key", .{});
@@ -725,14 +725,14 @@ pub fn parseDynamicImport(parser: *Parser, import_keyword: ast.NodeIndex, phase:
     // check for options argument (only for regular imports, not phase imports)
     if (phase == null and parser.current_token.type == .comma) {
         // allow trailing comma
-        try parser.advance(); // consume ','
+        try parser.advance() orelse return null; // consume ','
 
         if (parser.current_token.type != .right_paren) {
             options = try expressions.parseExpression(parser, Precedence.Assignment, .{}) orelse return null;
 
             // allow trailing comma after options
             if (parser.current_token.type == .comma) {
-                try parser.advance();
+                try parser.advance() orelse return null;
             }
         }
     }

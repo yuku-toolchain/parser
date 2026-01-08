@@ -272,7 +272,7 @@ fn parseAsyncArrowFunctionOrCall(parser: *Parser, is_async: bool, arrow_start: ?
 
 fn parseUnaryExpression(parser: *Parser) Error!?ast.NodeIndex {
     const operator_token = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
 
     const argument = try parseExpression(parser, Precedence.Unary, .{}) orelse return null;
 
@@ -291,7 +291,7 @@ fn parseUnaryExpression(parser: *Parser) Error!?ast.NodeIndex {
 /// https://tc39.es/ecma262/#sec-await
 fn parseAwaitExpression(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume 'await'
+    try parser.advance() orelse return null; // consume 'await'
 
     const argument = try parseExpression(parser, Precedence.Unary, .{}) orelse return null;
 
@@ -306,13 +306,13 @@ fn parseAwaitExpression(parser: *Parser) Error!?ast.NodeIndex {
 fn parseYieldExpression(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     var end = parser.current_token.span.end;
-    try parser.advance();
+    try parser.advance() orelse return null;
 
     var delegate = false;
     if (parser.current_token.type == .star and !parser.current_token.has_line_terminator_before) {
         delegate = true;
         end = parser.current_token.span.end;
-        try parser.advance();
+        try parser.advance() orelse return null;
     }
 
     var argument: ast.NodeIndex = ast.null_node;
@@ -346,7 +346,7 @@ fn parseYieldExpression(parser: *Parser) Error!?ast.NodeIndex {
 /// https://tc39.es/ecma262/#sec-this-keyword
 fn parseThisExpression(parser: *Parser) Error!?ast.NodeIndex {
     const this_token = parser.current_token;
-    try parser.advance(); // consume 'this'
+    try parser.advance() orelse return null; // consume 'this'
     return try parser.addNode(.this_expression, this_token.span);
 }
 
@@ -354,7 +354,7 @@ fn parseThisExpression(parser: *Parser) Error!?ast.NodeIndex {
 /// https://tc39.es/ecma262/#sec-super-keyword
 fn parseSuperExpression(parser: *Parser) Error!?ast.NodeIndex {
     const super_token = parser.current_token;
-    try parser.advance(); // consume 'super'
+    try parser.advance() orelse return null; // consume 'super'
     if (parser.current_token.type != .left_paren and parser.current_token.type != .dot and parser.current_token.type != .left_bracket) {
         try parser.report(parser.current_token.span, "'super' must be followed by a call or property access", .{ .help = "use 'super()' to call parent constructor, 'super.property' or 'super[property]' to access parent members" });
         return null;
@@ -366,7 +366,7 @@ fn parseSuperExpression(parser: *Parser) Error!?ast.NodeIndex {
 /// https://tc39.es/ecma262/#prod-ImportCall
 /// https://tc39.es/ecma262/#prod-ImportMeta
 pub fn parseImportExpression(parser: *Parser, name_from_param: ?u32) Error!?ast.NodeIndex {
-    const name = name_from_param orelse try literals.parseIdentifierName(parser);
+    const name = name_from_param orelse try literals.parseIdentifierName(parser) orelse return null;
 
     return switch (parser.current_token.type) {
         .dot => parseImportMetaOrPhaseImport(parser, name),
@@ -384,18 +384,18 @@ pub fn parseImportExpression(parser: *Parser, name_from_param: ?u32) Error!?ast.
 
 /// `import.meta`, `import.source()`, or `import.defer()`
 fn parseImportMetaOrPhaseImport(parser: *Parser, name: u32) Error!?ast.NodeIndex {
-    try parser.advance(); // consume '.'
+    try parser.advance() orelse return null; // consume '.'
 
     const name_span = parser.getSpan(name);
 
     // import.source() or import.defer()
     if (parser.current_token.type == .source) {
-        try parser.advance(); // consume 'source'
+        try parser.advance() orelse return null; // consume 'source'
         return modules.parseDynamicImport(parser, name, .source);
     }
 
     if (parser.current_token.type == .@"defer") {
-        try parser.advance(); // consume 'defer'
+        try parser.advance() orelse return null; // consume 'defer'
         return modules.parseDynamicImport(parser, name, .@"defer");
     }
 
@@ -409,7 +409,7 @@ fn parseImportMetaOrPhaseImport(parser: *Parser, name: u32) Error!?ast.NodeIndex
         return null;
     }
 
-    const property = try literals.parseIdentifierName(parser); // consume 'meta'
+    const property = try literals.parseIdentifierName(parser) orelse return null; // consume 'meta'
 
     return try parser.addNode(
         .{ .meta_property = .{ .meta = name, .property = property } },
@@ -420,7 +420,7 @@ fn parseImportMetaOrPhaseImport(parser: *Parser, name: u32) Error!?ast.NodeIndex
 /// `new.target`
 /// https://tc39.es/ecma262/#prod-NewTarget
 fn parseNewTarget(parser: *Parser, name: u32) Error!?ast.NodeIndex {
-    try parser.advance(); // consume '.'
+    try parser.advance() orelse return null; // consume '.'
 
     if (!std.mem.eql(u8, parser.current_token.lexeme, "target")) {
         try parser.report(
@@ -431,7 +431,7 @@ fn parseNewTarget(parser: *Parser, name: u32) Error!?ast.NodeIndex {
         return null;
     }
 
-    const property = try literals.parseIdentifierName(parser); // consume 'target'
+    const property = try literals.parseIdentifierName(parser) orelse return null; // consume 'target'
 
     return try parser.addNode(
         .{ .meta_property = .{ .meta = name, .property = property } },
@@ -443,7 +443,7 @@ fn parseNewTarget(parser: *Parser, name: u32) Error!?ast.NodeIndex {
 /// https://tc39.es/ecma262/#sec-new-operator
 fn parseNewExpression(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    const new = try literals.parseIdentifierName(parser); // consume 'new'
+    const new = try literals.parseIdentifierName(parser) orelse return null; // consume 'new'
 
     // check for new.target
     if (parser.current_token.type == .dot) {
@@ -488,7 +488,7 @@ fn parseNewExpression(parser: *Parser) Error!?ast.NodeIndex {
 
     const end = if (parser.current_token.type == .left_paren) blk: {
         const open_paren_span = parser.current_token.span;
-        try parser.advance();
+        try parser.advance() orelse return null;
         arguments = try parseArguments(parser) orelse return null;
         const arguments_end = parser.current_token.span.end;
 
@@ -503,7 +503,7 @@ fn parseNewExpression(parser: *Parser) Error!?ast.NodeIndex {
             );
             return null;
         }
-        try parser.advance(); // consume ')'
+        try parser.advance() orelse return null; // consume ')'
 
         break :blk arguments_end;
     } else parser.getSpan(callee).end;
@@ -517,7 +517,7 @@ fn parseNewExpression(parser: *Parser) Error!?ast.NodeIndex {
 fn parseUpdateExpression(parser: *Parser, prefix: bool, left: ast.NodeIndex) Error!?ast.NodeIndex {
     const operator_token = parser.current_token;
     const operator = ast.UpdateOperator.fromToken(operator_token.type);
-    try parser.advance();
+    try parser.advance() orelse return null;
 
     if (prefix) {
         const argument = try parseExpression(parser, Precedence.Unary, .{}) orelse return null;
@@ -561,7 +561,7 @@ fn parseUpdateExpression(parser: *Parser, prefix: bool, left: ast.NodeIndex) Err
 fn parseBinaryExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) Error!?ast.NodeIndex {
     const operator_token = parser.current_token;
     const operator = ast.BinaryOperator.fromToken(operator_token.type);
-    try parser.advance();
+    try parser.advance() orelse return null;
 
     // '**' is right-associative
     const next_precedence = if (operator == .exponent) precedence else precedence + 1;
@@ -575,7 +575,7 @@ fn parseBinaryExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) E
 
 fn parseLogicalExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) Error!?ast.NodeIndex {
     const operator_token = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
 
     const right = try parseExpression(parser, precedence + 1, .{}) orelse return null;
     const current_operator = ast.LogicalOperator.fromToken(operator_token.type);
@@ -617,7 +617,7 @@ fn parseSequenceExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex)
     try parser.scratch_a.append(parser.allocator(), left);
 
     while (parser.current_token.type == .comma) {
-        try parser.advance(); // consume ','
+        try parser.advance() orelse return null; // consume ','
 
         const expr = try parseExpression(parser, precedence + 1, .{}) orelse {
             parser.scratch_a.reset(checkpoint);
@@ -666,7 +666,7 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeInde
         return null;
     }
 
-    try parser.advance();
+    try parser.advance() orelse return null;
 
     const right = try parseExpression(parser, precedence, .{}) orelse return null;
 
@@ -681,7 +681,7 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeInde
 fn parseConditionalExpression(parser: *Parser, precedence: u8, @"test": ast.NodeIndex) Error!?ast.NodeIndex {
     const test_span = parser.getSpan(@"test");
 
-    try parser.advance(); // consume '?'
+    try parser.advance() orelse return null; // consume '?'
 
     // consequent
     // right-associative, so same prec, not precedence + 1
@@ -781,7 +781,7 @@ fn isPartOfPattern(parser: *Parser) bool {
 
 /// obj.prop or obj.#priv
 fn parseStaticMemberExpression(parser: *Parser, object_node: ast.NodeIndex, optional: bool) Error!?ast.NodeIndex {
-    try parser.advance(); // consume '.'
+    try parser.advance() orelse return null; // consume '.'
     return parseMemberProperty(parser, object_node, optional);
 }
 
@@ -817,7 +817,7 @@ fn parseMemberProperty(parser: *Parser, object_node: ast.NodeIndex, optional: bo
 /// obj[expr]
 fn parseComputedMemberExpression(parser: *Parser, object_node: ast.NodeIndex, optional: bool) Error!?ast.NodeIndex {
     const open_bracket_span = parser.current_token.span;
-    try parser.advance(); // consume '['
+    try parser.advance() orelse return null; // consume '['
 
     const saved_allow_in = parser.context.allow_in;
     parser.context.allow_in = true;
@@ -839,7 +839,7 @@ fn parseComputedMemberExpression(parser: *Parser, object_node: ast.NodeIndex, op
         );
         return null;
     }
-    try parser.advance(); // consume ']'
+    try parser.advance() orelse return null; // consume ']'
 
     return try parser.addNode(.{
         .member_expression = .{
@@ -855,7 +855,7 @@ fn parseComputedMemberExpression(parser: *Parser, object_node: ast.NodeIndex, op
 fn parseCallExpression(parser: *Parser, callee_node: ast.NodeIndex, optional: bool) Error!?ast.NodeIndex {
     const start = parser.getSpan(callee_node).start;
     const open_paren_span = parser.current_token.span;
-    try parser.advance(); // consume '('
+    try parser.advance() orelse return null; // consume '('
 
     const args = try parseArguments(parser) orelse return null;
 
@@ -871,7 +871,7 @@ fn parseCallExpression(parser: *Parser, callee_node: ast.NodeIndex, optional: bo
         );
         return null;
     }
-    try parser.advance(); // consume ')'
+    try parser.advance() orelse return null; // consume ')'
 
     return try parser.addNode(.{
         .call_expression = .{
@@ -892,7 +892,7 @@ fn parseArguments(parser: *Parser) Error!?ast.IndexRange {
     while (parser.current_token.type != .right_paren and parser.current_token.type != .eof) {
         const arg = if (parser.current_token.type == .spread) blk: {
             const spread_start = parser.current_token.span.start;
-            try parser.advance(); // consume '...'
+            try parser.advance() orelse return null; // consume '...'
             const argument = try parseExpression(parser, Precedence.Assignment, .{}) orelse {
                 parser.context.allow_in = saved_allow_in;
                 parser.scratch_a.reset(checkpoint);
@@ -911,7 +911,7 @@ fn parseArguments(parser: *Parser) Error!?ast.IndexRange {
         try parser.scratch_a.append(parser.allocator(), arg);
 
         if (parser.current_token.type == .comma) {
-            try parser.advance();
+            try parser.advance() orelse return null;
         } else {
             break;
         }
@@ -945,7 +945,7 @@ fn parseTaggedTemplateExpression(parser: *Parser, tag_node: ast.NodeIndex) Error
 /// optional chain: a?.b, a?.[b], a?.()
 fn parseOptionalChain(parser: *Parser, left: ast.NodeIndex) Error!?ast.NodeIndex {
     const chain_start = parser.getSpan(left).start;
-    try parser.advance(); // consume '?.'
+    try parser.advance() orelse return null; // consume '?.'
 
     // first optional operation
     var expr = try parseOptionalChainElement(parser, left, true) orelse return null;
@@ -957,7 +957,7 @@ fn parseOptionalChain(parser: *Parser, left: ast.NodeIndex) Error!?ast.NodeIndex
             .left_bracket => expr = try parseComputedMemberExpression(parser, expr, false) orelse return null,
             .left_paren => expr = try parseCallExpression(parser, expr, false) orelse return null,
             .optional_chaining => {
-                try parser.advance();
+                try parser.advance() orelse return null;
                 expr = try parseOptionalChainElement(parser, expr, true) orelse return null;
             },
             .template_head, .no_substitution_template => {

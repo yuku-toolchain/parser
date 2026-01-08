@@ -25,7 +25,7 @@ pub const ParenthesizedCover = struct {
 /// returns the cover which can be converted to either parenthesized expression or arrow params.
 pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume (
+    try parser.advance() orelse return null; // consume (
 
     const checkpoint = parser.scratch_cover.begin();
 
@@ -35,7 +35,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
     // empty parens: ()
     if (parser.current_token.type == .right_paren) {
         end = parser.current_token.span.end;
-        try parser.advance();
+        try parser.advance() orelse return null;
         return .{
             .elements = parser.scratch_cover.take(checkpoint),
             .start = start,
@@ -48,7 +48,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
         // rest element: (...x)
         if (parser.current_token.type == .spread) {
             const spread_start = parser.current_token.span.start;
-            try parser.advance();
+            try parser.advance() orelse return null;
 
             const argument = try grammar.parseExpressionInCover(parser, Precedence.Assignment) orelse {
                 parser.scratch_cover.reset(checkpoint);
@@ -67,7 +67,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
             end = spread_end;
 
             if (parser.current_token.type == .comma) {
-                try parser.advance();
+                try parser.advance() orelse return null;
                 has_trailing_comma = true;
             }
 
@@ -86,7 +86,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
 
         // comma or end
         if (parser.current_token.type == .comma) {
-            try parser.advance();
+            try parser.advance() orelse return null;
             has_trailing_comma = parser.current_token.type == .right_paren;
         } else if (parser.current_token.type != .right_paren) {
             try parser.report(
@@ -113,7 +113,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
     }
 
     end = parser.current_token.span.end;
-    try parser.advance(); // consume )
+    try parser.advance() orelse return null; // consume )
 
     return .{
         .elements = parser.scratch_cover.take(checkpoint),
@@ -199,7 +199,7 @@ pub fn coverToParenthesizedExpression(parser: *Parser, cover: ParenthesizedCover
 
 /// convert cover to ArrowFunctionExpression parameters and body.
 pub fn coverToArrowFunction(parser: *Parser, cover: ParenthesizedCover, is_async: bool, arrow_start: u32) Error!?ast.NodeIndex {
-    try parser.advance(); // consume =>
+    try parser.advance() orelse return null; // consume =>
 
     // convert elements to formal parameters
     const params = try convertToFormalParameters(parser, cover) orelse return null;
@@ -220,7 +220,7 @@ pub fn coverToArrowFunction(parser: *Parser, cover: ParenthesizedCover, is_async
 
 /// convert a single identifier to arrow function (x => body case).
 pub fn identifierToArrowFunction(parser: *Parser, id: ast.NodeIndex, is_async: bool, start: u32) Error!?ast.NodeIndex {
-    try parser.advance(); // consume =>
+    try parser.advance() orelse return null; // consume =>
 
     // convert identifier_reference to binding_identifier
     const id_data = parser.getData(id).identifier_reference;

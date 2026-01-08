@@ -34,7 +34,7 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts, start_from_param:
 
     if (parser.current_token.type == .star) {
         is_generator = true;
-        try parser.advance();
+        try parser.advance() orelse return null;
     }
 
     parser.context.in_async = false;
@@ -194,7 +194,7 @@ pub fn parseFormalParamaters(parser: *Parser, kind: ast.FormalParameterKind) Err
         }
 
         if (parser.current_token.type == .comma) {
-            try parser.advance();
+            try parser.advance() orelse return null;
         } else break;
     }
 

@@ -177,7 +177,9 @@ pub const Parser = struct {
         self.lexer = try lexer.Lexer.init(self.source, self.allocator(), self.source_type, self.strict_mode);
 
         // let's begin
-        try self.advance();
+        try self.advance() orelse {
+            self.current_token = token.Token.eof(0);
+        };
 
         errdefer {
             self.arena.deinit();
@@ -421,7 +423,8 @@ pub const Parser = struct {
     }
 
     fn synchronize(self: *Parser, terminator: ?token.TokenType) Error!void {
-        const errored_scope = self.state.scope_depth;
+        // skip errored token
+        try self.advance() orelse return;
 
         while (self.current_token.type != .eof) {
             // stop at the block terminator to avoid consuming the closing brace
@@ -434,9 +437,10 @@ pub const Parser = struct {
                 else => false,
             };
 
-            try self.advance();
+            const is_semi_colon = self.current_token.type == .semicolon;
 
-            if (self.state.scope_depth < errored_scope and (self.current_token.type == .semicolon or can_start_statement)) {
+            if (is_semi_colon or can_start_statement) {
+                if(is_semi_colon) try self.advance() orelse return;
                 return;
             }
         }

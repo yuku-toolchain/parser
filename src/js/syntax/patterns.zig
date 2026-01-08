@@ -34,7 +34,7 @@ pub inline fn parseBindingIdentifier(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     const current = parser.current_token;
-    try parser.advance();
+    try parser.advance() orelse return null;
 
     return try parser.addNode(
         .{
@@ -62,7 +62,7 @@ pub fn parseAssignmentPattern(parser: *Parser, left: ast.NodeIndex) Error!?ast.N
 
     if (parser.current_token.type != .assign) return left;
 
-    try parser.advance();
+    try parser.advance() orelse return null;
 
     // right side is AssignmentExpression, not Expression (so 2)
     const right = try expressions.parseExpression(parser, Precedence.Assignment, .{}) orelse return null;
@@ -75,7 +75,7 @@ pub fn parseAssignmentPattern(parser: *Parser, left: ast.NodeIndex) Error!?ast.N
 
 pub fn parseBindingRestElement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
-    try parser.advance(); // consume ...
+    try parser.advance() orelse return null; // consume ...
 
     const argument = try parseBindingPattern(parser) orelse return null;
     const end = parser.getSpan(argument).end;

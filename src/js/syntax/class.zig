@@ -50,7 +50,7 @@ pub fn parseClass(parser: *Parser, opts: ParseClassOpts, start_from_param: ?u32)
     // optional extends clause
     var super_class: ast.NodeIndex = ast.null_node;
     if (parser.current_token.type == .extends) {
-        try parser.advance(); // consume 'extends'
+        try parser.advance() orelse return null; // consume 'extends'
         super_class = try expressions.parseLeftHandSideExpression(parser) orelse return null;
     }
 
@@ -83,7 +83,7 @@ fn parseClassBody(parser: *Parser) Error!?ast.NodeIndex {
     while (parser.current_token.type != .right_brace and parser.current_token.type != .eof) {
         // empty statement (semicolon)
         if (parser.current_token.type == .semicolon) {
-            try parser.advance();
+            try parser.advance() orelse return null;
             continue;
         }
 
@@ -125,7 +125,7 @@ fn parseClassElement(parser: *Parser) Error!?ast.NodeIndex {
     // check for 'static' modifier
     if (parser.current_token.type == .static) {
         const static_token = parser.current_token;
-        try parser.advance();
+        try parser.advance() orelse return null;
 
         // static { } - static block
         if (parser.current_token.type == .left_brace) {
@@ -147,7 +147,7 @@ fn parseClassElement(parser: *Parser) Error!?ast.NodeIndex {
     // check for 'async' modifier (only if no key yet)
     if (ast.isNull(key) and parser.current_token.type == .async) {
         const async_token = parser.current_token;
-        try parser.advance();
+        try parser.advance() orelse return null;
 
         // check if this is async method or 'async' as property name
         if (isClassElementKeyStart(parser.current_token.type) and !parser.current_token.has_line_terminator_before) {
@@ -163,7 +163,7 @@ fn parseClassElement(parser: *Parser) Error!?ast.NodeIndex {
     // check for generator (*)
     if (ast.isNull(key) and parser.current_token.type == .star) {
         is_generator = true;
-        try parser.advance();
+        try parser.advance() orelse return null;
     }
 
     // check for get/set (only if no key yet and not async/generator)
@@ -172,7 +172,7 @@ fn parseClassElement(parser: *Parser) Error!?ast.NodeIndex {
 
         if (std.mem.eql(u8, lexeme, "get") or std.mem.eql(u8, lexeme, "set")) {
             const get_set_token = parser.current_token;
-            try parser.advance();
+            try parser.advance() orelse return null;
 
             // check if this is get/set accessor or just a property named 'get'/'set'
             if (isClassElementKeyStart(parser.current_token.type)) {
@@ -188,7 +188,7 @@ fn parseClassElement(parser: *Parser) Error!?ast.NodeIndex {
 
     // parse the key if not already determined
     if (ast.isNull(key)) {
-        const key_result = try parseClassElementKey(parser);
+        const key_result = try parseClassElementKey(parser) orelse return null;
         key = key_result.key orelse return null;
         computed = key_result.computed;
     }
@@ -245,10 +245,10 @@ const KeyResult = struct {
 };
 
 /// class element key
-fn parseClassElementKey(parser: *Parser) Error!KeyResult {
+fn parseClassElementKey(parser: *Parser) Error!?KeyResult {
     // computed key
     if (parser.current_token.type == .left_bracket) {
-        try parser.advance(); // consume '['
+        try parser.advance() orelse return null; // consume '['
         const key = try expressions.parseExpression(parser, Precedence.Assignment, .{}) orelse return .{ .key = null, .computed = true };
         if (!try parser.expect(.right_bracket, "Expected ']' after computed property key", null)) {
             return .{ .key = null, .computed = true };
@@ -275,7 +275,7 @@ fn parseClassElementKey(parser: *Parser) Error!KeyResult {
     // identifier-like (includes keywords)
     if (parser.current_token.type.isIdentifierLike()) {
         const tok = parser.current_token;
-        try parser.advance();
+        try parser.advance() orelse return null;
         const key = try parser.addNode(
             .{ .identifier_name = .{ .name_start = tok.span.start, .name_len = @intCast(tok.lexeme.len) } },
             tok.span,
@@ -426,14 +426,14 @@ fn parsePropertyDefinition(
     var end = parser.getSpan(key).end;
 
     if (parser.current_token.type == .assign) {
-        try parser.advance(); // consume '='
+        try parser.advance() orelse return null; // consume '='
         value = try expressions.parseExpression(parser, Precedence.Assignment, .{}) orelse return null;
         end = parser.getSpan(value).end;
     }
 
     if (parser.current_token.type == .semicolon) {
         end = parser.current_token.span.end;
-        try parser.advance();
+        try parser.advance() orelse return null;
     } else if (!parser.canInsertSemicolon() and parser.current_token.type != .right_brace) {
         try parser.report(
             parser.current_token.span,
