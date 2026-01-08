@@ -4,6 +4,7 @@ const Error = @import("../parser.zig").Error;
 const Precedence = @import("../token.zig").Precedence;
 const expressions = @import("expressions.zig");
 const patterns = @import("patterns.zig");
+const std = @import("std");
 
 pub fn parseVariableDeclaration(parser: *Parser, await_using: bool) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;

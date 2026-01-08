@@ -39,10 +39,9 @@ pub fn main() !void {
 
     const json_taken_ms = @as(f64, @floatFromInt(json_taken)) / ns_to_ms;
 
-
     defer allocator.free(json);
 
-    // std.debug.print("\n{s}\n", .{json});
+    std.debug.print("\n{s}\n", .{json});
 
     std.debug.print("estree time taken {d:.2}\n", .{json_taken_ms});
 

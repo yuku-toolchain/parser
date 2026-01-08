@@ -123,6 +123,7 @@ const ParserState = struct {
     cover_has_init_name: bool = false,
     /// tracks if we're still in the directive prologue of a function/script body.
     in_directive_prologue: bool = true,
+    scope_depth: u32 = 0,
 };
 
 pub const Error = error{OutOfMemory};
@@ -300,12 +301,18 @@ pub const Parser = struct {
     }
 
     pub fn advance(self: *Parser) Error!void {
-        if (self.next_token) |tok| {
-            self.current_token = tok;
+        const new_token = if (self.next_token) |tok| blk: {
             self.next_token = null;
-        } else {
-            self.current_token = try self.nextTokenOrEof();
+            break :blk tok;
+        } else try self.nextTokenOrEof();
+
+        if (new_token.type == .left_brace) {
+            self.state.scope_depth += 1;
+        } else if (new_token.type == .right_brace) {
+            self.state.scope_depth -= 1;
         }
+
+        self.current_token = new_token;
     }
 
     // lazy next token prefetching for lookahead.
@@ -342,6 +349,7 @@ pub const Parser = struct {
         }
 
         try self.report(self.current_token.span, message, .{ .help = help });
+
         return false;
     }
 
@@ -362,7 +370,7 @@ pub const Parser = struct {
 
     /// lenient semicolon consumption for statements with special ASI exceptions.
     ///
-    /// ES2015+ ASI rule: "The previous token is ) and the inserted semicolon would
+    /// ES2015+ ASI: "The previous token is ) and the inserted semicolon would
     /// then be parsed as the terminating semicolon of a do-while statement (14.7.2)"
     ///
     /// allows `do {} while (false) foo()`, semicolon optional after the `)`.
@@ -418,27 +426,25 @@ pub const Parser = struct {
         return try std.fmt.allocPrint(self.allocator(), format, args);
     }
 
-    // TODO(arshad): this is not that much better, make it better
     fn synchronize(self: *Parser, terminator: ?token.TokenType) Error!void {
+        const errored_scope = self.state.scope_depth;
+
         while (self.current_token.type != .eof) {
             // stop at the block terminator to avoid consuming the closing brace
             if (terminator) |t| {
                 if (self.current_token.type == t) return;
             }
 
-            if (self.current_token.type == .semicolon) {
-                try self.advance();
-                return;
-            }
-
-            switch (self.current_token.type) {
-                .left_brace, .class, .function, .@"var", .@"for", .@"if", .@"while", .@"return", .let, .@"const", .using, .@"try", .throw, .debugger, .@"break", .@"continue", .@"switch", .do, .with, .async, .@"export", .import => {
-                    return;
-                },
-                else => {},
-            }
+            const can_start_statement = switch (self.current_token.type) {
+                .class, .function, .@"var", .@"for", .@"if", .@"while", .@"return", .let, .@"const", .@"try", .throw, .debugger, .@"break", .@"continue", .@"switch", .do, .with, .async, .@"export", .import => true,
+                else => false,
+            };
 
             try self.advance();
+
+            if (self.state.scope_depth < errored_scope and (self.current_token.type == .semicolon or can_start_statement)) {
+                return;
+            }
         }
     }
 
