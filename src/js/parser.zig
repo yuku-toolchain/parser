@@ -226,10 +226,6 @@ pub const Parser = struct {
         while (!self.isAtBodyEnd(terminator)) {
             if (try statements.parseStatement(self, .{})) |statement| {
                 try self.scratch_statements.append(self.allocator(), statement);
-
-                if (self.state.in_directive_prologue and self.getData(statement) != .directive) {
-                    self.state.in_directive_prologue = false;
-                }
             } else {
                 self.state.in_directive_prologue = false;
                 try self.synchronize(terminator) orelse break;
