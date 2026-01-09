@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build:npm": "zig build && bun run --filter './npm' build",
+    "dev:docs": "bun run --filter './docs' dev",
     "type-check": "bun run --filter '*' type-check",
     "test": "bun run build:npm && bun test/run.ts",
     "release:npm": "bumpp -r --commit --push --tag"
@@ -15,6 +16,7 @@
     "typescript": "^5.9.3"
   },
   "workspaces": [
-    "npm"
+    "npm",
+    "docs"
   ]
 }
