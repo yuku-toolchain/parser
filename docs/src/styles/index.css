@@ -65,7 +65,7 @@ table code {
     padding: 16px !important;
 }
 
-.header.astro-hvhtrdpl {
+.header > .header {
     grid-template-columns: 270px auto;
     padding: 0 !important;
 }
