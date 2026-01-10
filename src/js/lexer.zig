@@ -919,16 +919,6 @@ pub const Lexer = struct {
         var can_be_html_close_comment = self.cursor == 0 or self.has_line_terminator_before;
 
         while (self.cursor < self.source_len) {
-            // consume any LineTerminatorSequence (LF, CR, CRLF, LS, PS)
-            const lt_len = util.Utf.lineTerminatorLen(self.source, self.cursor);
-
-            if (lt_len > 0) {
-                self.has_line_terminator_before = true;
-                can_be_html_close_comment = true;
-                self.cursor += lt_len;
-                continue;
-            }
-
             const c = self.source[self.cursor];
 
             if (std.ascii.isAscii(c)) {
@@ -939,7 +929,12 @@ pub const Lexer = struct {
                         self.cursor += 1;
                         continue;
                     },
-
+                    '\n', '\r' => {
+                        self.has_line_terminator_before = true;
+                        can_be_html_close_comment = true;
+                        self.cursor += 1;
+                        continue;
+                    },
                     '/' => {
                         const next = self.peek(1);
                         if (next == '/') {
@@ -952,7 +947,6 @@ pub const Lexer = struct {
                         }
                         break;
                     },
-
                     '<' => {
                         // html-style comments (<!-- ... -->) are only valid in script mode
                         if (self.source_type == .script) {
@@ -987,6 +981,17 @@ pub const Lexer = struct {
                 }
             } else {
                 @branchHint(.unlikely);
+
+                if (c == 0xE2) {
+                    const len = util.Utf.isUnicodeSeparator(self.source, self.cursor);
+
+                    if (len > 0) {
+                        self.has_line_terminator_before = true;
+                        can_be_html_close_comment = true;
+                        self.cursor += len;
+                        continue;
+                    }
+                }
 
                 const cp = try util.Utf.codePointAt(self.source, self.cursor);
 

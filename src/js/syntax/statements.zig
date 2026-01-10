@@ -111,7 +111,7 @@ fn parseExpressionStatementOrLabeledOrDirective(parser: *Parser) Error!?ast.Node
                 .value_len = value_len,
             },
         }, .{ .start = start, .end = try parser.eatSemicolon(expression_span.end) orelse return null });
-    } else if(parser.state.in_directive_prologue) {
+    } else if (parser.state.in_directive_prologue) {
         parser.state.in_directive_prologue = false;
     }
 
