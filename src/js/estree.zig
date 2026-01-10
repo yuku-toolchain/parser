@@ -1,7 +1,7 @@
 // converts the parsed tree to an typescript-estree compatible json string.
 // used for testing/ast inspection purposes, like snapshot tests (test folder).
-// also used for wasm, we convert to a json string first and pass to js, where js uses JSON.parse().
-// for NAPI, we will use a different approach rather than converting to a json string first and using JSON.parse() in js, which is slow.
+// this module is likely removed when have a better approach for passing ast to js, so we will use
+// that approach for snapshot tests.
 
 const std = @import("std");
 const ast = @import("ast.zig");
@@ -32,7 +32,7 @@ pub const Serializer = struct {
         var buffer: std.ArrayList(u8) = try .initCapacity(allocator, tree.source.len * 4);
         errdefer buffer.deinit(allocator);
 
-        const pos_map = try util.Utf.buildUtf16PosMap(allocator, tree.source);
+        const pos_map = try buildUtf16PosMap(allocator, tree.source);
         defer allocator.free(pos_map);
 
         var self = Self{
@@ -572,7 +572,7 @@ pub const Serializer = struct {
 
         var i: usize = 0;
         while (i < raw.len) {
-            const result = util.Utf.normalizeLineEnding(raw, i);
+            const result = normalizeLineEnding(raw, i);
             try self.scratch.append(self.allocator, result.normalized);
             i += result.len;
         }
@@ -1424,6 +1424,48 @@ fn appendUtf8(out: *std.ArrayList(u8), allocator: std.mem.Allocator, cp: u21) !v
         return;
     };
     try out.appendSlice(allocator, buf[0..len]);
+}
+
+/// normalize line terminators to LF (\n)
+/// handles CR, CRLF, and converts them all to LF
+/// returns the number of bytes consumed from source
+fn normalizeLineEnding(source: []const u8, pos: usize) struct { len: u8, normalized: u8 } {
+    const c = source[pos];
+
+    // CRLF -> LF
+    if (c == '\r') {
+        if (pos + 1 < source.len and source[pos + 1] == '\n') {
+            return .{ .len = 2, .normalized = '\n' };
+        }
+        // standalone CR -> LF
+        return .{ .len = 1, .normalized = '\n' };
+    }
+
+    // already LF, pass through
+    if (c == '\n') {
+        return .{ .len = 1, .normalized = '\n' };
+    }
+
+    // not a line ending
+    return .{ .len = 1, .normalized = c };
+}
+
+fn buildUtf16PosMap(allocator: std.mem.Allocator, source: []const u8) ![]u32 {
+    var map = try allocator.alloc(u32, source.len + 1);
+    var byte_pos: usize = 0;
+    var utf16_pos: u32 = 0;
+
+    while (byte_pos < source.len) {
+        map[byte_pos] = utf16_pos;
+        const len = std.unicode.utf8ByteSequenceLength(source[byte_pos]) catch 1;
+        utf16_pos += if (len == 4) 2 else 1; // surrogate pair for 4-byte sequences
+        for (1..len) |i| {
+            if (byte_pos + i < source.len) map[byte_pos + i] = utf16_pos;
+        }
+        byte_pos += len;
+    }
+    map[source.len] = utf16_pos;
+    return map;
 }
 
 pub fn toJSON(tree: *const parser.ParseTree, allocator: std.mem.Allocator, options: EstreeJsonOptions) ![]u8 {

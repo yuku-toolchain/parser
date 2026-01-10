@@ -916,17 +916,15 @@ pub const Lexer = struct {
     }
 
     inline fn skipSkippable(self: *Lexer) LexicalError!void {
-        // track if we're at a logical line start (start of file OR after a line terminator)
-        // this persists through whitespace/comment skipping for HTML close comment detection.
-        var at_line_start = self.cursor == 0 or self.has_line_terminator_before;
+        var can_be_html_close_comment = self.cursor == 0 or self.has_line_terminator_before;
 
         while (self.cursor < self.source_len) {
-            // consume any ECMAScript LineTerminatorSequence (LF, CR, CRLF, LS, PS)
+            // consume any LineTerminatorSequence (LF, CR, CRLF, LS, PS)
             const lt_len = util.Utf.lineTerminatorLen(self.source, self.cursor);
 
             if (lt_len > 0) {
                 self.has_line_terminator_before = true;
-                at_line_start = true;
+                can_be_html_close_comment = true;
                 self.cursor += lt_len;
                 continue;
             }
@@ -946,19 +944,17 @@ pub const Lexer = struct {
                         const next = self.peek(1);
                         if (next == '/') {
                             try self.scanLineComment();
-                            // scanLineComment stops before the line terminator; next loop iteration consumes it
                             continue;
                         } else if (next == '*') {
                             try self.scanBlockComment();
-                            // scanBlockComment updates has_line_terminator_before if it saw any
-                            if (self.has_line_terminator_before) at_line_start = true;
+                            if (self.has_line_terminator_before) can_be_html_close_comment = true;
                             continue;
                         }
                         break;
                     },
 
                     '<' => {
-                        // HTML-style comments (<!-- ... -->) are only valid in script mode
+                        // html-style comments (<!-- ... -->) are only valid in script mode
                         if (self.source_type == .script) {
                             const c1 = self.peek(1);
                             const c2 = self.peek(2);
@@ -973,15 +969,14 @@ pub const Lexer = struct {
                     },
 
                     '-' => {
-                        // HTML-style close comment --> is only valid at line start in script mode
+                        // html-style close comment --> is only valid at line start in script mode
                         // "line start" means start of file or after a line terminator,
                         // with only whitespace/comments before it.
-                        if (self.source_type == .script and at_line_start) {
+                        if (self.source_type == .script and can_be_html_close_comment) {
                             const c1 = self.peek(1);
                             const c2 = self.peek(2);
                             if (c1 == '-' and c2 == '>') {
                                 try self.scanHtmlCloseComment();
-                                // stops before the line terminator; next loop consumes it
                                 continue;
                             }
                         }
@@ -994,6 +989,7 @@ pub const Lexer = struct {
                 @branchHint(.unlikely);
 
                 const cp = try util.Utf.codePointAt(self.source, self.cursor);
+
                 if (util.Utf.isMultiByteSpace(cp.value)) {
                     self.cursor += cp.len;
                     continue;
