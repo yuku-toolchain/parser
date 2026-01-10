@@ -1,3 +1,6 @@
+// yuku's precedence system exactly follows:
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence#table
+
 pub const Mask = struct {
     pub const IsNumericLiteral: u32 = 1 << 12;
     pub const IsBinaryOp: u32 = 1 << 13;
