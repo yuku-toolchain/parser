@@ -1,5 +1,6 @@
-// yuku's precedence system exactly follows:
+// yuku's precedence system exactly follows with pratt:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence#table
+// means no special logics, works naturally
 
 pub const Mask = struct {
     pub const IsNumericLiteral: u32 = 1 << 12;
