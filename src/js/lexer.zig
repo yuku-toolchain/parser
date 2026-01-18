@@ -35,7 +35,25 @@ pub const LexicalError = error{
 // TODO:
 // [ ] some simd optimizations
 
+const LexerState = struct {
+    has_line_terminator_before: bool = false,
+    // <>...</>
+    in_jsx_text: bool = false,
+    // <...></...>
+    in_jsx_identifier: bool = false,
+};
+
 pub const Lexer = struct {
+    comments: std.ArrayList(ast.Comment),
+    allocator: std.mem.Allocator,
+
+    state: LexerState,
+
+    template_depth: u32,
+    /// stack of brace depths for each template nesting level.
+    /// each entry tracks nested braces within that template's ${} expression.
+    brace_depth_stack: [16]u32,
+
     strict_mode: bool,
     source: []const u8,
     source_len: u32,
@@ -43,15 +61,6 @@ pub const Lexer = struct {
     token_start: u32,
     /// current byte index being scanned in the source
     cursor: u32,
-
-    template_depth: u32,
-    /// stack of brace depths for each template nesting level.
-    /// each entry tracks nested braces within that template's ${} expression.
-    brace_depth_stack: [16]u32,
-
-    has_line_terminator_before: bool,
-    comments: std.ArrayList(ast.Comment),
-    allocator: std.mem.Allocator,
     source_type: parser.SourceType,
 
     pub fn init(source: []const u8, allocator: std.mem.Allocator, source_type: parser.SourceType, strict_mode: bool) error{OutOfMemory}!Lexer {
@@ -59,11 +68,14 @@ pub const Lexer = struct {
             .strict_mode = strict_mode,
             .source = source,
             .source_len = @intCast(source.len),
-            .token_start = 0,
-            .cursor = 0,
             .template_depth = 0,
+
+            .state = .{},
+
             .brace_depth_stack = .{0} ** 16,
-            .has_line_terminator_before = false,
+            .token_start = 0,
+
+            .cursor = 0,
             .comments = try .initCapacity(allocator, source.len / 3),
             .allocator = allocator,
             .source_type = source_type,
@@ -75,6 +87,21 @@ pub const Lexer = struct {
             return 0;
         }
         return self.source[self.cursor + offset];
+    }
+
+    inline fn canStartIdentifierAscii(c: u8) bool {
+        return (c >= 'a' and c <= 'z') or
+            (c >= 'A' and c <= 'Z') or
+            c == '_' or c == '$';
+    }
+
+    inline fn canContinueIdentifierAscii(c: u8, is_jsx: bool) bool {
+        return (c >= 'a' and c <= 'z') or
+            (c >= 'A' and c <= 'Z') or
+            (c >= '0' and c <= '9') or
+            c == '_' or c == '$' or
+            // <elem-name></elem-name>
+            (is_jsx and c == '-');
     }
 
     pub fn nextToken(self: *Lexer) LexicalError!token.Token {
@@ -95,7 +122,13 @@ pub const Lexer = struct {
             '`' => self.scanTemplateLiteral(),
             '~', '(', ')', '{', '[', ']', ';', ',', ':' => self.scanSimplePunctuation(),
             '}' => self.handleRightBrace(),
-            else => try self.scanIdentifierOrKeyword(),
+            else => {
+                if (self.state.in_jsx_text) {
+                    return self.scanJsxText();
+                }
+
+                return self.scanIdentifierOrKeyword();
+            },
         };
     }
 
@@ -126,7 +159,7 @@ pub const Lexer = struct {
         return self.createToken(token_type, self.source[start..self.cursor], start, self.cursor);
     }
 
-    inline fn makePunctuationToken(self: *Lexer, len: u32, token_type: token.TokenType, start: u32) token.Token {
+    inline fn makePuncToken(self: *Lexer, len: u32, token_type: token.TokenType, start: u32) token.Token {
         self.cursor += len;
         return self.createToken(token_type, self.source[start..self.cursor], start, self.cursor);
     }
@@ -140,83 +173,83 @@ pub const Lexer = struct {
 
         return switch (c0) {
             '+' => switch (c1) {
-                '+' => self.makePunctuationToken(2, .increment, start),
-                '=' => self.makePunctuationToken(2, .plus_assign, start),
-                else => self.makePunctuationToken(1, .plus, start),
+                '+' => self.makePuncToken(2, .increment, start),
+                '=' => self.makePuncToken(2, .plus_assign, start),
+                else => self.makePuncToken(1, .plus, start),
             },
             '-' => switch (c1) {
-                '-' => self.makePunctuationToken(2, .decrement, start),
-                '=' => self.makePunctuationToken(2, .minus_assign, start),
-                else => self.makePunctuationToken(1, .minus, start),
+                '-' => self.makePuncToken(2, .decrement, start),
+                '=' => self.makePuncToken(2, .minus_assign, start),
+                else => self.makePuncToken(1, .minus, start),
             },
             '*' => if (c1 == '*' and c2 == '=')
-                self.makePunctuationToken(3, .exponent_assign, start)
+                self.makePuncToken(3, .exponent_assign, start)
             else switch (c1) {
-                '*' => self.makePunctuationToken(2, .exponent, start),
-                '=' => self.makePunctuationToken(2, .star_assign, start),
-                else => self.makePunctuationToken(1, .star, start),
+                '*' => self.makePuncToken(2, .exponent, start),
+                '=' => self.makePuncToken(2, .star_assign, start),
+                else => self.makePuncToken(1, .star, start),
             },
-            '/' => if (c1 == '=') self.makePunctuationToken(2, .slash_assign, start) else self.makePunctuationToken(1, .slash, start),
+            '/' => if (c1 == '=') self.makePuncToken(2, .slash_assign, start) else self.makePuncToken(1, .slash, start),
             '%' => switch (c1) {
-                '=' => self.makePunctuationToken(2, .percent_assign, start),
-                else => self.makePunctuationToken(1, .percent, start),
+                '=' => self.makePuncToken(2, .percent_assign, start),
+                else => self.makePuncToken(1, .percent, start),
             },
             '<' => if (c1 == '<' and c2 == '=')
-                self.makePunctuationToken(3, .left_shift_assign, start)
+                self.makePuncToken(3, .left_shift_assign, start)
             else switch (c1) {
-                '<' => self.makePunctuationToken(2, .left_shift, start),
-                '=' => self.makePunctuationToken(2, .less_than_equal, start),
-                else => self.makePunctuationToken(1, .less_than, start),
+                '<' => self.makePuncToken(2, .left_shift, start),
+                '=' => self.makePuncToken(2, .less_than_equal, start),
+                else => self.makePuncToken(1, .less_than, start),
             },
             '>' => if (c1 == '>' and c2 == '=')
-                self.makePunctuationToken(3, .right_shift_assign, start)
+                self.makePuncToken(3, .right_shift_assign, start)
             else if (c1 == '>' and c2 == '>')
-                if (c3 == '=') self.makePunctuationToken(4, .unsigned_right_shift_assign, start) else self.makePunctuationToken(3, .unsigned_right_shift, start)
+                if (c3 == '=') self.makePuncToken(4, .unsigned_right_shift_assign, start) else self.makePuncToken(3, .unsigned_right_shift, start)
             else switch (c1) {
-                '>' => self.makePunctuationToken(2, .right_shift, start),
-                '=' => self.makePunctuationToken(2, .greater_than_equal, start),
-                else => self.makePunctuationToken(1, .greater_than, start),
+                '>' => self.makePuncToken(2, .right_shift, start),
+                '=' => self.makePuncToken(2, .greater_than_equal, start),
+                else => self.makePuncToken(1, .greater_than, start),
             },
             '=' => if (c1 == '=' and c2 == '=')
-                self.makePunctuationToken(3, .strict_equal, start)
+                self.makePuncToken(3, .strict_equal, start)
             else switch (c1) {
-                '=' => self.makePunctuationToken(2, .equal, start),
-                '>' => self.makePunctuationToken(2, .arrow, start),
-                else => self.makePunctuationToken(1, .assign, start),
+                '=' => self.makePuncToken(2, .equal, start),
+                '>' => self.makePuncToken(2, .arrow, start),
+                else => self.makePuncToken(1, .assign, start),
             },
             '!' => if (c1 == '=' and c2 == '=')
-                self.makePunctuationToken(3, .strict_not_equal, start)
+                self.makePuncToken(3, .strict_not_equal, start)
             else switch (c1) {
-                '=' => self.makePunctuationToken(2, .not_equal, start),
-                else => self.makePunctuationToken(1, .logical_not, start),
+                '=' => self.makePuncToken(2, .not_equal, start),
+                else => self.makePuncToken(1, .logical_not, start),
             },
             '&' => if (c1 == '&' and c2 == '=')
-                self.makePunctuationToken(3, .logical_and_assign, start)
+                self.makePuncToken(3, .logical_and_assign, start)
             else switch (c1) {
-                '&' => self.makePunctuationToken(2, .logical_and, start),
-                '=' => self.makePunctuationToken(2, .bitwise_and_assign, start),
-                else => self.makePunctuationToken(1, .bitwise_and, start),
+                '&' => self.makePuncToken(2, .logical_and, start),
+                '=' => self.makePuncToken(2, .bitwise_and_assign, start),
+                else => self.makePuncToken(1, .bitwise_and, start),
             },
             '|' => if (c1 == '|' and c2 == '=')
-                self.makePunctuationToken(3, .logical_or_assign, start)
+                self.makePuncToken(3, .logical_or_assign, start)
             else switch (c1) {
-                '|' => self.makePunctuationToken(2, .logical_or, start),
-                '=' => self.makePunctuationToken(2, .bitwise_or_assign, start),
-                else => self.makePunctuationToken(1, .bitwise_or, start),
+                '|' => self.makePuncToken(2, .logical_or, start),
+                '=' => self.makePuncToken(2, .bitwise_or_assign, start),
+                else => self.makePuncToken(1, .bitwise_or, start),
             },
             '^' => switch (c1) {
-                '=' => self.makePunctuationToken(2, .bitwise_xor_assign, start),
-                else => self.makePunctuationToken(1, .bitwise_xor, start),
+                '=' => self.makePuncToken(2, .bitwise_xor_assign, start),
+                else => self.makePuncToken(1, .bitwise_xor, start),
             },
             '?' => if (c1 == '?' and c2 == '=')
-                self.makePunctuationToken(3, .nullish_assign, start)
+                self.makePuncToken(3, .nullish_assign, start)
             else switch (c1) {
-                '?' => self.makePunctuationToken(2, .nullish_coalescing, start),
+                '?' => self.makePuncToken(2, .nullish_coalescing, start),
                 '.' => if (std.ascii.isDigit(c2))
-                    self.makePunctuationToken(1, .question, start)
+                    self.makePuncToken(1, .question, start)
                 else
-                    self.makePunctuationToken(2, .optional_chaining, start),
-                else => self.makePunctuationToken(1, .question, start),
+                    self.makePuncToken(2, .optional_chaining, start),
+                else => self.makePuncToken(1, .question, start),
             },
             else => unreachable,
         };
@@ -499,9 +532,35 @@ pub const Lexer = struct {
             return self.scanNumber();
         }
         if (c1 == '.' and c2 == '.') {
-            return self.makePunctuationToken(3, .spread, start);
+            return self.makePuncToken(3, .spread, start);
         }
-        return self.makePunctuationToken(1, .dot, start);
+        return self.makePuncToken(1, .dot, start);
+    }
+
+    fn scanJsxText(self: *Lexer) token.Token {
+        const c = self.source[self.cursor];
+
+        const start = self.cursor;
+
+        while (true) {
+            switch (c) {
+                '<' => {
+                    self.state.in_jsx_identifier = true;
+                    self.state.in_jsx_text = false;
+                    break;
+                },
+                '{' => {
+                    self.state.in_jsx_identifier = false;
+                    self.state.in_jsx_text = false;
+                    break;
+                },
+                else => {},
+            }
+
+            self.cursor += 1;
+        }
+
+        return self.createToken(.jsx_text, self.source[start..self.cursor], start, self.cursor);
     }
 
     inline fn scanIdentifierBody(self: *Lexer) !void {
@@ -516,9 +575,8 @@ pub const Lexer = struct {
                     }
                     const c2 = self.peek(2);
                     if (c2 != '{') {
-                        // \uXXXX format - decode and validate
                         if (util.Utf.parseHex4(self.source, self.cursor + 2)) |r| {
-                            if (!util.UnicodeId.canContinueIdentifier(r.value)) {
+                            if (!util.UnicodeId.canContinueIdentifierUnicode(r.value)) {
                                 return error.InvalidIdentifierContinue;
                             }
                         }
@@ -526,11 +584,7 @@ pub const Lexer = struct {
                     self.cursor += 1; // consume backslash to get to 'u'
                     try self.consumeUnicodeEscape();
                 } else {
-                    if ((c >= 'a' and c <= 'z') or
-                        (c >= 'A' and c <= 'Z') or
-                        (c >= '0' and c <= '9') or
-                        c == '_' or c == '$')
-                    {
+                    if (canContinueIdentifierAscii(c, self.state.in_jsx_identifier)) {
                         self.cursor += 1;
                     } else {
                         break;
@@ -539,7 +593,7 @@ pub const Lexer = struct {
             } else {
                 @branchHint(.cold);
                 const cp = try util.Utf.codePointAt(self.source, self.cursor);
-                if (util.UnicodeId.canContinueIdentifier(cp.value)) {
+                if (util.UnicodeId.canContinueIdentifierUnicode(cp.value)) {
                     self.cursor += cp.len;
                 } else {
                     break;
@@ -552,6 +606,7 @@ pub const Lexer = struct {
         const start = self.cursor;
 
         const is_private = self.source[self.cursor] == '#';
+
         if (is_private) {
             self.cursor += 1;
         }
@@ -566,7 +621,7 @@ pub const Lexer = struct {
                 const c2 = self.peek(2);
                 if (c2 != '{') {
                     if (util.Utf.parseHex4(self.source, self.cursor + 2)) |r| {
-                        if (!util.UnicodeId.canStartIdentifier(r.value)) {
+                        if (!util.UnicodeId.canStartIdentifierUnicode(r.value)) {
                             return error.InvalidIdentifierStart;
                         }
                     }
@@ -574,10 +629,7 @@ pub const Lexer = struct {
                 self.cursor += 1; // consume backslash to get to 'u'
                 try self.consumeUnicodeEscape();
             } else {
-                if (!((first_char >= 'a' and first_char <= 'z') or
-                    (first_char >= 'A' and first_char <= 'Z') or
-                    first_char == '_' or first_char == '$'))
-                {
+                if (!canStartIdentifierAscii(first_char)) {
                     @branchHint(.cold);
                     return error.InvalidIdentifierStart;
                 }
@@ -587,7 +639,7 @@ pub const Lexer = struct {
         } else {
             @branchHint(.cold);
             const c_cp = try util.Utf.codePointAt(self.source, self.cursor);
-            if (!util.UnicodeId.canStartIdentifier(c_cp.value)) {
+            if (!util.UnicodeId.canStartIdentifierUnicode(c_cp.value)) {
                 return error.InvalidIdentifierStart;
             }
             self.cursor += c_cp.len;
@@ -595,7 +647,9 @@ pub const Lexer = struct {
         }
 
         const lexeme = self.source[start..self.cursor];
-        const token_type: token.TokenType = if (is_private) .private_identifier else self.getKeywordType(lexeme);
+
+        const token_type: token.TokenType = if (self.state.in_jsx_identifier) .jsx_identifier else if (is_private) .private_identifier else self.getKeywordType(lexeme);
+
         return self.createToken(token_type, lexeme, start, self.cursor);
     }
 
@@ -919,7 +973,7 @@ pub const Lexer = struct {
     }
 
     inline fn skipSkippable(self: *Lexer) LexicalError!void {
-        var can_be_html_close_comment = self.cursor == 0 or self.has_line_terminator_before;
+        var can_be_html_close_comment = self.cursor == 0 or self.state.has_line_terminator_before;
 
         while (self.cursor < self.source_len) {
             const c = self.source[self.cursor];
@@ -933,7 +987,7 @@ pub const Lexer = struct {
                         continue;
                     },
                     '\n', '\r' => {
-                        self.has_line_terminator_before = true;
+                        self.state.has_line_terminator_before = true;
                         can_be_html_close_comment = true;
                         self.cursor += 1;
                         continue;
@@ -945,7 +999,7 @@ pub const Lexer = struct {
                             continue;
                         } else if (next == '*') {
                             try self.scanBlockComment();
-                            if (self.has_line_terminator_before) can_be_html_close_comment = true;
+                            if (self.state.has_line_terminator_before) can_be_html_close_comment = true;
                             continue;
                         }
                         break;
@@ -988,7 +1042,7 @@ pub const Lexer = struct {
                 const us_len = util.Utf.unicodeSeparatorLen(self.source, self.cursor);
 
                 if (us_len > 0) {
-                    self.has_line_terminator_before = true;
+                    self.state.has_line_terminator_before = true;
                     can_be_html_close_comment = true;
                     self.cursor += us_len;
                     continue;
@@ -1033,7 +1087,7 @@ pub const Lexer = struct {
             const lt_len = util.Utf.lineTerminatorLen(self.source, self.cursor);
 
             if (lt_len > 0) {
-                self.has_line_terminator_before = true;
+                self.state.has_line_terminator_before = true;
                 self.cursor += lt_len;
                 continue;
             }
@@ -1108,10 +1162,10 @@ pub const Lexer = struct {
             .type = token_type,
             .lexeme = lexeme,
             .span = .{ .start = start, .end = end },
-            .has_line_terminator_before = self.has_line_terminator_before,
+            .has_line_terminator_before = self.state.has_line_terminator_before,
         };
 
-        self.has_line_terminator_before = false;
+        self.state.has_line_terminator_before = false;
         return tok;
     }
 };

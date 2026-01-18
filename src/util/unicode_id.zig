@@ -3,24 +3,11 @@
 
 // inspired by https://github.com/dtolnay/unicode-ident
 
-pub fn canStartIdentifier(cp: u32) bool {
-    if (cp < 128) {
-        return (cp >= 'a' and cp <= 'z') or
-            (cp >= 'A' and cp <= 'Z') or
-            cp == '_' or cp == '$';
-    }
-
+pub fn canStartIdentifierUnicode(cp: u32) bool {
     return queryBitTable(cp, &id_start_root, &id_start_leaf);
 }
 
-pub fn canContinueIdentifier(cp: u32) bool {
-    if (cp < 128) {
-        return (cp >= 'a' and cp <= 'z') or
-            (cp >= 'A' and cp <= 'Z') or
-            cp == '_' or cp == '$' or
-            (cp >= '0' and cp <= '9');
-    }
-
+pub fn canContinueIdentifierUnicode(cp: u32) bool {
     return queryBitTable(cp, &id_continue_root, &id_continue_leaf);
 }
 

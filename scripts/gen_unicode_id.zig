@@ -50,26 +50,11 @@ pub fn main() !void {
         \\
         \\// inspired by https://github.com/dtolnay/unicode-ident
         \\
-        \\const std = @import("std");
-        \\
-        \\pub fn canStartIdentifier(cp: u32) bool {
-        \\    if (cp < 128) {
-        \\        return (cp >= 'a' and cp <= 'z') or
-        \\            (cp >= 'A' and cp <= 'Z') or
-        \\            cp == '_' or cp == '$';
-        \\    }
-        \\
+        \\pub fn canStartIdentifierUnicode(cp: u32) bool {
         \\    return queryBitTable(cp, &id_start_root, &id_start_leaf);
         \\}
         \\
-        \\pub fn canContinueIdentifier(cp: u32) bool {
-        \\    if (cp < 128) {
-        \\        return (cp >= 'a' and cp <= 'z') or
-        \\            (cp >= 'A' and cp <= 'Z') or
-        \\            cp == '_' or cp == '$' or
-        \\            (cp >= '0' and cp <= '9');
-        \\    }
-        \\
+        \\pub fn canContinueIdentifierUnicode(cp: u32) bool {
         \\    return queryBitTable(cp, &id_continue_root, &id_continue_leaf);
         \\}
         \\
@@ -77,7 +62,7 @@ pub fn main() !void {
         \\const bits_per_word = 32;
         \\const leaf_chunk_width = 16;
         \\
-        \\pub inline fn queryBitTable(cp: u32, root: []const u8, leaf: []const u64) bool {
+        \\inline fn queryBitTable(cp: u32, comptime root: []const u8, comptime leaf: []const u64) bool {
         \\    const chunk_idx = cp / chunk_size;
         \\    const leaf_base = @as(u32, root[chunk_idx]) * leaf_chunk_width;
         \\    const offset_in_chunk = cp - (chunk_idx * chunk_size);
