@@ -1099,7 +1099,7 @@ pub const TSNamespaceExportDeclaration = struct {
 pub const JSXElement = struct {
     /// JSXOpeningElement
     opening_element: NodeIndex,
-    /// JSXChild[]
+    /// (JSXText | JSXElement | JSXFragment | JSXExpressionContainer | JSXSpreadChild)[]
     children: IndexRange,
     /// JSXClosingElement (optional, may be null_node for self-closing tags)
     closing_element: NodeIndex,
@@ -1108,9 +1108,9 @@ pub const JSXElement = struct {
 /// `<Foo bar={baz}>` or `<Foo />`
 /// https://facebook.github.io/jsx/#prod-JSXOpeningElement
 pub const JSXOpeningElement = struct {
-    /// JSXElementName - the tag name
+    /// JSXIdentifier | JSXNamespacedName | JSXMemberExpression
     name: NodeIndex,
-    /// JSXAttributeItem[]
+    /// (JSXAttribute | JSXSpreadAttribute)[]
     attributes: IndexRange,
     /// true for `<Foo />`, false for `<Foo>`
     self_closing: bool,
@@ -1119,7 +1119,7 @@ pub const JSXOpeningElement = struct {
 /// `</Foo>`
 /// https://facebook.github.io/jsx/#prod-JSXClosingElement
 pub const JSXClosingElement = struct {
-    /// JSXElementName - the tag name
+    /// JSXIdentifier | JSXNamespacedName | JSXMemberExpression
     name: NodeIndex,
 };
 
@@ -1128,7 +1128,7 @@ pub const JSXClosingElement = struct {
 pub const JSXFragment = struct {
     /// JSXOpeningFragment
     opening_fragment: NodeIndex,
-    /// JSXChild[]
+    /// (JSXText | JSXElement | JSXFragment | JSXExpressionContainer | JSXSpreadChild)[]
     children: IndexRange,
     /// JSXClosingFragment
     closing_fragment: NodeIndex,
@@ -1159,18 +1159,18 @@ pub const JSXNamespacedName = struct {
 /// `<Foo.Bar.Baz />`
 /// https://facebook.github.io/jsx/#prod-JSXMemberExpression
 pub const JSXMemberExpression = struct {
-    /// JSXMemberExpressionObject (JSXIdentifier or JSXMemberExpression)
+    /// JSXIdentifier | JSXMemberExpression
     object: NodeIndex,
-    /// JSXIdentifier - property portion
+    /// JSXIdentifier
     property: NodeIndex,
 };
 
 /// `foo="bar"` or `foo={expr}` or just `foo`
 /// https://facebook.github.io/jsx/#prod-JSXAttribute
 pub const JSXAttribute = struct {
-    /// JSXAttributeName (JSXIdentifier or JSXNamespacedName)
+    /// JSXIdentifier | JSXNamespacedName
     name: NodeIndex,
-    /// JSXAttributeValue (optional, may be null_node for boolean-like attributes)
+    /// StringLiteral | JSXExpressionContainer | JSXElement | JSXFragment (optional, may be null_node for boolean-like attributes)
     value: NodeIndex,
 };
 
@@ -1184,7 +1184,7 @@ pub const JSXSpreadAttribute = struct {
 /// `{expression}`
 /// https://facebook.github.io/jsx/#prod-JSXExpressionContainer
 pub const JSXExpressionContainer = struct {
-    /// JSXExpression (JSXEmptyExpression or Expression)
+    /// JSXEmptyExpression | Expression
     expression: NodeIndex,
 };
 
