@@ -288,7 +288,6 @@ fn parseUnaryExpression(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 /// `await expression`
-/// https://tc39.es/ecma262/#sec-await
 fn parseAwaitExpression(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     try parser.advance() orelse return null; // consume 'await'
@@ -302,7 +301,6 @@ fn parseAwaitExpression(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 /// `yield`, `yield expression`, or `yield* expression`
-/// https://tc39.es/ecma262/#sec-generator-function-definitions-runtime-semantics-evaluation
 fn parseYieldExpression(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     var end = parser.current_token.span.end;
@@ -343,7 +341,6 @@ fn parseYieldExpression(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 /// `this`
-/// https://tc39.es/ecma262/#sec-this-keyword
 fn parseThisExpression(parser: *Parser) Error!?ast.NodeIndex {
     const this_token = parser.current_token;
     try parser.advance() orelse return null; // consume 'this'
@@ -351,7 +348,6 @@ fn parseThisExpression(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 /// `super`
-/// https://tc39.es/ecma262/#sec-super-keyword
 fn parseSuperExpression(parser: *Parser) Error!?ast.NodeIndex {
     const super_token = parser.current_token;
     try parser.advance() orelse return null; // consume 'super'
@@ -363,8 +359,6 @@ fn parseSuperExpression(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 /// `import.meta` or `import(...)`
-/// https://tc39.es/ecma262/#prod-ImportCall
-/// https://tc39.es/ecma262/#prod-ImportMeta
 pub fn parseImportExpression(parser: *Parser, name_from_param: ?u32) Error!?ast.NodeIndex {
     const name = name_from_param orelse try literals.parseIdentifierName(parser) orelse return null;
 
@@ -418,7 +412,6 @@ fn parseImportMetaOrPhaseImport(parser: *Parser, name: u32) Error!?ast.NodeIndex
 }
 
 /// `new.target`
-/// https://tc39.es/ecma262/#prod-NewTarget
 fn parseNewTarget(parser: *Parser, name: u32) Error!?ast.NodeIndex {
     try parser.advance() orelse return null; // consume '.'
 
@@ -440,7 +433,6 @@ fn parseNewTarget(parser: *Parser, name: u32) Error!?ast.NodeIndex {
 }
 
 /// `new Callee`, `new Callee(args)`, or `new.target`
-/// https://tc39.es/ecma262/#sec-new-operator
 fn parseNewExpression(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     const new = try literals.parseIdentifierName(parser) orelse return null; // consume 'new'
@@ -611,7 +603,6 @@ fn parseLogicalExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) 
 }
 
 /// `a, b, c` - comma operator / sequence expression
-/// https://tc39.es/ecma262/#sec-comma-operator
 fn parseSequenceExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex) Error!?ast.NodeIndex {
     const checkpoint = parser.scratch_a.begin();
     try parser.scratch_a.append(parser.allocator(), left);
@@ -677,7 +668,6 @@ fn parseAssignmentExpression(parser: *Parser, precedence: u8, left: ast.NodeInde
 }
 
 /// `test ? consequent : alternate`
-/// https://tc39.es/ecma262/#sec-conditional-operator
 fn parseConditionalExpression(parser: *Parser, precedence: u8, @"test": ast.NodeIndex) Error!?ast.NodeIndex {
     const test_span = parser.getSpan(@"test");
 
@@ -1012,7 +1002,6 @@ fn parseOptionalChainElement(parser: *Parser, object_node: ast.NodeIndex, option
     };
 }
 
-/// https://tc39.es/ecma262/#sec-left-hand-side-expressions
 /// used to parse `extends` clause, where we only need left hand side expression
 pub inline fn parseLeftHandSideExpression(parser: *Parser) Error!?ast.NodeIndex {
     // base expression
@@ -1076,7 +1065,6 @@ fn isPostfixOperation(token_type: token.TokenType) bool {
     };
 }
 
-/// https://tc39.es/ecma262/#sec-left-hand-side-expressions
 fn isLeftHandSideExpression(data: ast.NodeData) bool {
     return switch (data) {
         .arrow_function_expression, .update_expression, .unary_expression, .await_expression, .yield_expression, .binary_expression, .logical_expression, .conditional_expression, .assignment_expression, .sequence_expression => false,
