@@ -1,1 +1,1 @@
-export default "cool"
+<div>nice</div>
