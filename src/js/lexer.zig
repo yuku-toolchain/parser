@@ -89,6 +89,21 @@ pub const Lexer = struct {
         return self.source[self.cursor + offset];
     }
 
+    inline fn canStartIdentifierAscii(c: u8) bool {
+        return (c >= 'a' and c <= 'z') or
+            (c >= 'A' and c <= 'Z') or
+            c == '_' or c == '$';
+    }
+
+    inline fn canContinueIdentifierAscii(c: u8, is_jsx: bool) bool {
+        return (c >= 'a' and c <= 'z') or
+            (c >= 'A' and c <= 'Z') or
+            (c >= '0' and c <= '9') or
+            c == '_' or c == '$' or
+            // <elem-name></elem-name>
+            (is_jsx and c == '-');
+    }
+
     pub fn nextToken(self: *Lexer) LexicalError!token.Token {
         try self.skipSkippable();
 
@@ -108,7 +123,7 @@ pub const Lexer = struct {
             '~', '(', ')', '{', '[', ']', ';', ',', ':' => self.scanSimplePunctuation(),
             '}' => self.handleRightBrace(),
             else => {
-                if(self.state.in_jsx_text) {
+                if (self.state.in_jsx_text) {
                     return self.scanJsxText();
                 }
 
@@ -539,7 +554,7 @@ pub const Lexer = struct {
                     self.state.in_jsx_text = false;
                     break;
                 },
-                else => {}
+                else => {},
             }
 
             self.cursor += 1;
@@ -561,7 +576,7 @@ pub const Lexer = struct {
                     const c2 = self.peek(2);
                     if (c2 != '{') {
                         if (util.Utf.parseHex4(self.source, self.cursor + 2)) |r| {
-                            if (!util.UnicodeId.canContinueIdentifier(r.value)) {
+                            if (!util.UnicodeId.canContinueIdentifierUnicode(r.value)) {
                                 return error.InvalidIdentifierContinue;
                             }
                         }
@@ -569,13 +584,7 @@ pub const Lexer = struct {
                     self.cursor += 1; // consume backslash to get to 'u'
                     try self.consumeUnicodeEscape();
                 } else {
-                    if ((c >= 'a' and c <= 'z') or
-                        (c >= 'A' and c <= 'Z') or
-                        (c >= '0' and c <= '9') or
-                        c == '_' or c == '$' or
-                        // <elem-name></elem-name>
-                        (self.state.in_jsx_identifier and c == '-'))
-                    {
+                    if (canContinueIdentifierAscii(c, self.state.in_jsx_identifier)) {
                         self.cursor += 1;
                     } else {
                         break;
@@ -584,7 +593,7 @@ pub const Lexer = struct {
             } else {
                 @branchHint(.cold);
                 const cp = try util.Utf.codePointAt(self.source, self.cursor);
-                if (util.UnicodeId.canContinueIdentifier(cp.value)) {
+                if (util.UnicodeId.canContinueIdentifierUnicode(cp.value)) {
                     self.cursor += cp.len;
                 } else {
                     break;
@@ -612,7 +621,7 @@ pub const Lexer = struct {
                 const c2 = self.peek(2);
                 if (c2 != '{') {
                     if (util.Utf.parseHex4(self.source, self.cursor + 2)) |r| {
-                        if (!util.UnicodeId.canStartIdentifier(r.value)) {
+                        if (!util.UnicodeId.canStartIdentifierUnicode(r.value)) {
                             return error.InvalidIdentifierStart;
                         }
                     }
@@ -620,10 +629,7 @@ pub const Lexer = struct {
                 self.cursor += 1; // consume backslash to get to 'u'
                 try self.consumeUnicodeEscape();
             } else {
-                if (!((first_char >= 'a' and first_char <= 'z') or
-                    (first_char >= 'A' and first_char <= 'Z') or
-                    first_char == '_' or first_char == '$'))
-                {
+                if (!canStartIdentifierAscii(first_char)) {
                     @branchHint(.cold);
                     return error.InvalidIdentifierStart;
                 }
@@ -633,7 +639,7 @@ pub const Lexer = struct {
         } else {
             @branchHint(.cold);
             const c_cp = try util.Utf.codePointAt(self.source, self.cursor);
-            if (!util.UnicodeId.canStartIdentifier(c_cp.value)) {
+            if (!util.UnicodeId.canStartIdentifierUnicode(c_cp.value)) {
                 return error.InvalidIdentifierStart;
             }
             self.cursor += c_cp.len;
