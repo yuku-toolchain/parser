@@ -2,7 +2,7 @@ const ast = @import("../ast.zig");
 const Parser = @import("../parser.zig").Parser;
 const Error = @import("../parser.zig").Error;
 
-pub fn parseJsx(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseJsxElement(parser: *Parser) Error!?ast.NodeIndex {
     _ = try parseJsxOpeningElement(parser) orelse return null;
 
     return null;
