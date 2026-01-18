@@ -5,6 +5,7 @@ const token = @import("../token.zig");
 const std = @import("std");
 const Precedence = @import("../token.zig").Precedence;
 
+const jsx = @import("jsx.zig");
 const statements = @import("statements.zig");
 const variables = @import("variables.zig");
 const array = @import("array.zig");
@@ -140,6 +141,11 @@ fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts, precedence: u8) Error
 
     if (token_type == .import) {
         return parseImportExpression(parser, null);
+    }
+
+    // jsx element
+    if(token_type == .less_than) {
+        return jsx.parseJsx(parser);
     }
 
     return parsePrimaryExpression(parser, opts, precedence);
