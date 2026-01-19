@@ -12,6 +12,7 @@ await preload()
 console.clear()
 
 const isCI = !!process.env.CI
+const updateSnapshots = process.argv.includes("--update-snapshots")
 
 type TestType = "should_pass" | "should_fail" | "snapshot"
 type Language = "js" | "ts" | "jsx" | "tsx" | "dts"
@@ -178,6 +179,11 @@ const runTest = async (
       const snapshot = await Bun.file(snapshotFile).json()
 
       if (!equal(parsed, snapshot)) {
+        if (updateSnapshots) {
+          await Bun.write(snapshotFile, JSON.stringify(parsed, null, 2))
+          result.passed++
+          return
+        }
         const difference = diff(snapshot, parsed, { contextLines: 2 })
         if (!isCI) {
           console.log(`\nx ${file}\n${difference}\n`)
