@@ -307,7 +307,7 @@ pub const Parser = struct {
 
             try self.diagnostics.append(self.allocator(), .{
                 .message = lexer.getLexicalErrorMessage(lex_err),
-                .span = .{ .start = self.lexer.token_start, .end = self.lexer.cursor },
+                .span = .{ .start = self.current_token.span.end, .end = self.lexer.cursor },
                 .help = lexer.getLexicalErrorHelp(lex_err),
             });
 

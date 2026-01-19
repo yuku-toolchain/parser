@@ -59,8 +59,7 @@ pub const Lexer = struct {
 
     strict_mode: bool,
     source: []const u8,
-    /// token start position, retained for lexical error recovery if scan fails
-    token_start: u32,
+
     /// current byte index being scanned in the source
     cursor: u32,
     source_type: parser.SourceType,
@@ -74,7 +73,6 @@ pub const Lexer = struct {
             .state = .{},
 
             .brace_depth_stack = .{0} ** 16,
-            .token_start = 0,
 
             .cursor = 0,
             .comments = try .initCapacity(allocator, source.len / 3),
@@ -85,15 +83,16 @@ pub const Lexer = struct {
 
     pub fn nextToken(self: *Lexer) LexicalError!token.Token {
         // jsx text allows whitespaces and comments, as is as text
-        if(self.state.mode != .jsx_text) {
-            try self.skipWsAndComments();
+        if(self.state.mode == .jsx_text) {
+            return self.scanJsxText();
         }
+
+        try self.skipWsAndComments();
 
         if (self.cursor >= self.source.len) {
             return self.createToken(.eof, "", self.cursor, self.cursor);
         }
 
-        self.token_start = self.cursor;
         const current_char = self.source[self.cursor];
 
         return switch (current_char) {
@@ -104,13 +103,7 @@ pub const Lexer = struct {
             '`' => self.scanTemplateLiteral(),
             '~', '(', ')', '{', '[', ']', ';', ',', ':' => self.scanSimplePunctuation(),
             '}' => self.handleRightBrace(),
-            else => {
-                if (self.state.mode == .jsx_text) {
-                    return self.scanJsxText();
-                }
-
-                return self.scanIdentifierOrKeyword();
-            },
+            else => self.scanIdentifierOrKeyword(),
         };
     }
 
