@@ -768,7 +768,7 @@ pub fn parseObjectExpression(parser: *Parser, in_cover: bool) Error!?ast.NodeInd
     return object.coverToExpression(parser, cover, needs_validation);
 }
 
-fn isPartOfPattern(parser: *Parser) bool {
+inline fn isPartOfPattern(parser: *Parser) bool {
     return // means this array is part of assignment expression/pattern
     parser.current_token.type == .assign or
         // means this array is part of for-in/of
@@ -886,21 +886,29 @@ fn parseArguments(parser: *Parser) Error!?ast.IndexRange {
     parser.context.allow_in = true;
 
     while (parser.current_token.type != .right_paren and parser.current_token.type != .eof) {
+
         const arg = if (parser.current_token.type == .spread) blk: {
             const spread_start = parser.current_token.span.start;
+
             try parser.advance() orelse return null; // consume '...'
+
             const argument = try parseExpression(parser, Precedence.Assignment, .{}) orelse {
                 parser.context.allow_in = saved_allow_in;
                 parser.scratch_a.reset(checkpoint);
                 return null;
             };
+
             const arg_span = parser.getSpan(argument);
+
             break :blk try parser.addNode(.{
                 .spread_element = .{ .argument = argument },
             }, .{ .start = spread_start, .end = arg_span.end });
+
         } else try parseExpression(parser, Precedence.Assignment, .{}) orelse {
             parser.context.allow_in = saved_allow_in;
+
             parser.scratch_a.reset(checkpoint);
+
             return null;
         };
 

@@ -1,19 +1,103 @@
+// WIP WIP WIP
+
+const std = @import("std");
 const ast = @import("../ast.zig");
 const Parser = @import("../parser.zig").Parser;
 const Error = @import("../parser.zig").Error;
 
 pub fn parseJsxElement(parser: *Parser) Error!?ast.NodeIndex {
-    _ = try parseJsxOpeningElement(parser) orelse return null;
+    const start = parser.current_token.span.start;
 
-    return null;
+    const opening_element = try parseJsxOpeningElement(parser) orelse return null;
+
+    const end = parser.current_token.span.end;
+
+    return try parser.addNode(
+        .{
+            .jsx_element = .{
+                .opening_element = opening_element,
+                .children = ast.IndexRange.empty,
+                .closing_element = ast.null_node
+            }
+        }, .{ .start = start, .end = end });
 }
 
 pub fn parseJsxOpeningElement(parser: *Parser) Error!?ast.NodeIndex {
     parser.setLexerMode(.jsx_identifier);
 
+    const start = parser.current_token.span.start;
+
     try parser.advance() orelse return null; // consume '<'
 
-    if(parser.current_token.type == .jsx_identifier) {}
+    var self_closing = false;
+
+    var name: ast.NodeIndex = undefined;
+
+    if (parser.current_token.type == .jsx_identifier) {
+        name = try parser.addNode(
+            .{
+                .jsx_identifier = .{
+                    .name_len = @intCast(parser.current_token.lexeme.len),
+                    .name_start = parser.current_token.span.start
+                }
+            }, parser.current_token.span);
+
+        try parser.advance() orelse return null;
+
+    } else {
+        // report error here
+
+        return null;
+    }
+
+    if (parser.current_token.type == .dot) {
+        name = try parseJsxMemberExpression(parser, name) orelse return null;
+        try parser.advance() orelse return null;
+    }
+
+    if (parser.current_token.type == .slash) {
+        self_closing = true;
+        try parser.advance() orelse return null;
+    }
+
+    if (!try parser.expect(.greater_than, "an error message here", "a help message")) {
+       return null;
+    }
+
+    const end = parser.current_token.span.end;
+
+    return try parser.addNode(.{
+        .jsx_opening_element =  .{
+            .name = name,
+            .attributes = ast.IndexRange.empty, // not implemented yet
+            .self_closing = self_closing
+        }
+    }, .{ .start = start, .end = end });
+}
+
+pub fn parseJsxMemberExpression(parser: *Parser, object: ast.NodeIndex) Error!?ast.NodeIndex {
+    try parser.advance() orelse return null; // consume '.'
+
+    if(parser.current_token.type == .jsx_identifier) {
+        return try parser.addNode(
+            .{
+                .jsx_member_expression = .{
+                    .object = object,
+                    .property = try parser.addNode(
+                        .{
+                            .jsx_identifier = .{
+                                .name_len = @intCast(parser.current_token.lexeme.len),
+                                .name_start = parser.current_token.span.start
+                            }
+                        }, parser.current_token.span)
+                }
+            }, .{
+                .start = parser.getSpan(object).start,
+                .end = parser.current_token.span.end,
+            });
+    }
+
+    // report error here with proper message
 
     return null;
 }
