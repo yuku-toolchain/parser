@@ -246,6 +246,10 @@ pub const Parser = struct {
         return self.lang == .ts or self.lang == .tsx or self.lang == .dts;
     }
 
+    pub inline fn isJsx(self: *Parser) bool {
+        return self.lang == .tsx or self.lang == .jsx;
+    }
+
     pub inline fn isModule(self: *Parser) bool {
         return self.source_type == .module;
     }

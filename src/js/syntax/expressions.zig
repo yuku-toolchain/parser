@@ -144,7 +144,7 @@ fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts, precedence: u8) Error
     }
 
     // jsx element
-    if(token_type == .less_than) {
+    if(token_type == .less_than and parser.isJsx()) {
         return jsx.parseJsxElement(parser);
     }
 
