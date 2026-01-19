@@ -21,6 +21,6 @@ Yuku is still at a very early stage. Even though Yuku's JavaScript parser is alr
 
 - [x] JavaScript Parser
 - [x] WASM (try here: https://yuku-parser.vercel.app/playground)
-- [ ] JSX Support
+- [ ] JSX Support (In Progress)
 - [ ] TypeScript Support
 - [ ] Best-in-class Visitor and Traverser
