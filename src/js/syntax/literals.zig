@@ -6,7 +6,7 @@ const Parser = @import("../parser.zig").Parser;
 const Error = @import("../parser.zig").Error;
 const expressions = @import("expressions.zig");
 
-pub inline fn parseStringLiteral(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseStringLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
     try parser.advance() orelse return null;
     return try parser.addNode(.{
@@ -17,7 +17,7 @@ pub inline fn parseStringLiteral(parser: *Parser) Error!?ast.NodeIndex {
     }, token.span);
 }
 
-pub inline fn parseBooleanLiteral(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseBooleanLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
     try parser.advance() orelse return null;
     return try parser.addNode(.{
@@ -25,13 +25,13 @@ pub inline fn parseBooleanLiteral(parser: *Parser) Error!?ast.NodeIndex {
     }, token.span);
 }
 
-pub inline fn parseNullLiteral(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseNullLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
     try parser.advance() orelse return null;
     return try parser.addNode(.null_literal, token.span);
 }
 
-pub inline fn parseNumericLiteral(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseNumericLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
     try parser.advance() orelse return null;
     return try parser.addNode(.{
@@ -42,7 +42,7 @@ pub inline fn parseNumericLiteral(parser: *Parser) Error!?ast.NodeIndex {
     }, token.span);
 }
 
-pub inline fn parseBigIntLiteral(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseBigIntLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
     try parser.advance() orelse return null;
     return try parser.addNode(.{
