@@ -178,9 +178,7 @@ inline fn getTemplateElementSpan(token: @import("../token.zig").Token) ast.Span 
 }
 
 pub inline fn parseIdentifier(parser: *Parser) Error!?ast.NodeIndex {
-    if (!try validateIdentifier(parser, "an identifier", parser.current_token)) {
-        return null;
-    }
+    if (!try validateIdentifier(parser, "an identifier", parser.current_token)) return null;
 
     const tok = parser.current_token;
     try parser.advance() orelse return null;
@@ -215,9 +213,7 @@ pub fn parseIdentifierName(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 pub fn parseLabelIdentifier(parser: *Parser) Error!?ast.NodeIndex {
-    if (!try validateIdentifier(parser, "a label", parser.current_token)) {
-        return null;
-    }
+    if (!try validateIdentifier(parser, "a label", parser.current_token)) return null;
 
     const current = parser.current_token;
     try parser.advance() orelse return null;

@@ -82,9 +82,7 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts, start_from_param:
         .right_paren,
         "Expected ')' to close parameter list",
         "Add a closing parenthesis ')' after the parameters, or check for missing commas between parameters.",
-    )) {
-        return null;
-    }
+    )) return null;
 
     var body = ast.null_node;
 

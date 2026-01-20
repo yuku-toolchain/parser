@@ -191,9 +191,7 @@ fn parseNamedImports(parser: *Parser) Error!?ast.IndexRange {
         }
     }
 
-    if (!try parser.expect(.right_brace, "Expected '}' to close named imports", null)) {
-        return null;
-    }
+    if (!try parser.expect(.right_brace, "Expected '}' to close named imports", null)) return null;
 
     return try parser.addExtra(parser.scratch_a.take(checkpoint));
 }
@@ -549,9 +547,7 @@ fn parseExportSpecifiers(parser: *Parser) Error!?ExportSpecifiersResult {
         }
     }
 
-    if (!try parser.expect(.right_brace, "Expected '}' to close export specifiers", null)) {
-        return null;
-    }
+    if (!try parser.expect(.right_brace, "Expected '}' to close export specifiers", null)) return null;
 
     return .{
         .specifiers = try parser.addExtra(parser.scratch_a.take(checkpoint)),

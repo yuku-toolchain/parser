@@ -99,9 +99,7 @@ fn parseClassBody(parser: *Parser) Error!?ast.NodeIndex {
         .right_brace,
         "Expected '}' to close class body",
         "Add a closing brace '}' to complete the class, or check for unbalanced braces inside.",
-    )) {
-        return null;
-    }
+    )) return null;
 
     return try parser.addNode(.{
         .class_body = .{ .body = try parser.addExtra(parser.scratch_a.take(checkpoint)) },
@@ -351,9 +349,7 @@ fn parseMethodDefinition(
     }
 
     const func_start = parser.current_token.span.start;
-    if (!try parser.expect(.left_paren, "Expected '(' to start method parameters", null)) {
-        return null;
-    }
+    if (!try parser.expect(.left_paren, "Expected '(' to start method parameters", null)) return null;
 
     const params = try functions.parseFormalParamaters(parser, .unique_formal_parameters) orelse return null;
     const params_data = parser.getData(params).formal_parameters;
@@ -380,9 +376,7 @@ fn parseMethodDefinition(
         }
     }
 
-    if (!try parser.expect(.right_paren, "Expected ')' after method parameters", null)) {
-        return null;
-    }
+    if (!try parser.expect(.right_paren, "Expected ')' after method parameters", null)) return null;
 
     // body
     const body = try functions.parseFunctionBody(parser) orelse return null;
@@ -454,17 +448,13 @@ fn parsePropertyDefinition(
 
 /// static block: static { ... }
 fn parseStaticBlock(parser: *Parser, start: u32) Error!?ast.NodeIndex {
-    if (!try parser.expect(.left_brace, "Expected '{' to start static block", null)) {
-        return null;
-    }
+    if (!try parser.expect(.left_brace, "Expected '{' to start static block", null)) return null;
 
     const body = try parser.parseBody(.right_brace);
 
     const end = parser.current_token.span.end;
 
-    if (!try parser.expect(.right_brace, "Expected '}' to close static block", null)) {
-        return null;
-    }
+    if (!try parser.expect(.right_brace, "Expected '}' to close static block", null)) return null;
 
     return try parser.addNode(
         .{ .static_block = .{ .body = body } },

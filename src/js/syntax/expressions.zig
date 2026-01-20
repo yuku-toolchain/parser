@@ -681,9 +681,7 @@ fn parseConditionalExpression(parser: *Parser, precedence: u8, @"test": ast.Node
     // right-associative, so same prec, not precedence + 1
     const consequent = try parseExpression(parser, precedence, .{}) orelse return null;
 
-    if (!try parser.expect(.colon, "Expected ':' after conditional expression consequent", "The ternary operator requires a colon (:) to separate the consequent and alternate expressions.")) {
-        return null;
-    }
+    if (!try parser.expect(.colon, "Expected ':' after conditional expression consequent", "The ternary operator requires a colon (:) to separate the consequent and alternate expressions.")) return null;
 
     // alternate
     // right-associative, so same prec, not precedence + 1

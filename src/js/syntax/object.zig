@@ -322,9 +322,7 @@ fn parseObjectMethodProperty(
     }
 
     const func_start = parser.current_token.span.start;
-    if (!try parser.expect(.left_paren, "Expected '(' to start method parameters", null)) {
-        return null;
-    }
+    if (!try parser.expect(.left_paren, "Expected '(' to start method parameters", null)) return null;
 
     const params = try functions.parseFormalParamaters(parser, .unique_formal_parameters) orelse return null;
     const params_data = parser.getData(params).formal_parameters;
@@ -353,9 +351,7 @@ fn parseObjectMethodProperty(
         }
     }
 
-    if (!try parser.expect(.right_paren, "Expected ')' after method parameters", null)) {
-        return null;
-    }
+    if (!try parser.expect(.right_paren, "Expected ')' after method parameters", null)) return null;
 
     // parse body
     const body = try functions.parseFunctionBody(parser) orelse return null;
@@ -400,9 +396,7 @@ pub fn coverToExpression(parser: *Parser, cover: ObjectCover, validate: bool) Er
         .{ .start = cover.start, .end = cover.end },
     );
 
-    if (validate and !try grammar.validateNoCoverInitializedSyntax(parser, object_expression)) {
-        return null;
-    }
+    if (validate and !try grammar.validateNoCoverInitializedSyntax(parser, object_expression)) return null;
 
     return object_expression;
 }

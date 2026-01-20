@@ -97,9 +97,7 @@ pub fn coverToExpression(parser: *Parser, cover: ArrayCover, validate: bool) Err
         .{ .start = cover.start, .end = cover.end },
     );
 
-    if (validate and !try grammar.validateNoCoverInitializedSyntax(parser, array_expression)) {
-        return null;
-    }
+    if (validate and !try grammar.validateNoCoverInitializedSyntax(parser, array_expression)) return null;
 
     return array_expression;
 }
