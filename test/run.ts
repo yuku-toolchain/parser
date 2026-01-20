@@ -220,6 +220,7 @@ const runCategory = async (config: TestConfig) => {
   if (result.total === 0) return
 
   for (const file of files) {
+    console.log(`Running ${file}`)
     await runTest(file, config.type, result)
   }
 
@@ -265,9 +266,8 @@ for (const [, result] of results) {
 
 const passRate = ((totalPassed / totalTests) * 100).toFixed(2)
 const avgParseTime = totalParsedFiles > 0 ? totalParseTime / totalParsedFiles : 0
-const totalTime = totalEnd - totalStart
 
-console.log(`\n${totalPassed}/${totalTests} (${passRate}%) • ${formatTime(totalTime)} total • ${formatTime(totalParseTime)} for parsing ${totalParsedFiles} files • ${formatTime(avgParseTime)} to parse per file`)
+console.log(`\n${totalPassed}/${totalTests} (${passRate}%) • ${formatTime(totalParseTime)} for parsing ${totalParsedFiles} files • ${formatTime(avgParseTime)} to parse per file`)
 
 if (totalFailed > 0) {
   process.exit(1)
