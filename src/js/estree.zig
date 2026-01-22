@@ -1197,7 +1197,7 @@ pub const Serializer = struct {
 
     fn writeComments(self: *Self) !void {
         try self.beginArray();
-        for (self.tree.comments.items) |comment| {
+        for (self.tree.comments) |comment| {
             try self.sep();
             if (self.options.pretty) {
                 try self.writeByte('\n');
@@ -1215,7 +1215,7 @@ pub const Serializer = struct {
 
     fn writeDiagnostics(self: *Self) !void {
         try self.beginArray();
-        for (self.tree.diagnostics.items) |diag| {
+        for (self.tree.diagnostics) |diag| {
             try self.sep();
             if (self.options.pretty) {
                 try self.writeByte('\n');

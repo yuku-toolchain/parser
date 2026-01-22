@@ -46,7 +46,7 @@ pub fn main() !void {
     std.debug.print("estree time taken {d:.2}\n", .{json_taken_ms});
 
     if (tree.hasDiagnostics()) {
-        for (tree.diagnostics.items) |err| {
+        for (tree.diagnostics) |err| {
             const start_pos = getLineAndColumn(contents, err.span.start);
             const end_pos = getLineAndColumn(contents, err.span.end);
 

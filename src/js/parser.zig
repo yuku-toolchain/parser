@@ -49,13 +49,13 @@ pub const ParseTree = struct {
     /// Source code that was parsed
     source: []const u8,
     /// All nodes in the AST
-    nodes: std.MultiArrayList(ast.Node),
+    nodes: ast.NodeList.Slice,
     /// Extra data storage for variadic node children
-    extra: std.ArrayList(ast.NodeIndex),
+    extra: []ast.NodeIndex,
     /// Diagnostics (errors, warnings, etc.) encountered during parsing
-    diagnostics: std.ArrayList(Diagnostic),
+    diagnostics: []const Diagnostic,
     /// Comments collected in source code
-    comments: std.ArrayList(ast.Comment),
+    comments: []const ast.Comment,
     /// Arena allocator owning all the memory
     arena: std.heap.ArenaAllocator,
     /// Source type (script or module)
@@ -65,7 +65,7 @@ pub const ParseTree = struct {
 
     /// Returns true if the parse tree contains any errors.
     pub inline fn hasErrors(self: ParseTree) bool {
-        for (self.diagnostics.items) |d| {
+        for (self.diagnostics) |d| {
             if (d.severity == .@"error") return true;
         }
         return false;
@@ -73,7 +73,7 @@ pub const ParseTree = struct {
 
     /// Returns true if the parse tree contains any diagnostics (errors, warnings, etc.).
     pub inline fn hasDiagnostics(self: ParseTree) bool {
-        return self.diagnostics.items.len > 0;
+        return self.diagnostics.len > 0;
     }
 
     /// Frees all memory allocated by this parse tree.
@@ -93,7 +93,7 @@ pub const ParseTree = struct {
 
     /// Gets the extra node indices for the given range.
     pub inline fn getExtra(self: *const ParseTree, range: ast.IndexRange) []const ast.NodeIndex {
-        return self.extra.items[range.start..][0..range.len];
+        return self.extra[range.start..][0..range.len];
     }
 
     /// Gets a slice of the source text at the given position.
@@ -129,12 +129,12 @@ const ParserState = struct {
 
 pub const Error = error{OutOfMemory};
 
-pub const Parser = struct {
+const Parser = struct {
     source: []const u8,
     lexer: lexer.Lexer,
     arena: std.heap.ArenaAllocator,
     diagnostics: std.ArrayList(Diagnostic) = .empty,
-    nodes: std.MultiArrayList(ast.Node) = .empty,
+    nodes: ast.NodeList = .empty,
     extra: std.ArrayList(ast.NodeIndex) = .empty,
     current_token: token.Token,
     next_token: ?token.Token = null,
@@ -154,10 +154,10 @@ pub const Parser = struct {
     source_type: SourceType,
     lang: Lang,
 
-    pub fn init(backing_allocator: std.mem.Allocator, source: []const u8, options: Options) Parser {
+    pub fn init(child_allocator: std.mem.Allocator, source: []const u8, options: Options) Parser {
         return .{
             .source = source,
-            .arena = std.heap.ArenaAllocator.init(backing_allocator),
+            .arena = std.heap.ArenaAllocator.init(child_allocator),
             .source_type = options.source_type,
             .lang = options.lang,
             .strict_mode = options.source_type == .module,
@@ -174,17 +174,17 @@ pub const Parser = struct {
     /// The Parser is consumed and should not be used after calling this method.
     /// The caller owns the returned ParseTree and must call deinit() on it.
     pub fn parse(self: *Parser) Error!ParseTree {
+        const alloc = self.allocator();
+
         // init lexer
-        self.lexer = try lexer.Lexer.init(self.source, self.allocator(), self.source_type, self.strict_mode);
+        self.lexer = try lexer.Lexer.init(self.source, alloc, self.source_type, self.strict_mode);
 
         // let's begin
         try self.advance() orelse {
             self.current_token = token.Token.eof(0);
         };
 
-        errdefer {
-            self.arena.deinit();
-        }
+        errdefer self.arena.deinit();
 
         try self.ensureCapacity();
 
@@ -205,10 +205,10 @@ pub const Parser = struct {
         const tree = ParseTree{
             .program = program,
             .source = self.source,
-            .nodes = self.nodes,
-            .extra = self.extra,
-            .diagnostics = self.diagnostics,
-            .comments = self.lexer.comments,
+            .nodes = self.nodes.toOwnedSlice(),
+            .extra = try self.extra.toOwnedSlice(alloc),
+            .diagnostics = try self.diagnostics.toOwnedSlice(alloc),
+            .comments = try self.lexer.comments.toOwnedSlice(alloc),
             .arena = self.arena,
             .source_type = self.source_type,
             .lang = self.lang,
@@ -511,8 +511,8 @@ const ScratchBuffer = struct {
 };
 
 /// Parse JavaScript/TypeScript source code into an AST.
-/// Returns a ParseTree that must be freed with deinit().
-pub fn parse(backing_allocator: std.mem.Allocator, source: []const u8, options: Options) Error!ParseTree {
-    var parser = Parser.init(backing_allocator, source, options);
+/// Returns a ParseTree that must be freed by calling `tree.deinit()` when you're done using it.
+pub fn parse(child_allocator: std.mem.Allocator, source: []const u8, options: Options) Error!ParseTree {
+    var parser = Parser.init(child_allocator, source, options);
     return parser.parse();
 }

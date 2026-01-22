@@ -1,1 +1,1 @@
-<div>nice
+<div nice={{cool}} />

@@ -1316,6 +1316,8 @@ pub const Node = struct {
     span: Span,
 };
 
+pub const NodeList = std.MultiArrayList(Node);
+
 pub inline fn isNull(index: NodeIndex) bool {
     return index == null_node;
 }
