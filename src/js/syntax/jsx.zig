@@ -78,6 +78,8 @@ pub fn parseJsxOpeningElement(parser: *Parser) Error!?ast.NodeIndex {
 
     const end = parser.current_token.span.end;
 
+    // if the element is self closed, which means, we are done with the jsx element and back to normal javascript
+    // otherwise, it just a opening of a jsx element, and the next is jsx children (so to start, set lexer mode to jsx_text)
     parser.setLexerMode(if (self_closing) .normal else .jsx_text);
 
     if (!try parser.expect(.greater_than, "Expected '>' to close JSX opening element", "Add '>' to close the JSX tag")) return null;
