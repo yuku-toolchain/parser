@@ -9,9 +9,18 @@ const Error = @import("../parser.zig").Error;
 const literals = @import("literals.zig");
 const expressions = @import("expressions.zig");
 
+// https://facebook.github.io/jsx/#prod-JSXElement
 pub fn parseJsxExpression(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
+    const next = try parser.lookAhead() orelse return null;
+
+    if (next.type == .greater_than) {
+        // it's a fragment
+        return parseJsxFragment(parser);
+    }
+
+    // otherwise it's a regular element
     const opening_element = try parseJsxOpeningElement(parser) orelse return null;
 
     const opening_element_end = parser.getSpan(opening_element).end;
@@ -29,6 +38,52 @@ pub fn parseJsxExpression(parser: *Parser) Error!?ast.NodeIndex {
     return try parser.addNode(.{ .jsx_element = .{ .opening_element = opening_element, .children = children, .closing_element = closing_element } }, .{ .start = start, .end = end });
 }
 
+// https://facebook.github.io/jsx/#prod-JSXFragment
+pub fn parseJsxFragment(parser: *Parser) Error!?ast.NodeIndex {
+    const start = parser.current_token.span.start;
+
+    const opening_fragment = try parseJsxOpeningFragment(parser) orelse return null;
+
+    const opening_fragment_end = parser.getSpan(opening_fragment).end;
+
+    const children = try parseJsxChildren(parser, opening_fragment_end) orelse return null;
+
+    const closing_fragment = try parseJsxClosingFragment(parser) orelse return null;
+
+    const end = parser.getSpan(closing_fragment).end;
+
+    return try parser.addNode(.{ .jsx_fragment = .{ .opening_fragment = opening_fragment, .children = children, .closing_fragment = closing_fragment } }, .{ .start = start, .end = end });
+}
+
+// https://facebook.github.io/jsx/#prod-JSXOpeningFragment
+pub fn parseJsxOpeningFragment(parser: *Parser) Error!?ast.NodeIndex {
+    const start = parser.current_token.span.start;
+
+    try parser.advance() orelse return null; // consume '<'
+
+    const end = parser.current_token.span.end;
+
+    if (!try parser.expect(.greater_than, "Expected '>' to close JSX opening fragment", "Add '>' to complete the fragment opening tag")) return null;
+
+    return try parser.addNode(.{ .jsx_opening_fragment = .{} }, .{ .start = start, .end = end });
+}
+
+// https://facebook.github.io/jsx/#prod-JSXClosingFragment
+pub fn parseJsxClosingFragment(parser: *Parser) Error!?ast.NodeIndex {
+    const start = parser.current_token.span.start;
+
+    try parser.advance() orelse return null; // consume '<'
+
+    if (!try parser.expect(.slash, "Expected '/' in JSX closing fragment", "Add '/' to close the fragment")) return null;
+
+    const end = parser.current_token.span.end;
+
+    if (!try parser.expect(.greater_than, "Expected '>' to close JSX closing fragment", "Add '>' to complete the fragment closing tag")) return null;
+
+    return try parser.addNode(.{ .jsx_closing_fragment = .{} }, .{ .start = start, .end = end });
+}
+
+// https://facebook.github.io/jsx/#prod-JSXSelfClosingElement
 // https://facebook.github.io/jsx/#prod-JSXOpeningElement
 pub fn parseJsxOpeningElement(parser: *Parser) Error!?ast.NodeIndex {
     parser.setLexerMode(.jsx_identifier);
@@ -72,7 +127,7 @@ pub fn parseJsxClosingElement(parser: *Parser) Error!?ast.NodeIndex {
 
     try parser.advance() orelse return null; // consume '<'
 
-    if (!try parser.expect(.slash, "", "")) return null;
+    if (!try parser.expect(.slash, "Expected '/' in JSX closing element", "Add '/' after '<' to close the element")) return null;
 
     const name = try parseJsxElementName(parser) orelse return null;
 
@@ -80,7 +135,7 @@ pub fn parseJsxClosingElement(parser: *Parser) Error!?ast.NodeIndex {
 
     parser.setLexerMode(.normal);
 
-    if (!try parser.expect(.greater_than, "", "")) return null;
+    if (!try parser.expect(.greater_than, "Expected '>' to close JSX closing element", "Add '>' to complete the closing tag")) return null;
 
     return try parser.addNode(.{
         .jsx_closing_element = .{
@@ -89,6 +144,7 @@ pub fn parseJsxClosingElement(parser: *Parser) Error!?ast.NodeIndex {
     }, .{ .start = start, .end = end });
 }
 
+// https://facebook.github.io/jsx/#prod-JSXChildren
 pub fn parseJsxChildren(
     parser: *Parser,
     // the exact start position of the jsx_text
@@ -184,6 +240,7 @@ pub fn parseJsxSpread(parser: *Parser, context: SpreadContext) Error!?ast.NodeIn
     return try parser.addNode(.{ .jsx_spread_attribute = .{ .argument = expression } }, span);
 }
 
+// https://facebook.github.io/jsx/#prod-JSXAttributes
 pub fn parseJsxAttributes(parser: *Parser) Error!?ast.IndexRange {
     const attributes_checkpoint = parser.scratch_a.begin();
     defer parser.scratch_a.reset(attributes_checkpoint);
@@ -196,6 +253,7 @@ pub fn parseJsxAttributes(parser: *Parser) Error!?ast.IndexRange {
     return try parser.addExtra(parser.scratch_a.take(attributes_checkpoint));
 }
 
+// https://facebook.github.io/jsx/#prod-JSXAttribute
 pub fn parseJsxAttribute(parser: *Parser) Error!?ast.NodeIndex {
     if (parser.current_token.type == .left_brace) {
         return try parseJsxSpread(parser, .attribute);
@@ -217,6 +275,7 @@ pub fn parseJsxAttribute(parser: *Parser) Error!?ast.NodeIndex {
     return try parser.addNode(.{ .jsx_attribute = .{ .name = name, .value = value } }, .{ .start = parser.getSpan(name).start, .end = end });
 }
 
+// https://facebook.github.io/jsx/#prod-JSXAttributeName
 pub fn parseJsxAttributeName(parser: *Parser) Error!?ast.NodeIndex {
     var name = try parser.addNode(.{ .jsx_identifier = .{ .name_len = @intCast(parser.current_token.lexeme.len), .name_start = parser.current_token.span.start } }, parser.current_token.span);
 
@@ -246,6 +305,7 @@ pub fn parseJsxAttributeName(parser: *Parser) Error!?ast.NodeIndex {
     return name;
 }
 
+// https://facebook.github.io/jsx/#prod-JSXAttributeValue
 pub fn parseJsxAttributeValue(parser: *Parser) Error!?ast.NodeIndex {
     return switch (parser.current_token.type) {
         .string_literal => literals.parseStringLiteral(parser),
@@ -254,7 +314,7 @@ pub fn parseJsxAttributeValue(parser: *Parser) Error!?ast.NodeIndex {
 
             const expression_container = try parseJsxExpressionContainer(parser) orelse return null;
 
-            if (parser.getData(expression_container) == .jsx_empty_expression) {
+            if (parser.getData(parser.getData(expression_container).jsx_expression_container.expression) == .jsx_empty_expression) {
                 try parser.report(
                     parser.getSpan(expression_container),
                     "JSX attribute value cannot be an empty expression",
@@ -291,7 +351,9 @@ pub fn parseJsxExpressionContainer(parser: *Parser) Error!?ast.NodeIndex {
 
         try parser.advance() orelse return null;
 
-        return try parser.addNode(.{ .jsx_empty_expression = .{} }, .{ .start = start, .end = end });
+        const empty_expr = try parser.addNode(.{ .jsx_empty_expression = .{} }, .{ .start = start + 1, .end = end - 1 });
+
+        return try parser.addNode(.{ .jsx_expression_container = .{ .expression = empty_expr } }, .{ .start = start, .end = end });
     }
 
     const expression = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
