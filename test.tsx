@@ -1,1 +1,1 @@
-<div cool=<div>>
+<div>nice

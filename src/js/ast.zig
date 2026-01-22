@@ -1193,8 +1193,6 @@ pub const JSXEmptyExpression = struct {};
 
 /// text content inside JSX elements
 pub const JSXText = struct {
-    value_start: u32,
-    value_len: u16,
     raw_start: u32,
     raw_len: u16,
 };

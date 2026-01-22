@@ -181,7 +181,7 @@ pub const Lexer = struct {
                     // in jsx, <div attr=<elem></elem>></div>
                     //                               ~~
                     //                               this should be interepted as separate '>' tokens for ease of parsing
-                    if(self.state.mode == .jsx_identifier) {
+                    if (self.state.mode == .jsx_identifier) {
                         return self.makePuncToken(1, .greater_than, start);
                     } else {
                         return self.makePuncToken(2, .right_shift, start);
@@ -546,15 +546,7 @@ pub const Lexer = struct {
             const c = self.source[self.cursor];
 
             switch (c) {
-                '<' => {
-                    self.state.mode = .jsx_identifier;
-                    break;
-                },
-                '{' => {
-                    // we are back to expressions, so normal
-                    self.state.mode = .normal;
-                    break;
-                },
+                '<', '{' => break,
                 else => self.cursor += 1,
             }
         }

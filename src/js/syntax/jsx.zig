@@ -14,11 +14,47 @@ pub fn parseJsxElement(parser: *Parser) Error!?ast.NodeIndex {
 
     const opening_element = try parseJsxOpeningElement(parser) orelse return null;
 
-    // parser.setLexerMode(.jsx_text);
+    const children = try parseJsxChildren(parser) orelse return null;
 
     const end = parser.current_token.span.end;
 
-    return try parser.addNode(.{ .jsx_element = .{ .opening_element = opening_element, .children = ast.IndexRange.empty, .closing_element = ast.null_node } }, .{ .start = start, .end = end });
+    return try parser.addNode(.{ .jsx_element = .{ .opening_element = opening_element, .children = children, .closing_element = ast.null_node } }, .{ .start = start, .end = end });
+}
+
+pub fn parseJsxChildren(parser: *Parser) Error!?ast.IndexRange {
+    const children_checkpoint = parser.scratch_a.begin();
+    defer parser.scratch_a.reset(children_checkpoint);
+
+    while (parser.current_token.type != .eof) {
+        switch (parser.current_token.type) {
+            .jsx_text => {
+                const jsx_text = try parser.addNode(.{ .jsx_text = .{ .raw_start = parser.current_token.span.start, .raw_len = @intCast(parser.current_token.lexeme.len) } }, parser.current_token.span);
+
+                try parser.scratch_a.append(parser.allocator(), jsx_text);
+
+                parser.setLexerMode(.normal);
+
+                try parser.advance() orelse return null;
+            },
+            .less_than => {
+                // parser.setLexerMode(.jsx_identifier);
+
+                //
+                //
+                return null;
+            },
+            .left_brace => {
+                // parser.setLexerMode(.normal);
+
+                //
+                //
+                return null;
+            },
+            else => break,
+        }
+    }
+
+    return try parser.addExtra(parser.scratch_a.take(children_checkpoint));
 }
 
 // https://facebook.github.io/jsx/#prod-JSXOpeningElement
@@ -40,9 +76,11 @@ pub fn parseJsxOpeningElement(parser: *Parser) Error!?ast.NodeIndex {
         try parser.advance() orelse return null;
     }
 
-    if (!try parser.expect(.greater_than, "Expected '>' to close JSX opening element", "Add '>' to close the JSX tag")) return null;
-
     const end = parser.current_token.span.end;
+
+    parser.setLexerMode(if (self_closing) .normal else .jsx_text);
+
+    if (!try parser.expect(.greater_than, "Expected '>' to close JSX opening element", "Add '>' to close the JSX tag")) return null;
 
     return try parser.addNode(.{
         .jsx_opening_element = .{
@@ -57,7 +95,7 @@ pub fn parseJsxAttributes(parser: *Parser) Error!?ast.IndexRange {
     const attributes_checkpoint = parser.scratch_a.begin();
     defer parser.scratch_a.reset(attributes_checkpoint);
 
-    while (parser.current_token.type == .jsx_identifier and parser.current_token.type != .eof) {
+    while (parser.current_token.type == .jsx_identifier) {
         const attribute = try parseJsxAttribute(parser) orelse return null;
         try parser.scratch_a.append(parser.allocator(), attribute);
     }
@@ -119,7 +157,7 @@ pub fn parseJsxAttributeValue(parser: *Parser) Error!?ast.NodeIndex {
 
             const expression_container = try parseJsxExpressionContainer(parser) orelse return null;
 
-            if(parser.getData(expression_container) == .jsx_empty_expression) {
+            if (parser.getData(expression_container) == .jsx_empty_expression) {
                 // report error
 
                 return null;
@@ -202,7 +240,7 @@ pub fn parseJsxElementName(parser: *Parser) Error!?ast.NodeIndex {
 
         try parser.advance() orelse return null;
 
-        name = try parser.addNode(.{ .jsx_member_expression = .{ .object = name, .property = property } }, .{ .start = parser.getSpan(name).start, .end = parser.current_token.span.end });
+        name = try parser.addNode(.{ .jsx_member_expression = .{ .object = name, .property = property } }, .{ .start = parser.getSpan(name).start, .end = parser.getSpan(property).end });
     }
 
     // namespace only if it was not a member expression
@@ -224,7 +262,7 @@ pub fn parseJsxElementName(parser: *Parser) Error!?ast.NodeIndex {
 
         try parser.advance() orelse return null;
 
-        name = try parser.addNode(.{ .jsx_namespaced_name = .{ .namespace = name, .name = namespace_name } }, .{ .start = parser.getSpan(name).start, .end = parser.current_token.span.end });
+        name = try parser.addNode(.{ .jsx_namespaced_name = .{ .namespace = name, .name = namespace_name } }, .{ .start = parser.getSpan(name).start, .end = parser.getSpan(namespace_name).end });
     }
 
     return name;

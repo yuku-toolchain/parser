@@ -1176,12 +1176,13 @@ pub const Serializer = struct {
     }
 
     fn writeJSXText(self: *Self, data: ast.JSXText, span: ast.Span) !void {
-        const value = self.tree.getSourceText(data.value_start, data.value_len);
         const raw = self.tree.getSourceText(data.raw_start, data.raw_len);
+
         try self.beginObject();
         try self.fieldType("JSXText");
         try self.fieldSpan(span);
-        try self.fieldString("value", value);
+        try self.field("value");
+        try self.writeDecodedString(raw);
         try self.fieldString("raw", raw);
         try self.endObject();
     }
