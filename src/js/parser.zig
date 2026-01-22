@@ -129,7 +129,7 @@ const ParserState = struct {
 
 pub const Error = error{OutOfMemory};
 
-const Parser = struct {
+pub const Parser = struct {
     source: []const u8,
     lexer: lexer.Lexer,
     arena: std.heap.ArenaAllocator,

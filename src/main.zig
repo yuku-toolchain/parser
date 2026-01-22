@@ -17,6 +17,7 @@ pub fn main() !void {
     defer allocator.free(contents);
 
     var start = try std.time.Timer.start();
+
     const tree = try js.parse(std.heap.page_allocator, contents, .{ .lang = .tsx });
     defer tree.deinit();
 
