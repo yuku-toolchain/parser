@@ -17,15 +17,76 @@ pub fn parseJsxExpression(parser: *Parser) Error!?ast.NodeIndex {
     const opening_element_end = parser.getSpan(opening_element).end;
 
     var children = ast.IndexRange.empty;
-    const closing_element = ast.null_node;
+    var closing_element = ast.null_node;
 
     if (!parser.getData(opening_element).jsx_opening_element.self_closing) {
         children = try parseJsxChildren(parser, opening_element_end) orelse return null;
+        closing_element = try parseJsxClosingElement(parser) orelse return null;
     }
 
     const end = if (!ast.isNull(closing_element)) parser.getSpan(closing_element).end else opening_element_end;
 
     return try parser.addNode(.{ .jsx_element = .{ .opening_element = opening_element, .children = children, .closing_element = closing_element } }, .{ .start = start, .end = end });
+}
+
+// https://facebook.github.io/jsx/#prod-JSXOpeningElement
+pub fn parseJsxOpeningElement(parser: *Parser) Error!?ast.NodeIndex {
+    parser.setLexerMode(.jsx_identifier);
+
+    const start = parser.current_token.span.start;
+
+    try parser.advance() orelse return null; // consume '<'
+
+    var self_closing = false;
+
+    const name = try parseJsxElementName(parser) orelse return null;
+
+    const attributes = try parseJsxAttributes(parser) orelse return null;
+
+    if (parser.current_token.type == .slash) {
+        self_closing = true;
+        try parser.advance() orelse return null;
+    }
+
+    const end = parser.current_token.span.end;
+
+    // we are done with attributes parsing, set lexer mode back to normal
+    parser.setLexerMode(.normal);
+
+    if (!try parser.expect(.greater_than, "Expected '>' to close JSX opening element", "Add '>' to close the JSX tag")) return null;
+
+    return try parser.addNode(.{
+        .jsx_opening_element = .{
+            .name = name,
+            .attributes = attributes,
+            .self_closing = self_closing,
+        },
+    }, .{ .start = start, .end = end });
+}
+
+// https://facebook.github.io/jsx/#prod-JSXClosingElement
+pub fn parseJsxClosingElement(parser: *Parser) Error!?ast.NodeIndex {
+    parser.setLexerMode(.jsx_identifier);
+
+    const start = parser.current_token.span.start;
+
+    try parser.advance() orelse return null; // consume '<'
+
+    if (!try parser.expect(.slash, "", "")) return null;
+
+    const name = try parseJsxElementName(parser) orelse return null;
+
+    const end = parser.current_token.span.end;
+
+    parser.setLexerMode(.normal);
+
+    if (!try parser.expect(.greater_than, "", "")) return null;
+
+    return try parser.addNode(.{
+        .jsx_closing_element = .{
+            .name = name,
+        },
+    }, .{ .start = start, .end = end });
 }
 
 pub fn parseJsxChildren(
@@ -94,41 +155,6 @@ pub fn parseJsxChildren(
     }
 
     return try parser.addExtra(parser.scratch_b.take(children_checkpoint));
-}
-
-// https://facebook.github.io/jsx/#prod-JSXOpeningElement
-pub fn parseJsxOpeningElement(parser: *Parser) Error!?ast.NodeIndex {
-    parser.setLexerMode(.jsx_identifier);
-
-    const start = parser.current_token.span.start;
-
-    try parser.advance() orelse return null; // consume '<'
-
-    var self_closing = false;
-
-    const name = try parseJsxElementName(parser) orelse return null;
-
-    const attributes = try parseJsxAttributes(parser) orelse return null;
-
-    if (parser.current_token.type == .slash) {
-        self_closing = true;
-        try parser.advance() orelse return null;
-    }
-
-    const end = parser.current_token.span.end;
-
-    // we are done with attributes parsing, set lexer mode back to normal
-    parser.setLexerMode(.normal);
-
-    if (!try parser.expect(.greater_than, "Expected '>' to close JSX opening element", "Add '>' to close the JSX tag")) return null;
-
-    return try parser.addNode(.{
-        .jsx_opening_element = .{
-            .name = name,
-            .attributes = attributes,
-            .self_closing = self_closing,
-        },
-    }, .{ .start = start, .end = end });
 }
 
 const SpreadContext = enum { attribute, child };
