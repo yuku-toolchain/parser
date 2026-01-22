@@ -160,8 +160,11 @@ pub fn parseJsxAttributeValue(parser: *Parser) Error!?ast.NodeIndex {
             const expression_container = try parseJsxExpressionContainer(parser) orelse return null;
 
             if (parser.getData(expression_container) == .jsx_empty_expression) {
-                // report error
-
+                try parser.report(
+                    parser.getSpan(expression_container),
+                    "JSX attribute value cannot be an empty expression",
+                    .{ .help = "Replace {} with a valid expression or remove the braces to use a string literal" },
+                );
                 return null;
             }
 
@@ -200,7 +203,7 @@ pub fn parseJsxExpressionContainer(parser: *Parser) Error!?ast.NodeIndex {
 
     const end = parser.current_token.span.end;
 
-    if (!try parser.expect(.right_brace, "", "")) return null;
+    if (!try parser.expect(.right_brace, "Expected '}' to close JSX expression", "Add '}' to close the expression")) return null;
 
     return try parser.addNode(.{ .jsx_expression_container = .{ .expression = expression } }, .{ .start = start, .end = end });
 }
