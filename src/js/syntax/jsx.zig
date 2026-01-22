@@ -117,14 +117,19 @@ pub fn parseJsxAttributeValue(parser: *Parser) Error!?ast.NodeIndex {
         .left_brace => {
             parser.setLexerMode(.normal);
 
-            _ = try parseJsxExpressionContainer(parser) orelse return null;
+            const expression_container = try parseJsxExpressionContainer(parser) orelse return null;
 
-            // validate, empty expression not allowed as attribute value
+            if(parser.getData(expression_container) == .jsx_empty_expression) {
+                // report error
+
+                return null;
+            }
 
             parser.setLexerMode(.jsx_identifier);
 
-            return null;
+            return expression_container;
         },
+        .less_than => parseJsxElement(parser),
         else => {
             try parser.reportFmt(
                 parser.current_token.span,
@@ -219,7 +224,7 @@ pub fn parseJsxElementName(parser: *Parser) Error!?ast.NodeIndex {
 
         try parser.advance() orelse return null;
 
-        return try parser.addNode(.{ .jsx_namespaced_name = .{ .namespace = name, .name = namespace_name } }, .{ .start = parser.getSpan(name).start, .end = parser.current_token.span.end });
+        name = try parser.addNode(.{ .jsx_namespaced_name = .{ .namespace = name, .name = namespace_name } }, .{ .start = parser.getSpan(name).start, .end = parser.current_token.span.end });
     }
 
     return name;

@@ -177,7 +177,16 @@ pub const Lexer = struct {
             else if (c1 == '>' and c2 == '>')
                 if (c3 == '=') self.makePuncToken(4, .unsigned_right_shift_assign, start) else self.makePuncToken(3, .unsigned_right_shift, start)
             else switch (c1) {
-                '>' => self.makePuncToken(2, .right_shift, start),
+                '>' => {
+                    // in jsx, <div attr=<elem></elem>></div>
+                    //                               ~~
+                    //                               this should be interepted as separate '>' tokens for ease of parsing
+                    if(self.state.mode == .jsx_identifier) {
+                        return self.makePuncToken(1, .greater_than, start);
+                    } else {
+                        return self.makePuncToken(2, .right_shift, start);
+                    }
+                },
                 '=' => self.makePuncToken(2, .greater_than_equal, start),
                 else => self.makePuncToken(1, .greater_than, start),
             },
