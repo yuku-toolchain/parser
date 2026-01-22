@@ -36,10 +36,12 @@ pub const LexicalError = error{
 // [ ] some simd optimizations
 
 pub const LexerMode = enum {
-    // normal javascript mode
+    /// normal javascript mode
     normal,
-    // when in this mode, allows hyphens in identifiers and interepts as jsx_identifier token
+    /// jsx tag context: allows hyphens in identifiers, emits jsx_identifier tokens
     jsx_identifier,
+    /// jsx text context: next token will be scanned as raw text (used once after '>')
+    jsx_text,
 };
 
 const LexerState = struct {
@@ -99,7 +101,13 @@ pub const Lexer = struct {
             '`' => self.scanTemplateLiteral(),
             '~', '(', ')', '{', '[', ']', ';', ',', ':' => self.scanSimplePunctuation(),
             '}' => self.handleRightBrace(),
-            else => self.scanIdentifierOrKeyword(),
+            else => {
+                if (self.state.mode == .jsx_text) {
+                    return self.scanJsxText(self.cursor);
+                }
+
+                return self.scanIdentifierOrKeyword();
+            },
         };
     }
 
@@ -466,7 +474,7 @@ pub const Lexer = struct {
         return self.createToken(.right_brace, self.source[start..self.cursor], start, self.cursor);
     }
 
-    pub fn reScanAsJsxText(self: *Lexer, initial_cursor: u32) token.Token {
+    pub fn scanJsxText(self: *Lexer, initial_cursor: u32) token.Token {
         self.resetToCursor(initial_cursor);
 
         const start = self.cursor;

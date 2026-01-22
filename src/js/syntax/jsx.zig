@@ -9,6 +9,26 @@ const Error = @import("../parser.zig").Error;
 const literals = @import("literals.zig");
 const expressions = @import("expressions.zig");
 
+// jsx text parsing
+//
+// jsx content like "<div>@hello</div>" needs special handling because '@' is not valid
+// javascript - the lexer would fail trying to tokenize it as an identifier.
+//
+// we handle this with two mechanisms:
+//
+// 1. advanceIntoJsxContent() sets lexer to .jsx_text mode before advancing past '>'.
+//    this makes the lexer treat the next token as raw text instead of code.
+//
+// 2. parseJsxChildren tracks a byte position (scanJsxTextFrom) and calls
+//    lexer.scanJsxText() directly to read text between children.
+
+/// advances past '>' and into jsx content, ensuring the next token is lexed as text
+fn advanceIntoJsxContent(parser: *Parser, err_msg: []const u8, help: []const u8) Error!bool {
+    parser.setLexerMode(.jsx_text);
+    defer parser.setLexerMode(.normal);
+    return parser.expect(.greater_than, err_msg, help);
+}
+
 // https://facebook.github.io/jsx/#prod-JSXElement
 pub fn parseJsxExpression(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
@@ -63,7 +83,7 @@ pub fn parseJsxOpeningFragment(parser: *Parser) Error!?ast.NodeIndex {
 
     const end = parser.current_token.span.end;
 
-    if (!try parser.expect(.greater_than, "Expected '>' to close JSX opening fragment", "Add '>' to complete the fragment opening tag")) return null;
+    if (!try advanceIntoJsxContent(parser, "Expected '>' to close JSX opening fragment", "Add '>' to complete the fragment opening tag")) return null;
 
     return try parser.addNode(.{ .jsx_opening_fragment = .{} }, .{ .start = start, .end = end });
 }
@@ -105,10 +125,7 @@ pub fn parseJsxOpeningElement(parser: *Parser) Error!?ast.NodeIndex {
 
     const end = parser.current_token.span.end;
 
-    // we are done with attributes parsing, set lexer mode back to normal
-    parser.setLexerMode(.normal);
-
-    if (!try parser.expect(.greater_than, "Expected '>' to close JSX opening element", "Add '>' to close the JSX tag")) return null;
+    if (!try advanceIntoJsxContent(parser, "Expected '>' to close JSX opening element", "Add '>' to close the JSX tag")) return null;
 
     return try parser.addNode(.{
         .jsx_opening_element = .{
@@ -147,20 +164,18 @@ pub fn parseJsxClosingElement(parser: *Parser) Error!?ast.NodeIndex {
 // https://facebook.github.io/jsx/#prod-JSXChildren
 pub fn parseJsxChildren(
     parser: *Parser,
-    // the exact start position of the jsx_text
-    // this is right after the > without skipping any whitespace
-    start: u32,
+    start: u32, // byte position right after '>' (no whitespace skipped)
 ) Error!?ast.IndexRange {
     const children_checkpoint = parser.scratch_b.begin();
     defer parser.scratch_b.reset(children_checkpoint);
 
-    // track where we should start scanning JSX text, including whitespace.
-    // If we use parser.current_token.start, the current_token might be positioned after skipped whitespace (because our lexer skips whitespace).
-    // instead, we use the end of the opening element, or while scanning, the end of expression containers, jsx_elements, etc.
+    // tracks where to start next text scan. updated after each child to preserve all text/whitespace.
+    // this prevents missing text between children since normal tokenization skips whitespace.
     var scanJsxTextFrom = start;
 
     while (parser.current_token.type != .eof) {
-        const jsx_text_token = parser.lexer.reScanAsJsxText(scanJsxTextFrom);
+        // manually scan jsx text from tracked position (not from current token position)
+        const jsx_text_token = parser.lexer.scanJsxText(scanJsxTextFrom);
 
         if (jsx_text_token.lexeme.len > 0) {
             const jsx_text = try parser.addNode(.{ .jsx_text = .{ .raw_start = jsx_text_token.span.start, .raw_len = @intCast(jsx_text_token.lexeme.len) } }, jsx_text_token.span);
@@ -174,16 +189,13 @@ pub fn parseJsxChildren(
             .less_than => {
                 const next = try parser.lookAhead() orelse return null;
 
-                // then it's a closing element start, so break the children loop
                 if (next.type == .slash) {
-                    break;
+                    break; // closing element
                 }
-
-                // otherwise it's a child jsx element/fragment
 
                 const jsx_expression = try parseJsxExpression(parser) orelse return null;
 
-                scanJsxTextFrom = parser.getSpan(jsx_expression).end;
+                scanJsxTextFrom = parser.getSpan(jsx_expression).end; //  scan from end of element
 
                 try parser.scratch_b.append(parser.allocator(), jsx_expression);
             },
@@ -193,8 +205,7 @@ pub fn parseJsxChildren(
                 if (next.type == .spread) {
                     const jsx_spread_child = try parseJsxSpread(parser, .child) orelse return null;
 
-                    // rigth after '}'
-                    scanJsxTextFrom = parser.getSpan(jsx_spread_child).end;
+                    scanJsxTextFrom = parser.getSpan(jsx_spread_child).end; // scan from end of spread
 
                     try parser.scratch_b.append(parser.allocator(), jsx_spread_child);
 
@@ -203,8 +214,7 @@ pub fn parseJsxChildren(
 
                 const expression_container = try parseJsxExpressionContainer(parser) orelse return null;
 
-                // rigth after '}'
-                scanJsxTextFrom = parser.getSpan(expression_container).end;
+                scanJsxTextFrom = parser.getSpan(expression_container).end; // scan from end of expression
 
                 try parser.scratch_b.append(parser.allocator(), expression_container);
             },
@@ -385,7 +395,7 @@ pub fn parseJsxElementName(parser: *Parser) Error!?ast.NodeIndex {
 
     try parser.advance() orelse return null;
 
-    while (parser.current_token.type == .dot and parser.current_token.type != .eof) {
+    while (parser.current_token.type == .dot) {
         try parser.advance() orelse return null; // consume '.'
 
         if (parser.current_token.type != .jsx_identifier) {

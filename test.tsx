@@ -1,1 +1,1 @@
-<div>@test content</div>
+<div>@Cool</div>
