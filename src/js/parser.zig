@@ -258,7 +258,8 @@ pub const Parser = struct {
     // utils
 
     pub inline fn setLexerMode(self: *Parser, mode: lexer.LexerMode) void {
-        // clear lookahead, so parser will fetch fresh next token with new mode
+        // so parser will fetch fresh next token with new mode
+        // otherwise, `advance` method may use already prefetched/cached next token which maybe scanned with previous mode
         self.clearLookAhead();
         self.lexer.state.mode = mode;
     }
@@ -340,9 +341,9 @@ pub const Parser = struct {
 
     pub inline fn clearLookAhead(self: *Parser) void {
         self.next_token = null;
-        // reset lexer's cursor to the current token's end
-        // because cursor was incremented past for prefetching next token when lookAhead
-        // when clearing lookahead, we need to revert the cursor
+        // also reset the lexer's cursor to the current token's end,
+        // because the cursor was incremented further when prefetching the next token during lookAhead.
+        // When clearing the lookahead/prefetched token, we need to revert the cursor as well.
         self.lexer.resetToCursor(self.current_token.span.end);
     }
 

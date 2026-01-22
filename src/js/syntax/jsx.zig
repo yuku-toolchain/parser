@@ -27,16 +27,16 @@ pub fn parseJsxExpression(parser: *Parser) Error!?ast.NodeIndex {
 
 pub fn parseJsxChildren(
     parser: *Parser,
-    // exact the start of the jsx_text
-    // means, right after the > without skipping whitespaces
+    // the exact start position of the jsx_text
+    // this is right after the > without skipping any whitespace
     start: u32,
 ) Error!?ast.IndexRange {
     const children_checkpoint = parser.scratch_b.begin();
     defer parser.scratch_b.reset(children_checkpoint);
 
-    // track from where we should start scanning jsx text, including whitespace
-    // because, if we use parser.current_token.start, the current_token maybe after skipped whitespace
-    // so we use the end of the opening element, or while scanning, end of expression container, end of jsx_element, etc.
+    // track where we should start scanning JSX text, including whitespace.
+    // If we use parser.current_token.start, the current_token might be positioned after skipped whitespace (because our lexer skips whitespace).
+    // instead, we use the end of the opening element, or while scanning, the end of expression containers, jsx_elements, etc.
     var scanJsxTextFrom = start;
 
     while (parser.current_token.type != .eof) {
@@ -53,13 +53,15 @@ pub fn parseJsxChildren(
                 const next = try parser.lookAhead() orelse return null;
 
                 // then it's a closing element start, so break the children loop
-                if(next.type == .slash) {
+                if (next.type == .slash) {
                     break;
                 }
 
                 // otherwise it's a child jsx element/fragment
 
                 const jsx_expression = try parseJsxExpression(parser) orelse return null;
+
+                scanJsxTextFrom = parser.getSpan(jsx_expression).end;
 
                 try parser.scratch_b.append(parser.allocator(), jsx_expression);
             },
@@ -144,15 +146,11 @@ pub fn parseJsxSpread(parser: *Parser, context: SpreadContext) Error!?ast.NodeIn
 
     if (!try parser.expect(.right_brace, "", "")) return null;
 
-    const span = ast.Span{
-        .start = start,
-        .end = end
-    };
+    const span = ast.Span{ .start = start, .end = end };
 
     if (context == .child) {
         return try parser.addNode(.{ .jsx_spread_child = .{ .expression = expression } }, span);
     }
-
 
     return try parser.addNode(.{ .jsx_spread_attribute = .{ .argument = expression } }, span);
 }
