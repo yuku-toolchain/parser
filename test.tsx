@@ -1,1 +1,1 @@
-<div>{<div {...test} />}</div>
+<div>@test content</div>

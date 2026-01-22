@@ -162,9 +162,11 @@ pub fn parseJsxChildren(
     while (parser.current_token.type != .eof) {
         const jsx_text_token = parser.lexer.reScanAsJsxText(scanJsxTextFrom);
 
-        const jsx_text = try parser.addNode(.{ .jsx_text = .{ .raw_start = jsx_text_token.span.start, .raw_len = @intCast(jsx_text_token.lexeme.len) } }, jsx_text_token.span);
+        if (jsx_text_token.lexeme.len > 0) {
+            const jsx_text = try parser.addNode(.{ .jsx_text = .{ .raw_start = jsx_text_token.span.start, .raw_len = @intCast(jsx_text_token.lexeme.len) } }, jsx_text_token.span);
 
-        try parser.scratch_b.append(parser.allocator(), jsx_text);
+            try parser.scratch_b.append(parser.allocator(), jsx_text);
+        }
 
         try parser.replaceTokenAndAdvance(jsx_text_token) orelse return null;
 
