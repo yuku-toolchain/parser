@@ -23,6 +23,7 @@ pub const Serializer = struct {
     scratch: std.ArrayList(u8) = .empty,
     isTs: bool,
     pos_map: []u32,
+    in_jsx_attribute: bool = false,
 
     const Self = @This();
     const Error = error{ InvalidCharacter, NoSpaceLeft, OutOfMemory, Overflow };
@@ -613,7 +614,13 @@ pub const Serializer = struct {
         try self.fieldType("Literal");
         try self.fieldSpan(span);
         try self.field("value");
-        try self.writeDecodedString(raw[1 .. raw.len - 1]);
+        if (self.in_jsx_attribute) {
+            // jsx attribute strings don't process escapes, write raw content without quotes
+            try self.writeString(raw[1 .. raw.len - 1]);
+        } else {
+            // regular js strings process escapes
+            try self.writeDecodedString(raw[1 .. raw.len - 1]);
+        }
         try self.fieldString("raw", raw);
         try self.endObject();
     }
@@ -1148,7 +1155,9 @@ pub const Serializer = struct {
         try self.fieldType("JSXAttribute");
         try self.fieldSpan(span);
         try self.fieldNode("name", data.name);
+        self.in_jsx_attribute = true;
         try self.fieldNode("value", data.value);
+        self.in_jsx_attribute = false;
         try self.endObject();
     }
 
