@@ -244,8 +244,8 @@ pub const Lexer = struct {
             (allow_hyphen and c == '-');
     }
 
-    pub inline fn resetToCursor(self: *Lexer, cursor: u32) void {
-        self.cursor = cursor;
+    pub inline fn rewindTo(self: *Lexer, position: u32) void {
+        self.cursor = position;
         self.state.has_line_terminator_before = false;
     }
 
@@ -440,7 +440,7 @@ pub const Lexer = struct {
 
     // used by parser to scan text content between '<' and '{' in JSX children
     pub fn scanJsxText(self: *Lexer, initial_cursor: u32) token.Token {
-        self.resetToCursor(initial_cursor);
+        self.rewindTo(initial_cursor);
 
         const start = self.cursor;
 
@@ -458,7 +458,7 @@ pub const Lexer = struct {
 
     // used by parser to re-scan a slash token as a regex literal
     pub fn reScanAsRegex(self: *Lexer, slash_token: token.Token) LexicalError!struct { span: token.Span, pattern: []const u8, flags: []const u8, lexeme: []const u8 } {
-        self.resetToCursor(slash_token.span.start);
+        self.rewindTo(slash_token.span.start);
 
         const start = self.cursor;
         var closing_delimeter_pos: u32 = 0;

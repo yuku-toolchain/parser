@@ -135,7 +135,7 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
         }
 
         // reset lexer cursor to the '}' position and scan for template middle or tail
-        parser.lexer.resetToCursor(parser.current_token.span.start);
+        parser.lexer.rewindTo(parser.current_token.span.start);
 
         const template_token = parser.lexer.scanTemplateMiddleOrTail() catch |e| {
             try parser.report(parser.current_token.span, lexer.getLexicalErrorMessage(e), .{ .help = lexer.getLexicalErrorHelp(e) });

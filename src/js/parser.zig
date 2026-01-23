@@ -344,7 +344,7 @@ pub const Parser = struct {
         // also reset the lexer's cursor to the current token's end,
         // because the cursor was incremented further when prefetching the next token during lookAhead.
         // When clearing the lookahead/prefetched token, we need to revert the cursor as well.
-        self.lexer.resetToCursor(self.current_token.span.end);
+        self.lexer.rewindTo(self.current_token.span.end);
     }
 
     /// sets current token from a re-scanned token and advances to the next token.
