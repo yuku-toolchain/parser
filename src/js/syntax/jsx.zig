@@ -7,8 +7,21 @@ const Error = @import("../parser.zig").Error;
 const literals = @import("literals.zig");
 const expressions = @import("expressions.zig");
 
+const JsxContext = enum {
+    /// top-level JSX expression (not inside another JSX element)
+    top_level,
+    /// JSX element as a child of another JSX element
+    child,
+    /// JSX element as an attribute value
+    attribute,
+};
+
 // https://facebook.github.io/jsx/#prod-JSXElement
 pub fn parseJsxExpression(parser: *Parser) Error!?ast.NodeIndex {
+    return parseJsxExpressionWithContext(parser, .top_level);
+}
+
+fn parseJsxExpressionWithContext(parser: *Parser, context: JsxContext) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
     const next = try parser.lookAhead() orelse return null;
@@ -19,7 +32,7 @@ pub fn parseJsxExpression(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     // otherwise it's a regular element
-    const opening_element = try parseJsxOpeningElement(parser) orelse return null;
+    const opening_element = try parseJsxOpeningElement(parser, context) orelse return null;
 
     const opening_element_end = parser.getSpan(opening_element).end;
 
@@ -87,7 +100,7 @@ pub fn parseJsxClosingFragment(parser: *Parser) Error!?ast.NodeIndex {
 
 // https://facebook.github.io/jsx/#prod-JSXSelfClosingElement
 // https://facebook.github.io/jsx/#prod-JSXOpeningElement
-pub fn parseJsxOpeningElement(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseJsxOpeningElement(parser: *Parser, context: JsxContext) Error!?ast.NodeIndex {
     parser.setLexerMode(.jsx_tag);
 
     const start = parser.current_token.span.start;
@@ -113,10 +126,15 @@ pub fn parseJsxOpeningElement(parser: *Parser) Error!?ast.NodeIndex {
     const end = parser.current_token.span.end;
 
     if (self_closing) {
-        // self-closing: advance past '>' normally
         parser.setLexerMode(.normal);
-        try parser.advance() orelse return null;
+        // only advance for top-level self-closing elements.
+        // for child elements, parseJsxChildren will handle scanning via scanJsxText.
+        // for attribute elements, the caller will set the lexer mode appropriately.
+        if (context == .top_level) {
+            try parser.advance() orelse return null;
+        }
     }
+
     // non-self-closing: don't advance - parseJsxChildren will scan from here
 
     return try parser.addNode(.{
@@ -186,7 +204,7 @@ pub fn parseJsxChildren(
                 const next = try parser.lookAhead() orelse return null;
                 if (next.type == .slash) break; // closing element
 
-                const child = try parseJsxExpression(parser) orelse return null;
+                const child = try parseJsxExpressionWithContext(parser, .child) orelse return null;
                 scan_from = parser.getSpan(child).end;
                 try parser.scratch_b.append(parser.allocator(), child);
             },
@@ -319,7 +337,7 @@ pub fn parseJsxAttributeValue(parser: *Parser) Error!?ast.NodeIndex {
             return expression_container;
         },
         .less_than => {
-            const jsx_expression = try parseJsxExpression(parser) orelse return null;
+            const jsx_expression = try parseJsxExpressionWithContext(parser, .attribute) orelse return null;
 
             parser.setLexerMode(.jsx_tag);
 

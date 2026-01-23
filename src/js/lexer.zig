@@ -267,7 +267,8 @@ pub const Lexer = struct {
                 return self.createToken(.string_literal, self.source[start..self.cursor], start, self.cursor);
             }
 
-            if (c == '\n' or c == '\r') {
+            // In jsx tag mode, strings can contain newlines (for multi-line attribute values)
+            if ((c == '\n' or c == '\r') and self.state.mode != .jsx_tag) {
                 return error.UnterminatedString;
             }
 
