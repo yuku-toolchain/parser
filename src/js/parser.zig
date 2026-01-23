@@ -347,9 +347,11 @@ pub const Parser = struct {
         self.lexer.resetToCursor(self.current_token.span.end);
     }
 
-    pub inline fn replaceTokenAndAdvance(self: *Parser, tok: token.Token) Error!?void {
+    /// replaces the current token with a new one and clears any lookahead.
+    /// use this when re-scanning produces a different token than what was originally lexed.
+    pub inline fn replaceToken(self: *Parser, tok: token.Token) void {
         self.current_token = tok;
-        try self.advance() orelse return null;
+        self.next_token = null;
     }
 
     pub inline fn expect(self: *Parser, token_type: token.TokenType, message: []const u8, help: ?[]const u8) Error!bool {

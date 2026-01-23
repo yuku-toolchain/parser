@@ -168,7 +168,8 @@ pub fn parseJsxChildren(
             try parser.scratch_b.append(parser.allocator(), jsx_text);
         }
 
-        try parser.replaceTokenAndAdvance(jsx_text_token) orelse return null;
+        parser.replaceToken(jsx_text_token);
+        try parser.advance() orelse return null;
 
         switch (parser.current_token.type) {
             .less_than => {

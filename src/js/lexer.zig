@@ -55,11 +55,6 @@ pub const Lexer = struct {
 
     state: LexerState,
 
-    template_depth: u32,
-    /// stack of brace depths for each template nesting level.
-    /// each entry tracks nested braces within that template's ${} expression.
-    brace_depth_stack: [16]u32,
-
     strict_mode: bool,
     source: []const u8,
 
@@ -71,11 +66,8 @@ pub const Lexer = struct {
         return .{
             .strict_mode = strict_mode,
             .source = source,
-            .template_depth = 0,
 
             .state = .{},
-
-            .brace_depth_stack = .{0} ** 16,
 
             .cursor = 0,
             .comments = try .initCapacity(allocator, source.len / 3),
@@ -120,13 +112,7 @@ pub const Lexer = struct {
             '~' => .bitwise_not,
             '(' => .left_paren,
             ')' => .right_paren,
-            '{' => blk: {
-                // track nested braces inside template expressions
-                if (self.template_depth > 0) {
-                    self.brace_depth_stack[self.template_depth - 1] += 1;
-                }
-                break :blk .left_brace;
-            },
+            '{' => .left_brace,
             '[' => .left_bracket,
             ']' => .right_bracket,
             ';' => .semicolon,
@@ -319,9 +305,6 @@ pub const Lexer = struct {
             if (c == '$' and self.peek(1) == '{') {
                 self.cursor += 2;
                 const end = self.cursor;
-                // initialize brace depth for this template level before incrementing depth
-                self.brace_depth_stack[self.template_depth] = 0;
-                self.template_depth += 1;
                 return self.createToken(.template_head, self.source[start..end], start, end);
             }
 
@@ -331,7 +314,10 @@ pub const Lexer = struct {
         return error.NonTerminatedTemplateLiteral;
     }
 
-    fn scanTemplateMiddleOrTail(self: *Lexer) LexicalError!token.Token {
+    /// scans for template_middle or template_tail starting from current position.
+    /// called by the parser when it expects a template continuation after parsing
+    /// an expression inside ${}.
+    pub fn scanTemplateMiddleOrTail(self: *Lexer) LexicalError!token.Token {
         const start = self.cursor;
         self.cursor += 1;
 
@@ -344,9 +330,6 @@ pub const Lexer = struct {
             if (c == '`') {
                 self.cursor += 1;
                 const end = self.cursor;
-                if (self.template_depth > 0) {
-                    self.template_depth -= 1;
-                }
                 return self.createToken(.template_tail, self.source[start..end], start, end);
             }
             if (c == '$' and self.peek(1) == '{') {
@@ -455,20 +438,7 @@ pub const Lexer = struct {
         }
     }
 
-    fn handleRightBrace(self: *Lexer) LexicalError!token.Token {
-        // inside a template expression, check if this } closes a nested brace
-        // or the template substitution itself
-        if (self.template_depth > 0) {
-            const depth_idx = self.template_depth - 1;
-            if (self.brace_depth_stack[depth_idx] > 0) {
-                // this } closes a nested brace (e.g., arrow function body, object literal)
-                self.brace_depth_stack[depth_idx] -= 1;
-            } else {
-                // this } closes the template substitution ${...}
-                return self.scanTemplateMiddleOrTail();
-            }
-        }
-
+    fn handleRightBrace(self: *Lexer) token.Token {
         const start = self.cursor;
         self.cursor += 1;
         return self.createToken(.right_brace, self.source[start..self.cursor], start, self.cursor);

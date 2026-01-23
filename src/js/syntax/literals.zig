@@ -61,12 +61,14 @@ pub fn parseRegExpLiteral(parser: *Parser) Error!?ast.NodeIndex {
         return null;
     };
 
-    try parser.replaceTokenAndAdvance(parser.lexer.createToken(
+    parser.replaceToken(parser.lexer.createToken(
         .regex_literal,
         parser.source[regex.span.start..regex.span.end],
         regex.span.start,
         regex.span.end,
-    )) orelse return null;
+    ));
+
+    try parser.advance() orelse return null;
 
     return try parser.addNode(.{
         .regexp_literal = .{
@@ -123,36 +125,45 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
         const expr = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
         try parser.scratch_b.append(parser.allocator(), expr);
 
-        const token = parser.current_token;
-        const is_tail = token.type == .template_tail;
-
-        switch (token.type) {
-            .template_middle, .template_tail => {
-                const span = getTemplateElementSpan(token);
-                try parser.scratch_a.append(parser.allocator(), try parser.addNode(.{
-                    .template_element = .{
-                        .raw_start = span.start,
-                        .raw_len = @intCast(span.end - span.start),
-                        .tail = is_tail,
-                    },
-                }, span));
-
-                if (is_tail) {
-                    end = token.span.end;
-                    try parser.advance() orelse return null;
-                    break;
-                }
-                try parser.advance() orelse return null;
-            },
-            else => {
-                try parser.report(
-                    token.span,
-                    "Unexpected token in template literal expression",
-                    .{ .help = "Template expressions must be followed by '}' to continue the template string. Check for unmatched braces." },
-                );
-                return null;
-            },
+        // after parsing the expression, we expect '}' which closes the ${} substitution.
+        // we need to explicitly scan for template continuation (middle or tail).
+        if (parser.current_token.type != .right_brace) {
+            try parser.report(
+                parser.current_token.span,
+                "Expected '}' to close template expression",
+                .{ .help = "Template expressions must be closed with '}'" },
+            );
+            return null;
         }
+
+        // reset lexer cursor to the '}' position and scan for template middle or tail
+        parser.lexer.resetToCursor(parser.current_token.span.start);
+
+        const template_token = parser.lexer.scanTemplateMiddleOrTail() catch |e| {
+            try parser.report(parser.current_token.span, lexer.getLexicalErrorMessage(e), .{ .help = lexer.getLexicalErrorHelp(e) });
+            return null;
+        };
+
+        const is_tail = template_token.type == .template_tail;
+        const span = getTemplateElementSpan(template_token);
+
+        try parser.scratch_a.append(parser.allocator(), try parser.addNode(.{
+            .template_element = .{
+                .raw_start = span.start,
+                .raw_len = @intCast(span.end - span.start),
+                .tail = is_tail,
+            },
+        }, span));
+
+        parser.replaceToken(template_token);
+
+        if (is_tail) {
+            end = template_token.span.end;
+            try parser.advance() orelse return null;
+            break;
+        }
+
+        try parser.advance() orelse return null;
     }
 
     return try parser.addNode(.{
