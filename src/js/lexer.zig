@@ -38,10 +38,13 @@ pub const LexicalError = error{
 pub const LexerMode = enum {
     /// normal javascript mode
     normal,
-    // allows hyphens in identifiers and emits jsx_identifier, and also won't process escapes in attribute string value
+    /// jsx tag context: allows hyphens in identifiers, emits jsx_identifier,
+    /// and doesn't process escapes in attribute string values
     jsx_tag,
-    /// jsx text context: next token will be scanned as raw text (used once after '>')
-    jsx_text,
+    /// transitional mode used when advancing past '>' into jsx content.
+    /// ensures the first token after '>' is scanned as raw text, handling
+    /// characters that would be invalid in normal JS (like '@' in '<div>@test</div>')
+    jsx_content_start,
 };
 
 const LexerState = struct {
@@ -94,7 +97,7 @@ pub const Lexer = struct {
             '~', '(', ')', '{', '[', ']', ';', ',', ':' => self.scanSimplePunctuation(),
             '}' => self.handleRightBrace(),
             else => {
-                if (self.state.mode == .jsx_text) {
+                if (self.state.mode == .jsx_content_start) {
                     return self.scanJsxText(self.cursor);
                 }
 

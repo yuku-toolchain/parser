@@ -61,7 +61,7 @@ pub fn parseJsxOpeningFragment(parser: *Parser) Error!?ast.NodeIndex {
 
     const end = parser.current_token.span.end;
 
-    if (!try advanceIntoJsxContent(parser, "Expected '>' to close JSX opening fragment", "Add '>' to complete the fragment opening tag")) return null;
+    if (!try consumeTagClose(parser, "Expected '>' to close JSX opening fragment", "Add '>' to complete the fragment opening tag")) return null;
 
     return try parser.addNode(.{ .jsx_opening_fragment = .{} }, .{ .start = start, .end = end });
 }
@@ -103,7 +103,7 @@ pub fn parseJsxOpeningElement(parser: *Parser) Error!?ast.NodeIndex {
 
     const end = parser.current_token.span.end;
 
-    if (!try advanceIntoJsxContent(parser, "Expected '>' to close JSX opening element", "Add '>' to close the JSX tag")) return null;
+    if (!try consumeTagClose(parser, "Expected '>' to close JSX opening element", "Add '>' to close the JSX tag")) return null;
 
     return try parser.addNode(.{
         .jsx_opening_element = .{
@@ -114,9 +114,17 @@ pub fn parseJsxOpeningElement(parser: *Parser) Error!?ast.NodeIndex {
     }, .{ .start = start, .end = end });
 }
 
-/// advances past '>' and into jsx content, ensuring the next token is lexed as text
-fn advanceIntoJsxContent(parser: *Parser, err_msg: []const u8, help: []const u8) Error!bool {
-    parser.setLexerMode(.jsx_text);
+/// Consumes '>' and transitions into JSX content parsing mode.
+///
+/// After '>', JSX content can contain arbitrary text including characters
+/// that aren't valid token starts in normal JS (like '@' in '<div>@test</div>').
+/// This function temporarily sets jsx_content_start mode so the lexer scans
+/// the first token as raw text, then resets to normal mode.
+///
+/// parseJsxChildren will re-scan from the exact position after '>' to get
+/// precise text boundaries.
+fn consumeTagClose(parser: *Parser, err_msg: []const u8, help: []const u8) Error!bool {
+    parser.setLexerMode(.jsx_content_start);
     defer parser.setLexerMode(.normal);
     return parser.expect(.greater_than, err_msg, help);
 }
@@ -147,27 +155,37 @@ pub fn parseJsxClosingElement(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 // https://facebook.github.io/jsx/#prod-JSXChildren
+/// Parses JSX children (text, elements, and expression containers).
+///
+/// This function manually scans JSX text using scanJsxText() rather than relying
+/// on normal tokenization. This is necessary because:
+/// 1. JSX text can contain characters invalid in normal JS (like '@')
+/// 2. We need to preserve exact whitespace between children
+/// 3. Normal tokenization would skip whitespace and fail on invalid chars
+///
+/// The 'start' parameter is the byte position right after '>' from the opening tag.
+/// consumeTagClose() has already advanced past '>' with jsx_content_start mode to handle
+/// the initial token, and this function re-scans from 'start' to get the exact text.
 pub fn parseJsxChildren(
     parser: *Parser,
-    start: u32, // byte position right after '>' (no whitespace skipped)
+    start: u32,
 ) Error!?ast.IndexRange {
     const children_checkpoint = parser.scratch_b.begin();
     defer parser.scratch_b.reset(children_checkpoint);
 
     // tracks where to start next text scan. updated after each child to preserve all text/whitespace.
-    // this prevents missing text between children since normal tokenization skips whitespace.
     var scanJsxTextFrom = start;
 
     while (parser.current_token.type != .eof) {
-        // manually scan jsx text from tracked position (not from current token position)
+        // scan jsx text from tracked position (stops at '<' or '{')
         const jsx_text_token = parser.lexer.scanJsxText(scanJsxTextFrom);
 
         if (jsx_text_token.lexeme.len > 0) {
             const jsx_text = try parser.addNode(.{ .jsx_text = .{ .raw_start = jsx_text_token.span.start, .raw_len = @intCast(jsx_text_token.lexeme.len) } }, jsx_text_token.span);
-
             try parser.scratch_b.append(parser.allocator(), jsx_text);
         }
 
+        // replace current token with the scanned text and advance to '<' or '{'
         parser.replaceToken(jsx_text_token);
         try parser.advance() orelse return null;
 
