@@ -14,13 +14,13 @@ A high-performance JavaScript/TypeScript compiler written in Zig, featuring a fa
 </div>
 
 :::note
-Yuku is still at a very early stage. Even though Yuku's JavaScript parser is already functional, JSX and TypeScript support are still in development.
+Yuku's JavaScript/JSX parser is already functional, well-tested, and production-ready. TypeScript support is still in development. Additionally, to facilitate clean public use of Yuku's parsers, a Visitor/Traverse API is on the way, featuring comprehensive scope information, symbol tables, and more.
 :::
 
 ## Roadmap
 
 - [x] JavaScript Parser
 - [x] WASM (try here: https://yuku-parser.vercel.app/playground)
-- [ ] JSX Support (In Progress)
-- [ ] TypeScript Support
+- [x] JSX Support
+- [ ] TypeScript Support (In Progress)
 - [ ] Best-in-class Visitor and Traverser
