@@ -19,7 +19,7 @@ const JsxElementContext = enum {
     top_level,
     /// child of another JSX element, parent's parseJsxChildren handles continuation
     child,
-    /// attribute value, caller restores jsx_tag mode
+    /// attribute value, restores jsx_tag mode
     attribute,
 };
 
@@ -83,10 +83,15 @@ fn parseJsxFragment(parser: *Parser) Error!?ast.NodeIndex {
 
     // parse </>
     const closing_start = parser.current_token.span.start;
+
     try parser.advance() orelse return null; // consume '<'
+
     if (!try parser.expect(.slash, "Expected '/' in JSX closing fragment", "Add '/' to close the fragment")) return null;
+
     const closing_end = parser.current_token.span.end;
+
     if (!try parser.expect(.greater_than, "Expected '>' to close JSX closing fragment", "Add '>' to complete the fragment closing tag")) return null;
+
     const closing = try parser.addNode(.{ .jsx_closing_fragment = .{} }, .{ .start = closing_start, .end = closing_end });
 
     return try parser.addNode(.{
@@ -125,9 +130,14 @@ fn parseJsxOpeningElement(parser: *Parser, context: JsxElementContext) Error!?as
     // - self-closing child/attribute: switch to normal, don't advance (caller handles it)
     // - non-self-closing: stay in jsx_tag (will switch in parseJsxChildren), don't advance
     if (self_closing) {
-        parser.setLexerMode(.normal);
-        if (context == .top_level) {
+        if(context == .attribute) {
+            parser.setLexerMode(.jsx_tag);
             try parser.advance() orelse return null;
+        } else {
+            parser.setLexerMode(.normal);
+            if (context == .top_level) {
+                try parser.advance() orelse return null;
+            }
         }
     }
 
@@ -321,12 +331,7 @@ fn parseJsxAttributeValue(parser: *Parser) Error!?ast.NodeIndex {
         },
 
         // nested JSX element: <elem />
-        .less_than => {
-            const element = try parseJsxElement(parser, .attribute) orelse return null;
-            // restore jsx_tag mode for remaining attributes
-            parser.setLexerMode(.jsx_tag);
-            return element;
-        },
+        .less_than => return parseJsxElement(parser, .attribute),
 
         else => {
             try parser.reportFmt(
