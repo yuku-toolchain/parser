@@ -5,101 +5,9 @@ const ast = @import("ast.zig");
 
 const statements = @import("syntax/statements.zig");
 
-pub const Severity = enum {
-    @"error",
-    warning,
-    hint,
-    info,
-
-    pub fn toString(self: Severity) []const u8 {
-        return switch (self) {
-            .@"error" => "error",
-            .warning => "warning",
-            .hint => "hint",
-            .info => "info",
-        };
-    }
-};
-
-pub const Label = struct {
-    span: ast.Span,
-    message: []const u8,
-};
-
-pub const Diagnostic = struct {
-    severity: Severity = .@"error",
-    message: []const u8,
-    span: ast.Span,
-    help: ?[]const u8 = null,
-    labels: []const Label = &.{},
-};
-
-pub const SourceType = enum { script, module };
-pub const Lang = enum { js, ts, jsx, tsx, dts };
-
 pub const Options = struct {
-    source_type: SourceType = .module,
-    lang: Lang = .js,
-};
-
-/// Must be deinitialized to free the arena-allocated memory.
-pub const ParseTree = struct {
-    /// Root node of the AST (always a Program node)
-    program: ast.NodeIndex,
-    /// Source code that was parsed
-    source: []const u8,
-    /// All nodes in the AST
-    nodes: ast.NodeList.Slice,
-    /// Extra data storage for variadic node children
-    extra: []ast.NodeIndex,
-    /// Diagnostics (errors, warnings, etc.) encountered during parsing
-    diagnostics: []const Diagnostic,
-    /// Comments collected in source code
-    comments: []const ast.Comment,
-    /// Arena allocator owning all the memory
-    arena: std.heap.ArenaAllocator,
-    /// Source type (script or module)
-    source_type: SourceType,
-    /// Language variant (js, ts, jsx, tsx, dts)
-    lang: Lang,
-
-    /// Returns true if the parse tree contains any errors.
-    pub inline fn hasErrors(self: ParseTree) bool {
-        for (self.diagnostics) |d| {
-            if (d.severity == .@"error") return true;
-        }
-        return false;
-    }
-
-    /// Returns true if the parse tree contains any diagnostics (errors, warnings, etc.).
-    pub inline fn hasDiagnostics(self: ParseTree) bool {
-        return self.diagnostics.len > 0;
-    }
-
-    /// Frees all memory allocated by this parse tree.
-    pub fn deinit(self: *const ParseTree) void {
-        self.arena.deinit();
-    }
-
-    /// Gets the data for the node at the given index.
-    pub inline fn getData(self: *const ParseTree, index: ast.NodeIndex) ast.NodeData {
-        return self.nodes.items(.data)[index];
-    }
-
-    /// Gets the span for the node at the given index.
-    pub inline fn getSpan(self: *const ParseTree, index: ast.NodeIndex) ast.Span {
-        return self.nodes.items(.span)[index];
-    }
-
-    /// Gets the extra node indices for the given range.
-    pub inline fn getExtra(self: *const ParseTree, range: ast.IndexRange) []const ast.NodeIndex {
-        return self.extra[range.start..][0..range.len];
-    }
-
-    /// Gets a slice of the source text at the given position.
-    pub inline fn getSourceText(self: *const ParseTree, start: u32, len: u16) []const u8 {
-        return self.source[start..][0..len];
-    }
+    source_type: ast.SourceType = .module,
+    lang: ast.Lang = .js,
 };
 
 const ParserContext = struct {
@@ -133,7 +41,7 @@ pub const Parser = struct {
     source: []const u8,
     lexer: lexer.Lexer,
     arena: std.heap.ArenaAllocator,
-    diagnostics: std.ArrayList(Diagnostic) = .empty,
+    diagnostics: std.ArrayList(ast.Diagnostic) = .empty,
     nodes: ast.NodeList = .empty,
     extra: std.ArrayList(ast.NodeIndex) = .empty,
     current_token: token.Token,
@@ -150,8 +58,8 @@ pub const Parser = struct {
     state: ParserState = .{},
 
     strict_mode: bool,
-    source_type: SourceType,
-    lang: Lang,
+    source_type: ast.SourceType,
+    lang: ast.Lang,
 
     pub fn init(child_allocator: std.mem.Allocator, source: []const u8, options: Options) Parser {
         return .{
@@ -172,7 +80,7 @@ pub const Parser = struct {
     /// Parse the source code and return a ParseTree.
     /// The Parser is consumed and should not be used after calling this method.
     /// The caller owns the returned ParseTree and must call deinit() on it.
-    pub fn parse(self: *Parser) Error!ParseTree {
+    pub fn parse(self: *Parser) Error!ast.ParseTree {
         const alloc = self.allocator();
 
         // init lexer
@@ -201,7 +109,7 @@ pub const Parser = struct {
             .{ .start = 0, .end = end },
         );
 
-        const tree = ParseTree{
+        const tree = ast.ParseTree{
             .program = program,
             .source = self.source,
             .nodes = self.nodes.toOwnedSlice(),
@@ -390,9 +298,9 @@ pub const Parser = struct {
     }
 
     pub const ReportOptions = struct {
-        severity: Severity = .@"error",
+        severity: ast.Severity = .@"error",
         help: ?[]const u8 = null,
-        labels: []const Label = &.{},
+        labels: []const ast.Label = &.{},
     };
 
     pub fn report(self: *Parser, span: ast.Span, message: []const u8, opts: ReportOptions) Error!void {
@@ -410,12 +318,12 @@ pub const Parser = struct {
         try self.report(span, message, opts);
     }
 
-    pub fn label(_: *Parser, span: ast.Span, message: []const u8) Label {
+    pub fn label(_: *Parser, span: ast.Span, message: []const u8) ast.Label {
         return .{ .span = span, .message = message };
     }
 
-    pub fn makeLabels(self: *Parser, labels: []const Label) Error![]const Label {
-        return try self.allocator().dupe(Label, labels);
+    pub fn makeLabels(self: *Parser, labels: []const ast.Label) Error![]const ast.Label {
+        return try self.allocator().dupe(ast.Label, labels);
     }
 
     pub fn formatMessage(self: *Parser, comptime format: []const u8, args: anytype) Error![]u8 {
@@ -503,7 +411,7 @@ const ScratchBuffer = struct {
 
 /// Parse JavaScript/TypeScript source code into an AST.
 /// Returns a ParseTree that must be freed by calling `tree.deinit()` when you're done using it.
-pub fn parse(child_allocator: std.mem.Allocator, source: []const u8, options: Options) Error!ParseTree {
+pub fn parse(child_allocator: std.mem.Allocator, source: []const u8, options: Options) Error!ast.ParseTree {
     var parser = Parser.init(child_allocator, source, options);
     return parser.parse();
 }

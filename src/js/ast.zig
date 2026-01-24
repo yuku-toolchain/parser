@@ -1,6 +1,48 @@
 const std = @import("std");
 const token = @import("token.zig");
 
+pub const Severity = enum {
+    @"error",
+    warning,
+    hint,
+    info,
+
+    pub fn toString(self: Severity) []const u8 {
+        return switch (self) {
+            .@"error" => "error",
+            .warning => "warning",
+            .hint => "hint",
+            .info => "info",
+        };
+    }
+};
+
+pub const Label = struct {
+    span: Span,
+    message: []const u8,
+};
+
+pub const Diagnostic = struct {
+    severity: Severity = .@"error",
+    message: []const u8,
+    span: Span,
+    help: ?[]const u8 = null,
+    labels: []const Label = &.{},
+};
+
+pub const SourceType = enum {
+    script,
+    module,
+
+    pub fn toString(self: SourceType) []const u8 {
+        return switch (self) {
+            .script => "script",
+            .module => "module",
+        };
+    }
+};
+pub const Lang = enum { js, ts, jsx, tsx, dts };
+
 pub const Comment = struct {
     type: Type,
     start: u32,
@@ -25,6 +67,66 @@ pub const Comment = struct {
             // Skip "/*" prefix and "*/" suffix
             .block => source[self.start + 2 .. self.end - 2],
         };
+    }
+};
+
+/// Must be deinitialized to free the arena-allocated memory.
+pub const ParseTree = struct {
+    /// Root node of the AST (always a Program node)
+    program: NodeIndex,
+    /// Source code that was parsed
+    source: []const u8,
+    /// All nodes in the AST
+    nodes: NodeList.Slice,
+    /// Extra data storage for variadic node children
+    extra: []NodeIndex,
+    /// Diagnostics (errors, warnings, etc.) encountered during parsing
+    diagnostics: []const Diagnostic,
+    /// Comments collected in source code
+    comments: []const Comment,
+    /// Arena allocator owning all the memory
+    arena: std.heap.ArenaAllocator,
+    /// Source type (script or module)
+    source_type: SourceType,
+    /// Language variant (js, ts, jsx, tsx, dts)
+    lang: Lang,
+
+    /// Returns true if the parse tree contains any errors.
+    pub inline fn hasErrors(self: ParseTree) bool {
+        for (self.diagnostics) |d| {
+            if (d.severity == .@"error") return true;
+        }
+        return false;
+    }
+
+    /// Returns true if the parse tree contains any diagnostics (errors, warnings, etc.).
+    pub inline fn hasDiagnostics(self: ParseTree) bool {
+        return self.diagnostics.len > 0;
+    }
+
+    /// Frees all memory allocated by this parse tree.
+    pub fn deinit(self: *const ParseTree) void {
+        self.arena.deinit();
+    }
+
+    /// Gets the data for the node at the given index.
+    pub inline fn getData(self: *const ParseTree, index: NodeIndex) NodeData {
+        return self.nodes.items(.data)[index];
+    }
+
+    /// Gets the span for the node at the given index.
+    pub inline fn getSpan(self: *const ParseTree, index: NodeIndex) Span {
+        return self.nodes.items(.span)[index];
+    }
+
+    /// Gets the extra node indices for the given range.
+    pub inline fn getExtra(self: *const ParseTree, range: IndexRange) []const NodeIndex {
+        return self.extra[range.start..][0..range.len];
+    }
+
+    /// Gets a slice of the source text at the given position.
+    pub inline fn getSourceText(self: *const ParseTree, start: u32, len: u16) []const u8 {
+        return self.source[start..][0..len];
     }
 };
 
@@ -781,18 +883,6 @@ pub const Program = struct {
     source_type: SourceType,
     /// (Statement | Directive)[]
     body: IndexRange,
-};
-
-pub const SourceType = enum {
-    script,
-    module,
-
-    pub fn toString(self: SourceType) []const u8 {
-        return switch (self) {
-            .script => "script",
-            .module => "module",
-        };
-    }
 };
 
 /// `"use strict";`

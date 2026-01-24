@@ -1,7 +1,8 @@
-// converts the parsed tree to an typescript-estree compatible json string.
-// used for testing/ast inspection purposes, like snapshot tests (test folder).
-// this module is likely removed when have a better approach for passing ast to js, so we will use
-// that approach for snapshot tests.
+// this is slow tbh (while other yuku things are super/extremely fast in comparison), but it's as fast as possible.
+// it converts the parsed tree to a typescript-estree compatible json string.
+// used for testing and ast inspection purposes, such as snapshot tests (in the test folder).
+// this module will likely be removed when we have a better approach for passing ast to js,
+// and we'll use that approach for snapshot tests.
 
 const std = @import("std");
 const ast = @import("ast.zig");
@@ -14,7 +15,7 @@ pub const EstreeJsonOptions = struct {
 };
 
 pub const Serializer = struct {
-    tree: *const parser.ParseTree,
+    tree: *const ast.ParseTree,
     buffer: *std.ArrayList(u8),
     allocator: std.mem.Allocator,
     depth: u32 = 0,
@@ -29,7 +30,7 @@ pub const Serializer = struct {
     const Error = error{ InvalidCharacter, NoSpaceLeft, OutOfMemory, Overflow };
     const max_depth = 512;
 
-    pub fn serialize(tree: *const parser.ParseTree, allocator: std.mem.Allocator, options: EstreeJsonOptions) ![]u8 {
+    pub fn serialize(tree: *const ast.ParseTree, allocator: std.mem.Allocator, options: EstreeJsonOptions) ![]u8 {
         var buffer: std.ArrayList(u8) = try .initCapacity(allocator, tree.source.len * 4);
         errdefer buffer.deinit(allocator);
 
@@ -1625,7 +1626,7 @@ fn buildUtf16PosMap(allocator: std.mem.Allocator, source: []const u8) ![]u32 {
     return map;
 }
 
-pub fn toJSON(tree: *const parser.ParseTree, allocator: std.mem.Allocator, options: EstreeJsonOptions) ![]u8 {
+pub fn toJSON(tree: *const ast.ParseTree, allocator: std.mem.Allocator, options: EstreeJsonOptions) ![]u8 {
     return Serializer.serialize(tree, allocator, options);
 }
 

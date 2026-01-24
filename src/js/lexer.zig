@@ -2,7 +2,6 @@ const std = @import("std");
 const token = @import("token.zig");
 const ast = @import("ast.zig");
 const util = @import("util");
-const parser = @import("parser.zig");
 
 pub const LexicalError = error{
     UnterminatedString,
@@ -66,9 +65,9 @@ pub const Lexer = struct {
 
     /// current byte index being scanned in the source
     cursor: u32,
-    source_type: parser.SourceType,
+    source_type: ast.SourceType,
 
-    pub fn init(source: []const u8, allocator: std.mem.Allocator, source_type: parser.SourceType, strict_mode: bool) error{OutOfMemory}!Lexer {
+    pub fn init(source: []const u8, allocator: std.mem.Allocator, source_type: ast.SourceType, strict_mode: bool) error{OutOfMemory}!Lexer {
         return .{
             .strict_mode = strict_mode,
             .source = source,
