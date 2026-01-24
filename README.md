@@ -25,6 +25,6 @@ A high-performance JavaScript/TypeScript compiler written in Zig, featuring a fa
 
 - [x] JavaScript Parser
 - [x] WASM (try here: https://yuku-parser.vercel.app/playground)
-- [ ] JSX Support (In Progress)
-- [ ] TypeScript Support
+- [x] JSX Support
+- [ ] TypeScript Support (In Progress)
 - [ ] Best-in-class Visitor and Traverser
