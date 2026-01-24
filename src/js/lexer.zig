@@ -261,8 +261,11 @@ pub const Lexer = struct {
     /// scans template_middle or template_tail starting from current position.
     /// called by the parser when it expects a template continuation after parsing
     /// an expression inside ${}.
-    pub fn rescanTemplateContinuation(self: *Lexer) LexicalError!token.Token {
+    pub fn scanTemplateContinuation(self: *Lexer, expression_end: u32) LexicalError!token.Token {
+        self.rewindTo(expression_end);
+
         const start = self.cursor;
+
         self.cursor += 1;
 
         while (self.cursor < self.source.len) {
@@ -308,8 +311,8 @@ pub const Lexer = struct {
     /// re-scans a slash token as a regex literal
     /// called by the parser when context determines that a '/' token should be interpreted
     /// as the start of a regular expression rather than a division operator
-    pub fn rescanAsRegex(self: *Lexer, slash_token: token.Token) LexicalError!struct { span: token.Span, pattern: []const u8, flags: []const u8, lexeme: []const u8 } {
-        self.rewindTo(slash_token.span.start);
+    pub fn rescanAsRegex(self: *Lexer, slash_token_start: u32) LexicalError!struct { span: token.Span, pattern: []const u8, flags: []const u8, lexeme: []const u8 } {
+        self.rewindTo(slash_token_start);
 
         const start = self.cursor;
         var closing_delimeter_pos: u32 = 0;
