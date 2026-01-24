@@ -65,6 +65,7 @@ const configs: TestConfig[] = [
   { path: "test/jsx/pass", type: "snapshot", languages: ["jsx"] },
   { path: "test/jsx/regression", type: "snapshot", languages: ["jsx"] },
   { path: "test/jsx/misc", type: "snapshot", languages: ["jsx"] },
+  { path: "test/jsx/fail", type: "should_fail", languages: ["jsx"] },
 ]
 
 interface TestResult {
