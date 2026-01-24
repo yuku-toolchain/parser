@@ -41,8 +41,9 @@ pub const LexicalError = error{
 pub const LexerMode = enum {
     /// normal javascript mode
     normal,
-    /// jsx tag context: allows hyphens in identifiers, emits jsx_identifier,
-    /// and doesn't process escapes in attribute string values
+    /// jsx tag context: allows hyphens in identifiers, emits jsx_identifier tokens,
+    /// disables escape sequences in both identifiers and string literals,
+    /// allows newlines in string literals, and treats '>>' as two separate '>' tokens
     jsx_tag,
 };
 
