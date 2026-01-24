@@ -7,12 +7,6 @@ const Error = @import("../parser.zig").Error;
 const literals = @import("literals.zig");
 const expressions = @import("expressions.zig");
 
-// mode transitions:
-// - entering a tag (<elem or </elem): switch to jsx_tag
-// - exiting a tag (>): switch to normal (for children) or stay in jsx_tag (for attributes after nested JSX)
-// - entering expression container ({): switch to normal
-// - exiting expression container (}): restore to jsx_tag (if in attribute) or normal (if in children)
-
 /// context for JSX element parsing, determines post-parse behavior
 const JsxElementContext = enum {
     /// top-level JSX expression, needs to advance past final '>'
