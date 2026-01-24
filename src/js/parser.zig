@@ -318,18 +318,17 @@ pub const Parser = struct {
     }
 
     pub fn lookAhead(self: *Parser) Error!?token.Token {
-        // these are the changing states in lexer
         const prev_state = self.lexer.state;
         const prev_cursor = self.lexer.cursor;
-        const prev_comments = self.lexer.comments;
+        const prev_comments_len = self.lexer.comments.items.len;
 
-        const next_token = try self.nextToken() orelse return null;
+        defer {
+            self.lexer.state = prev_state;
+            self.lexer.cursor = prev_cursor;
+            self.lexer.comments.shrinkRetainingCapacity(prev_comments_len);
+        }
 
-        self.lexer.state = prev_state;
-        self.lexer.cursor = prev_cursor;
-        self.lexer.comments = prev_comments;
-
-        return next_token;
+        return try self.nextToken();
     }
 
     /// sets current token from a re-scanned token and advances to the next token.
