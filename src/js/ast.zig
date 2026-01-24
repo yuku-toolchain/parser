@@ -1094,6 +1094,115 @@ pub const TSNamespaceExportDeclaration = struct {
     id: NodeIndex,
 };
 
+/// `<Foo>children</Foo>` or `<Foo />`
+/// https://facebook.github.io/jsx/#prod-JSXElement
+pub const JSXElement = struct {
+    /// JSXOpeningElement
+    opening_element: NodeIndex,
+    /// (JSXText | JSXElement | JSXFragment | JSXExpressionContainer | JSXSpreadChild)[]
+    children: IndexRange,
+    /// JSXClosingElement (optional, may be null_node for self-closing tags)
+    closing_element: NodeIndex,
+};
+
+/// `<Foo bar={baz}>` or `<Foo />`
+/// https://facebook.github.io/jsx/#prod-JSXOpeningElement
+pub const JSXOpeningElement = struct {
+    /// JSXIdentifier | JSXNamespacedName | JSXMemberExpression
+    name: NodeIndex,
+    /// (JSXAttribute | JSXSpreadAttribute)[]
+    attributes: IndexRange,
+    /// true for `<Foo />`, false for `<Foo>`
+    self_closing: bool,
+};
+
+/// `</Foo>`
+/// https://facebook.github.io/jsx/#prod-JSXClosingElement
+pub const JSXClosingElement = struct {
+    /// JSXIdentifier | JSXNamespacedName | JSXMemberExpression
+    name: NodeIndex,
+};
+
+/// `<>children</>`
+/// https://facebook.github.io/jsx/#prod-JSXFragment
+pub const JSXFragment = struct {
+    /// JSXOpeningFragment
+    opening_fragment: NodeIndex,
+    /// (JSXText | JSXElement | JSXFragment | JSXExpressionContainer | JSXSpreadChild)[]
+    children: IndexRange,
+    /// JSXClosingFragment
+    closing_fragment: NodeIndex,
+};
+
+/// `<>`
+pub const JSXOpeningFragment = struct {};
+
+/// `</>`
+pub const JSXClosingFragment = struct {};
+
+/// used in jsx tag names and attributes
+/// https://facebook.github.io/jsx/#prod-JSXIdentifier
+pub const JSXIdentifier = struct {
+    name_start: u32,
+    name_len: u16,
+};
+
+/// `<namespace:name />`
+/// https://facebook.github.io/jsx/#prod-JSXNamespacedName
+pub const JSXNamespacedName = struct {
+    /// JSXIdentifier - namespace portion
+    namespace: NodeIndex,
+    /// JSXIdentifier - name portion
+    name: NodeIndex,
+};
+
+/// `<Foo.Bar.Baz />`
+/// https://facebook.github.io/jsx/#prod-JSXMemberExpression
+pub const JSXMemberExpression = struct {
+    /// JSXIdentifier | JSXMemberExpression
+    object: NodeIndex,
+    /// JSXIdentifier
+    property: NodeIndex,
+};
+
+/// `foo="bar"` or `foo={expr}` or just `foo`
+/// https://facebook.github.io/jsx/#prod-JSXAttribute
+pub const JSXAttribute = struct {
+    /// JSXIdentifier | JSXNamespacedName
+    name: NodeIndex,
+    /// StringLiteral | JSXExpressionContainer | JSXElement | JSXFragment (optional, may be null_node for boolean-like attributes)
+    value: NodeIndex,
+};
+
+/// `{...props}`
+/// https://facebook.github.io/jsx/#prod-JSXSpreadAttribute
+pub const JSXSpreadAttribute = struct {
+    /// Expression - the expression being spread
+    argument: NodeIndex,
+};
+
+/// `{expression}`
+/// https://facebook.github.io/jsx/#prod-JSXExpressionContainer
+pub const JSXExpressionContainer = struct {
+    /// JSXEmptyExpression | Expression
+    expression: NodeIndex,
+};
+
+/// `{}`
+pub const JSXEmptyExpression = struct {};
+
+/// text content inside JSX elements
+pub const JSXText = struct {
+    raw_start: u32,
+    raw_len: u16,
+};
+
+/// `{...children}`
+pub const JSXSpreadChild = struct {
+    /// Expression - the expression being spread
+    expression: NodeIndex,
+};
+
 pub const NodeData = union(enum) {
     sequence_expression: SequenceExpression,
     parenthesized_expression: ParenthesizedExpression,
@@ -1179,14 +1288,35 @@ pub const NodeData = union(enum) {
     export_default_declaration: ExportDefaultDeclaration,
     export_all_declaration: ExportAllDeclaration,
     export_specifier: ExportSpecifier,
+
+    // typescript
     ts_export_assignment: TSExportAssignment,
     ts_namespace_export_declaration: TSNamespaceExportDeclaration,
+
+    // jsx
+    jsx_element: JSXElement,
+    jsx_opening_element: JSXOpeningElement,
+    jsx_closing_element: JSXClosingElement,
+    jsx_fragment: JSXFragment,
+    jsx_opening_fragment: JSXOpeningFragment,
+    jsx_closing_fragment: JSXClosingFragment,
+    jsx_identifier: JSXIdentifier,
+    jsx_namespaced_name: JSXNamespacedName,
+    jsx_member_expression: JSXMemberExpression,
+    jsx_attribute: JSXAttribute,
+    jsx_spread_attribute: JSXSpreadAttribute,
+    jsx_expression_container: JSXExpressionContainer,
+    jsx_empty_expression: JSXEmptyExpression,
+    jsx_text: JSXText,
+    jsx_spread_child: JSXSpreadChild,
 };
 
 pub const Node = struct {
     data: NodeData,
     span: Span,
 };
+
+pub const NodeList = std.MultiArrayList(Node);
 
 pub inline fn isNull(index: NodeIndex) bool {
     return index == null_node;

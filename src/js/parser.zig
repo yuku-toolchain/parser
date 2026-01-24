@@ -49,13 +49,13 @@ pub const ParseTree = struct {
     /// Source code that was parsed
     source: []const u8,
     /// All nodes in the AST
-    nodes: std.MultiArrayList(ast.Node),
+    nodes: ast.NodeList.Slice,
     /// Extra data storage for variadic node children
-    extra: std.ArrayList(ast.NodeIndex),
+    extra: []ast.NodeIndex,
     /// Diagnostics (errors, warnings, etc.) encountered during parsing
-    diagnostics: std.ArrayList(Diagnostic),
+    diagnostics: []const Diagnostic,
     /// Comments collected in source code
-    comments: std.ArrayList(ast.Comment),
+    comments: []const ast.Comment,
     /// Arena allocator owning all the memory
     arena: std.heap.ArenaAllocator,
     /// Source type (script or module)
@@ -65,7 +65,7 @@ pub const ParseTree = struct {
 
     /// Returns true if the parse tree contains any errors.
     pub inline fn hasErrors(self: ParseTree) bool {
-        for (self.diagnostics.items) |d| {
+        for (self.diagnostics) |d| {
             if (d.severity == .@"error") return true;
         }
         return false;
@@ -73,7 +73,7 @@ pub const ParseTree = struct {
 
     /// Returns true if the parse tree contains any diagnostics (errors, warnings, etc.).
     pub inline fn hasDiagnostics(self: ParseTree) bool {
-        return self.diagnostics.items.len > 0;
+        return self.diagnostics.len > 0;
     }
 
     /// Frees all memory allocated by this parse tree.
@@ -93,7 +93,7 @@ pub const ParseTree = struct {
 
     /// Gets the extra node indices for the given range.
     pub inline fn getExtra(self: *const ParseTree, range: ast.IndexRange) []const ast.NodeIndex {
-        return self.extra.items[range.start..][0..range.len];
+        return self.extra[range.start..][0..range.len];
     }
 
     /// Gets a slice of the source text at the given position.
@@ -134,10 +134,9 @@ pub const Parser = struct {
     lexer: lexer.Lexer,
     arena: std.heap.ArenaAllocator,
     diagnostics: std.ArrayList(Diagnostic) = .empty,
-    nodes: std.MultiArrayList(ast.Node) = .empty,
+    nodes: ast.NodeList = .empty,
     extra: std.ArrayList(ast.NodeIndex) = .empty,
     current_token: token.Token,
-    next_token: ?token.Token = null,
 
     scratch_statements: ScratchBuffer = .{},
     scratch_cover: ScratchBuffer = .{},
@@ -154,10 +153,10 @@ pub const Parser = struct {
     source_type: SourceType,
     lang: Lang,
 
-    pub fn init(backing_allocator: std.mem.Allocator, source: []const u8, options: Options) Parser {
+    pub fn init(child_allocator: std.mem.Allocator, source: []const u8, options: Options) Parser {
         return .{
             .source = source,
-            .arena = std.heap.ArenaAllocator.init(backing_allocator),
+            .arena = std.heap.ArenaAllocator.init(child_allocator),
             .source_type = options.source_type,
             .lang = options.lang,
             .strict_mode = options.source_type == .module,
@@ -174,17 +173,17 @@ pub const Parser = struct {
     /// The Parser is consumed and should not be used after calling this method.
     /// The caller owns the returned ParseTree and must call deinit() on it.
     pub fn parse(self: *Parser) Error!ParseTree {
+        const alloc = self.allocator();
+
         // init lexer
-        self.lexer = try lexer.Lexer.init(self.source, self.allocator(), self.source_type, self.strict_mode);
+        self.lexer = try lexer.Lexer.init(self.source, alloc, self.source_type, self.strict_mode);
 
         // let's begin
         try self.advance() orelse {
             self.current_token = token.Token.eof(0);
         };
 
-        errdefer {
-            self.arena.deinit();
-        }
+        errdefer self.arena.deinit();
 
         try self.ensureCapacity();
 
@@ -205,10 +204,10 @@ pub const Parser = struct {
         const tree = ParseTree{
             .program = program,
             .source = self.source,
-            .nodes = self.nodes,
-            .extra = self.extra,
-            .diagnostics = self.diagnostics,
-            .comments = self.lexer.comments,
+            .nodes = self.nodes.toOwnedSlice(),
+            .extra = try self.extra.toOwnedSlice(alloc),
+            .diagnostics = try self.diagnostics.toOwnedSlice(alloc),
+            .comments = try self.lexer.comments.toOwnedSlice(alloc),
             .arena = self.arena,
             .source_type = self.source_type,
             .lang = self.lang,
@@ -219,6 +218,7 @@ pub const Parser = struct {
 
     pub fn parseBody(self: *Parser, terminator: ?token.TokenType) Error!ast.IndexRange {
         const statements_checkpoint = self.scratch_statements.begin();
+        defer self.scratch_statements.reset(statements_checkpoint);
 
         self.state.in_directive_prologue = true;
         self.state.current_scope_id += 1;
@@ -246,11 +246,19 @@ pub const Parser = struct {
         return self.lang == .ts or self.lang == .tsx or self.lang == .dts;
     }
 
+    pub inline fn isJsx(self: *Parser) bool {
+        return self.lang == .tsx or self.lang == .jsx;
+    }
+
     pub inline fn isModule(self: *Parser) bool {
         return self.source_type == .module;
     }
 
     // utils
+
+    pub inline fn setLexerMode(self: *Parser, mode: lexer.LexerMode) void {
+        self.lexer.state.mode = mode;
+    }
 
     pub inline fn addNode(self: *Parser, data: ast.NodeData, span: ast.Span) Error!ast.NodeIndex {
         const index: ast.NodeIndex = @intCast(self.nodes.len);
@@ -297,7 +305,7 @@ pub const Parser = struct {
 
             try self.diagnostics.append(self.allocator(), .{
                 .message = lexer.getLexicalErrorMessage(lex_err),
-                .span = .{ .start = self.lexer.token_start, .end = self.lexer.cursor },
+                .span = .{ .start = self.current_token.span.end, .end = self.lexer.cursor },
                 .help = lexer.getLexicalErrorHelp(lex_err),
             });
 
@@ -305,34 +313,32 @@ pub const Parser = struct {
         };
     }
 
-    pub fn advance(self: *Parser) Error!?void {
-        const new_token = if (self.next_token) |tok| blk: {
-            self.next_token = null;
-            break :blk tok;
-        } else try self.nextToken() orelse return null;
-
-        self.current_token = new_token;
+    pub inline fn advance(self: *Parser) Error!?void {
+        self.current_token = try self.nextToken() orelse return null;
     }
 
-    // lazy next token prefetching for lookahead.
-    // if lookahead has already cached the next token, `advance` will use it,
-    // so there's no extra cost for lookAhead.
     pub fn lookAhead(self: *Parser) Error!?token.Token {
-        if (self.next_token) |tok| {
-            return tok;
+        const prev_state = self.lexer.state;
+        const prev_cursor = self.lexer.cursor;
+        const prev_comments_len = self.lexer.comments.items.len;
+
+        defer {
+            self.lexer.state = prev_state;
+            self.lexer.cursor = prev_cursor;
+            self.lexer.comments.shrinkRetainingCapacity(prev_comments_len);
         }
 
-        self.next_token = try self.nextToken() orelse return null;
-
-        return self.next_token;
+        return try self.nextToken();
     }
 
-    pub inline fn replaceTokenAndAdvance(self: *Parser, tok: token.Token) Error!?void {
+    /// sets current token from a re-scanned token and advances to the next token.
+    /// use after lexer re-scan functions (reScanJsxText, reScanTemplateContinuation, etc.)
+    pub inline fn advanceWithRescannedToken(self: *Parser, tok: token.Token) Error!?void {
         self.current_token = tok;
-        try self.advance() orelse return null;
+        return self.advance();
     }
 
-    pub inline fn expect(self: *Parser, token_type: token.TokenType, message: []const u8, help: ?[]const u8) Error!bool {
+    pub fn expect(self: *Parser, token_type: token.TokenType, message: []const u8, help: ?[]const u8) Error!bool {
         if (self.current_token.type == token_type) {
             try self.advance() orelse return false;
             return true;
@@ -343,7 +349,7 @@ pub const Parser = struct {
         return false;
     }
 
-    pub inline fn eatSemicolon(self: *Parser, end: u32) Error!?u32 {
+    pub fn eatSemicolon(self: *Parser, end: u32) Error!?u32 {
         if (self.current_token.type == .semicolon) {
             const semicolon_end = self.current_token.span.end;
             try self.advance() orelse return null;
@@ -364,7 +370,7 @@ pub const Parser = struct {
     /// then be parsed as the terminating semicolon of a do-while statement (14.7.2)"
     ///
     /// allows `do {} while (false) foo()`, semicolon optional after the `)`.
-    pub inline fn eatSemicolonLenient(self: *Parser, end: u32) Error!?u32 {
+    pub fn eatSemicolonLenient(self: *Parser, end: u32) Error!?u32 {
         if (self.current_token.type == .semicolon) {
             const semicolon_end = self.current_token.span.end;
             try self.advance() orelse return null;
@@ -389,7 +395,7 @@ pub const Parser = struct {
         labels: []const Label = &.{},
     };
 
-    pub inline fn report(self: *Parser, span: ast.Span, message: []const u8, opts: ReportOptions) Error!void {
+    pub fn report(self: *Parser, span: ast.Span, message: []const u8, opts: ReportOptions) Error!void {
         try self.diagnostics.append(self.allocator(), .{
             .severity = opts.severity,
             .message = message,
@@ -399,12 +405,12 @@ pub const Parser = struct {
         });
     }
 
-    pub inline fn reportFmt(self: *Parser, span: ast.Span, comptime format: []const u8, args: anytype, opts: ReportOptions) Error!void {
+    pub fn reportFmt(self: *Parser, span: ast.Span, comptime format: []const u8, args: anytype, opts: ReportOptions) Error!void {
         const message = try std.fmt.allocPrint(self.allocator(), format, args);
         try self.report(span, message, opts);
     }
 
-    pub inline fn label(_: *Parser, span: ast.Span, message: []const u8) Label {
+    pub fn label(_: *Parser, span: ast.Span, message: []const u8) Label {
         return .{ .span = span, .message = message };
     }
 
@@ -496,8 +502,8 @@ const ScratchBuffer = struct {
 };
 
 /// Parse JavaScript/TypeScript source code into an AST.
-/// Returns a ParseTree that must be freed with deinit().
-pub fn parse(backing_allocator: std.mem.Allocator, source: []const u8, options: Options) Error!ParseTree {
-    var parser = Parser.init(backing_allocator, source, options);
+/// Returns a ParseTree that must be freed by calling `tree.deinit()` when you're done using it.
+pub fn parse(child_allocator: std.mem.Allocator, source: []const u8, options: Options) Error!ParseTree {
+    var parser = Parser.init(child_allocator, source, options);
     return parser.parse();
 }

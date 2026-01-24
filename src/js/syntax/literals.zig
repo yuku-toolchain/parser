@@ -6,7 +6,7 @@ const Parser = @import("../parser.zig").Parser;
 const Error = @import("../parser.zig").Error;
 const expressions = @import("expressions.zig");
 
-pub inline fn parseStringLiteral(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseStringLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
     try parser.advance() orelse return null;
     return try parser.addNode(.{
@@ -17,7 +17,7 @@ pub inline fn parseStringLiteral(parser: *Parser) Error!?ast.NodeIndex {
     }, token.span);
 }
 
-pub inline fn parseBooleanLiteral(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseBooleanLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
     try parser.advance() orelse return null;
     return try parser.addNode(.{
@@ -25,13 +25,13 @@ pub inline fn parseBooleanLiteral(parser: *Parser) Error!?ast.NodeIndex {
     }, token.span);
 }
 
-pub inline fn parseNullLiteral(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseNullLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
     try parser.advance() orelse return null;
     return try parser.addNode(.null_literal, token.span);
 }
 
-pub inline fn parseNumericLiteral(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseNumericLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
     try parser.advance() orelse return null;
     return try parser.addNode(.{
@@ -42,7 +42,7 @@ pub inline fn parseNumericLiteral(parser: *Parser) Error!?ast.NodeIndex {
     }, token.span);
 }
 
-pub inline fn parseBigIntLiteral(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseBigIntLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
     try parser.advance() orelse return null;
     return try parser.addNode(.{
@@ -56,12 +56,12 @@ pub inline fn parseBigIntLiteral(parser: *Parser) Error!?ast.NodeIndex {
 pub fn parseRegExpLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
 
-    const regex = parser.lexer.reScanAsRegex(token) catch |e| {
+    const regex = parser.lexer.reScanAsRegex(token.span.start) catch |e| {
         try parser.report(token.span, lexer.getLexicalErrorMessage(e), .{ .help = lexer.getLexicalErrorHelp(e) });
         return null;
     };
 
-    try parser.replaceTokenAndAdvance(parser.lexer.createToken(
+    try parser.advanceWithRescannedToken(parser.lexer.createToken(
         .regex_literal,
         parser.source[regex.span.start..regex.span.end],
         regex.span.start,
@@ -101,7 +101,9 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
     const quasis_checkpoint = parser.scratch_a.begin();
+    defer parser.scratch_a.reset(quasis_checkpoint);
     const exprs_checkpoint = parser.scratch_b.begin();
+    defer parser.scratch_b.reset(exprs_checkpoint);
 
     const head = parser.current_token;
     const head_span = getTemplateElementSpan(head);
@@ -118,45 +120,48 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
 
     var end: u32 = undefined;
     while (true) {
-        const expr = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse {
-            parser.scratch_a.reset(quasis_checkpoint);
-            parser.scratch_b.reset(exprs_checkpoint);
-            return null;
-        };
+        const expr = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
         try parser.scratch_b.append(parser.allocator(), expr);
 
-        const token = parser.current_token;
-        const is_tail = token.type == .template_tail;
-
-        switch (token.type) {
-            .template_middle, .template_tail => {
-                const span = getTemplateElementSpan(token);
-                try parser.scratch_a.append(parser.allocator(), try parser.addNode(.{
-                    .template_element = .{
-                        .raw_start = span.start,
-                        .raw_len = @intCast(span.end - span.start),
-                        .tail = is_tail,
-                    },
-                }, span));
-
-                if (is_tail) {
-                    end = token.span.end;
-                    try parser.advance() orelse return null;
-                    break;
-                }
-                try parser.advance() orelse return null;
-            },
-            else => {
-                try parser.report(
-                    token.span,
-                    "Unexpected token in template literal expression",
-                    .{ .help = "Template expressions must be followed by '}' to continue the template string. Check for unmatched braces." },
-                );
-                parser.scratch_a.reset(quasis_checkpoint);
-                parser.scratch_b.reset(exprs_checkpoint);
-                return null;
-            },
+        // after parsing the expression, we expect '}' which closes the ${} substitution.
+        // we need to explicitly scan for template continuation (middle or tail).
+        if (parser.current_token.type != .right_brace) {
+            try parser.report(
+                parser.current_token.span,
+                "Expected '}' to close template expression",
+                .{ .help = "Template expressions must be closed with '}'" },
+            );
+            return null;
         }
+
+
+        // now scan template continuation from right after right_brace
+
+        const right_brace = parser.current_token;
+
+        const template_token = parser.lexer.reScanTemplateContinuation(right_brace.span.start) catch |e| {
+            try parser.report(right_brace.span, lexer.getLexicalErrorMessage(e), .{ .help = lexer.getLexicalErrorHelp(e) });
+            return null;
+        };
+
+        const is_tail = template_token.type == .template_tail;
+        const span = getTemplateElementSpan(template_token);
+
+        try parser.scratch_a.append(parser.allocator(), try parser.addNode(.{
+            .template_element = .{
+                .raw_start = span.start,
+                .raw_len = @intCast(span.end - span.start),
+                .tail = is_tail,
+            },
+        }, span));
+
+        if (is_tail) {
+            end = template_token.span.end;
+            try parser.advanceWithRescannedToken(template_token) orelse return null;
+            break;
+        }
+
+        try parser.advanceWithRescannedToken(template_token) orelse return null;
     }
 
     return try parser.addNode(.{
@@ -182,9 +187,7 @@ inline fn getTemplateElementSpan(token: @import("../token.zig").Token) ast.Span 
 }
 
 pub inline fn parseIdentifier(parser: *Parser) Error!?ast.NodeIndex {
-    if (!try validateIdentifier(parser, "an identifier", parser.current_token)) {
-        return null;
-    }
+    if (!try validateIdentifier(parser, "an identifier", parser.current_token)) return null;
 
     const tok = parser.current_token;
     try parser.advance() orelse return null;
@@ -219,9 +222,7 @@ pub fn parseIdentifierName(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 pub fn parseLabelIdentifier(parser: *Parser) Error!?ast.NodeIndex {
-    if (!try validateIdentifier(parser, "a label", parser.current_token)) {
-        return null;
-    }
+    if (!try validateIdentifier(parser, "a label", parser.current_token)) return null;
 
     const current = parser.current_token;
     try parser.advance() orelse return null;

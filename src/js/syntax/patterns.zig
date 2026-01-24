@@ -29,9 +29,7 @@ pub inline fn parseBindingPattern(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 pub inline fn parseBindingIdentifier(parser: *Parser) Error!?ast.NodeIndex {
-    if (!try literals.validateIdentifier(parser, "an identifier", parser.current_token)) {
-        return null;
-    }
+    if (!try literals.validateIdentifier(parser, "an identifier", parser.current_token)) return null;
 
     const current = parser.current_token;
     try parser.advance() orelse return null;

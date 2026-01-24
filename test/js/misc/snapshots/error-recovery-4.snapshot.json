@@ -62,7 +62,7 @@
       "severity": "error",
       "message": "Unterminated string literal",
       "help": "Try adding a closing quote here to complete the string",
-      "start": 41,
+      "start": 40,
       "end": 42,
       "labels": []
     },

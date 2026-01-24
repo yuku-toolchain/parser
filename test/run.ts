@@ -12,6 +12,7 @@ await preload()
 console.clear()
 
 const isCI = !!process.env.CI
+const updateSnapshots = process.argv.includes("--update-snapshots")
 
 type TestType = "should_pass" | "should_fail" | "snapshot"
 type Language = "js" | "ts" | "jsx" | "tsx" | "dts"
@@ -61,8 +62,10 @@ const configs: TestConfig[] = [
       "f063969b23239390.module.js"
   ] },
   { path: "test/js/misc", type: "snapshot", languages: ["js"] },
-  { path: "test/jsx/pass", type: "snapshot", languages: ["jsx"], skipOnCI: true },
-  { path: "test/jsx/regression", type: "snapshot", languages: ["jsx"], skipOnCI: true },
+  { path: "test/jsx/pass", type: "snapshot", languages: ["jsx"] },
+  { path: "test/jsx/regression", type: "snapshot", languages: ["jsx"] },
+  { path: "test/jsx/misc", type: "snapshot", languages: ["jsx"] },
+  { path: "test/jsx/fail", type: "should_fail", languages: ["jsx"] },
 ]
 
 interface TestResult {
@@ -178,6 +181,11 @@ const runTest = async (
       const snapshot = await Bun.file(snapshotFile).json()
 
       if (!equal(parsed, snapshot)) {
+        if (updateSnapshots) {
+          await Bun.write(snapshotFile, JSON.stringify(parsed, null, 2))
+          result.passed++
+          return
+        }
         const difference = diff(snapshot, parsed, { contextLines: 2 })
         if (!isCI) {
           console.log(`\nx ${file}\n${difference}\n`)
@@ -222,18 +230,14 @@ const runCategory = async (config: TestConfig) => {
 
 console.log("Running tests...\n")
 
-const totalStart = performance.now()
-
 for (const config of configs) {
   if (config.skipOnCI && isCI) {
-    console.log(`Skipping ${config.path} on CI`)
+    console.log(`\nSkipping ${config.path} on CI`)
     continue
   }
 
   await runCategory(config)
 }
-
-const totalEnd = performance.now()
 
 let totalPassed = 0
 let totalFailed = 0
@@ -259,9 +263,8 @@ for (const [, result] of results) {
 
 const passRate = ((totalPassed / totalTests) * 100).toFixed(2)
 const avgParseTime = totalParsedFiles > 0 ? totalParseTime / totalParsedFiles : 0
-const totalTime = totalEnd - totalStart
 
-console.log(`\n${totalPassed}/${totalTests} (${passRate}%) • ${formatTime(totalTime)} total • ${formatTime(totalParseTime)} for parsing ${totalParsedFiles} files • ${formatTime(avgParseTime)} to parse per file`)
+console.log(`\n${totalPassed}/${totalTests} (${passRate}%) • ${formatTime(totalParseTime)} for parsing ${totalParsedFiles} files • ${formatTime(avgParseTime)} to parse per file`)
 
 if (totalFailed > 0) {
   process.exit(1)

@@ -24,6 +24,7 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
     try parser.advance() orelse return null; // consume {
 
     const checkpoint = parser.scratch_cover.begin();
+    defer parser.scratch_cover.reset(checkpoint);
 
     var end = start + 1;
 
@@ -32,10 +33,7 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
         if (parser.current_token.type == .spread) {
             const spread_start = parser.current_token.span.start;
             try parser.advance() orelse return null;
-            const argument = try grammar.parseExpressionInCover(parser, Precedence.Assignment) orelse {
-                parser.scratch_cover.reset(checkpoint);
-                return null;
-            };
+            const argument = try grammar.parseExpressionInCover(parser, Precedence.Assignment) orelse return null;
             const spread_end = parser.getSpan(argument).end;
             const spread = try parser.addNode(
                 .{ .spread_element = .{ .argument = argument } },
@@ -45,10 +43,7 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
             end = spread_end;
         } else {
             // property
-            const prop = try parseCoverProperty(parser) orelse {
-                parser.scratch_cover.reset(checkpoint);
-                return null;
-            };
+            const prop = try parseCoverProperty(parser) orelse return null;
             try parser.scratch_cover.append(parser.allocator(), prop);
             end = parser.getSpan(prop).end;
         }
@@ -66,7 +61,6 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
                 "Expected ',' or '}' in object",
                 .{ .help = "Add a comma between properties or close the object with '}'." },
             );
-            parser.scratch_cover.reset(checkpoint);
             return null;
         }
     }
@@ -80,7 +74,6 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
                 .labels = try parser.makeLabels(&.{parser.label(.{ .start = start, .end = start + 1 }, "Opened here")}),
             },
         );
-        parser.scratch_cover.reset(checkpoint);
         return null;
     }
 
@@ -329,9 +322,7 @@ fn parseObjectMethodProperty(
     }
 
     const func_start = parser.current_token.span.start;
-    if (!try parser.expect(.left_paren, "Expected '(' to start method parameters", null)) {
-        return null;
-    }
+    if (!try parser.expect(.left_paren, "Expected '(' to start method parameters", null)) return null;
 
     const params = try functions.parseFormalParamaters(parser, .unique_formal_parameters) orelse return null;
     const params_data = parser.getData(params).formal_parameters;
@@ -360,9 +351,7 @@ fn parseObjectMethodProperty(
         }
     }
 
-    if (!try parser.expect(.right_paren, "Expected ')' after method parameters", null)) {
-        return null;
-    }
+    if (!try parser.expect(.right_paren, "Expected ')' after method parameters", null)) return null;
 
     // parse body
     const body = try functions.parseFunctionBody(parser) orelse return null;
@@ -407,9 +396,7 @@ pub fn coverToExpression(parser: *Parser, cover: ObjectCover, validate: bool) Er
         .{ .start = cover.start, .end = cover.end },
     );
 
-    if (validate and !try grammar.validateNoCoverInitializedSyntax(parser, object_expression)) {
-        return null;
-    }
+    if (validate and !try grammar.validateNoCoverInitializedSyntax(parser, object_expression)) return null;
 
     return object_expression;
 }

@@ -23,6 +23,7 @@ pub const Serializer = struct {
     scratch: std.ArrayList(u8) = .empty,
     isTs: bool,
     pos_map: []u32,
+    in_jsx_attribute: bool = false,
 
     const Self = @This();
     const Error = error{ InvalidCharacter, NoSpaceLeft, OutOfMemory, Overflow };
@@ -156,6 +157,21 @@ pub const Serializer = struct {
             .export_specifier => |d| self.writeExportSpecifier(d, span),
             .ts_export_assignment => |d| self.writeTSExportAssignment(d, span),
             .ts_namespace_export_declaration => |d| self.writeTSNamespaceExportDeclaration(d, span),
+            .jsx_element => |d| self.writeJSXElement(d, span),
+            .jsx_opening_element => |d| self.writeJSXOpeningElement(d, span),
+            .jsx_closing_element => |d| self.writeJSXClosingElement(d, span),
+            .jsx_fragment => |d| self.writeJSXFragment(d, span),
+            .jsx_opening_fragment => self.writeJSXOpeningFragment(span),
+            .jsx_closing_fragment => self.writeJSXClosingFragment(span),
+            .jsx_identifier => |d| self.writeJSXIdentifier(d, span),
+            .jsx_namespaced_name => |d| self.writeJSXNamespacedName(d, span),
+            .jsx_member_expression => |d| self.writeJSXMemberExpression(d, span),
+            .jsx_attribute => |d| self.writeJSXAttribute(d, span),
+            .jsx_spread_attribute => |d| self.writeJSXSpreadAttribute(d, span),
+            .jsx_expression_container => |d| self.writeJSXExpressionContainer(d, span),
+            .jsx_empty_expression => self.writeJSXEmptyExpression(span),
+            .jsx_text => |d| self.writeJSXText(d, span),
+            .jsx_spread_child => |d| self.writeJSXSpreadChild(d, span),
         };
     }
 
@@ -598,7 +614,13 @@ pub const Serializer = struct {
         try self.fieldType("Literal");
         try self.fieldSpan(span);
         try self.field("value");
-        try self.writeDecodedString(raw[1 .. raw.len - 1]);
+        if (self.in_jsx_attribute) {
+            // jsx attribute strings don't process escapes, write raw content without quotes
+            try self.writeString(raw[1 .. raw.len - 1]);
+        } else {
+            // regular js strings process escapes
+            try self.writeDecodedString(raw[1 .. raw.len - 1]);
+        }
         try self.fieldString("raw", raw);
         try self.endObject();
     }
@@ -1047,9 +1069,144 @@ pub const Serializer = struct {
         try self.endObject();
     }
 
+    fn writeJSXElement(self: *Self, data: ast.JSXElement, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXElement");
+        try self.fieldSpan(span);
+        try self.fieldNode("openingElement", data.opening_element);
+        try self.fieldNodeArray("children", data.children);
+        try self.fieldNode("closingElement", data.closing_element);
+        try self.endObject();
+    }
+
+    fn writeJSXOpeningElement(self: *Self, data: ast.JSXOpeningElement, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXOpeningElement");
+        try self.fieldSpan(span);
+        try self.fieldNode("name", data.name);
+        try self.fieldNodeArray("attributes", data.attributes);
+        try self.fieldBool("selfClosing", data.self_closing);
+        try self.endObject();
+    }
+
+    fn writeJSXClosingElement(self: *Self, data: ast.JSXClosingElement, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXClosingElement");
+        try self.fieldSpan(span);
+        try self.fieldNode("name", data.name);
+        try self.endObject();
+    }
+
+    fn writeJSXFragment(self: *Self, data: ast.JSXFragment, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXFragment");
+        try self.fieldSpan(span);
+        try self.fieldNode("openingFragment", data.opening_fragment);
+        try self.fieldNodeArray("children", data.children);
+        try self.fieldNode("closingFragment", data.closing_fragment);
+        try self.endObject();
+    }
+
+    fn writeJSXOpeningFragment(self: *Self, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXOpeningFragment");
+        try self.fieldSpan(span);
+        try self.fieldEmptyArray("attributes");
+        try self.fieldBool("selfClosing", false);
+        try self.endObject();
+    }
+
+    fn writeJSXClosingFragment(self: *Self, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXClosingFragment");
+        try self.fieldSpan(span);
+        try self.endObject();
+    }
+
+    fn writeJSXIdentifier(self: *Self, data: ast.JSXIdentifier, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXIdentifier");
+        try self.fieldSpan(span);
+        try self.field("name");
+        try self.writeDecodedString(self.tree.getSourceText(data.name_start, data.name_len));
+        try self.endObject();
+    }
+
+    fn writeJSXNamespacedName(self: *Self, data: ast.JSXNamespacedName, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXNamespacedName");
+        try self.fieldSpan(span);
+        try self.fieldNode("namespace", data.namespace);
+        try self.fieldNode("name", data.name);
+        try self.endObject();
+    }
+
+    fn writeJSXMemberExpression(self: *Self, data: ast.JSXMemberExpression, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXMemberExpression");
+        try self.fieldSpan(span);
+        try self.fieldNode("object", data.object);
+        try self.fieldNode("property", data.property);
+        try self.endObject();
+    }
+
+    fn writeJSXAttribute(self: *Self, data: ast.JSXAttribute, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXAttribute");
+        try self.fieldSpan(span);
+        try self.fieldNode("name", data.name);
+        self.in_jsx_attribute = true;
+        try self.fieldNode("value", data.value);
+        self.in_jsx_attribute = false;
+        try self.endObject();
+    }
+
+    fn writeJSXSpreadAttribute(self: *Self, data: ast.JSXSpreadAttribute, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXSpreadAttribute");
+        try self.fieldSpan(span);
+        try self.fieldNode("argument", data.argument);
+        try self.endObject();
+    }
+
+    fn writeJSXExpressionContainer(self: *Self, data: ast.JSXExpressionContainer, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXExpressionContainer");
+        try self.fieldSpan(span);
+        try self.fieldNode("expression", data.expression);
+        try self.endObject();
+    }
+
+    fn writeJSXEmptyExpression(self: *Self, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXEmptyExpression");
+        try self.fieldSpan(span);
+        try self.endObject();
+    }
+
+    fn writeJSXText(self: *Self, data: ast.JSXText, span: ast.Span) !void {
+        const raw = self.tree.getSourceText(data.raw_start, data.raw_len);
+
+        try self.beginObject();
+        try self.fieldType("JSXText");
+        try self.fieldSpan(span);
+        try self.field("value");
+        try self.writeDecodedString(raw);
+        try self.fieldString("raw", raw);
+        try self.endObject();
+    }
+
+    fn writeJSXSpreadChild(self: *Self, data: ast.JSXSpreadChild, span: ast.Span) !void {
+        try self.beginObject();
+        try self.fieldType("JSXSpreadChild");
+        try self.fieldSpan(span);
+        try self.fieldNode("expression", data.expression);
+        try self.endObject();
+    }
+
     fn writeComments(self: *Self) !void {
         try self.beginArray();
-        for (self.tree.comments.items) |comment| {
+        for (self.tree.comments) |comment| {
             try self.sep();
             if (self.options.pretty) {
                 try self.writeByte('\n');
@@ -1067,7 +1224,7 @@ pub const Serializer = struct {
 
     fn writeDiagnostics(self: *Self) !void {
         try self.beginArray();
-        for (self.tree.diagnostics.items) |diag| {
+        for (self.tree.diagnostics) |diag| {
             try self.sep();
             if (self.options.pretty) {
                 try self.writeByte('\n');

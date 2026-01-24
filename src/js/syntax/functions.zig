@@ -82,9 +82,7 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts, start_from_param:
         .right_paren,
         "Expected ')' to close parameter list",
         "Add a closing parenthesis ')' after the parameters, or check for missing commas between parameters.",
-    )) {
-        return null;
-    }
+    )) return null;
 
     var body = ast.null_node;
 
@@ -162,6 +160,7 @@ pub fn parseFormalParamaters(parser: *Parser, kind: ast.FormalParameterKind) Err
     var end: u32 = parser.current_token.span.end;
 
     const params_checkpoint = parser.scratch_a.begin();
+    defer parser.scratch_a.reset(params_checkpoint);
 
     var rest = ast.null_node;
 
@@ -180,8 +179,6 @@ pub fn parseFormalParamaters(parser: *Parser, kind: ast.FormalParameterKind) Err
                     "Rest parameter must be the last parameter",
                     .{ .help = "Move the '...rest' parameter to the end of the parameter list, or remove trailing parameters." },
                 );
-
-                parser.scratch_a.reset(params_checkpoint);
 
                 return null;
             }

@@ -1,7 +1,6 @@
 const parser = @import("parser.zig");
 
 pub const parse = parser.parse;
-pub const Parser = parser.Parser;
 pub const ParseTree = parser.ParseTree;
 pub const Options = parser.Options;
 pub const Diagnostic = parser.Diagnostic;
