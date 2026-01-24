@@ -6,7 +6,7 @@ pub fn main() !void {
     defer _ = gpa.deinit();
     const allocator = gpa.allocator();
 
-    const file_path = "test.tsx";
+    const file_path = "test.js";
 
     const file = try std.fs.cwd().openFile(file_path, .{});
     defer file.close();
@@ -18,7 +18,7 @@ pub fn main() !void {
 
     var start = try std.time.Timer.start();
 
-    const tree = try js.parse(std.heap.page_allocator, contents, .{ .lang = .tsx });
+    const tree = try js.parse(std.heap.page_allocator, contents, .{ .lang = .jsx });
     defer tree.deinit();
 
     const taken = start.read();
@@ -51,14 +51,14 @@ pub fn main() !void {
             const start_pos = getLineAndColumn(contents, err.span.start);
             const end_pos = getLineAndColumn(contents, err.span.end);
 
-            std.debug.print("\nError: {s} at test.tsx:{d}:{d} to test.tsx:{d}:{d}\n", .{ err.message, start_pos.line, start_pos.col, end_pos.line, end_pos.col });
+            std.debug.print("\nError: {s} at test.js:{d}:{d} to test.js:{d}:{d}\n", .{ err.message, start_pos.line, start_pos.col, end_pos.line, end_pos.col });
             if (err.help) |help| std.debug.print("  Help: {s}\n\n", .{help});
             if (err.labels.len > 0) {
                 for (err.labels) |label| {
                     const label_start_pos = getLineAndColumn(contents, label.span.start);
                     const label_end_pos = getLineAndColumn(contents, label.span.end);
 
-                    std.debug.print("  Label: {s} at test.tsx:{d}:{d} to test.tsx:{d}:{d}\n", .{ label.message, label_start_pos.line, label_start_pos.col, label_end_pos.line, label_end_pos.col });
+                    std.debug.print("  Label: {s} at test.js:{d}:{d} to test.js:{d}:{d}\n", .{ label.message, label_start_pos.line, label_start_pos.col, label_end_pos.line, label_end_pos.col });
                 }
             }
         }
