@@ -44,7 +44,7 @@
     }
   },
   "scripts": {
-    "build": "tsgo && cp ../zig-out/yuku.wasm dist"
+    "build": "tsgo && cp ../zig-out/bin/yuku.wasm dist"
   },
   "type": "module",
   "types": "./dist/index.d.ts"
