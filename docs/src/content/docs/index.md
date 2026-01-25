@@ -22,5 +22,6 @@ Yuku's JavaScript/JSX parser is already functional, well-tested, and production-
 - [x] JavaScript Parser
 - [x] WASM (try here: https://yuku-parser.vercel.app/playground)
 - [x] JSX Support
-- [ ] TypeScript Support (In Progress)
-- [ ] Best-in-class Visitor and Traverser
+- [ ] Best-in-class Visitor/Traverser (In Progress)
+- [ ] Initial Version Docs
+- [ ] TypeScript Support
