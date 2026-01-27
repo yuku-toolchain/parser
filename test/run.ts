@@ -155,9 +155,7 @@ const runTest = async (
           return
         }
         const difference = diff(snapshot, parsed, { contextLines: 2 })
-        if (!isCI) {
-          console.log(`\nx ${file}\n${difference}\n`)
-        }
+        console.log(`\nx ${file}\n${difference}\n`)
         result.failures.push(file)
         return
       }
