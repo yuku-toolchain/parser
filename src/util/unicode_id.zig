@@ -885,7 +885,7 @@ const std = @import("std");
 const t = std.testing;
 const g = @import("../tools/gen_unicode_id.zig");
 
-test "unicode_id tables match source data" {
+test "unicode_id can id" {
     var id_starts, var id_contts = try g.downloadAndParseProperties(t.allocator);
     defer id_starts.deinit();
     defer id_contts.deinit();
