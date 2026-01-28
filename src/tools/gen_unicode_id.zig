@@ -1,5 +1,5 @@
 // inspired by https://github.com/dtolnay/unicode-ident
-
+//
 const std = @import("std");
 
 const unicode_data_url = "https://www.unicode.org/Public/17.0.0/ucd/UCD.zip";
@@ -7,11 +7,11 @@ const temp_zip_path = "/tmp/ucd.zip";
 const extraction_path = "/tmp/ucd";
 const output_table_path = "./src/util/unicode_id.zig";
 
-const chunk_elements = 16;
-const bits_per_element = 32;
-const elements_per_chunk = chunk_elements * bits_per_element;
-const total_codepoints = std.math.maxInt(u21) + 1;
-const total_chunks = total_codepoints / elements_per_chunk;
+const chunk_elements = 16; // number of 32-bit words per chunk
+const bits_per_element = 32; // bits per word (standard u32)
+const elements_per_chunk = chunk_elements * bits_per_element; // = 512 codepoints per chunk
+const total_codepoints = std.math.maxInt(u21) + 1; // unicode max = 0x10FFFF + 1
+const total_chunks = total_codepoints / elements_per_chunk; // total number of chunks to process
 
 const CodepointSet = std.AutoArrayHashMap(u32, void);
 const BitsetChunk = [chunk_elements]u32;
@@ -81,36 +81,56 @@ pub fn main() !void {
     try buffered_writer.end();
 }
 
+/// builds compact two-level lookup tables from a set of codepoints
+///
+/// 1. iterate through all possible chunks (0x10FFFF / 512 = ~4290 chunks)
+/// 2. for each chunk, create a 512-bit bitset where bit N is 1 if codepoint is in the set
+/// 3. deduplicate identical chunks (many chunks are all-zeros or identical patterns)
+/// 4. build root table mapping chunk_index -> deduplicated_leaf_index
+/// 5. build leaf table containing only unique chunk bitsets
 fn buildLookupTables(alloc: std.mem.Allocator, codepoints: CodepointSet) !TableData {
+    // maps chunk index to its bitset representation
     var chunk_index_map = std.AutoArrayHashMap(usize, BitsetChunk).init(alloc);
     defer chunk_index_map.deinit();
 
+    // deduplication map: bitset pattern -> unique leaf index
     var leaf_dedup_map = std.AutoArrayHashMap(BitsetChunk, usize).init(alloc);
     defer leaf_dedup_map.deinit();
 
     const zero_chunk: BitsetChunk = .{0} ** chunk_elements;
 
+    // step 1: build bitsets for all chunks
     var chunk_idx: usize = 0;
     while (chunk_idx < total_chunks) : (chunk_idx += 1) {
         var bitset: BitsetChunk = zero_chunk;
 
+        // for each of the 16 u32 elements in this chunk
         for (0.., &bitset) |elem_idx, *element| {
+            // for each of the 32 bits in this element
             var bit_idx: u32 = 0;
             while (bit_idx < bits_per_element) : (bit_idx += 1) {
+                // calculate the actual codepoint this bit represents
                 const cp: u32 = @intCast(chunk_idx * elements_per_chunk + elem_idx * bits_per_element + bit_idx);
+
+                // set the bit if this codepoint has the property
                 const is_set: u32 = if (codepoints.contains(cp)) 1 else 0;
                 element.* = element.* | (is_set << @as(u5, @intCast(bit_idx)));
             }
         }
 
+        // store this chunk's bitset
         try chunk_index_map.put(chunk_idx, bitset);
 
+        // stap 2: deduplicate, if we've seen this pattern before, reuse it
         const entry = try leaf_dedup_map.getOrPut(bitset);
         if (!entry.found_existing) {
+            // new unique pattern, assign it the next leaf index
             entry.value_ptr.* = leaf_dedup_map.count() - 1;
         }
     }
 
+    // step 3: build the root table
+    // maps each chunk index to its deduplicated leaf index
     const root = try alloc.alloc(u32, total_chunks);
 
     for (0..total_chunks) |idx| {
@@ -119,6 +139,8 @@ fn buildLookupTables(alloc: std.mem.Allocator, codepoints: CodepointSet) !TableD
         root[idx] = @intCast(leaf_idx);
     }
 
+    // step 4: build the leaf table
+    // contains only unique bitset patterns, in the order they were discovered
     var leaf_buffer: std.ArrayList(u32) = .empty;
 
     for (leaf_dedup_map.keys()) |*chunk_bits| {
@@ -132,6 +154,19 @@ fn buildLookupTables(alloc: std.mem.Allocator, codepoints: CodepointSet) !TableD
     return .{ .root = root, .leaf = leaf };
 }
 
+/// parses Unicode DerivedCoreProperties.txt to extract ID_Start and ID_Continue codepoints
+///
+/// the file contains lines like:
+///   0041..005A    ; ID_Start # L&  [26] LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER Z
+///   0030..0039    ; ID_Continue # Nd  [10] DIGIT ZERO..DIGIT NINE
+///   200C          ; ID_Continue # Cf       ZERO WIDTH NON-JOINER
+///
+/// each line can specify:
+/// - a single codepoint (e.g., "200C")
+/// - a range of codepoints (e.g., "0041..005A")
+///
+/// this function extracts both ID_Start and ID_Continue properties and returns them
+/// as separate sets of codepoints.
 pub fn parseUnicodeProperties(alloc: std.mem.Allocator) !struct { CodepointSet, CodepointSet } {
     const target_file = "DerivedCoreProperties.txt";
 
@@ -147,17 +182,21 @@ pub fn parseUnicodeProperties(alloc: std.mem.Allocator) !struct { CodepointSet, 
     var line_iter = std.mem.splitScalar(u8, file_data, '\n');
 
     while (line_iter.next()) |line| {
+        // skip empty lines and comments
         if (line.len == 0 or std.mem.startsWith(u8, line, "#")) continue;
 
+        // determine which property this line describes
         const prop_type: PropertyType = if (std.mem.indexOf(u8, line, "ID_Start")) |_|
             .Start
         else if (std.mem.indexOf(u8, line, "ID_Continue")) |_|
             .Continue
         else
-            continue;
+            continue; // line doesn't contain a property we care about
 
+        // extract the codepoint or codepoint range
         const range = try extractCodepointRange(line) orelse continue;
 
+        // add all codepoints in the range to the appropriate set
         var cp = range.start;
         while (cp < range.end) : (cp += 1) {
             const target_set = if (prop_type == .Start) &start_set else &continue_set;
@@ -170,17 +209,22 @@ pub fn parseUnicodeProperties(alloc: std.mem.Allocator) !struct { CodepointSet, 
 
 const CodepointRange = struct { start: u32, end: u32 };
 
+/// extracts a codepoint range from a line in DerivedCoreProperties.txt
 fn extractCodepointRange(line: []const u8) !?CodepointRange {
+    // find the first space or semicolon (marks end of codepoint part)
     const sep_pos = std.mem.indexOfScalar(u8, line, ' ') orelse line.len;
     const hex_part = line[0..sep_pos];
 
+    // check if this is a range (contains "..")
     if (std.mem.indexOf(u8, hex_part, "..")) |range_sep| {
         const low = try std.fmt.parseInt(u32, hex_part[0..range_sep], 16);
         const high = try std.fmt.parseInt(u32, hex_part[range_sep + 2 ..], 16);
-        return .{ .start = low, .end = high + 1 };
+
+        return .{ .start = low, .end = high + 1 }; // +1 for half-open range
     } else {
+        // single codepoint
         const single = try std.fmt.parseInt(u32, hex_part, 16);
-        return .{ .start = single, .end = single + 1 };
+        return .{ .start = single, .end = single + 1 }; // range of one element
     }
 }
 
@@ -234,6 +278,15 @@ fn pathExists(path: []const u8) bool {
     }
 }
 
+/// writes a lookup table to the output file in zig array format
+///
+/// generates code like:
+///   pub const id_start_root = [_]u8{
+///       0x00, 0x01, 0x02, ...
+///   };
+///
+/// The root table uses u8 (can index up to 256 unique patterns)
+/// The leaf table uses u64 (8 bytes for better formatting and alignment)
 fn emitTableStructure(data: TableData, writer: *std.Io.Writer, table_name: []const u8) !void {
     try writer.print(
         \\
@@ -273,4 +326,11 @@ fn emitTableStructure(data: TableData, writer: *std.Io.Writer, table_name: []con
     );
 
     std.log.info("Successfully wrote {s} to {s}", .{ table_name, output_table_path });
+}
+
+pub fn downloadAndParseProperties(alloc: std.mem.Allocator) !struct { CodepointSet, CodepointSet } {
+    if (!pathExists(extraction_path)) {
+        try fetchUnicodeData(alloc);
+    }
+    return try parseUnicodeProperties(alloc);
 }
