@@ -53,7 +53,7 @@ pub fn build(b: *std.Build) void {
     const gen_unicode_id_table = b.addExecutable(.{
         .name = "gen-unicode-id",
         .root_module = b.createModule(.{
-            .root_source_file = b.path("scripts/gen_unicode_id.zig"),
+            .root_source_file = b.path("src/tools/gen_unicode_id.zig"),
             .target = b.graph.host,
             .optimize = optimize,
         }),
