@@ -1,5 +1,5 @@
 // inspired by https://github.com/dtolnay/unicode-ident
-//
+
 const std = @import("std");
 
 const unicode_data_url = "https://www.unicode.org/Public/17.0.0/ucd/UCD.zip";
