@@ -1,14 +1,14 @@
 const std = @import("std");
 const js = @import("js");
 
-pub fn main() !void {
+pub fn main(init: std.process.Init) !void {
     var gpa = std.heap.DebugAllocator(.{}).init;
     defer _ = gpa.deinit();
     const allocator = gpa.allocator();
 
     const file_path = "test.js";
 
-    const contents = try std.fs.cwd().readFileAlloc(file_path, allocator, std.Io.Limit.limited(10 * 1024 * 1024));
+    const contents = try std.Io.Dir.cwd().readFileAlloc(init.io, file_path, allocator, std.Io.Limit.limited(10 * 1024 * 1024));
     defer allocator.free(contents);
 
     var start = try std.time.Timer.start();
