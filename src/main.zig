@@ -38,7 +38,7 @@ pub fn main(init: std.process.Init) !void {
 
     defer allocator.free(json);
 
-    // std.debug.print("\n{s}\n", .{json});
+    std.debug.print("\n{s}\n", .{json});
 
     std.debug.print("estree time taken {d:.2}\n", .{json_taken_ms});
 

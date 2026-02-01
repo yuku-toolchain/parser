@@ -629,17 +629,26 @@ pub const Serializer = struct {
     fn writeNumericLiteral(self: *Self, data: ast.NumericLiteral, span: ast.Span) !void {
         const raw = self.tree.getSourceText(data.raw_start, data.raw_len);
 
-        var sci_buf: [64]u8 = undefined;
-        const num_sci = try parseJSNumericToSciNotation(&sci_buf, raw);
+        var buf: [64]u8 = undefined;
+        const num_str = parseJSNumeric(&buf, raw) catch {
+            // parse error, output null
+            try self.beginObject();
+            try self.fieldType("Literal");
+            try self.fieldSpan(span);
+            try self.fieldNull("value");
+            try self.fieldString("raw", raw);
+            try self.endObject();
+            return;
+        };
 
         try self.beginObject();
         try self.fieldType("Literal");
         try self.fieldSpan(span);
-        if (std.mem.eql(u8, num_sci, "inf")) {
+        if (std.mem.eql(u8, num_str, "inf") or std.mem.eql(u8, num_str, "-inf")) {
             try self.fieldNull("value");
         } else {
             try self.field("value");
-            try self.write(num_sci);
+            try self.write(num_str);
         }
         try self.fieldString("raw", raw);
         try self.endObject();
@@ -1456,124 +1465,151 @@ pub const Serializer = struct {
         return self.tree.getExtra(range);
     }
 
-    fn writeDecodedString(self: *Self, s: []const u8) !void {
-        self.scratch.clearRetainingCapacity();
-        try decodeEscapes(s, &self.scratch, self.allocator);
+    /// writes a js string value as json, handling escape sequences.
+    /// json-compatible escapes (\n, \r, \t, \b, \f, \\, \", \/, \uXXXX) pass through directly
+    /// since JSON.parse will interpret them. js-only escapes (\v, \xXX, \0, octals, \u{...})
+    /// are decoded here.
+    fn writeDecodedString(self: *Self, input: []const u8) !void {
         try self.writeByte('"');
-        try self.writeJsonEscaped(self.scratch.items);
+
+        var i: usize = 0;
+        while (i < input.len) {
+            const c = input[i];
+
+            if (c != '\\') {
+                // regular character, json-escape if needed
+                try self.writeJsonEscapedChar(c);
+                i += 1;
+                continue;
+            }
+
+            // backslash, check for escape sequence
+            if (i + 1 >= input.len) {
+                try self.write("\\\\"); // trailing backslash
+                break;
+            }
+
+            const next = input[i + 1];
+
+            // unicode line separator (line continuation), skip entirely
+            if (util.Utf.unicodeSeparatorLen(input, i + 1) > 0) {
+                i += 4; // backslash + 3-byte separator
+                continue;
+            }
+
+            switch (next) {
+                // json-compatible escapes, pass through directly for JSON.parse
+                'n', 'r', 't', 'b', 'f', '"', '\\' => {
+                    try self.writeByte('\\');
+                    try self.writeByte(next);
+                    i += 2;
+                },
+                '/' => {
+                    try self.writeByte('/');
+                    i += 2;
+                },
+                'u' => {
+                    if (i + 2 < input.len and input[i + 2] == '{') {
+                        // (\u{XXXXX}) JS-only, must decode
+                        if (util.Utf.parseHexVariable(input, i + 3, 16)) |r| {
+                            if (r.has_digits and r.end < input.len and input[r.end] == '}') {
+                                try self.writeCodePointAsJson(r.value);
+                                i = r.end + 1;
+                                continue;
+                            }
+                        }
+                        try self.writeByte('u');
+                        i += 2;
+                    } else if (i + 5 < input.len and util.Utf.parseHex4(input, i + 2) != null) {
+                        // \uXXXX, JSON-compatible, pass through
+                        try self.write("\\u");
+                        try self.write(input[i + 2 .. i + 6]);
+                        i += 6;
+                    } else {
+                        // invalid - output as-is
+                        try self.writeByte('u');
+                        i += 2;
+                    }
+                },
+                // JS-only escapes, must decode
+                'v' => {
+                    try self.write("\\u000b"); // vertical tab as unicode escape
+                    i += 2;
+                },
+                '0' => {
+                    if (i + 2 < input.len and util.Utf.isOctalDigit(input[i + 2])) {
+                        const r = util.Utf.parseOctal(input, i + 1);
+                        try self.writeCodePointAsJson(r.value);
+                        i = r.end;
+                    } else {
+                        try self.write("\\u0000"); // null char
+                        i += 2;
+                    }
+                },
+                '1'...'7' => {
+                    const r = util.Utf.parseOctal(input, i + 1);
+                    try self.writeCodePointAsJson(r.value);
+                    i = r.end;
+                },
+                'x' => {
+                    if (util.Utf.parseHex2(input, i + 2)) |r| {
+                        try self.writeCodePointAsJson(r.value);
+                        i = r.end;
+                    } else {
+                        // invalid
+                        try self.writeByte('x');
+                        i += 2;
+                    }
+                },
+                '\r', '\n' => {
+                    // line continuation, skip
+                    i += 1 + util.Utf.asciiLineTerminatorLen(input, i + 1);
+                },
+                else => {
+                    // unknown escape (includes \') - just output the char
+                    try self.writeJsonEscapedChar(next);
+                    i += 2;
+                },
+            }
+        }
+
         try self.writeByte('"');
+    }
+
+    fn writeJsonEscapedChar(self: *Self, c: u8) !void {
+        switch (c) {
+            '"' => try self.write("\\\""),
+            '\\' => try self.write("\\\\"),
+            '\n' => try self.write("\\n"),
+            '\r' => try self.write("\\r"),
+            '\t' => try self.write("\\t"),
+            0x08 => try self.write("\\b"),
+            0x0C => try self.write("\\f"),
+            else => {
+                if (c < 0x20) {
+                    var buf: [6]u8 = undefined;
+                    try self.write(std.fmt.bufPrint(&buf, "\\u{x:0>4}", .{c}) catch unreachable);
+                } else {
+                    try self.writeByte(c);
+                }
+            },
+        }
+    }
+
+    fn writeCodePointAsJson(self: *Self, cp: u21) !void {
+        if (cp < 0x80) {
+            try self.writeJsonEscapedChar(@intCast(cp));
+        } else {
+            // non-ASCII, encode as UTF-8
+            var buf: [4]u8 = undefined;
+            const len = std.unicode.utf8Encode(cp, &buf) catch {
+                try self.write("\u{FFFD}");
+                return;
+            };
+            try self.write(buf[0..len]);
+        }
     }
 };
-
-fn decodeEscapes(input: []const u8, out: *std.ArrayList(u8), allocator: std.mem.Allocator) !void {
-    var i: usize = 0;
-    while (i < input.len) {
-        if (input[i] != '\\') {
-            try out.append(allocator, input[i]);
-            i += 1;
-            continue;
-        }
-
-        i += 1;
-        if (i >= input.len) {
-            try out.append(allocator, '\\');
-            break;
-        }
-
-        if (util.Utf.unicodeSeparatorLen(input, i) > 0) {
-            i += 3;
-            continue;
-        }
-
-        switch (input[i]) {
-            'n' => {
-                try out.append(allocator, '\n');
-                i += 1;
-            },
-            'r' => {
-                try out.append(allocator, '\r');
-                i += 1;
-            },
-            't' => {
-                try out.append(allocator, '\t');
-                i += 1;
-            },
-            'b' => {
-                try out.append(allocator, 0x08);
-                i += 1;
-            },
-            'f' => {
-                try out.append(allocator, 0x0C);
-                i += 1;
-            },
-            'v' => {
-                try out.append(allocator, 0x0B);
-                i += 1;
-            },
-            '0' => {
-                if (i + 1 < input.len and util.Utf.isOctalDigit(input[i + 1])) {
-                    const r = util.Utf.parseOctal(input, i);
-                    try appendUtf8(out, allocator, r.value);
-                    i = r.end;
-                } else {
-                    try out.append(allocator, 0);
-                    i += 1;
-                }
-            },
-            '1'...'7' => {
-                const r = util.Utf.parseOctal(input, i);
-                try appendUtf8(out, allocator, r.value);
-                i = r.end;
-            },
-            'x' => {
-                i += 1;
-                if (util.Utf.parseHex2(input, i)) |r| {
-                    try appendUtf8(out, allocator, r.value);
-                    i = r.end;
-                    continue;
-                }
-                try out.append(allocator, 'x');
-            },
-            'u' => {
-                i += 1;
-                if (i < input.len and input[i] == '{') {
-                    i += 1;
-                    if (util.Utf.parseHexVariable(input, i, 16)) |r| {
-                        if (r.has_digits and r.end < input.len and input[r.end] == '}') {
-                            try appendUtf8(out, allocator, r.value);
-                            i = r.end + 1;
-                            continue;
-                        }
-                    }
-                    try out.append(allocator, 'u');
-                } else if (util.Utf.parseHex4(input, i)) |r| {
-                    try appendUtf8(out, allocator, r.value);
-                    i = r.end;
-                    continue;
-                } else {
-                    try out.append(allocator, 'u');
-                }
-            },
-            '\r', '\n' => {
-                const len = util.Utf.asciiLineTerminatorLen(input, i);
-                i += len;
-            },
-            else => |c| {
-                try out.append(allocator, c);
-                i += 1;
-            },
-        }
-    }
-}
-
-fn appendUtf8(out: *std.ArrayList(u8), allocator: std.mem.Allocator, cp: u21) !void {
-    var buf: [4]u8 = undefined;
-    const len = std.unicode.utf8Encode(cp, &buf) catch {
-        try out.appendSlice(allocator, "\u{FFFD}");
-        return;
-    };
-    try out.appendSlice(allocator, buf[0..len]);
-}
 
 /// normalize CR and CRLF to LF, pass through everything else
 fn normalizeLineEnding(source: []const u8, pos: usize) struct { len: u8, normalized: u8 } {
@@ -1603,7 +1639,8 @@ fn buildUtf16PosMap(allocator: std.mem.Allocator, source: []const u8) ![]u32 {
     return map;
 }
 
-pub fn parseJSNumericToSciNotation(outbuf: []u8, str: []const u8) ![]const u8 {
+/// parses js numeric literal (handles hex, binary, octal, underscores) to JSON-compatible format.
+fn parseJSNumeric(outbuf: []u8, str: []const u8) ![]const u8 {
     // remove underscores
     var buf: [128]u8 = undefined;
     var len: usize = 0;
@@ -1643,6 +1680,7 @@ pub fn parseJSNumericToSciNotation(outbuf: []u8, str: []const u8) ![]const u8 {
         val = std.fmt.parseFloat(f64, s) catch @floatFromInt(try std.fmt.parseInt(i64, s, 10));
     }
 
+    // output in scientific notation
     return std.fmt.bufPrint(outbuf, "{e}", .{val});
 }
 
