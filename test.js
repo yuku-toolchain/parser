@@ -1,3 +1,1 @@
-for await (let wow of nice) {
-
-}
+\u{0000}

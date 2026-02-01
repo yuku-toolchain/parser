@@ -213,7 +213,7 @@ const CodepointRange = struct { start: u32, end: u32 };
 /// extracts a codepoint range from a line in DerivedCoreProperties.txt
 fn extractCodepointRange(line: []const u8) !?CodepointRange {
     // find the first space or semicolon (marks end of codepoint part)
-    const sep_pos = std.mem.indexOfScalar(u8, line, ' ') orelse line.len;
+    const sep_pos = std.mem.findScalar(u8, line, ' ') orelse line.len;
     const hex_part = line[0..sep_pos];
 
     // check if this is a range (contains "..")

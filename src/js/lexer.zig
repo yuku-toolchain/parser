@@ -461,7 +461,7 @@ pub const Lexer = struct {
                 try self.consumeHex();
             },
             'u' => {
-                try self.consumeUnicodeEscape();
+                try self.consumeUnicodeEscape(.normal);
             },
             '1'...'7' => {
                 if (self.strict_mode) return error.OctalEscapeInStrict;
@@ -503,17 +503,31 @@ pub const Lexer = struct {
         }
     }
 
-    fn consumeUnicodeEscape(self: *Lexer) LexicalError!void {
+    const ConsumeUnicodeContext = enum {
+        identifier_start,
+        identifier_continue,
+        normal,
+    };
+
+    fn consumeUnicodeEscape(self: *Lexer, context: ConsumeUnicodeContext) LexicalError!void {
         self.cursor += 1; // skip 'u'
+
+        const in_identifier = context == .identifier_start or context == .identifier_continue;
+
+        const id_error = if (context == .identifier_start) error.InvalidIdentifierStart else error.InvalidIdentifierContinue;
 
         if (self.cursor < self.source.len and self.source[self.cursor] == '{') {
             // \u{XXXXX}
             self.cursor += 1;
             const start = self.cursor;
-            const end = std.mem.indexOfScalarPos(u8, self.source, self.cursor, '}') orelse
+            const end = std.mem.findScalarPos(u8, self.source, self.cursor, '}') orelse
                 return error.InvalidUnicodeEscape;
 
             if (util.Utf.parseHexVariable(self.source, start, end - start)) |r| {
+                if (in_identifier and !util.UnicodeId.canContinueIdentifierUnicode(r.value)) {
+                    return id_error;
+                }
+
                 if (r.has_digits and r.end == end) {
                     self.cursor = @intCast(end + 1); // skip past '}'
                 } else {
@@ -525,6 +539,10 @@ pub const Lexer = struct {
         } else {
             // \uXXXX format
             if (util.Utf.parseHex4(self.source, self.cursor)) |r| {
+                if (in_identifier and !util.UnicodeId.canContinueIdentifierUnicode(r.value)) {
+                    return id_error;
+                }
+
                 self.cursor = @intCast(r.end);
             } else {
                 return error.InvalidUnicodeEscape;
@@ -559,26 +577,14 @@ pub const Lexer = struct {
                 @branchHint(.likely);
                 if (c == '\\') {
                     @branchHint(.cold);
+
                     // JSX tag names don't support escape sequences
                     if (is_jsx_tag) {
                         return error.JsxIdentifierCannotContainEscapes;
                     }
 
-                    if (self.peek(1) != 'u') {
-                        return error.InvalidUnicodeEscape;
-                    }
-
-                    const c2 = self.peek(2);
-                    if (c2 != '{') {
-                        if (util.Utf.parseHex4(self.source, self.cursor + 2)) |r| {
-                            if (!util.UnicodeId.canContinueIdentifierUnicode(r.value)) {
-                                return error.InvalidIdentifierContinue;
-                            }
-                        }
-                    }
-
                     self.cursor += 1; // consume backslash to get to 'u'
-                    try self.consumeUnicodeEscape();
+                    try self.consumeUnicodeEscape(.identifier_continue);
                 } else {
                     if (canContinueIdentifierAscii(c, is_jsx_tag)) {
                         self.cursor += 1;
@@ -620,19 +626,10 @@ pub const Lexer = struct {
                 if (is_jsx_tag) {
                     return error.JsxIdentifierCannotStartWithBackslash;
                 }
-                if (self.peek(1) != 'u') {
-                    return error.InvalidUnicodeEscape;
-                }
-                const c2 = self.peek(2);
-                if (c2 != '{') {
-                    if (util.Utf.parseHex4(self.source, self.cursor + 2)) |r| {
-                        if (!util.UnicodeId.canStartIdentifierUnicode(r.value)) {
-                            return error.InvalidIdentifierStart;
-                        }
-                    }
-                }
+
                 self.cursor += 1; // consume backslash to get to 'u'
-                try self.consumeUnicodeEscape();
+
+                try self.consumeUnicodeEscape(.identifier_start);
             } else {
                 if (!canStartIdentifierAscii(first_char)) {
                     @branchHint(.cold);
