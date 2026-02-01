@@ -195,19 +195,6 @@ pub const Serializer = struct {
         try self.endObject();
     }
 
-    fn writeDirectiveAsExpressionStatement(self: *Self, data: ast.Directive, span: ast.Span) !void {
-        try self.sep();
-        if (self.options.pretty) {
-            try self.writeByte('\n');
-            try self.writeIndent();
-        }
-        try self.beginObject();
-        try self.fieldType("ExpressionStatement");
-        try self.fieldSpan(span);
-        try self.fieldNode("expression", data.expression);
-        try self.endObject();
-    }
-
     fn writeFunction(self: *Self, data: ast.Function, span: ast.Span) !void {
         try self.beginObject();
         try self.fieldType(switch (data.type) {
@@ -258,11 +245,7 @@ pub const Serializer = struct {
         try self.field("body");
         try self.beginArray();
         for (self.getExtra(data.body)) |idx| {
-            const node_data = self.tree.getData(idx);
-            if (node_data == .directive)
-                try self.writeDirectiveAsExpressionStatement(node_data.directive, self.tree.getSpan(idx))
-            else
-                try self.elemNode(idx);
+            try self.elemNode(idx);
         }
         try self.endArray();
         try self.endObject();
@@ -577,9 +560,9 @@ pub const Serializer = struct {
     fn writeTemplateElement(self: *Self, data: ast.TemplateElement, span: ast.Span) !void {
         const raw = self.tree.getSourceText(data.raw_start, data.raw_len);
 
+        // normalize line endings: CRLF (\r\n) and standalone CR (\r) -> LF (\n) per spec
         self.scratch.clearRetainingCapacity();
 
-        // normalize line endings: CRLF/CR -> LF (per spec)
         var i: usize = 0;
         while (i < raw.len) {
             const c = raw[i];
@@ -611,6 +594,7 @@ pub const Serializer = struct {
         try self.fieldType("Literal");
         try self.fieldSpan(span);
         try self.field("value");
+        // JSX attribute strings don't process escapes, regular JS strings do
         if (self.in_jsx_attribute)
             try self.writeString(raw[1 .. raw.len - 1])
         else
@@ -1420,6 +1404,10 @@ pub const Serializer = struct {
         return self.tree.getExtra(range);
     }
 
+    /// writes a JS string value as JSON, handling escape sequences.
+    /// JSON-compatible escapes (\n, \r, \t, \b, \f, \\, \", \/, \uXXXX) pass through directly
+    /// since JSON.parse will interpret them. JS-only escapes (\v, \xXX, \0, octals, \u{...})
+    /// are decoded here since JSON.parse doesn't understand them.
     fn writeDecodedString(self: *Self, input: []const u8) !void {
         try self.writeByte('"');
 
@@ -1533,13 +1521,14 @@ pub const Serializer = struct {
         }
     }
 
+    /// writes a Unicode code point as JSON. ASCII chars are escaped if needed, non-ASCII are UTF-8 encoded.
     fn writeCodePointAsJson(self: *Self, cp: u21) !void {
         if (cp < 0x80) {
             try self.writeJsonEscapedChar(@intCast(cp));
         } else {
             var buf: [4]u8 = undefined;
             const len = std.unicode.utf8Encode(cp, &buf) catch {
-                try self.write("\u{FFFD}");
+                try self.write("\u{FFFD}"); // replacement character for invalid code points
                 return;
             };
             try self.write(buf[0..len]);
@@ -1566,6 +1555,7 @@ fn buildUtf16PosMap(allocator: std.mem.Allocator, source: []const u8) ![]u32 {
 }
 
 fn parseJSNumeric(outbuf: []u8, str: []const u8) ![]const u8 {
+    // remove underscores
     var buf: [128]u8 = undefined;
     var len: usize = 0;
     for (str) |c| {
