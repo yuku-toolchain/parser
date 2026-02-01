@@ -238,8 +238,8 @@ pub inline fn validateIdentifier(parser: *Parser, comptime as_what: []const u8, 
     if (!token.type.isIdentifierLike()) {
         try parser.reportFmt(
             token.span,
-            "Expected identifier {s}, found '{s}'",
-            .{ as_what, parser.describeToken(token) },
+            "Expected an identifier but found '{s}'",
+            .{  parser.describeToken(token) },
             .{ .help = "Identifiers must start with a letter, underscore (_), or dollar sign ($)" },
         );
 
@@ -261,6 +261,17 @@ pub inline fn validateIdentifier(parser: *Parser, comptime as_what: []const u8, 
         try parser.reportFmt(
             token.span,
             "Cannot use 'yield' as {s} in a generator context",
+            .{as_what},
+            .{},
+        );
+
+        return false;
+    }
+
+    if (token.type == .await and parser.context.in_async) {
+        try parser.reportFmt(
+            token.span,
+            "Cannot use `await` as {s} in an async context",
             .{as_what},
             .{},
         );
