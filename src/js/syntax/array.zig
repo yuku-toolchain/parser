@@ -103,17 +103,17 @@ pub fn coverToExpression(parser: *Parser, cover: ArrayCover, validate: bool) Err
 }
 
 /// convert array cover to ArrayPattern.
-pub fn coverToPattern(parser: *Parser, cover: ArrayCover, context: grammar.PatternContext) Error!?ast.NodeIndex {
+pub fn coverToPattern(parser: *Parser, cover: ArrayCover, comptime context: grammar.PatternContext) Error!?ast.NodeIndex {
     const elements_range = try parser.addExtra(cover.elements);
     return toArrayPatternImpl(parser, null, elements_range, .{ .start = cover.start, .end = cover.end }, context);
 }
 
 /// convert ArrayExpression to ArrayPattern (mutates in-place).
-pub fn toArrayPattern(parser: *Parser, expr_node: ast.NodeIndex, elements_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?void {
+pub fn toArrayPattern(parser: *Parser, expr_node: ast.NodeIndex, elements_range: ast.IndexRange, span: ast.Span, comptime context: grammar.PatternContext) Error!?void {
     _ = try toArrayPatternImpl(parser, expr_node, elements_range, span, context) orelse return null;
 }
 
-fn toArrayPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, elements_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?ast.NodeIndex {
+fn toArrayPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, elements_range: ast.IndexRange, span: ast.Span, comptime context: grammar.PatternContext) Error!?ast.NodeIndex {
     const elements = parser.getExtra(elements_range);
 
     var rest: ast.NodeIndex = ast.null_node;

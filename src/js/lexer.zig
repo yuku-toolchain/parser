@@ -530,7 +530,7 @@ pub const Lexer = struct {
         normal,
     };
 
-    fn consumeUnicodeEscape(self: *Lexer, context: ConsumeUnicodeContext) LexicalError!void {
+    fn consumeUnicodeEscape(self: *Lexer, comptime context: ConsumeUnicodeContext) LexicalError!void {
         self.cursor += 1; // skip 'u'
 
         const in_identifier = context == .identifier_start or context == .identifier_continue;

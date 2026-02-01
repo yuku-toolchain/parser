@@ -30,7 +30,7 @@ pub fn parseJsxExpression(parser: *Parser) Error!?ast.NodeIndex {
     return parseJsxElement(parser, .top_level);
 }
 
-fn parseJsxElement(parser: *Parser, context: JsxElementContext) Error!?ast.NodeIndex {
+fn parseJsxElement(parser: *Parser, comptime context: JsxElementContext) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
     const next = try parser.lookAhead() orelse return null;
 
@@ -108,7 +108,7 @@ fn parseJsxFragment(parser: *Parser) Error!?ast.NodeIndex {
 
 // https://facebook.github.io/jsx/#prod-JSXSelfClosingElement
 // https://facebook.github.io/jsx/#prod-JSXOpeningElement
-fn parseJsxOpeningElement(parser: *Parser, context: JsxElementContext) Error!?ast.NodeIndex {
+fn parseJsxOpeningElement(parser: *Parser, comptime context: JsxElementContext) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
     enterJsxTag(parser);
@@ -389,7 +389,7 @@ const JsxExprContext = enum {
 };
 
 // parses {expr} in children context
-fn parseJsxExpressionContainer(parser: *Parser, context: JsxExprContext) Error!?ast.NodeIndex {
+fn parseJsxExpressionContainer(parser: *Parser, comptime context: JsxExprContext) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
     // switch to normal mode for JS expression parsing

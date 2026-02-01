@@ -103,7 +103,7 @@ pub const PatternContext = enum {
 pub fn expressionToPattern(
     parser: *Parser,
     expr: ast.NodeIndex,
-    context: PatternContext,
+    comptime context: PatternContext,
     // if return null, there is a error reported, so caller do 'orelse return null'
 ) Error!?void {
     const data = parser.getData(expr);

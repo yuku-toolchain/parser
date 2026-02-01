@@ -402,17 +402,17 @@ pub fn coverToExpression(parser: *Parser, cover: ObjectCover, validate: bool) Er
 }
 
 /// convert object cover to ObjectPattern.
-pub fn coverToPattern(parser: *Parser, cover: ObjectCover, context: grammar.PatternContext) Error!?ast.NodeIndex {
+pub fn coverToPattern(parser: *Parser, cover: ObjectCover, comptime context: grammar.PatternContext) Error!?ast.NodeIndex {
     const properties_range = try parser.addExtra(cover.properties);
     return toObjectPatternImpl(parser, null, properties_range, .{ .start = cover.start, .end = cover.end }, context);
 }
 
 /// convert ObjectExpression to ObjectPattern (mutates in-place).
-pub fn toObjectPattern(parser: *Parser, expr_node: ast.NodeIndex, properties_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?void {
+pub fn toObjectPattern(parser: *Parser, expr_node: ast.NodeIndex, properties_range: ast.IndexRange, span: ast.Span, comptime context: grammar.PatternContext) Error!?void {
     _ = try toObjectPatternImpl(parser, expr_node, properties_range, span, context) orelse return null;
 }
 
-fn toObjectPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, properties_range: ast.IndexRange, span: ast.Span, context: grammar.PatternContext) Error!?ast.NodeIndex {
+fn toObjectPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, properties_range: ast.IndexRange, span: ast.Span, comptime context: grammar.PatternContext) Error!?ast.NodeIndex {
     const properties = parser.getExtra(properties_range);
 
     var rest: ast.NodeIndex = ast.null_node;
