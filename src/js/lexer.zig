@@ -10,6 +10,8 @@ pub const LexicalError = error{
     UnterminatedRegexLiteral,
     InvalidRegexLineTerminator,
     InvalidRegex,
+    InvalidRegexFlag,
+    DuplicateRegexFlag,
     InvalidIdentifierStart,
     InvalidIdentifierContinue,
     UnterminatedMultiLineComment,
@@ -356,9 +358,28 @@ pub const Lexer = struct {
 
                 closing_delimeter_pos = self.cursor;
 
-                while (self.cursor < self.source.len and
-                    std.ascii.isAlphabetic(self.source[self.cursor]))
-                {
+                // 26 bits enough, 'a' to 'z'
+                var flags_seen: u32 = 0;
+                while (self.cursor < self.source.len and std.ascii.isAlphabetic(self.source[self.cursor])) {
+                    const flag = self.source[self.cursor];
+
+                    const is_valid_flag = switch (flag) {
+                        'g', 'i', 'm', 's', 'u', 'y', 'd' => true,
+                        else => false,
+                    };
+
+                    if (!is_valid_flag) {
+                        return error.InvalidRegexFlag;
+                    }
+
+                    const bit: u5 = @intCast(flag - 'a');
+
+                    if ((flags_seen & (@as(u32, 1) << bit)) != 0) {
+                        return error.DuplicateRegexFlag;
+                    }
+
+                    flags_seen |= (@as(u32, 1) << bit);
+
                     self.cursor += 1;
                 }
 
@@ -1181,6 +1202,8 @@ pub fn getLexicalErrorMessage(error_type: LexicalError) []const u8 {
         error.UnterminatedRegexLiteral => "Unterminated regular expression literal",
         error.InvalidRegexLineTerminator => "Line terminator not allowed in regular expression literal",
         error.InvalidRegex => "Invalid regular expression",
+        error.InvalidRegexFlag => "Invalid regular expression flag",
+        error.DuplicateRegexFlag => "Duplicate regular expression flag",
         error.InvalidIdentifierStart => "Invalid character at start of identifier",
         error.InvalidIdentifierContinue => "Invalid character in identifier",
         error.UnterminatedMultiLineComment => "Unterminated multi-line comment",
@@ -1213,6 +1236,8 @@ pub fn getLexicalErrorHelp(error_type: LexicalError) []const u8 {
         error.UnterminatedRegexLiteral => "Try adding a closing slash (/) here, optionally followed by flags (g, i, m, etc.)",
         error.InvalidRegexLineTerminator => "Try removing the line break here or escaping it within the regex pattern",
         error.InvalidRegex => "Try checking the regex syntax here for unclosed groups, invalid escapes, or malformed patterns",
+        error.InvalidRegexFlag => "Valid regex flags are: g (global), i (ignoreCase), m (multiline), s (dotAll), u (unicode), y (sticky), d (hasIndices)",
+        error.DuplicateRegexFlag => "Remove the duplicate flag; each flag can only appear once",
         error.InvalidIdentifierStart => "Try starting the identifier here with a letter (a-z, A-Z), underscore (_), or dollar sign ($)",
         error.InvalidIdentifierContinue => "Try using a valid identifier character here (letters, digits, underscore, or dollar sign)",
         error.UnterminatedMultiLineComment => "Try adding the closing delimiter (*/) here to complete the comment",
