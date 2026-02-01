@@ -5,23 +5,28 @@ Running TypeScript, Test262 and Babel test suites with ESTree/TypeScript-ESTree 
 
 Summary
 -------
-Passed:      37931
-Failed:      479
+Passed:      37944
+Failed:      466
 Total:       38410
-Coverage:    98.75%
+Coverage:    98.79%
 
 Results by Suite
 ----------------
 
 ✗ test/suite/js/pass
-  Passed: 37081/37553 (98.74%)
-  Failed: 472
+  Passed: 37094/37553 (98.78%)
+  Failed: 459
   Failures:
     - test/suite/js/pass/94809bec87aef538.js
+    - test/suite/js/pass/0b33eaefa157821f.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/ae21291bcd461ac3.js
+    - test/suite/js/pass/0f9f10c894a7d811.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/ca7cd4d2acaf9770.js
+    - test/suite/js/pass/756579211447db0b.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/73e3b696d859e505.js
     - test/suite/js/pass/3572bfe54fd13cdb.js
+    - test/suite/js/pass/2b9d4a632590814a.js (error: Error: Failed to parse source code)
+    - test/suite/js/pass/bf6aaaab7c143ca1.js
     - test/suite/js/pass/352ddcc2cd45872e.js
     - test/suite/js/pass/a9482799825e5e96.js
     - test/suite/js/pass/edfe082e9badb2f5.js
@@ -42,20 +47,16 @@ Results by Suite
     - test/suite/js/pass/dc268fd8061e90be.js
     - test/suite/js/pass/8b8f055d2e1c91f4.js
     - test/suite/js/pass/bc785eac79d91704.js
-    - test/suite/js/pass/0ed780912851e990.js
-    - test/suite/js/pass/3fa162d677e2908a.js
     - test/suite/js/pass/95fd2254b1e17d01.js
     - test/suite/js/pass/018315a394d03406.js
-    - test/suite/js/pass/b5bb33a87a134a47.js
     - test/suite/js/pass/cd613bd8ca030563.js
-    - test/suite/js/pass/aebcebc125a2fedc.js
     - test/suite/js/pass/93f7dc27bfbe8cf3.js
     - test/suite/js/pass/10b0ea59ebc0a6b7.js
     - test/suite/js/pass/a529d2701eab3af2.js
     - test/suite/js/pass/39c4c6a909d89ef6.js
     - test/suite/js/pass/03e5f95c0f966156.js
-    - test/suite/js/pass/d9fbe38103d2d284.js
     - test/suite/js/pass/fbca025a688f684a.js
+    - test/suite/js/pass/b4501378a6e0307b.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/6585e1fa4e677457.js
     - test/suite/js/pass/c1825cca9fb2e399.js
     - test/suite/js/pass/ce3cc1d29854f62e.js
@@ -63,7 +64,6 @@ Results by Suite
     - test/suite/js/pass/e5db1fb33c6729cf.js
     - test/suite/js/pass/f01a805eb4999fa4.js
     - test/suite/js/pass/de48922d9cbaae07.js
-    - test/suite/js/pass/16cbf941a32800ab.js
     - test/suite/js/pass/59fa396bfa4d4cb5.js
     - test/suite/js/pass/aa181b03b79c7eab.js
     - test/suite/js/pass/d276593f691c8a78.js
@@ -74,17 +74,16 @@ Results by Suite
     - test/suite/js/pass/b429fad313d4a48c.js
     - test/suite/js/pass/80eba225d5dccaf7.js
     - test/suite/js/pass/4cf7dcf9ec3d5490.js
-    - test/suite/js/pass/514166dddc49a9ce.js
     - test/suite/js/pass/10a193679625793a.js
     - test/suite/js/pass/d1efe3c288cf969f.js
     - test/suite/js/pass/006092d3ee9f3efb.js
     - test/suite/js/pass/82f1dfb94993cd82.js
-    - test/suite/js/pass/55e65d57a98ab794.js
     - test/suite/js/pass/d4751ccc6f12d5a2.js
     - test/suite/js/pass/2cd92816c39ff0ed.js
     - test/suite/js/pass/028cb82125592036.js
     - test/suite/js/pass/cf1ef3002a38a8c2.js
     - test/suite/js/pass/ec8a6bd64ce6c50e.js
+    - test/suite/js/pass/184b511b81c8ee7e.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/0f62f1d31a5ff922.js
     - test/suite/js/pass/05972c30310985b0.js
     - test/suite/js/pass/6c38e09958f2b51d.js
@@ -98,6 +97,7 @@ Results by Suite
     - test/suite/js/pass/44cfc12eda994fc3.js
     - test/suite/js/pass/d01c9b2cd6e572bf.js
     - test/suite/js/pass/bd7f87317715ebcc.js
+    - test/suite/js/pass/f76bff118ed6c306.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/e7e96a092e4ae71b.js
     - test/suite/js/pass/37a7850f313127a8.module.js
     - test/suite/js/pass/24b30fc9a4fea093.js
@@ -107,13 +107,13 @@ Results by Suite
     - test/suite/js/pass/07af967376fa8c19.js
     - test/suite/js/pass/acac25f0357d8853.js
     - test/suite/js/pass/8cf00b8172976057.js
+    - test/suite/js/pass/d63cf2aa47ecb993.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/bed3e9183a5f1f38.js
     - test/suite/js/pass/8d70d54ed8dd1c05.js
     - test/suite/js/pass/36a9d9dc5cb0ee1a.js
     - test/suite/js/pass/3d4c18f92ca8443e.js
     - test/suite/js/pass/25cd50f7457463d2.js
     - test/suite/js/pass/11b847714e4c85ca.js
-    - test/suite/js/pass/cddf43d5f4a333fd.js
     - test/suite/js/pass/84e2d10f3987cfdc.js
     - test/suite/js/pass/4661e593038cadc2.js
     - test/suite/js/pass/9dccd7b28914e18c.js
@@ -128,7 +128,6 @@ Results by Suite
     - test/suite/js/pass/c8185770513a8a39.js
     - test/suite/js/pass/71995b1e13c03405.js
     - test/suite/js/pass/8ec129c40fce2650.js
-    - test/suite/js/pass/da856657ad6bd629.js
     - test/suite/js/pass/b2ac6e2b2f24e7e2.js
     - test/suite/js/pass/b53d8a9040f94149.js
     - test/suite/js/pass/be680a69760e26cc.js
@@ -137,17 +136,19 @@ Results by Suite
     - test/suite/js/pass/fa04a3c608a650fc.js
     - test/suite/js/pass/f08f90f27adbf959.js
     - test/suite/js/pass/fba379516d70ad8b.js
+    - test/suite/js/pass/e0f831f2b08fd35c.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/5c360341d6fb6357.js
     - test/suite/js/pass/62ba39b07fe0b0c7.module.js
     - test/suite/js/pass/4218dfc17a082b1c.module.js
+    - test/suite/js/pass/4e07f8992cca7db0.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/fb1e8ab49a2e7854.js
     - test/suite/js/pass/b15c8ec64cbeffcf.js
     - test/suite/js/pass/ee1e2f85d112da09.js
-    - test/suite/js/pass/c6da92047857f60d.js
     - test/suite/js/pass/f56cfa3911ff18d6.js
     - test/suite/js/pass/adaf8530e5cf0fb4.js
     - test/suite/js/pass/635760b6c209c02b.js
     - test/suite/js/pass/b8b4709327879876.js
+    - test/suite/js/pass/500fd2b5ef0552ed.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/c87cafb77715b122.js
     - test/suite/js/pass/9a470f3cd7c3fb57.js
     - test/suite/js/pass/697ba16be49c9176.js
@@ -158,12 +159,10 @@ Results by Suite
     - test/suite/js/pass/b8b15356182f2407.js
     - test/suite/js/pass/43bf3a510afc933f.js
     - test/suite/js/pass/6199b88dd4575394.js
-    - test/suite/js/pass/7ece7495118fda2c.js
     - test/suite/js/pass/01a5527d99f7debb.js
     - test/suite/js/pass/67cbc432b6079ccb.js
     - test/suite/js/pass/b46e1336bf7205d3.js
     - test/suite/js/pass/b97ed3bd04ca9170.js
-    - test/suite/js/pass/5f0fec721f5df3ad.js
     - test/suite/js/pass/fb174e3de59ff24b.js
     - test/suite/js/pass/6202d1a0d330409e.js
     - test/suite/js/pass/23410cd462fc4905.js
@@ -174,7 +173,6 @@ Results by Suite
     - test/suite/js/pass/32d7ba308c1e28a4.js
     - test/suite/js/pass/4b8a312399ab1a38.js
     - test/suite/js/pass/b2898d27da4408b9.js
-    - test/suite/js/pass/9bb59ffb17fe5375.js
     - test/suite/js/pass/ad165c07518dc94e.js
     - test/suite/js/pass/1e56337440a3ea6c.js
     - test/suite/js/pass/351dc209e241e07f.module.js
@@ -182,23 +180,24 @@ Results by Suite
     - test/suite/js/pass/7be52cb99b631366.js
     - test/suite/js/pass/c0693e4341cd0e98.js
     - test/suite/js/pass/b9d8ba7f0ea8992d.js
-    - test/suite/js/pass/bc3e0243cdc240be.js
+    - test/suite/js/pass/11444cd5fa127201.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/62b4bdacf41bb9b3.js
     - test/suite/js/pass/5d4c90d266c220de.js
     - test/suite/js/pass/86c6b77c336a166e.js
+    - test/suite/js/pass/3cdcd6d8147cb03c.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/782d096245de4836.js
     - test/suite/js/pass/9fd0bb42dbe60af7.js
     - test/suite/js/pass/aa9ec1a56729b466.js
     - test/suite/js/pass/02c2e1a25a995d03.js
-    - test/suite/js/pass/4bdace9cb10585e8.js
-    - test/suite/js/pass/f76e75ba682ff429.js
+    - test/suite/js/pass/e337421133687beb.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/56615444c4f2a727.module.js
     - test/suite/js/pass/77a0e66bdeb691a6.js
     - test/suite/js/pass/3861d718451c4459.js
-    - test/suite/js/pass/f94f2fa01da83c99.js
+    - test/suite/js/pass/500c113dc5f4871c.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/35cfa6c5aaf90998.js
     - test/suite/js/pass/c5f361000a339ba2.js
     - test/suite/js/pass/c65470f0f4cb4bd0.js
+    - test/suite/js/pass/f63963565fc4b5af.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/d76f84d184b859d6.js
     - test/suite/js/pass/655af8da63e8f6d5.js
     - test/suite/js/pass/eadfce103de53ff3.js
@@ -208,18 +207,14 @@ Results by Suite
     - test/suite/js/pass/f88391bc58e7b1ce.js
     - test/suite/js/pass/212f328a8e7371d3.js
     - test/suite/js/pass/05b1443976365323.js
-    - test/suite/js/pass/8007aaa096c94800.js
     - test/suite/js/pass/b0ed38e69ff88a1d.js
     - test/suite/js/pass/04b9612459a56ede.js
-    - test/suite/js/pass/0d1a1131db2953e3.js
     - test/suite/js/pass/c43da5d264216e8b.js
-    - test/suite/js/pass/f3adf126c6257c07.js
     - test/suite/js/pass/13cb506bd1420793.js
     - test/suite/js/pass/ad73caf1fed2dc55.js
     - test/suite/js/pass/20006a6776d42bd7.js
     - test/suite/js/pass/4981aec4d1785774.js
     - test/suite/js/pass/242cd80588ae1a33.js
-    - test/suite/js/pass/f02b2dbd8378e289.js
     - test/suite/js/pass/756c77f5080b3564.js
     - test/suite/js/pass/c49c74b3106b4b0b.js
     - test/suite/js/pass/a7c5f86966e8f462.js
@@ -233,11 +228,9 @@ Results by Suite
     - test/suite/js/pass/b956e0acea9b1058.js
     - test/suite/js/pass/734befbb3f29fa54.js
     - test/suite/js/pass/50016c6d479ee4d1.js
-    - test/suite/js/pass/acfac76e274adbc4.js
     - test/suite/js/pass/4f21f64e638ee720.js
     - test/suite/js/pass/f238c3e1d4860603.js
     - test/suite/js/pass/a55633141e1b02b4.js
-    - test/suite/js/pass/09888ee6c90d8943.js
     - test/suite/js/pass/428321a62e2be026.js
     - test/suite/js/pass/f2de373249196bae.js
     - test/suite/js/pass/c822c0d7569e8a84.js
@@ -262,9 +255,11 @@ Results by Suite
     - test/suite/js/pass/6cb597cc0137ffdb.js
     - test/suite/js/pass/37d22f16973305f1.js
     - test/suite/js/pass/4c2354b4cd055a48.js
+    - test/suite/js/pass/4c876dff0684566c.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/78620501e7cd7a72.js
     - test/suite/js/pass/ee0bedd2148a909d.js
     - test/suite/js/pass/2891b6ec095d2fd7.js
+    - test/suite/js/pass/92042bdd7de31401.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/4def01f280f32d99.js
     - test/suite/js/pass/e8239e6685cc1707.js
     - test/suite/js/pass/46975638cd68f5d2.js
@@ -277,6 +272,7 @@ Results by Suite
     - test/suite/js/pass/0029631c92735ffa.js
     - test/suite/js/pass/a2e149a078fcdc47.js
     - test/suite/js/pass/2ddc18ecf3905758.js
+    - test/suite/js/pass/d7b4764f48d8fdb3.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/c5cad087795bd3f3.js
     - test/suite/js/pass/861ec57633e8a6fb.js
     - test/suite/js/pass/05c531fdf62e9134.js
@@ -287,7 +283,6 @@ Results by Suite
     - test/suite/js/pass/aae525da7403afb0.js
     - test/suite/js/pass/6434091c72f67d23.js
     - test/suite/js/pass/c7252196e3436433.js
-    - test/suite/js/pass/aef758003e38af51.js
     - test/suite/js/pass/3d15e32fe3041ca7.js
     - test/suite/js/pass/3e89007d5ed09198.js
     - test/suite/js/pass/0d03fc0736b321fe.js
@@ -309,11 +304,16 @@ Results by Suite
     - test/suite/js/pass/d40af04e4dd20f23.js
     - test/suite/js/pass/94c57eee46f67acd.js
     - test/suite/js/pass/9f3a3ca36e4646a9.js
+    - test/suite/js/pass/411568ede24adf17.js (error: Error: Failed to parse source code)
+    - test/suite/js/pass/896a91a368b79942.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/4873ebaea99e5bd6.js
     - test/suite/js/pass/f632b7b4bd1babf1.js
     - test/suite/js/pass/43ee96e7e5d4e309.js
+    - test/suite/js/pass/1a30ae2930a06a09.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/0dcd3cf7c47054c2.js
     - test/suite/js/pass/387e468767a33a09.js
+    - test/suite/js/pass/fd664d62238d668a.js (error: Error: Failed to parse source code)
+    - test/suite/js/pass/b11a611eb9745804.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/04571759065dbf65.js
     - test/suite/js/pass/93dba0832f768c12.js
     - test/suite/js/pass/8e4368ec34334fb0.js
@@ -332,18 +332,15 @@ Results by Suite
     - test/suite/js/pass/cd3b4b53afebb2aa.js
     - test/suite/js/pass/8d498c6b47f74a10.js
     - test/suite/js/pass/ebdb418fa86f4b4e.js
-    - test/suite/js/pass/c22dcc8cb0cec38e.js
     - test/suite/js/pass/b6fc916d7104c2d7.js
     - test/suite/js/pass/a5278ac4ddf90b1b.js
     - test/suite/js/pass/b1cb95d6169f8446.js
     - test/suite/js/pass/2a4a765fca29aa41.js
-    - test/suite/js/pass/8ee289629a8a3429.js
     - test/suite/js/pass/5ccda44c9fa2421a.js
     - test/suite/js/pass/2a935ecfe7cca232.js
     - test/suite/js/pass/4089efddeb503f9b.js
     - test/suite/js/pass/4f5ef5021d254136.js
     - test/suite/js/pass/4f290d3030f0b381.js
-    - test/suite/js/pass/4a92a1ad662fdd6f.js
     - test/suite/js/pass/d234d513c075b3aa.js
     - test/suite/js/pass/a8138ac5de107670.js
     - test/suite/js/pass/a85e6f3d03410aca.js
@@ -354,27 +351,25 @@ Results by Suite
     - test/suite/js/pass/ca423724534aa2c5.js
     - test/suite/js/pass/ca4d8397661ae371.js
     - test/suite/js/pass/8736cdc1d4a8a9d0.js
-    - test/suite/js/pass/677a28fead37025d.js
     - test/suite/js/pass/58eceaf055ee743a.js
     - test/suite/js/pass/abeb8fe8363b2812.js
     - test/suite/js/pass/56d46b16311e9270.js
     - test/suite/js/pass/24d8626ad6e4cebe.js
     - test/suite/js/pass/8db12604789c2018.js
     - test/suite/js/pass/f2c4f4b63206c35a.js
-    - test/suite/js/pass/4462a60e3666f4ab.js
+    - test/suite/js/pass/3ff14beec8015e0e.js (error: Error: Failed to parse source code)
+    - test/suite/js/pass/7f3978db75a733b7.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/63ddba0cffc3345f.js
     - test/suite/js/pass/5107ddc7d9c51fc8.js
     - test/suite/js/pass/f3f9063d04a33d63.js
     - test/suite/js/pass/37224c47e09f12b6.js
     - test/suite/js/pass/34bcc62fa07528e6.js
     - test/suite/js/pass/f7267f0a4d07a669.js
-    - test/suite/js/pass/3f18818a1e60f01a.js
     - test/suite/js/pass/7bfa9635f12e73de.js
     - test/suite/js/pass/8eac02358f5a61c0.js
     - test/suite/js/pass/54fcc2fed064e22d.js
     - test/suite/js/pass/7252cb1e71120964.js
     - test/suite/js/pass/ced306395064876a.js
-    - test/suite/js/pass/500cf52a36662dd8.js
     - test/suite/js/pass/f3304f60c1b0620c.js
     - test/suite/js/pass/b7aafdb144ffe746.js
     - test/suite/js/pass/3cd25147aa11efc4.js
@@ -382,7 +377,6 @@ Results by Suite
     - test/suite/js/pass/4ca833b970f2f384.js
     - test/suite/js/pass/fc319af41ceb308e.js
     - test/suite/js/pass/323287ec6a080447.module.js
-    - test/suite/js/pass/e13314ec06ae4589.js
     - test/suite/js/pass/80810e858fb819cd.js
     - test/suite/js/pass/6963c841cffab1f6.js
     - test/suite/js/pass/546b7cd34a90193a.js
@@ -415,6 +409,7 @@ Results by Suite
     - test/suite/js/pass/565b57125b36aef8.js
     - test/suite/js/pass/79d5549c86e41f61.js
     - test/suite/js/pass/be8a21d0e2da975f.js
+    - test/suite/js/pass/f6d8d6b79543a9a0.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/00c433c9147cc661.js
     - test/suite/js/pass/1c7728eccf607184.js
     - test/suite/js/pass/84c3700e4c4de10f.js
@@ -423,52 +418,45 @@ Results by Suite
     - test/suite/js/pass/78c3152945fb2795.js
     - test/suite/js/pass/4d513c17428f7941.js
     - test/suite/js/pass/12e52c36313d72f3.js
-    - test/suite/js/pass/844a55f10d598ffd.js
+    - test/suite/js/pass/4acbb144d0923efe.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/3506c5c9dedd2f4e.js
     - test/suite/js/pass/a920dd78c2bb53a5.js
     - test/suite/js/pass/978d861516846a89.js
     - test/suite/js/pass/c583f8519a3a029d.js
-    - test/suite/js/pass/40f6d4c4689335f6.js
-    - test/suite/js/pass/c8425a5df903846e.js
     - test/suite/js/pass/77762a8d275af8ca.js
-    - test/suite/js/pass/77ae529cd29ea539.js
     - test/suite/js/pass/84023a01373aec37.js
     - test/suite/js/pass/d397e2fd2f91f122.module.js
     - test/suite/js/pass/a9c0a6f2a4cbd635.js
-    - test/suite/js/pass/cf99724387e64e2c.js
-    - test/suite/js/pass/f23829e861928ec6.js
     - test/suite/js/pass/d74117055a7455ea.js
     - test/suite/js/pass/633960740127d16c.js
     - test/suite/js/pass/eb72ccc6d90a966c.js
-    - test/suite/js/pass/28096f6ad12520fa.js
+    - test/suite/js/pass/37aa38c131bb059b.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/0a27991e5e33b892.js
-    - test/suite/js/pass/a1fa7b2965796db9.js
     - test/suite/js/pass/30355d4ad2d86a2b.js
     - test/suite/js/pass/cda1a6d2c9a4f0a3.js
     - test/suite/js/pass/8d07a7a56db6a8ad.js
     - test/suite/js/pass/5e49d1554463a489.js
     - test/suite/js/pass/783cbd944aefba3c.js
     - test/suite/js/pass/e8e160168f66e832.js
+    - test/suite/js/pass/7ac65536b701f413.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/7e01b0973d8dc990.js
     - test/suite/js/pass/8a325595801da0b0.js
-    - test/suite/js/pass/3f4807c8f59386e0.js
     - test/suite/js/pass/cef525f8b090bc9e.js
     - test/suite/js/pass/2e777c63e39fb18f.js
     - test/suite/js/pass/79a8bf923069b5b5.js
+    - test/suite/js/pass/9edbcbfa4f458ba3.js (error: Error: Failed to parse source code)
+    - test/suite/js/pass/6848c1fc1493d847.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/82597d7ef17df6de.js
-    - test/suite/js/pass/ba78a2fe150d117e.js
-    - test/suite/js/pass/f16e724af7df3d52.js
     - test/suite/js/pass/fe14421ef24602ea.js
     - test/suite/js/pass/e8ad0ccfb1a1543c.js
     - test/suite/js/pass/3e332ea1125feb21.js
-    - test/suite/js/pass/7659f36696d87b5c.js
     - test/suite/js/pass/ff7ab73c01f9aa89.js
     - test/suite/js/pass/13c69baf7bc98ace.js
     - test/suite/js/pass/d15164955c0b1d13.js
     - test/suite/js/pass/1911b2bf743afa21.js
     - test/suite/js/pass/0271d56f772ea75f.js
+    - test/suite/js/pass/d64afdda0e4c7715.js (error: Error: Failed to parse source code)
     - test/suite/js/pass/ed1644030cb136db.js
-    - test/suite/js/pass/9a228d3a83c5bc1e.js
     - test/suite/js/pass/7c63a5baad7f1a5d.js
     - test/suite/js/pass/33fa43bcfd5722e0.js
     - test/suite/js/pass/8c425c68cac51339.js
@@ -486,7 +474,6 @@ Results by Suite
     - test/suite/js/pass/6a944c4539ead5bf.js
     - test/suite/js/pass/f74671cb6760e363.js
     - test/suite/js/pass/3cede6b3581aeceb.js
-    - test/suite/js/pass/b68a054108e3dadd.js
     - test/suite/js/pass/34de75d28746dae5.js
     - test/suite/js/pass/b61d4b9da6f25d58.js
 

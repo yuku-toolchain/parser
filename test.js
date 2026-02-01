@@ -1,1 +1,1 @@
-await: cool
+const nice = 1.7976931348623156e+31
