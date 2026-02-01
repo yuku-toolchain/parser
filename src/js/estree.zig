@@ -636,7 +636,7 @@ pub const Serializer = struct {
         try self.beginObject();
         try self.fieldType("Literal");
         try self.fieldSpan(span);
-        if(std.mem.eql(u8, number, "inf")) {
+        if (std.mem.eql(u8, number, "inf")) {
             try self.fieldNull("value");
         } else {
             try self.field("value");
@@ -1366,19 +1366,9 @@ pub const Serializer = struct {
         try self.writeNull();
     }
 
-    fn fieldEmptyObject(self: *Self, key: []const u8) !void {
-        try self.field(key);
-        try self.write("{}");
-    }
-
     fn fieldEmptyArray(self: *Self, key: []const u8) !void {
         try self.field(key);
         try self.write("[]");
-    }
-
-    fn fieldRaw(self: *Self, key: []const u8, value: []const u8) !void {
-        try self.field(key);
-        try self.write(value);
     }
 
     fn fieldNodeArray(self: *Self, key: []const u8, range: ast.IndexRange) !void {
@@ -1586,27 +1576,13 @@ fn appendUtf8(out: *std.ArrayList(u8), allocator: std.mem.Allocator, cp: u21) !v
     try out.appendSlice(allocator, buf[0..len]);
 }
 
-/// normalize line terminators to LF (\n)
-/// handles CR, CRLF, and converts them all to LF
-/// returns the number of bytes consumed from source
+/// normalize CR and CRLF to LF, pass through everything else
 fn normalizeLineEnding(source: []const u8, pos: usize) struct { len: u8, normalized: u8 } {
     const c = source[pos];
-
-    // CRLF -> LF
     if (c == '\r') {
-        if (pos + 1 < source.len and source[pos + 1] == '\n') {
-            return .{ .len = 2, .normalized = '\n' };
-        }
-        // standalone CR -> LF
-        return .{ .len = 1, .normalized = '\n' };
+        const len: u8 = if (pos + 1 < source.len and source[pos + 1] == '\n') 2 else 1;
+        return .{ .len = len, .normalized = '\n' };
     }
-
-    // already LF, pass through
-    if (c == '\n') {
-        return .{ .len = 1, .normalized = '\n' };
-    }
-
-    // not a line ending
     return .{ .len = 1, .normalized = c };
 }
 
