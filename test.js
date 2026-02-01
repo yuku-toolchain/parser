@@ -1,1 +1,1 @@
-\u{0000}
+class a extends b { static prototype(){} }

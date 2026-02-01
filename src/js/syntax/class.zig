@@ -332,7 +332,6 @@ fn parseMethodDefinition(
         );
     }
 
-    // save and set context
     const saved_async = parser.context.in_async;
     const saved_generator = parser.context.in_generator;
 
@@ -345,6 +344,7 @@ fn parseMethodDefinition(
     }
 
     const func_start = parser.current_token.span.start;
+
     if (!try parser.expect(.left_paren, "Expected '(' to start method parameters", null)) return null;
 
     const params = try functions.parseFormalParamaters(parser, .unique_formal_parameters) orelse return null;
