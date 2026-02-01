@@ -629,18 +629,17 @@ pub const Serializer = struct {
     fn writeNumericLiteral(self: *Self, data: ast.NumericLiteral, span: ast.Span) !void {
         const raw = self.tree.getSourceText(data.raw_start, data.raw_len);
 
-        var buf: [64]u8 = undefined;
-
-        const number = try std.fmt.bufPrint(&buf, "{e}", .{try std.fmt.parseFloat(f64, raw)});
+        var sci_buf: [64]u8 = undefined;
+        const num_sci = try parseJSNumericToSciNotation(&sci_buf, raw);
 
         try self.beginObject();
         try self.fieldType("Literal");
         try self.fieldSpan(span);
-        if (std.mem.eql(u8, number, "inf")) {
+        if (std.mem.eql(u8, num_sci, "inf")) {
             try self.fieldNull("value");
         } else {
             try self.field("value");
-            try self.write(number);
+            try self.write(num_sci);
         }
         try self.fieldString("raw", raw);
         try self.endObject();
@@ -1602,6 +1601,49 @@ fn buildUtf16PosMap(allocator: std.mem.Allocator, source: []const u8) ![]u32 {
     }
     map[source.len] = utf16_pos;
     return map;
+}
+
+pub fn parseJSNumericToSciNotation(outbuf: []u8, str: []const u8) ![]const u8 {
+    // remove underscores
+    var buf: [128]u8 = undefined;
+    var len: usize = 0;
+    for (str) |c| {
+        if (c != '_') {
+            if (len >= buf.len) return error.Overflow;
+            buf[len] = c;
+            len += 1;
+        }
+    }
+    const s = buf[0..len];
+    if (s.len == 0) return error.InvalidCharacter;
+
+    var val: f64 = undefined;
+    if (s.len >= 2 and s[0] == '0') {
+        switch (s[1]) {
+            'x', 'X' => val = @floatFromInt(try std.fmt.parseInt(i64, s[2..], 16)),
+            'b', 'B' => val = @floatFromInt(try std.fmt.parseInt(i64, s[2..], 2)),
+            'o', 'O' => val = @floatFromInt(try std.fmt.parseInt(i64, s[2..], 8)),
+            '0'...'7' => {
+                var is_octal = true;
+                for (s[1..]) |c| {
+                    if (c < '0' or c > '7') {
+                        is_octal = false;
+                        break;
+                    }
+                }
+                if (is_octal) {
+                    val = @floatFromInt(try std.fmt.parseInt(i64, s[1..], 8));
+                } else {
+                    val = try std.fmt.parseFloat(f64, s);
+                }
+            },
+            else => val = try std.fmt.parseFloat(f64, s),
+        }
+    } else {
+        val = std.fmt.parseFloat(f64, s) catch @floatFromInt(try std.fmt.parseInt(i64, s, 10));
+    }
+
+    return std.fmt.bufPrint(outbuf, "{e}", .{val});
 }
 
 pub fn toJSON(tree: *const ast.ParseTree, allocator: std.mem.Allocator, options: EstreeJsonOptions) ![]u8 {

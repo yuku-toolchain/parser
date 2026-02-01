@@ -200,7 +200,7 @@ fn parseSwitchCases(parser: *Parser) Error!ast.IndexRange {
         try parser.scratch_a.append(parser.allocator(), case_node);
     }
 
-    return parser.addExtra(parser.scratch_a.take(checkpoint));
+    return parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint));
 }
 
 fn parseSwitchCase(parser: *Parser) Error!?ast.NodeIndex {
@@ -248,7 +248,7 @@ fn parseCaseConsequent(parser: *Parser) Error!ast.IndexRange {
         }
     }
 
-    return parser.addExtra(parser.scratch_b.take(checkpoint));
+    return parser.addExtra(try parser.scratch_b.take(parser.allocator(), checkpoint));
 }
 
 /// https://tc39.es/ecma262/#sec-if-statement
@@ -488,7 +488,7 @@ fn parseForWithDeclaration(parser: *Parser, start: u32, is_await: bool) Error!?a
         end = parser.getSpan(declarator).end;
     }
 
-    const declarators = parser.scratch_a.take(checkpoint);
+    const declarators = try parser.scratch_a.take(parser.allocator(), checkpoint);
 
     const declarators_range = try parser.addExtra(declarators);
 
@@ -785,7 +785,7 @@ fn createSingleDeclaration(parser: *Parser, kind: ast.VariableKind, declarator: 
 
     return try parser.addNode(.{
         .variable_declaration = .{
-            .declarators = try parser.addExtra(parser.scratch_a.take(checkpoint)),
+            .declarators = try parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint)),
             .kind = kind,
         },
     }, .{ .start = decl_start, .end = decl_end });

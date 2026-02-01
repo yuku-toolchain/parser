@@ -38,7 +38,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
         end = parser.current_token.span.end;
         try parser.advance() orelse return null;
         return .{
-            .elements = parser.scratch_cover.take(checkpoint),
+            .elements = try parser.scratch_cover.take(parser.allocator(), checkpoint),
             .start = start,
             .end = end,
             .has_trailing_comma = false,
@@ -109,7 +109,7 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
     try parser.advance() orelse return null; // consume )
 
     return .{
-        .elements = parser.scratch_cover.take(checkpoint),
+        .elements = try parser.scratch_cover.take(parser.allocator(), checkpoint),
         .start = start,
         .end = end,
         .has_trailing_comma = has_trailing_comma,
@@ -316,7 +316,7 @@ fn convertToFormalParameters(parser: *Parser, cover: ParenthesizedCover) Error!?
         try parser.scratch_cover.append(parser.allocator(), param);
     }
 
-    const items = try parser.addExtra(parser.scratch_cover.take(checkpoint));
+    const items = try parser.addExtra(try parser.scratch_cover.take(parser.allocator(), checkpoint));
 
     return try parser.addNode(
         .{ .formal_parameters = .{ .items = items, .rest = rest, .kind = .arrow_formal_parameters } },

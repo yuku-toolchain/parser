@@ -83,7 +83,7 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
     try parser.advance() orelse return null; // consume ]
 
     return .{
-        .elements = parser.scratch_cover.take(checkpoint),
+        .elements = try parser.scratch_cover.take(parser.allocator(), checkpoint),
         .start = start,
         .end = end,
     };

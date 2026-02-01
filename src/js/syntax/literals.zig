@@ -165,8 +165,8 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
 
     return try parser.addNode(.{
         .template_literal = .{
-            .quasis = try parser.addExtra(parser.scratch_a.take(quasis_checkpoint)),
-            .expressions = try parser.addExtra(parser.scratch_b.take(exprs_checkpoint)),
+            .quasis = try parser.addExtra(try parser.scratch_a.take(parser.allocator(), quasis_checkpoint)),
+            .expressions = try parser.addExtra(try parser.scratch_b.take(parser.allocator(), exprs_checkpoint)),
         },
     }, .{ .start = start, .end = end });
 }
@@ -239,7 +239,7 @@ pub inline fn validateIdentifier(parser: *Parser, comptime as_what: []const u8, 
         try parser.reportFmt(
             token.span,
             "Expected an identifier but found '{s}'",
-            .{  parser.describeToken(token) },
+            .{parser.describeToken(token)},
             .{ .help = "Identifiers must start with a letter, underscore (_), or dollar sign ($)" },
         );
 

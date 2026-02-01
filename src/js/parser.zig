@@ -146,7 +146,9 @@ pub const Parser = struct {
 
         self.state.current_scope_id -= 1;
 
-        return self.addExtra(self.scratch_statements.take(statements_checkpoint));
+        const body_slice = try self.scratch_statements.take(self.allocator(), statements_checkpoint);
+
+        return self.addExtra(body_slice);
     }
 
     inline fn isAtBodyEnd(self: *Parser, terminator: ?token.TokenType) bool {
@@ -402,10 +404,8 @@ const ScratchBuffer = struct {
         try self.items.append(alloc, index);
     }
 
-    pub inline fn take(self: *ScratchBuffer, checkpoint: usize) []const ast.NodeIndex {
-        const slice = self.items.items[checkpoint..];
-        self.items.shrinkRetainingCapacity(checkpoint);
-        return slice;
+    pub inline fn take(self: *ScratchBuffer, alloc: std.mem.Allocator, checkpoint: usize) Error![]const ast.NodeIndex {
+        return try alloc.dupe(ast.NodeIndex, self.items.items[checkpoint..self.items.items.len]);
     }
 
     pub inline fn reset(self: *ScratchBuffer, checkpoint: usize) void {

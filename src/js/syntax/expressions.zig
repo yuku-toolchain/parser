@@ -621,7 +621,7 @@ fn parseSequenceExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex)
         try parser.scratch_a.append(parser.allocator(), expr);
     }
 
-    const expressions = parser.scratch_a.take(checkpoint);
+    const expressions = try parser.scratch_a.take(parser.allocator(), checkpoint);
 
     const first_span = parser.getSpan(expressions[0]);
     const last_span = parser.getSpan(expressions[expressions.len - 1]);
@@ -914,7 +914,7 @@ fn parseArguments(parser: *Parser) Error!?ast.IndexRange {
     }
 
     parser.context.allow_in = saved_allow_in;
-    return try parser.addExtra(parser.scratch_a.take(checkpoint));
+    return try parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint));
 }
 
 /// tag`template`

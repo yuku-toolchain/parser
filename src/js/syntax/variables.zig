@@ -43,7 +43,7 @@ pub fn parseVariableDeclaration(parser: *Parser, await_using: bool) Error!?ast.N
     return try parser.addNode(
         .{
             .variable_declaration = .{
-                .declarators = try parser.addExtra(parser.scratch_a.take(checkpoint)),
+                .declarators = try parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint)),
                 .kind = kind,
             },
         },

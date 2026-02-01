@@ -81,7 +81,7 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
     try parser.advance() orelse return null; // consume }
 
     return .{
-        .properties = parser.scratch_cover.take(checkpoint),
+        .properties = try parser.scratch_cover.take(parser.allocator(), checkpoint),
         .start = start,
         .end = end,
     };

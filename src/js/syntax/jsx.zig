@@ -256,7 +256,7 @@ fn parseJsxChildren(parser: *Parser, gt_end: u32) Error!?ast.IndexRange {
         }
     }
 
-    return try parser.addExtra(parser.scratch_b.take(checkpoint));
+    return try parser.addExtra(try parser.scratch_b.take(parser.allocator(), checkpoint));
 }
 
 // https://facebook.github.io/jsx/#prod-JSXAttributes
@@ -269,7 +269,7 @@ fn parseJsxAttributes(parser: *Parser) Error!?ast.IndexRange {
         try parser.scratch_a.append(parser.allocator(), attr);
     }
 
-    return try parser.addExtra(parser.scratch_a.take(checkpoint));
+    return try parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint));
 }
 
 // https://facebook.github.io/jsx/#prod-JSXAttribute
