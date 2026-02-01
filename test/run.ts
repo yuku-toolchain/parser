@@ -115,6 +115,11 @@ const runTest = async (
     }
 
     if (type === "snapshot") {
+      if (hasErrors) {
+        result.failures.push(file)
+        return
+      }
+
       const dir = dirname(file)
       const snapshotsDir = join(dir, "snapshots")
       const base = getBaseName(file)
@@ -215,14 +220,14 @@ const saveResults = async () => {
     "Test Results",
     "============",
     "",
-    "Running TypeScript, Test262 and Babel test suites with AST matching ESTree/TypeScript-ESTree AST.",
+    "Running TypeScript, Test262 and Babel test suites with ESTree/TypeScript-ESTree AST matching.",
     "",
     "Summary",
     "-------",
     `Passed:      ${totalPassed}`,
     `Failed:      ${totalFailed}`,
     `Total:       ${totalTests}`,
-    `AST Matches: ${passRate}%`,
+    `Coverage:    ${passRate}%`,
     "",
     "Results by Suite",
     "----------------",

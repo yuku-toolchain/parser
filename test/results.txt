@@ -1,14 +1,14 @@
 Test Results
 ============
 
-Running TypeScript, Test262 and Babel test suites with AST matching ESTree/TypeScript-ESTree AST.
+Running TypeScript, Test262 and Babel test suites with ESTree/TypeScript-ESTree AST matching.
 
 Summary
 -------
-Passed:      37626
-Failed:      845
+Passed:      37617
+Failed:      854
 Total:       38471
-AST Matches: 97.80%
+Coverage:    97.78%
 
 Results by Suite
 ----------------
@@ -875,5 +875,16 @@ Results by Suite
 ✓ test/misc/jsx
   Passed: 1/1 (100.00%)
 
-✓ test/misc/js
-  Passed: 24/24 (100.00%)
+✗ test/misc/js
+  Passed: 15/24 (62.50%)
+  Failed: 9
+  Failures:
+    - test/misc/js/error-recovery-3.js
+    - test/misc/js/error-recovery-2.js
+    - test/misc/js/using-export.module.js
+    - test/misc/js/export-default-using.module.js
+    - test/misc/js/import-in-script.js
+    - test/misc/js/async-arrow-function-line-terminator-1.js
+    - test/misc/js/error-recovery-1.js
+    - test/misc/js/tagged-template-with-optional-chaining.js
+    - test/misc/js/error-recovery-4.js
