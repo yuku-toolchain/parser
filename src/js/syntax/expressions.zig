@@ -42,11 +42,10 @@ pub fn parseExpression(parser: *Parser, precedence: u8, opts: ParseExpressionOpt
 
         // `yield\n+a`
         // it's not a binary expression, these are separate 'YieldExpression (argument=null)'
-        // and an another 'UnaryExpression'
-        if (parser.current_token.has_line_terminator_before) {
-            if (left_data == .yield_expression) {
-                break;
-            }
+        // and an another 'UnaryExpression'.
+        // because 'yield' is an expression and a statement at the same time lol
+        if (parser.current_token.has_line_terminator_before and left_data == .yield_expression) {
+            break;
         }
 
         // only LeftHandSideExpressions can have postfix operations applied.
@@ -123,7 +122,7 @@ fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts, precedence: u8) Error
         return parseAwaitExpression(parser);
     }
 
-    if (token_type == .yield and parser.context.in_generator and precedence <= Precedence.Assignment) {
+    if (token_type == .yield and parser.context.in_generator) {
         return parseYieldExpression(parser);
     }
 
