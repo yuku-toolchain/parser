@@ -1236,7 +1236,7 @@ pub fn getLexicalErrorHelp(error_type: LexicalError) []const u8 {
         error.UnterminatedRegexLiteral => "Try adding a closing slash (/) here, optionally followed by flags (g, i, m, etc.)",
         error.InvalidRegexLineTerminator => "Try removing the line break here or escaping it within the regex pattern",
         error.InvalidRegex => "Try checking the regex syntax here for unclosed groups, invalid escapes, or malformed patterns",
-        error.InvalidRegexFlag => "Valid regex flags are: g (global), i (ignoreCase), m (multiline), s (dotAll), u (unicode), y (sticky), d (hasIndices)",
+        error.InvalidRegexFlag => "Valid regex flags are: `g` (global), `i` (ignoreCase), `m` (multiline), `s` (dotAll), `u` (unicode), `y` (sticky), `d` (hasIndices), `v` (setNotation)",
         error.DuplicateRegexFlag => "Remove the duplicate flag; each flag can only appear once",
         error.InvalidIdentifierStart => "Try starting the identifier here with a letter (a-z, A-Z), underscore (_), or dollar sign ($)",
         error.InvalidIdentifierContinue => "Try using a valid identifier character here (letters, digits, underscore, or dollar sign)",
