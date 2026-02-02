@@ -47,7 +47,7 @@ pub fn parseExpression(parser: *Parser, precedence: u8, opts: ParseExpressionOpt
             }
         }
 
-        const lbp = parser.current_token.leftBindingPower();
+        const lbp = parser.current_token.leftBp();
         if (lbp < precedence or lbp == 0) break;
 
         // only LeftHandSideExpressions can have postfix operations applied.
@@ -311,9 +311,14 @@ fn parseYieldExpression(parser: *Parser) Error!?ast.NodeIndex {
 
     var argument: ast.NodeIndex = ast.null_node;
 
-    if (!parser.canInsertSemicolon(parser.current_token) and
+    if (
+        // yield [no LineTerminator here] AssignmentExpression[?In, +Yield, ?Await]
+        !parser.canInsertSemicolon(parser.current_token) and
         parser.current_token.type != .semicolon)
     {
+        // the yield argument is optional.
+        // for example, `function* g() { [yield] }`. this passes the above condition,
+        // but the right side is not a valid expression, it's '['.
         if (try parseExpression(parser, Precedence.Assignment, .{ .optional = true })) |expr| {
             argument = expr;
             end = parser.getSpan(argument).end;

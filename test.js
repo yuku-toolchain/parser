@@ -1,1 +1,2 @@
-for (; false; ) yield
+await
+cool

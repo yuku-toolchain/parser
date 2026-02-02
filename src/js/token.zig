@@ -386,7 +386,7 @@ pub const Token = struct {
         return Token{ .lexeme = "", .span = .{ .start = pos, .end = pos }, .type = .eof, .has_line_terminator_before = false };
     }
 
-    pub fn leftBindingPower(self: *const Token) u5 {
+    pub fn leftBp(self: *const Token) u5 {
         // handle: [no LineTerminator here] ++ --
         if ((self.type == .increment or self.type == .decrement) and self.has_line_terminator_before) {
             return 0; // can't be infix, start new expression
