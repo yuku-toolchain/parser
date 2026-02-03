@@ -12,6 +12,7 @@ const literals = @import("literals.zig");
 const patterns = @import("patterns.zig");
 const functions = @import("functions.zig");
 const class = @import("class.zig");
+const extensions = @import("extensions.zig");
 const grammar = @import("../grammar.zig");
 const modules = @import("modules.zig");
 
@@ -27,7 +28,7 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
     }
 
     if (parser.current_token.type == .at) {
-        return class.parseDecoratedClass(parser, .{});
+        return extensions.parseDecorated(parser, .{});
     }
 
     if (opts.can_be_single_statement_context) {
@@ -87,7 +88,7 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
 
     const statement = switch (parser.current_token.type) {
         .function => functions.parseFunction(parser, .{}, null),
-        .class => class.parseClass(parser, .{}, null),
+        .class => class.parseClass(parser, .{}, null, ast.IndexRange.empty),
         .@"export" => modules.parseExportDeclaration(parser),
         .@"if" => parseIfStatement(parser),
         .@"switch" => parseSwitchStatement(parser),

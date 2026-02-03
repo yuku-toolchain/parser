@@ -13,6 +13,7 @@ const object = @import("object.zig");
 const literals = @import("literals.zig");
 const functions = @import("functions.zig");
 const class = @import("class.zig");
+const extensions = @import("extensions.zig");
 const parenthesized = @import("parenthesized.zig");
 const patterns = @import("patterns.zig");
 const modules = @import("modules.zig");
@@ -111,7 +112,7 @@ fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts, precedence: u8) Error
     }
 
     if (token_type == .at) {
-        return class.parseDecoratedClass(parser, .{ .is_expression = true });
+        return extensions.parseDecorated(parser, .{ .is_expression = true });
     }
 
     if (token_type.isUnaryOperator()) {
@@ -162,7 +163,7 @@ pub inline fn parsePrimaryExpression(parser: *Parser, opts: ParseExpressionOpts,
         .left_bracket => parseArrayExpression(parser, opts.in_cover),
         .left_brace => parseObjectExpression(parser, opts.in_cover),
         .function => functions.parseFunction(parser, .{ .is_expression = true }, null),
-        .class => class.parseClass(parser, .{ .is_expression = true }, null),
+        .class => class.parseClass(parser, .{ .is_expression = true }, null, ast.IndexRange.empty),
         .async => parseAsyncFunctionOrArrow(parser, precedence),
         else => {
             if (parser.current_token.type.isIdentifierLike()) {

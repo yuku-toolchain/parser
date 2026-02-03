@@ -10,6 +10,7 @@ const patterns = @import("patterns.zig");
 const functions = @import("functions.zig");
 const expressions = @import("expressions.zig");
 const statements = @import("statements.zig");
+const extensions = @import("extensions.zig");
 
 pub const ParseClassOpts = packed struct {
     is_expression: bool = false,
@@ -19,23 +20,8 @@ pub const ParseClassOpts = packed struct {
 
 /// class declaration or expression
 /// https://tc39.es/ecma262/#sec-class-definitions
-pub fn parseClass(parser: *Parser, opts: ParseClassOpts, start_from_param: ?u32) Error!?ast.NodeIndex {
+pub fn parseClass(parser: *Parser, opts: ParseClassOpts, start_from_param: ?u32, decorators: ast.IndexRange) Error!?ast.NodeIndex {
     const start = start_from_param orelse parser.current_token.span.start;
-    return parseClassWithDecorators(parser, opts, start, ast.IndexRange.empty);
-}
-
-pub fn parseDecoratedClass(parser: *Parser, opts: ParseClassOpts) Error!?ast.NodeIndex {
-    const start = parser.current_token.span.start;
-    const decorators = try parseDecorators(parser) orelse return null;
-    return parseClassWithDecorators(parser, opts, start, decorators);
-}
-
-fn parseClassWithDecorators(
-    parser: *Parser,
-    opts: ParseClassOpts,
-    start: u32,
-    decorators: ast.IndexRange,
-) Error!?ast.NodeIndex {
 
     if (!try parser.expect(.class, "Expected 'class' keyword", null)) return null;
 
@@ -82,32 +68,6 @@ fn parseClassWithDecorators(
             .body = body,
         },
     }, .{ .start = start, .end = body_end });
-}
-
-fn parseDecorators(parser: *Parser) Error!?ast.IndexRange {
-    const checkpoint = parser.scratch_decorators.begin();
-    defer parser.scratch_decorators.reset(checkpoint);
-
-    while (parser.current_token.type == .at) {
-        const decorator = try parseDecorator(parser) orelse return null;
-        try parser.scratch_decorators.append(parser.allocator(), decorator);
-    }
-
-    return try parser.addExtra(try parser.scratch_decorators.take(parser.allocator(), checkpoint));
-}
-
-fn parseDecorator(parser: *Parser) Error!?ast.NodeIndex {
-    const start = parser.current_token.span.start;
-    if (!try parser.expect(.at, "Expected '@' to start a decorator", null)) return null;
-
-    const expression = try expressions.parseLeftHandSideExpression(parser) orelse return null;
-    const end = parser.getSpan(expression).end;
-
-    return try parser.addNode(.{
-        .decorator = .{
-            .expression = expression,
-        },
-    }, .{ .start = start, .end = end });
 }
 
 /// class body: { ClassElementList }
@@ -157,7 +117,7 @@ fn parseClassElement(parser: *Parser) Error!?ast.NodeIndex {
 
     if (parser.current_token.type == .at) {
         elem_start = parser.current_token.span.start;
-        decorators = try parseDecorators(parser) orelse return null;
+        decorators = try extensions.parseDecorators(parser) orelse return null;
     }
 
     var is_static = false;

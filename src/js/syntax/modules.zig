@@ -10,6 +10,7 @@ const literals = @import("literals.zig");
 const patterns = @import("patterns.zig");
 const functions = @import("functions.zig");
 const class = @import("class.zig");
+const extensions = @import("extensions.zig");
 const variables = @import("variables.zig");
 
 pub fn parseImportDeclaration(parser: *Parser) Error!?ast.NodeIndex {
@@ -365,12 +366,12 @@ fn parseExportDefaultDeclaration(parser: *Parser, start: u32) Error!?ast.NodeInd
 
     // export default class [name] {}
     else if (parser.current_token.type == .class) {
-        declaration = try class.parseClass(parser, .{ .is_default_export = true }, null) orelse return null;
+        declaration = try class.parseClass(parser, .{ .is_default_export = true }, null, ast.IndexRange.empty) orelse return null;
         is_decl = true;
     }
     // export default @decorator class [name] {}
     else if (parser.current_token.type == .at) {
-        declaration = try class.parseDecoratedClass(parser, .{ .is_default_export = true }) orelse return null;
+        declaration = try extensions.parseDecorated(parser, .{ .is_default_export = true }) orelse return null;
         is_decl = true;
     }
     // export default expression
@@ -498,10 +499,10 @@ fn parseExportWithDeclaration(parser: *Parser, start: u32) Error!?ast.NodeIndex 
             declaration = try functions.parseFunction(parser, .{ .is_async = true }, async_start) orelse return null;
         },
         .class => {
-            declaration = try class.parseClass(parser, .{}, null) orelse return null;
+            declaration = try class.parseClass(parser, .{}, null, ast.IndexRange.empty) orelse return null;
         },
         .at => {
-            declaration = try class.parseDecoratedClass(parser, .{}) orelse return null;
+            declaration = try extensions.parseDecorated(parser, .{}) orelse return null;
         },
         else => {
             try parser.report(parser.current_token.span, "Expected declaration after 'export'", .{
