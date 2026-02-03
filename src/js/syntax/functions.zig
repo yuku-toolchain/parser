@@ -38,20 +38,37 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts, start_from_param:
     }
 
     const saved_async = parser.context.in_async;
-    const saved_generator = parser.context.in_generator;
+    const saved_yield_is_keyword = parser.context.yield_is_keyword;
 
     parser.context.in_async = opts.is_async;
-    parser.context.in_generator = is_generator;
 
     defer {
         parser.context.in_async = saved_async;
-        parser.context.in_generator = saved_generator;
+        parser.context.yield_is_keyword = saved_yield_is_keyword;
     }
+
+    const outer_yield_is_keyword = parser.context.yield_is_keyword;
+
+    // names use different yield-keyword rules for declarations vs expressions.
+    // inside a generator body:
+    // - `function yield(){}` (declaration) is invalid.
+    // - `(function yield(){})` (expression) is ok.
+    // - `(function* yield(){})` is invalid.
+    const name_yield_is_keyword = switch (function_type) {
+        .function_expression => is_generator,
+        else => outer_yield_is_keyword,
+    };
+
+    parser.context.yield_is_keyword = name_yield_is_keyword;
 
     const id = if (parser.current_token.type.isIdentifierLike())
         try patterns.parseBindingIdentifier(parser) orelse ast.null_node
     else
         ast.null_node;
+
+    // params/body are validated in the function's generator context.
+    // example: `function* yield(){}` ok, but `function* f(yield){}` is not.
+    parser.context.yield_is_keyword = is_generator;
 
     // name is required for regular function declarations, but optional for:
     // - function expressions

@@ -257,7 +257,7 @@ pub inline fn validateIdentifier(parser: *Parser, comptime as_what: []const u8, 
         return false;
     }
 
-    if (token.type == .yield and parser.context.in_generator) {
+    if (token.type == .yield and parser.context.yield_is_keyword) {
         try parser.reportFmt(
             token.span,
             "Cannot use 'yield' as {s} in a generator context",

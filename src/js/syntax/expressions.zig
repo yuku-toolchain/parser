@@ -127,7 +127,7 @@ fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts, precedence: u8) Error
         return parseAwaitExpression(parser);
     }
 
-    if (token_type == .yield and parser.context.in_generator) {
+    if (token_type == .yield and parser.context.yield_is_keyword) {
         return parseYieldExpression(parser);
     }
 

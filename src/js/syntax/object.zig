@@ -311,14 +311,14 @@ fn parseObjectMethodProperty(
     }
 
     const saved_async = parser.context.in_async;
-    const saved_generator = parser.context.in_generator;
+    const saved_yield_is_keyword = parser.context.yield_is_keyword;
 
     parser.context.in_async = is_async;
-    parser.context.in_generator = is_generator;
+    parser.context.yield_is_keyword = is_generator;
 
     defer {
         parser.context.in_async = saved_async;
-        parser.context.in_generator = saved_generator;
+        parser.context.yield_is_keyword = saved_yield_is_keyword;
     }
 
     const func_start = parser.current_token.span.start;

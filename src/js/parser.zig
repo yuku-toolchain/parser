@@ -16,7 +16,8 @@ pub const Options = struct {
 
 const ParserContext = struct {
     in_async: bool = false,
-    in_generator: bool = false,
+    /// When true, `yield` is a keyword (allowed as an expression, disallowed as an identifier).
+    yield_is_keyword: bool = false,
     allow_in: bool = true,
     in_function: bool = false,
     /// Whether we're parsing a single statement.
