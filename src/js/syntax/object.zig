@@ -439,22 +439,32 @@ fn toObjectPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, properties_
                 return null;
             }
 
-            const arg = prop_data.spread_element.argument;
+            // spread_element to binding_rest_element
+            try grammar.expressionToPattern(parser, prop, context) orelse return null;
+
+            const rest_data = parser.getData(prop).binding_rest_element;
+            const arg = rest_data.argument;
             const arg_data = parser.getData(arg);
 
-            if (arg_data != .identifier_reference) {
-                try parser.report(parser.getSpan(arg), "Rest element argument must be an identifier", .{
-                    .help = "Object rest patterns only accept simple identifiers.",
-                });
-                return null;
+            switch (context) {
+                .binding => {
+                    if (arg_data != .binding_identifier) {
+                        try parser.report(parser.getSpan(arg), "Rest element argument must be an identifier", .{
+                            .help = "Object rest patterns only accept simple identifiers.",
+                        });
+                    }
+                },
+                .assignable => {
+                    if (arg_data != .binding_identifier and arg_data != .member_expression) {
+                        try parser.report(
+                            parser.getSpan(arg),
+                            "Rest element argument must be an identifier or member expression",
+                            .{ .help = "Object rest assignment only accepts identifiers or member expressions." },
+                        );
+                    }
+                },
             }
 
-            parser.setData(arg, .{ .binding_identifier = .{
-                .name_start = arg_data.identifier_reference.name_start,
-                .name_len = arg_data.identifier_reference.name_len,
-            } });
-
-            parser.setData(prop, .{ .binding_rest_element = .{ .argument = arg } });
             rest = prop;
             properties_len = @intCast(i);
             break;

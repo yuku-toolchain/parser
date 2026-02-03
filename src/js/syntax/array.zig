@@ -123,6 +123,7 @@ fn toArrayPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, elements_ran
         if (ast.isNull(elem)) continue;
 
         const elem_data = parser.getData(elem);
+
         if (elem_data == .spread_element) {
             if (parser.state.cover_has_trailing_comma == span.start) {
                 try parser.report(span, "Rest element cannot have a trailing comma in array destructuring.", .{
@@ -141,9 +142,8 @@ fn toArrayPatternImpl(parser: *Parser, mutate_node: ?ast.NodeIndex, elements_ran
                 return null;
             }
 
-            try grammar.expressionToPattern(parser, elem_data.spread_element.argument, context) orelse return null;
-
-            parser.setData(elem, .{ .binding_rest_element = .{ .argument = elem_data.spread_element.argument } });
+            // spread_element to binding_rest_element
+            try grammar.expressionToPattern(parser, elem, context) orelse return null;
             rest = elem;
             elements_len = @intCast(i);
             break;

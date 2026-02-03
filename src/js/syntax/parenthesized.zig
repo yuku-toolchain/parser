@@ -300,14 +300,9 @@ fn convertToFormalParameters(parser: *Parser, cover: ParenthesizedCover) Error!?
         }
 
         if (parser.getData(elem) == .spread_element) {
-            const spread_data = parser.getData(elem).spread_element;
-
-            try grammar.expressionToPattern(parser, spread_data.argument, .binding) orelse return null;
-
-            parser.setData(elem, .{ .binding_rest_element = .{ .argument = spread_data.argument } });
-
+            // spread_element to binding_rest_element
+            try grammar.expressionToPattern(parser, elem, .binding) orelse return null;
             rest = elem;
-
             continue;
         }
 

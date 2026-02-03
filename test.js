@@ -1,1 +1,1 @@
-@decorator
+({ ...foo() } = obj);

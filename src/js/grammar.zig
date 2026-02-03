@@ -142,6 +142,12 @@ pub fn expressionToPattern(
             try object.toObjectPattern(parser, expr, obj.properties, parser.getSpan(expr), context) orelse return null;
         },
 
+        .spread_element => |spread| {
+            const arg = spread.argument;
+            try expressionToPattern(parser, arg, context) orelse return null;
+            parser.setData(expr, .{ .binding_rest_element = .{ .argument = arg } });
+        },
+
         .chain_expression => {
             try parser.report(
                 parser.getSpan(expr),

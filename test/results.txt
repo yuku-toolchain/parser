@@ -5,32 +5,29 @@ Running TypeScript, Test262 and Babel test suites with ESTree/TypeScript-ESTree 
 
 Summary
 -------
-Passed:      38331
-Failed:      79
+Passed:      38340
+Failed:      70
 Total:       38410
-Coverage:    99.79%
+Coverage:    99.82%
 
 Results by Suite
 ----------------
 
 ✗ test/suite/js/pass
-  Passed: 37481/37553 (99.81%)
-  Failed: 72
+  Passed: 37490/37553 (99.83%)
+  Failed: 63
   Failures:
     - test/suite/js/pass/91fe55e6dd38d465.js
     - test/suite/js/pass/a0fc601115be8dac.js
     - test/suite/js/pass/9db2f500fb73d4b3.js
     - test/suite/js/pass/abf30856c52cbc08.js
     - test/suite/js/pass/c4e2bc7110d2242c.js
-    - test/suite/js/pass/8b8f055d2e1c91f4.js
     - test/suite/js/pass/bc785eac79d91704.js
     - test/suite/js/pass/cd613bd8ca030563.js
     - test/suite/js/pass/03e5f95c0f966156.js
-    - test/suite/js/pass/de48922d9cbaae07.js
     - test/suite/js/pass/9e0e3a7bd9c32070.js
     - test/suite/js/pass/80eba225d5dccaf7.js
     - test/suite/js/pass/4cf7dcf9ec3d5490.js
-    - test/suite/js/pass/028cb82125592036.js
     - test/suite/js/pass/e7e96a092e4ae71b.js
     - test/suite/js/pass/37a7850f313127a8.module.js
     - test/suite/js/pass/6af9cd6987b592c3.js
@@ -49,12 +46,8 @@ Results by Suite
     - test/suite/js/pass/08677349704af264.js
     - test/suite/js/pass/734befbb3f29fa54.js
     - test/suite/js/pass/e9be8ed11bcdfcc2.js
-    - test/suite/js/pass/2891b6ec095d2fd7.js
     - test/suite/js/pass/a2e149a078fcdc47.js
     - test/suite/js/pass/6434091c72f67d23.js
-    - test/suite/js/pass/9eb2f78256f150fd.js
-    - test/suite/js/pass/5ca28daebfee3b93.js
-    - test/suite/js/pass/a25c8d3cadd2edf1.js
     - test/suite/js/pass/4dd46d3523507053.js
     - test/suite/js/pass/f632b7b4bd1babf1.js
     - test/suite/js/pass/93dba0832f768c12.js
@@ -77,7 +70,6 @@ Results by Suite
     - test/suite/js/pass/12ee9a68fce89bc4.js
     - test/suite/js/pass/7a6f20d74aed16d8.module.js
     - test/suite/js/pass/1b74c047bfb0d4a8.js
-    - test/suite/js/pass/84c3700e4c4de10f.js
     - test/suite/js/pass/4d513c17428f7941.js
     - test/suite/js/pass/978d861516846a89.js
     - test/suite/js/pass/77762a8d275af8ca.js
@@ -86,7 +78,6 @@ Results by Suite
     - test/suite/js/pass/3e332ea1125feb21.js
     - test/suite/js/pass/ff7ab73c01f9aa89.js
     - test/suite/js/pass/c30bfb9ed55f7d54.js
-    - test/suite/js/pass/f74671cb6760e363.js
     - test/suite/js/pass/3cede6b3581aeceb.js
     - test/suite/js/pass/b61d4b9da6f25d58.js
 
