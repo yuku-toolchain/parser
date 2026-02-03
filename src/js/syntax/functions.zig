@@ -37,14 +37,6 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts, start_from_param:
         try parser.advance() orelse return null;
     }
 
-    parser.context.in_async = false;
-    parser.context.in_generator = false;
-
-    const id = if (parser.current_token.type.isIdentifierLike())
-        try patterns.parseBindingIdentifier(parser) orelse ast.null_node
-    else
-        ast.null_node;
-
     const saved_async = parser.context.in_async;
     const saved_generator = parser.context.in_generator;
 
@@ -55,6 +47,11 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts, start_from_param:
         parser.context.in_async = saved_async;
         parser.context.in_generator = saved_generator;
     }
+
+    const id = if (parser.current_token.type.isIdentifierLike())
+        try patterns.parseBindingIdentifier(parser) orelse ast.null_node
+    else
+        ast.null_node;
 
     // name is required for regular function declarations, but optional for:
     // - function expressions
