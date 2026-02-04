@@ -54,12 +54,10 @@ pub fn parseFunction(parser: *Parser, opts: ParseFunctionOpts, start_from_param:
     // - `function yield(){}` (declaration) is invalid.
     // - `(function yield(){})` (expression) is ok.
     // - `(function* yield(){})` is invalid.
-    const name_yield_is_keyword = switch (function_type) {
+    parser.context.yield_is_keyword = switch (function_type) {
         .function_expression => is_generator,
         else => outer_yield_is_keyword,
     };
-
-    parser.context.yield_is_keyword = name_yield_is_keyword;
 
     const id = if (parser.current_token.type.isIdentifierLike())
         try patterns.parseBindingIdentifier(parser) orelse ast.null_node
