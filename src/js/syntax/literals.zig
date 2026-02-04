@@ -268,10 +268,10 @@ pub inline fn validateIdentifier(parser: *Parser, comptime as_what: []const u8, 
         return false;
     }
 
-    if (token.type == .await and parser.context.in_async) {
+    if (token.type == .await and (parser.context.in_async or parser.isModule())) {
         try parser.reportFmt(
             token.span,
-            "Cannot use `await` as {s} in an async context",
+            "Cannot use `await` as {s} in an async or module context",
             .{as_what},
             .{},
         );
