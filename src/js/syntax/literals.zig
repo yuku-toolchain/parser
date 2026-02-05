@@ -165,8 +165,8 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
 
     return try parser.addNode(.{
         .template_literal = .{
-            .quasis = try parser.addExtra(try parser.scratch_a.take(parser.allocator(), quasis_checkpoint)),
-            .expressions = try parser.addExtra(try parser.scratch_b.take(parser.allocator(), exprs_checkpoint)),
+            .quasis = try parser.addExtraFromScratch(&parser.scratch_a, quasis_checkpoint),
+            .expressions = try parser.addExtraFromScratch(&parser.scratch_b, exprs_checkpoint),
         },
     }, .{ .start = start, .end = end });
 }

@@ -148,9 +148,7 @@ pub const Parser = struct {
 
         self.state.current_scope_id -= 1;
 
-        const body_slice = try self.scratch_statements.take(self.allocator(), statements_checkpoint);
-
-        return self.addExtra(body_slice);
+        return self.addExtraFromScratch(&self.scratch_statements, statements_checkpoint);
     }
 
     inline fn isAtBodyEnd(self: *Parser, terminator: ?token.TokenType) bool {
@@ -178,14 +176,38 @@ pub const Parser = struct {
 
     pub inline fn addNode(self: *Parser, data: ast.NodeData, span: ast.Span) Error!ast.NodeIndex {
         const index: ast.NodeIndex = @intCast(self.nodes.len);
-        try self.nodes.append(self.allocator(), .{ .data = data, .span = span });
+        if (self.nodes.len < self.nodes.capacity) {
+            self.nodes.appendAssumeCapacity(.{ .data = data, .span = span });
+        } else {
+            try self.nodes.append(self.allocator(), .{ .data = data, .span = span });
+        }
         return index;
     }
 
     pub fn addExtra(self: *Parser, indices: []const ast.NodeIndex) Error!ast.IndexRange {
         const start: u32 = @intCast(self.extra.items.len);
         const len: u32 = @intCast(indices.len);
-        try self.extra.appendSlice(self.allocator(), indices);
+        if (self.extra.items.len + indices.len <= self.extra.capacity) {
+            self.extra.appendSliceAssumeCapacity(indices);
+        } else {
+            try self.extra.appendSlice(self.allocator(), indices);
+        }
+        return .{ .start = start, .len = len };
+    }
+
+    pub fn addExtraFromScratch(self: *Parser, scratch: *ScratchBuffer, checkpoint: usize) Error!ast.IndexRange {
+        const start: u32 = @intCast(self.extra.items.len);
+        const slice = scratch.items.items[checkpoint..scratch.items.items.len];
+        const len: u32 = @intCast(slice.len);
+
+        if (slice.len > 0) {
+            if (self.extra.items.len + slice.len <= self.extra.capacity) {
+                self.extra.appendSliceAssumeCapacity(slice);
+            } else {
+                try self.extra.appendSlice(self.allocator(), slice);
+            }
+        }
+
         return .{ .start = start, .len = len };
     }
 
@@ -403,7 +425,11 @@ const ScratchBuffer = struct {
     }
 
     pub inline fn append(self: *ScratchBuffer, alloc: std.mem.Allocator, index: ast.NodeIndex) Error!void {
-        try self.items.append(alloc, index);
+        if (self.items.items.len < self.items.capacity) {
+            self.items.appendAssumeCapacity(index);
+        } else {
+            try self.items.append(alloc, index);
+        }
     }
 
     pub inline fn take(self: *ScratchBuffer, alloc: std.mem.Allocator, checkpoint: usize) Error![]const ast.NodeIndex {

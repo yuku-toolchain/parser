@@ -77,7 +77,7 @@ pub const Lexer = struct {
             .state = .{},
 
             .cursor = 0,
-            .comments = try .initCapacity(allocator, source.len / 3),
+            .comments = try .initCapacity(allocator, @max(64, @min(source.len / 64, 131_072))),
             .allocator = allocator,
             .source_type = source_type,
         };
@@ -232,10 +232,11 @@ pub const Lexer = struct {
     }
 
     inline fn peek(self: *const Lexer, offset: u32) u8 {
-        if (offset > self.source.len or self.cursor >= self.source.len - offset) {
+        const idx = @as(usize, self.cursor) + offset;
+        if (idx >= self.source.len) {
             return 0;
         }
-        return self.source[self.cursor + offset];
+        return self.source[idx];
     }
 
     inline fn canStartIdentifierAscii(c: u8) bool {
@@ -583,7 +584,7 @@ pub const Lexer = struct {
         const c1 = self.peek(1);
         const c2 = self.peek(2);
 
-        if (std.ascii.isDigit(c1)) {
+        if (c1 >= '0' and c1 <= '9') {
             return self.scanNumber();
         }
         if (c1 == '.' and c2 == '.') {
@@ -595,7 +596,7 @@ pub const Lexer = struct {
     inline fn scanIdentifierBody(self: *Lexer, is_jsx_tag: bool) !void {
         while (self.cursor < self.source.len) {
             const c = self.source[self.cursor];
-            if (std.ascii.isAscii(c)) {
+            if (c < 0x80) {
                 @branchHint(.likely);
                 if (c == '\\') {
                     @branchHint(.cold);
@@ -641,7 +642,7 @@ pub const Lexer = struct {
         }
 
         const first_char = self.source[self.cursor];
-        if (std.ascii.isAscii(first_char)) {
+        if (first_char < 0x80) {
             @branchHint(.likely);
             if (first_char == '\\') {
                 // JSX tag names don't support escape sequences
@@ -833,25 +834,27 @@ pub const Lexer = struct {
         var is_legacy_octal = false;
 
         // handle prefixes: 0x, 0o, 0b
+        var has_decimal_or_exponent = false;
+
         if (self.source[self.cursor] == '0') {
-            const prefix = std.ascii.toLower(self.peek(1));
+            const prefix = self.peek(1);
 
             switch (prefix) {
-                'x' => {
+                'x', 'X' => {
                     token_type = .hex_literal;
                     self.cursor += 2;
                     const hex_start = self.cursor;
                     try self.consumeHexDigits();
                     if (self.cursor == hex_start) return error.InvalidHexLiteral;
                 },
-                'o' => {
+                'o', 'O' => {
                     token_type = .octal_literal;
                     self.cursor += 2;
                     const oct_start = self.cursor;
                     try self.consumeOctalDigits();
                     if (self.cursor == oct_start) return error.InvalidOctalLiteralDigit;
                 },
-                'b' => {
+                'b', 'B' => {
                     token_type = .binary_literal;
                     self.cursor += 2;
                     const bin_start = self.cursor;
@@ -889,18 +892,20 @@ pub const Lexer = struct {
             const next = self.peek(1);
             if (next == '_') return error.NumericSeparatorMisuse;
 
-            if (is_legacy_octal and !std.ascii.isDigit(next)) {
+            if (is_legacy_octal and !(next >= '0' and next <= '9')) {
                 // don't consume the '.', it's member access (e.g., 01.toString())
             } else {
                 self.cursor += 1;
-                if (std.ascii.isDigit(next)) try self.consumeDecimalDigits();
+                has_decimal_or_exponent = true;
+                if (next >= '0' and next <= '9') try self.consumeDecimalDigits();
             }
         }
 
         // handle exponent (only for regular numbers)
         if (token_type == .numeric_literal and self.cursor < self.source.len) {
-            const exp_char = std.ascii.toLower(self.source[self.cursor]);
-            if (exp_char == 'e') {
+            const exp_char = self.source[self.cursor];
+            if (exp_char == 'e' or exp_char == 'E') {
+                has_decimal_or_exponent = true;
                 try self.consumeExponent();
             }
         }
@@ -908,13 +913,8 @@ pub const Lexer = struct {
         // handle bigint suffix 'n'
         if (self.cursor < self.source.len and self.source[self.cursor] == 'n') {
             // bigint cannot have decimal point or exponent
-            if (token_type == .numeric_literal) {
-                const lexeme = self.source[start..self.cursor];
-                for (lexeme) |c| {
-                    if (c == '.' or std.ascii.toLower(c) == 'e') {
-                        return error.InvalidBigIntSuffix;
-                    }
-                }
+            if (token_type == .numeric_literal and has_decimal_or_exponent) {
+                return error.InvalidBigIntSuffix;
             }
 
             self.cursor += 1;
@@ -1002,7 +1002,7 @@ pub const Lexer = struct {
         while (self.cursor < self.source.len) {
             const c = self.source[self.cursor];
 
-            if (std.ascii.isAscii(c)) {
+            if (c < 0x80) {
                 @branchHint(.likely);
 
                 switch (c) {

@@ -311,7 +311,7 @@ fn convertToFormalParameters(parser: *Parser, cover: ParenthesizedCover) Error!?
         try parser.scratch_cover.append(parser.allocator(), param);
     }
 
-    const items = try parser.addExtra(try parser.scratch_cover.take(parser.allocator(), checkpoint));
+    const items = try parser.addExtraFromScratch(&parser.scratch_cover, checkpoint);
 
     return try parser.addNode(
         .{ .formal_parameters = .{ .items = items, .rest = rest, .kind = .arrow_formal_parameters } },

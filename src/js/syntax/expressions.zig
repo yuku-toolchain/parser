@@ -629,7 +629,7 @@ fn parseSequenceExpression(parser: *Parser, precedence: u8, left: ast.NodeIndex)
     const last_span = parser.getSpan(expressions[expressions.len - 1]);
 
     return try parser.addNode(
-        .{ .sequence_expression = .{ .expressions = try parser.addExtra(expressions) } },
+        .{ .sequence_expression = .{ .expressions = try parser.addExtraFromScratch(&parser.scratch_a, checkpoint) } },
         .{ .start = first_span.start, .end = last_span.end },
     );
 }
@@ -916,7 +916,7 @@ fn parseArguments(parser: *Parser) Error!?ast.IndexRange {
     }
 
     parser.context.allow_in = saved_allow_in;
-    return try parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint));
+    return try parser.addExtraFromScratch(&parser.scratch_a, checkpoint);
 }
 
 /// tag`template`

@@ -102,7 +102,7 @@ fn parseImportClause(parser: *Parser) Error!?ast.IndexRange {
     if (parser.current_token.type == .star) {
         const ns = try parseImportNamespaceSpecifier(parser) orelse return null;
         try parser.scratch_a.append(parser.allocator(), ns);
-        return try parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint));
+        return try parser.addExtraFromScratch(&parser.scratch_a, checkpoint);
     }
 
     // named imports: { foo, bar }
@@ -135,7 +135,7 @@ fn parseImportClause(parser: *Parser) Error!?ast.IndexRange {
         }
     }
 
-    return try parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint));
+    return try parser.addExtraFromScratch(&parser.scratch_a, checkpoint);
 }
 
 /// default import specifier: import foo from 'module'
@@ -193,7 +193,7 @@ fn parseNamedImports(parser: *Parser) Error!?ast.IndexRange {
 
     if (!try parser.expect(.right_brace, "Expected '}' to close named imports", null)) return null;
 
-    return try parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint));
+    return try parser.addExtraFromScratch(&parser.scratch_a, checkpoint);
 }
 
 /// import specifier: foo or foo as bar or "string" as bar
@@ -555,7 +555,7 @@ fn parseExportSpecifiers(parser: *Parser) Error!?ExportSpecifiersResult {
     if (!try parser.expect(.right_brace, "Expected '}' to close export specifiers", null)) return null;
 
     return .{
-        .specifiers = try parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint)),
+        .specifiers = try parser.addExtraFromScratch(&parser.scratch_a, checkpoint),
         .local_token_types = try parser.scratch_b.take(parser.allocator(), token_checkpoint),
     };
 }
@@ -648,7 +648,7 @@ fn parseWithClause(parser: *Parser) Error!ast.IndexRange {
         return ast.IndexRange.empty;
     }
 
-    return parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint));
+    return parser.addExtraFromScratch(&parser.scratch_a, checkpoint);
 }
 
 /// ImportAttribute: key : value

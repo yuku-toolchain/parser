@@ -228,7 +228,7 @@ fn parseSwitchCases(parser: *Parser) Error!ast.IndexRange {
         try parser.scratch_a.append(parser.allocator(), case_node);
     }
 
-    return parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint));
+    return parser.addExtraFromScratch(&parser.scratch_a, checkpoint);
 }
 
 fn parseSwitchCase(parser: *Parser) Error!?ast.NodeIndex {
@@ -276,7 +276,7 @@ fn parseCaseConsequent(parser: *Parser) Error!ast.IndexRange {
         }
     }
 
-    return parser.addExtra(try parser.scratch_b.take(parser.allocator(), checkpoint));
+    return parser.addExtraFromScratch(&parser.scratch_b, checkpoint);
 }
 
 /// https://tc39.es/ecma262/#sec-if-statement
@@ -551,9 +551,9 @@ fn parseForWithDeclaration(parser: *Parser, start: u32, is_for_await: bool, kind
         end = parser.getSpan(declarator).end;
     }
 
-    const declarators = try parser.scratch_a.take(parser.allocator(), checkpoint);
+    const declarators = parser.scratch_a.items.items[checkpoint..parser.scratch_a.items.items.len];
 
-    const declarators_range = try parser.addExtra(declarators);
+    const declarators_range = try parser.addExtraFromScratch(&parser.scratch_a, checkpoint);
 
     // init is required for non idenitifer id's in regular loop
     // for example, this is an error:
@@ -835,7 +835,7 @@ fn createSingleDeclaration(parser: *Parser, kind: ast.VariableKind, declarator: 
 
     return try parser.addNode(.{
         .variable_declaration = .{
-            .declarators = try parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint)),
+            .declarators = try parser.addExtraFromScratch(&parser.scratch_a, checkpoint),
             .kind = kind,
         },
     }, .{ .start = decl_start, .end = decl_end });

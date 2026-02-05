@@ -116,7 +116,7 @@ fn parseClassBody(parser: *Parser) Error!?ast.NodeIndex {
     )) return null;
 
     return try parser.addNode(.{
-        .class_body = .{ .body = try parser.addExtra(try parser.scratch_a.take(parser.allocator(), checkpoint)) },
+        .class_body = .{ .body = try parser.addExtraFromScratch(&parser.scratch_a, checkpoint) },
     }, .{ .start = start, .end = end });
 }
 

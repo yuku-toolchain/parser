@@ -207,7 +207,7 @@ pub fn parseFormalParamaters(parser: *Parser, kind: ast.FormalParameterKind) Err
     }
 
     return try parser.addNode(.{ .formal_parameters = .{
-        .items = try parser.addExtra(try parser.scratch_a.take(parser.allocator(), params_checkpoint)),
+        .items = try parser.addExtraFromScratch(&parser.scratch_a, params_checkpoint),
         .rest = rest,
         .kind = kind,
     } }, .{ .start = start, .end = end });
