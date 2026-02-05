@@ -123,7 +123,7 @@ fn parseExpressionStatementOrLabeledOrDirective(parser: *Parser) Error!?ast.Node
 
     const start = expression_span.start;
 
-    if (expression_data == .string_literal and parser.state.in_directive_prologue) {
+    if (expression_data == .string_literal and parser.context.in_directive_prologue) {
         const value_start = expression_data.string_literal.raw_start + 1;
         const value_len: u16 = expression_data.string_literal.raw_len - 2;
 
@@ -139,8 +139,8 @@ fn parseExpressionStatementOrLabeledOrDirective(parser: *Parser) Error!?ast.Node
                 .value_len = value_len,
             },
         }, .{ .start = start, .end = try parser.eatSemicolon(expression_span.end) orelse return null });
-    } else if (parser.state.in_directive_prologue) {
-        parser.state.in_directive_prologue = false;
+    } else if (parser.context.in_directive_prologue) {
+        parser.context.in_directive_prologue = false;
     }
 
     return try parser.addNode(

@@ -26,6 +26,8 @@ const ParserContext = struct {
     ///          ~~
     ///           ^ this is in a single statement context
     in_single_statement_context: bool = false,
+    /// tracks if we're still in the directive prologue of a function/script body.
+    in_directive_prologue: bool = true,
 };
 
 const ParserState = struct {
@@ -34,8 +36,6 @@ const ParserState = struct {
     cover_has_trailing_comma: ?u32 = null,
     /// tracks if CoverInitializedName ({a = 1}) was parsed in current cover context.
     cover_has_init_name: bool = false,
-    /// tracks if we're still in the directive prologue of a function/script body.
-    in_directive_prologue: bool = true,
     /// current scope identified by depth
     current_scope_id: u32 = 0,
 };
@@ -134,14 +134,14 @@ pub const Parser = struct {
         const statements_checkpoint = self.scratch_statements.begin();
         defer self.scratch_statements.reset(statements_checkpoint);
 
-        self.state.in_directive_prologue = true;
+        self.context.in_directive_prologue = true;
         self.state.current_scope_id += 1;
 
         while (!self.isAtBodyEnd(terminator)) {
             if (try statements.parseStatement(self, .{})) |statement| {
                 try self.scratch_statements.append(self.allocator(), statement);
             } else {
-                self.state.in_directive_prologue = false;
+                self.context.in_directive_prologue = false;
                 try self.synchronize(terminator) orelse break;
             }
         }
