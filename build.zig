@@ -10,21 +10,13 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
-    const js_module = b.createModule(.{
+    const js_module = b.addModule(.{
         .root_source_file = b.path("src/js/root.zig"),
         .target = target,
         .optimize = optimize,
     });
 
     js_module.addImport("util", util_module);
-
-    const yuku_module = b.addModule("yuku", .{
-        .root_source_file = b.path("src/root.zig"),
-        .target = target,
-        .optimize = optimize,
-    });
-
-    yuku_module.addImport("js", js_module);
 
     const exe_module = b.createModule(.{
         .root_source_file = b.path("src/main.zig"),
