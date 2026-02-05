@@ -2,24 +2,27 @@ const std = @import("std");
 const js = @import("js");
 
 pub fn main(init: std.process.Init) !void {
+    const Io = init.io;
     var gpa = std.heap.DebugAllocator(.{}).init;
     defer _ = gpa.deinit();
     const allocator = gpa.allocator();
 
     const file_path = "test.js";
 
-    const contents = try std.Io.Dir.cwd().readFileAlloc(init.io, file_path, allocator, std.Io.Limit.limited(10 * 1024 * 1024));
+    const contents = try std.Io.Dir.cwd().readFileAlloc(Io, file_path, allocator, std.Io.Limit.limited(10 * 1024 * 1024));
     defer allocator.free(contents);
 
-    var start = try std.time.Timer.start();
+    const start = std.Io.Clock.Timestamp.now(Io, .real);
 
     const tree = try js.parse(std.heap.page_allocator, contents, .{ .lang = js.Lang.fromPath(file_path), .source_type = js.SourceType.fromPath(file_path) });
 
     defer tree.deinit();
 
-    const taken = start.read();
+    const end = std.Io.Clock.Timestamp.now(Io, .real);
 
-    const taken_ms = @as(f64, @floatFromInt(taken)) / ns_to_ms;
+    const taken = start.durationTo(end);
+
+    const taken_ms = @as(f64, @floatFromInt(taken.raw.toNanoseconds())) / std.time.ns_per_ms;
 
     var line_count: usize = 1;
     for (contents) |c| {
@@ -30,17 +33,9 @@ pub fn main(init: std.process.Init) !void {
 
     const mb_per_sec = (@as(f64, @floatFromInt(contents.len)) / 1_000_000.0) / (taken_ms / 1000.0);
 
-    var json_start = try std.time.Timer.start();
     const json = try js.estree.toJSON(&tree, allocator, .{});
-    const json_taken = json_start.read();
-
-    const json_taken_ms = @as(f64, @floatFromInt(json_taken)) / ns_to_ms;
 
     defer allocator.free(json);
-
-    // std.debug.print("\n{s}\n", .{json});
-
-    std.debug.print("estree time taken {d:.2}\n", .{json_taken_ms});
 
     if (tree.hasDiagnostics()) {
         for (tree.diagnostics) |err| {
