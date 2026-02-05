@@ -7,7 +7,7 @@ const grammar = @import("../grammar.zig");
 
 /// result from parsing array cover grammar: [a, b, ...c]
 pub const ArrayCover = struct {
-    elements: []const ast.NodeIndex,
+    elements: ast.IndexRange,
     start: u32,
     end: u32,
 };
@@ -82,8 +82,10 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
     end = parser.current_token.span.end;
     try parser.advance() orelse return null; // consume ]
 
+    const elements = try parser.addExtraFromScratch(&parser.scratch_cover, checkpoint);
+
     return .{
-        .elements = try parser.scratch_cover.take(parser.allocator(), checkpoint),
+        .elements = elements,
         .start = start,
         .end = end,
     };
@@ -93,7 +95,7 @@ pub fn parseCover(parser: *Parser) Error!?ArrayCover {
 /// validates that the expression does not contain CoverInitializedName when validate=true.
 pub fn coverToExpression(parser: *Parser, cover: ArrayCover, validate: bool) Error!?ast.NodeIndex {
     const array_expression = try parser.addNode(
-        .{ .array_expression = .{ .elements = try parser.addExtra(cover.elements) } },
+        .{ .array_expression = .{ .elements = cover.elements } },
         .{ .start = cover.start, .end = cover.end },
     );
 
@@ -104,8 +106,7 @@ pub fn coverToExpression(parser: *Parser, cover: ArrayCover, validate: bool) Err
 
 /// convert array cover to ArrayPattern.
 pub fn coverToPattern(parser: *Parser, cover: ArrayCover, comptime context: grammar.PatternContext) Error!?ast.NodeIndex {
-    const elements_range = try parser.addExtra(cover.elements);
-    return toArrayPatternImpl(parser, null, elements_range, .{ .start = cover.start, .end = cover.end }, context);
+    return toArrayPatternImpl(parser, null, cover.elements, .{ .start = cover.start, .end = cover.end }, context);
 }
 
 /// convert ArrayExpression to ArrayPattern (mutates in-place).

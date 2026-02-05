@@ -11,7 +11,7 @@ const functions = @import("functions.zig");
 
 /// result from parsing object cover grammar: {a, b: c, ...d}
 pub const ObjectCover = struct {
-    properties: []const ast.NodeIndex,
+    properties: ast.IndexRange,
     start: u32,
     end: u32,
 };
@@ -80,8 +80,10 @@ pub fn parseCover(parser: *Parser) Error!?ObjectCover {
     end = parser.current_token.span.end;
     try parser.advance() orelse return null; // consume }
 
+    const properties = try parser.addExtraFromScratch(&parser.scratch_cover, checkpoint);
+
     return .{
-        .properties = try parser.scratch_cover.take(parser.allocator(), checkpoint),
+        .properties = properties,
         .start = start,
         .end = end,
     };
@@ -392,7 +394,7 @@ fn parseObjectMethodProperty(
 /// validates that the expression does not contain CoverInitializedName when validate=true.
 pub fn coverToExpression(parser: *Parser, cover: ObjectCover, validate: bool) Error!?ast.NodeIndex {
     const object_expression = try parser.addNode(
-        .{ .object_expression = .{ .properties = try parser.addExtra(cover.properties) } },
+        .{ .object_expression = .{ .properties = cover.properties } },
         .{ .start = cover.start, .end = cover.end },
     );
 
@@ -403,8 +405,7 @@ pub fn coverToExpression(parser: *Parser, cover: ObjectCover, validate: bool) Er
 
 /// convert object cover to ObjectPattern.
 pub fn coverToPattern(parser: *Parser, cover: ObjectCover, comptime context: grammar.PatternContext) Error!?ast.NodeIndex {
-    const properties_range = try parser.addExtra(cover.properties);
-    return toObjectPatternImpl(parser, null, properties_range, .{ .start = cover.start, .end = cover.end }, context);
+    return toObjectPatternImpl(parser, null, cover.properties, .{ .start = cover.start, .end = cover.end }, context);
 }
 
 /// convert ObjectExpression to ObjectPattern (mutates in-place).

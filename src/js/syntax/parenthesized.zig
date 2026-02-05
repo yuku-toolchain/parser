@@ -14,7 +14,7 @@ const object = @import("object.zig");
 /// https://tc39.es/ecma262/#prod-CoverParenthesizedExpressionAndArrowParameterList
 pub const ParenthesizedCover = struct {
     /// parsed elements (expressions + spread elements)
-    elements: []const ast.NodeIndex,
+    elements: ast.IndexRange,
     start: u32,
     end: u32,
     /// trailing comma present (valid for arrow params, not for parenthesized expr)
@@ -37,8 +37,9 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
     if (parser.current_token.type == .right_paren) {
         end = parser.current_token.span.end;
         try parser.advance() orelse return null;
+        const elements = try parser.addExtraFromScratch(&parser.scratch_cover, checkpoint);
         return .{
-            .elements = try parser.scratch_cover.take(parser.allocator(), checkpoint),
+            .elements = elements,
             .start = start,
             .end = end,
             .has_trailing_comma = false,
@@ -108,8 +109,10 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
     end = parser.current_token.span.end;
     try parser.advance() orelse return null; // consume )
 
+    const elements = try parser.addExtraFromScratch(&parser.scratch_cover, checkpoint);
+
     return .{
-        .elements = try parser.scratch_cover.take(parser.allocator(), checkpoint),
+        .elements = elements,
         .start = start,
         .end = end,
         .has_trailing_comma = has_trailing_comma,
@@ -118,23 +121,25 @@ pub fn parseCover(parser: *Parser) Error!?ParenthesizedCover {
 
 /// convert cover to CallExpression.
 pub fn coverToCallExpression(parser: *Parser, cover: ParenthesizedCover, callee: ast.NodeIndex) Error!?ast.NodeIndex {
+    const elements = parser.getExtra(cover.elements);
     // validate no CoverInitializedName in nested objects
-    for (cover.elements) |elem| {
+    for (elements) |elem| {
         if (!try grammar.validateNoCoverInitializedSyntax(parser, elem)) {
             return null;
         }
     }
 
     return try parser.addNode(
-        .{ .call_expression = .{ .callee = callee, .arguments = try parser.addExtra(cover.elements), .optional = false } },
+        .{ .call_expression = .{ .callee = callee, .arguments = cover.elements, .optional = false } },
         .{ .start = parser.getSpan(callee).start, .end = cover.end },
     );
 }
 
 /// convert cover to ParenthesizedExpression.
 pub fn coverToParenthesizedExpression(parser: *Parser, cover: ParenthesizedCover) Error!?ast.NodeIndex {
+    const elements = parser.getExtra(cover.elements);
     // empty parens () without arrow is invalid
-    if (cover.elements.len == 0) {
+    if (elements.len == 0) {
         try parser.report(
             .{ .start = cover.start, .end = cover.end },
             "Empty parentheses are only valid as arrow function parameters",
@@ -153,7 +158,7 @@ pub fn coverToParenthesizedExpression(parser: *Parser, cover: ParenthesizedCover
     }
 
     // validate no CoverInitializedName in nested objects
-    for (cover.elements) |elem| {
+    for (elements) |elem| {
         if (parser.getData(elem) == .spread_element) {
             try parser.report(
                 parser.getSpan(elem),
@@ -169,18 +174,18 @@ pub fn coverToParenthesizedExpression(parser: *Parser, cover: ParenthesizedCover
         }
     }
 
-    if (cover.elements.len == 1) {
+    if (elements.len == 1) {
         return try parser.addNode(
-            .{ .parenthesized_expression = .{ .expression = cover.elements[0] } },
+            .{ .parenthesized_expression = .{ .expression = elements[0] } },
             .{ .start = cover.start, .end = cover.end },
         );
     }
 
-    const first_span = parser.getSpan(cover.elements[0]);
-    const last_span = parser.getSpan(cover.elements[cover.elements.len - 1]);
+    const first_span = parser.getSpan(elements[0]);
+    const last_span = parser.getSpan(elements[elements.len - 1]);
 
     const seq_expr = try parser.addNode(
-        .{ .sequence_expression = .{ .expressions = try parser.addExtra(cover.elements) } },
+        .{ .sequence_expression = .{ .expressions = cover.elements } },
         .{ .start = first_span.start, .end = last_span.end },
     );
 
@@ -288,7 +293,8 @@ fn convertToFormalParameters(parser: *Parser, cover: ParenthesizedCover) Error!?
 
     var rest: ast.NodeIndex = ast.null_node;
 
-    for (cover.elements) |elem| {
+    const elements = parser.getExtra(cover.elements);
+    for (elements) |elem| {
         if (!ast.isNull(rest)) {
             try parser.report(
                 parser.getSpan(rest),
