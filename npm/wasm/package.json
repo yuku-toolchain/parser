@@ -1,5 +1,5 @@
 {
-  "name": "@yuku/wasm",
+  "name": "yuku-wasm",
   "description": "WebAssembly module for Yuku, the JavaScript/TypeScript parser",
   "version": "0.1.0",
   "type": "module",
