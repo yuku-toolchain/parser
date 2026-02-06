@@ -14,12 +14,6 @@ const extensions = @import("extensions.zig");
 const variables = @import("variables.zig");
 
 pub fn parseImportDeclaration(parser: *Parser) Error!?ast.NodeIndex {
-    if (!parser.isModule()) {
-        try parser.report(parser.current_token.span, "'import' statement is only valid in module mode", .{
-            .help = "Use dynamic import() for script mode",
-        });
-    }
-
     const start = parser.current_token.span.start;
     try parser.advance() orelse return null; // consume 'import'
 
@@ -259,12 +253,6 @@ fn parseImportedBinding(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 pub fn parseExportDeclaration(parser: *Parser) Error!?ast.NodeIndex {
-    if (!parser.isModule()) {
-        try parser.report(parser.current_token.span, "'export' statement is only valid in module mode", .{
-            .help = "Export declarations can only appear in module mode",
-        });
-    }
-
     const start = parser.current_token.span.start;
     try parser.advance() orelse return null; // consume 'export'
 
@@ -457,7 +445,7 @@ fn parseExportNamedFromClause(parser: *Parser, start: u32) Error!?ast.NodeIndex 
 
             const local_token_type: token.TokenType = @enumFromInt(result.local_token_types[i]);
 
-            if (local_token_type.isStrictModeReserved()) {
+            if (local_token_type.isReserved()) {
                 const local_name = parser.getSourceText(local_data.identifier_name.name_start, local_data.identifier_name.name_len);
 
                 try parser.reportFmt(

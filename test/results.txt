@@ -5,11 +5,11 @@ Running TypeScript, Test262 and Babel test suites with ESTree/TypeScript-ESTree 
 
 Summary
 -------
-Passed:       38373
-Failed:       37
-AST mismatch: 10/37609
+Passed:       38365
+Failed:       45
+AST mismatch: 11/37609
 Total:        38410
-Coverage:     99.90%
+Coverage:     99.88%
 
 Results by Suite
 ----------------
@@ -54,12 +54,19 @@ Results by Suite
     - test/suite/js/pass/b61d4b9da6f25d58.js
 
 ✗ test/suite/js/fail
-  Passed: 760/763 (99.61%)
-  Failed: 3
+  Passed: 753/763 (98.69%)
+  Failed: 10
   Failures:
     - test/suite/js/fail/9ff6d57c18ddbb72.module.js
     - test/suite/js/fail/76a88d38487dbe0e.module.js
+    - test/suite/js/fail/e462669423ea79e4.js
+    - test/suite/js/fail/80da22a7d2a15fc5.js
+    - test/suite/js/fail/7fdf990c6f42edcd.js
+    - test/suite/js/fail/975d02f132c05a98.js
+    - test/suite/js/fail/0f8806b7b4358487.js
+    - test/suite/js/fail/1fc70bca408f884c.js
     - test/suite/js/fail/d05de7f89d74add1.module.js
+    - test/suite/js/fail/4554c00dbb28cad8.js
 
 ✓ test/suite/jsx/pass
   Passed: 55/55 (100.00%)
@@ -70,5 +77,8 @@ Results by Suite
 ✓ test/misc/jsx
   Passed: 1/1 (100.00%)
 
-✓ test/misc/js
-  Passed: 24/24 (100.00%)
+✗ test/misc/js
+  Passed: 23/24 (95.83%)
+  Failed: 1
+  Failures:
+    - test/misc/js/import-in-script.js (AST mismatch)

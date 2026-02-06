@@ -1,1 +1,1 @@
-const nice = "cool"
+export { if }

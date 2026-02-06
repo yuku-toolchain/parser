@@ -246,7 +246,7 @@ pub inline fn validateIdentifier(parser: *Parser, comptime as_what: []const u8, 
         return false;
     }
 
-    if (token.type.isReserved()) {
+    if (token.type.isUnconditionallyReserved()) {
         try parser.reportFmt(
             token.span,
             "'{s}' is a reserved word and cannot be used as {s}",
