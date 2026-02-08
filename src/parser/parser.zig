@@ -86,7 +86,7 @@ pub const Parser = struct {
         const alloc = self.allocator();
 
         // init lexer
-        self.lexer = try lexer.Lexer.init(self.source, alloc, self.source_type, self.isModule());
+        self.lexer = try lexer.Lexer.init(self.source, alloc, self.source_type);
 
         // let's begin
         try self.advance() orelse {

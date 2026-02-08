@@ -38,6 +38,7 @@ pub fn parseNumericLiteral(parser: *Parser) Error!?ast.NodeIndex {
         .numeric_literal = .{
             .raw_start = token.span.start,
             .raw_len = @intCast(token.lexeme.len),
+            .kind = ast.NumericLiteral.Kind.fromToken(token.type),
         },
     }, token.span);
 }

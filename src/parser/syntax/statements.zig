@@ -1,4 +1,3 @@
-const std = @import("std");
 const ast = @import("../ast.zig");
 const token = @import("../token.zig");
 const Parser = @import("../parser.zig").Parser;
@@ -126,10 +125,6 @@ fn parseExpressionStatementOrLabeledOrDirective(parser: *Parser) Error!?ast.Node
     if (expression_data == .string_literal and parser.context.in_directive_prologue) {
         const value_start = expression_data.string_literal.raw_start + 1;
         const value_len: u16 = expression_data.string_literal.raw_len - 2;
-
-        if (std.mem.eql(u8, parser.getSourceText(value_start, value_len), "use strict")) {
-            parser.lexer.strict_mode = true;
-        }
 
         return try parser.addNode(.{
             .directive = .{
@@ -480,7 +475,7 @@ fn parseForLoopVariableKindOrNull(parser: *Parser) Error!?ast.VariableKind {
     if (token_type == .let or token_type == .@"const" or token_type == .@"var") {
         try parser.advance() orelse return null;
         return switch (token_type) {
-            .let => .@"let",
+            .let => .let,
             .@"const" => .@"const",
             .@"var" => .@"var",
             else => unreachable,

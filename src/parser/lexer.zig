@@ -18,10 +18,8 @@ pub const LexicalError = error{
     InvalidUnicodeEscape,
     InvalidHexEscape,
     InvalidOctalEscape,
-    OctalEscapeInStrict,
-    OctalLiteralInStrict,
-    InvalidBinaryLiteral,
     InvalidOctalLiteralDigit,
+    InvalidBinaryLiteral,
     InvalidHexLiteral,
     InvalidExponentPart,
     NumericSeparatorMisuse,
@@ -62,16 +60,14 @@ pub const Lexer = struct {
 
     state: LexerState,
 
-    strict_mode: bool,
     source: []const u8,
 
     /// current byte index being scanned in the source
     cursor: u32,
     source_type: ast.SourceType,
 
-    pub fn init(source: []const u8, allocator: std.mem.Allocator, source_type: ast.SourceType, strict_mode: bool) error{OutOfMemory}!Lexer {
+    pub fn init(source: []const u8, allocator: std.mem.Allocator, source_type: ast.SourceType) error{OutOfMemory}!Lexer {
         return .{
-            .strict_mode = strict_mode,
             .source = source,
 
             .state = .{},
@@ -477,7 +473,6 @@ pub const Lexer = struct {
                     break :brk;
                 }
 
-                if (self.strict_mode) return error.OctalEscapeInStrict;
                 try self.consumeOctal();
             },
             'x' => {
@@ -487,11 +482,9 @@ pub const Lexer = struct {
                 try self.consumeUnicodeEscape(.normal);
             },
             '1'...'7' => {
-                if (self.strict_mode) return error.OctalEscapeInStrict;
                 try self.consumeOctal();
             },
             '8'...'9' => {
-                if (self.strict_mode) return error.InvalidOctalEscape;
                 self.cursor += 1;
             },
             '\n', '\r' => {
@@ -831,10 +824,12 @@ pub const Lexer = struct {
     fn scanNumber(self: *Lexer) LexicalError!token.Token {
         const start = self.cursor;
         var token_type: token.TokenType = .numeric_literal;
-        var is_legacy_octal = false;
 
         // handle prefixes: 0x, 0o, 0b
         var has_decimal_or_exponent = false;
+
+        // 017
+        var is_legacy_octal = false;
 
         if (self.source[self.cursor] == '0') {
             const prefix = self.peek(1);
@@ -861,9 +856,9 @@ pub const Lexer = struct {
                     try self.consumeBinaryDigits();
                     if (self.cursor == bin_start) return error.InvalidBinaryLiteral;
                 },
-                '0'...'7' => {
-                    // potential legacy octal: 01, 07, etc.
+                '0'...'9' => {
                     is_legacy_octal = true;
+
                     try self.consumeDecimalDigits();
 
                     for (self.source[start..self.cursor]) |c| {
@@ -873,9 +868,7 @@ pub const Lexer = struct {
                         }
                     }
 
-                    if (is_legacy_octal and self.strict_mode) {
-                        return error.OctalLiteralInStrict;
-                    }
+                    token_type = .leading_zero_literal;
                 },
                 else => {
                     try self.consumeDecimalDigits();
@@ -1210,10 +1203,8 @@ pub fn getLexicalErrorMessage(error_type: LexicalError) []const u8 {
         error.UnterminatedMultiLineComment => "Unterminated multi-line comment",
         error.InvalidUnicodeEscape => "Invalid Unicode escape sequence",
         error.InvalidOctalEscape => "Invalid octal escape sequence",
-        error.OctalEscapeInStrict => "Octal escape sequences are not allowed in strict mode",
-        error.OctalLiteralInStrict => "Octal literals are not allowed in strict mode",
-        error.InvalidBinaryLiteral => "Binary literal must contain at least one binary digit",
         error.InvalidOctalLiteralDigit => "Octal literal must contain at least one octal digit",
+        error.InvalidBinaryLiteral => "Binary literal must contain at least one binary digit",
         error.InvalidHexLiteral => "Hexadecimal literal must contain at least one hex digit",
         error.InvalidExponentPart => "Exponent part is missing a number",
         error.NumericSeparatorMisuse => "Numeric separator cannot appear at the end of a numeric literal",
@@ -1244,10 +1235,8 @@ pub fn getLexicalErrorHelp(error_type: LexicalError) []const u8 {
         error.UnterminatedMultiLineComment => "Try adding the closing delimiter (*/) here to complete the comment",
         error.InvalidUnicodeEscape => "Try using \\uHHHH (4 hex digits) or \\u{HHHHHH} (1-6 hex digits) here",
         error.InvalidOctalEscape => "Try using a valid octal sequence here (\\0-7, \\00-77, or \\000-377)",
-        error.OctalEscapeInStrict => "Try replacing this octal escape with \\xHH (hex) or \\uHHHH (unicode) instead",
-        error.OctalLiteralInStrict => "Try replacing this octal literal with a decimal number, or use 0xHH (hex) or 0bBB (binary) instead",
-        error.InvalidBinaryLiteral => "Try adding at least one binary digit (0 or 1) here after '0b'",
         error.InvalidOctalLiteralDigit => "Try adding at least one octal digit (0-7) here after '0o'",
+        error.InvalidBinaryLiteral => "Try adding at least one binary digit (0 or 1) here after '0b'",
         error.InvalidHexLiteral => "Try adding at least one hex digit (0-9, a-f, A-F) here after '0x'",
         error.InvalidExponentPart => "Try adding digits here after the exponent (e.g., e10, e-5, E+2)",
         error.NumericSeparatorMisuse => "Try removing the trailing underscore here or adding more digits after it",

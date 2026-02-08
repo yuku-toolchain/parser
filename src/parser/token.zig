@@ -17,9 +17,12 @@ pub const Mask = struct {
 pub const TokenType = enum(u32) {
     numeric_literal = 1 | Mask.IsNumericLiteral, // e.g., "123", "45.67"
     hex_literal = 2 | Mask.IsNumericLiteral, // e.g., "0xFF", "0x1A"
+    /// modern octal literal
     octal_literal = 3 | Mask.IsNumericLiteral, // e.g., "0o777", "0o12"
     binary_literal = 4 | Mask.IsNumericLiteral, // e.g., "0b1010", "0b11"
     bigint_literal = 5 | Mask.IsNumericLiteral, // e.g., "123n", "456n"
+    /// deprecated in strict mode
+    leading_zero_literal = 131 | Mask.IsNumericLiteral, // e.g., "01", "08", "09"
 
     string_literal = 6, // e.g., "'hello'", "\"world\""
     regex_literal = 7, // e.g., "/abc/g", "/[0-9]+/i"
@@ -363,6 +366,7 @@ pub const TokenType = enum(u32) {
             .octal_literal,
             .binary_literal,
             .bigint_literal,
+            .leading_zero_literal,
             .string_literal,
             .regex_literal,
             .no_substitution_template,
@@ -390,7 +394,12 @@ pub const Token = struct {
     has_line_terminator_before: bool,
 
     pub inline fn eof(pos: u32) Token {
-        return Token{ .lexeme = "", .span = .{ .start = pos, .end = pos }, .type = .eof, .has_line_terminator_before = false };
+        return Token{
+            .lexeme = "",
+            .span = .{ .start = pos, .end = pos },
+            .type = .eof,
+            .has_line_terminator_before = false,
+        };
     }
 
     pub fn leftBp(self: *const Token) u5 {

@@ -1,4 +1,1 @@
-(function() {
-  "use strict";
-  "asterisk: \052";
-});
+const nice = <>cool</>
