@@ -46,8 +46,16 @@ pub fn parseDecorated(parser: *Parser, opts: ParseDecoratedOpts) Error!?ast.Node
     if (parser.current_token.type != .class) {
         try parser.report(
             parser.current_token.span,
-            "Decorators must be followed by a class declaration or expression",
-            .{ .help = "Use '@decorator class Foo {}' or remove the decorator." },
+            if (opts.is_expression)
+                "Expected a class expression after decorators in expression position"
+            else
+                "Expected a class declaration after decorators in declaration position",
+            .{
+                .help = if (opts.is_expression)
+                    "Use '@decorator class {}' (or a named class expression), or remove the decorator."
+                else
+                    "Use '@decorator class Foo {}', or remove the decorator.",
+            },
         );
         return null;
     }
