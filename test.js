@@ -1,1 +1,3 @@
-const nice = 09.x
+class Nice {
+  static [10n] = "nice"
+}

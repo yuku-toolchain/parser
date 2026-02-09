@@ -34,22 +34,22 @@ pub fn parseNullLiteral(parser: *Parser) Error!?ast.NodeIndex {
 pub fn parseNumericLiteral(parser: *Parser) Error!?ast.NodeIndex {
     const token = parser.current_token;
     try parser.advance() orelse return null;
+
+    // bigint literal is a separate node
+    if(token.type == .bigint_literal) {
+        return try parser.addNode(.{
+            .bigint_literal = .{
+                .raw_start = token.span.start,
+                .raw_len = @intCast(token.lexeme.len),
+            },
+        }, token.span);
+    }
+
     return try parser.addNode(.{
         .numeric_literal = .{
             .raw_start = token.span.start,
             .raw_len = @intCast(token.lexeme.len),
             .kind = ast.NumericLiteral.Kind.fromToken(token.type),
-        },
-    }, token.span);
-}
-
-pub fn parseBigIntLiteral(parser: *Parser) Error!?ast.NodeIndex {
-    const token = parser.current_token;
-    try parser.advance() orelse return null;
-    return try parser.addNode(.{
-        .bigint_literal = .{
-            .raw_start = token.span.start,
-            .raw_len = @intCast(token.lexeme.len),
         },
     }, token.span);
 }
