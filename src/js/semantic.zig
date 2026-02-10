@@ -59,3 +59,29 @@
 // 'default' case cannot appear more than once in a switch statement.
 // for-in/of loop variable declaration may not have an initializer
 // 'with' statement is not allowed in strict mode
+// '0'-prefixed octal literals in strict mode
+// Decimals with leading zeros are not allowed in strict mode
+// Octal escapes are not allowed in strict mode
+
+// fn octalInString(raw: []const u8) bool {
+//     var i: usize = 0;
+//     while (i + 1 < raw.len) {
+//         if (raw[i] != '\\') {
+//             i += 1;
+//             continue;
+//         }
+
+//         const escaped = raw[i + 1];
+//         switch (escaped) {
+//             '1'...'7', '8', '9' => return true,
+//             '0' => {
+//                 if (i + 2 < raw.len and isOctalDigit(raw[i + 2])) return true;
+//             },
+//             else => {},
+//         }
+
+//         i += 2;
+//     }
+
+//     return false;
+// }

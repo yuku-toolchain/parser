@@ -800,6 +800,28 @@ pub const StringLiteral = struct {
 pub const NumericLiteral = struct {
     raw_start: u32,
     raw_len: u16,
+    kind: Kind,
+
+    pub const Kind = enum {
+        decimal,
+        hex,
+        /// modern octal literal
+        octal,
+        binary,
+        /// deprecated in strict mode
+        leading_zero,
+
+        pub fn fromToken(tok: token.TokenType) Kind {
+            return switch (tok) {
+                .numeric_literal => .decimal,
+                .hex_literal => .hex,
+                .octal_literal => .octal,
+                .binary_literal => .binary,
+                .leading_zero_literal => .leading_zero,
+                else => unreachable,
+            };
+        }
+    };
 };
 
 /// https://tc39.es/ecma262/#sec-ecmascript-language-lexical-grammar-literals

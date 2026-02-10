@@ -1,4 +1,3 @@
-const std = @import("std");
 const ast = @import("../ast.zig");
 const token = @import("../token.zig");
 const Parser = @import("../parser.zig").Parser;
@@ -103,7 +102,7 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
         .@"try" => parseTryStatement(parser),
         .debugger => parseDebuggerStatement(parser),
         .semicolon => parseEmptyStatement(parser),
-        else => parseExpressionStatementOrLabeledOrDirective(parser),
+        else => parseExpressionOrLabeledStatement(parser),
     };
 
     parser.context.in_single_statement_context = false;
@@ -111,7 +110,7 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
     return statement;
 }
 
-fn parseExpressionStatementOrLabeledOrDirective(parser: *Parser) Error!?ast.NodeIndex {
+fn parseExpressionOrLabeledStatement(parser: *Parser) Error!?ast.NodeIndex {
     const expression = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
     const expression_span = parser.getSpan(expression);
     const expression_data = parser.getData(expression);
@@ -122,25 +121,6 @@ fn parseExpressionStatementOrLabeledOrDirective(parser: *Parser) Error!?ast.Node
     }
 
     const start = expression_span.start;
-
-    if (expression_data == .string_literal and parser.context.in_directive_prologue) {
-        const value_start = expression_data.string_literal.raw_start + 1;
-        const value_len: u16 = expression_data.string_literal.raw_len - 2;
-
-        if (std.mem.eql(u8, parser.getSourceText(value_start, value_len), "use strict")) {
-            parser.lexer.strict_mode = true;
-        }
-
-        return try parser.addNode(.{
-            .directive = .{
-                .expression = expression,
-                .value_start = value_start,
-                .value_len = value_len,
-            },
-        }, .{ .start = start, .end = try parser.eatSemicolon(expression_span.end) orelse return null });
-    } else if (parser.context.in_directive_prologue) {
-        parser.context.in_directive_prologue = false;
-    }
 
     return try parser.addNode(
         .{ .expression_statement = .{ .expression = expression } },
@@ -480,7 +460,7 @@ fn parseForLoopVariableKindOrNull(parser: *Parser) Error!?ast.VariableKind {
     if (token_type == .let or token_type == .@"const" or token_type == .@"var") {
         try parser.advance() orelse return null;
         return switch (token_type) {
-            .let => .@"let",
+            .let => .let,
             .@"const" => .@"const",
             .@"var" => .@"var",
             else => unreachable,
