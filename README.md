@@ -31,6 +31,6 @@ A high-performance JavaScript/TypeScript toolchain written in Zig, bringing mode
 - [x] JavaScript Parser
 - [x] WASM (try here: https://yuku-parser.vercel.app/playground)
 - [x] JSX Support
-- [ ] TypeScript Support (In Progress)
-- [ ] Best-in-class Visitor/Traverser
-- [ ] Initial Version Docs
+- [ ] Best-in-class Visitor/Traverser (In Progress)
+- [ ] TypeScript Support
+- [ ] Docs

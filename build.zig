@@ -4,6 +4,11 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    const codspeed_dep = b.dependency("codspeed_zig", .{
+        .target = target,
+        .optimize = optimize,
+    });
+
     const util_module = b.createModule(.{
         .root_source_file = b.path("src/util/root.zig"),
         .target = target,
@@ -33,6 +38,24 @@ pub fn build(b: *std.Build) void {
 
     b.installArtifact(exe);
 
+    const profiler_module = b.createModule(.{
+        .root_source_file = b.path("profiler/main.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
+    profiler_module.addImport("parser", parser_module);
+
+    profiler_module.addImport("codspeed", codspeed_dep.module("codspeed"));
+
+    const profiler_exe = b.addExecutable(.{
+        .name = "profiler",
+        .root_module = profiler_module,
+    });
+
+
+    b.installArtifact(profiler_exe);
+
     const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
     if (b.args) |args| {
@@ -41,6 +64,14 @@ pub fn build(b: *std.Build) void {
 
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
+
+    const profile_cmd = b.addRunArtifact(profiler_exe);
+    if (b.args) |args| {
+        profile_cmd.addArgs(args);
+    }
+
+    const profile_step = b.step("profile", "Run profiler");
+    profile_step.dependOn(&profile_cmd.step);
 
     const gen_unicode_id_table = b.addExecutable(.{
         .name = "gen-unicode-id",
