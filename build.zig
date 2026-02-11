@@ -45,10 +45,11 @@ pub fn build(b: *std.Build) void {
     });
 
     profiler_module.addImport("parser", parser_module);
+
     profiler_module.addImport("codspeed", codspeed_dep.module("codspeed"));
 
     const profiler_exe = b.addExecutable(.{
-        .name = "profile",
+        .name = "profiler",
         .root_module = profiler_module,
     });
 
@@ -63,6 +64,14 @@ pub fn build(b: *std.Build) void {
 
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
+
+    const profile_cmd = b.addRunArtifact(profiler_exe);
+    if (b.args) |args| {
+        profile_cmd.addArgs(args);
+    }
+
+    const profile_step = b.step("profile", "Run profiler");
+    profile_step.dependOn(&profile_cmd.step);
 
     const gen_unicode_id_table = b.addExecutable(.{
         .name = "gen-unicode-id",
