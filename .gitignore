@@ -9,3 +9,4 @@ jsx-roadmap.md
 .astro/
 test/suite
 profiler/files
+zig-pkg
