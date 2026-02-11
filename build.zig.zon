@@ -3,12 +3,12 @@
     .version = "0.0.0",
     .dependencies = .{
         .codspeed_zig = .{
-            .url = "git+https://github.com/arshad-yaseen/codspeed-zig.git#9b484e60e804410ab657808f2e7c95ab401bfd04",
-            .hash = "codspeed_zig-0.1.0-cdqftph4DwC0_K7CSDt9-RIuBCdOAM_SMA-_A4olS9NR",
+            .url = "git+https://github.com/arshad-yaseen/codspeed-zig.git#01fbd2dc5834ebd12f2c2e3818da304f942129bc",
+            .hash = "codspeed_zig-0.1.0-cdqftph4DwBYmqHqHdMwFXJ4xMB_Tj2rNAsM2k3RmvQZ",
         },
     },
     .fingerprint = 0xc32fad6e9edaaa9b, // Changing this has security and trust implications.
-    .minimum_zig_version = "0.16.0-dev.731+958faa703",
+    .minimum_zig_version = "0.16.0-dev.2535+b5bd49460",
     .paths = .{
         "build.zig",
         "build.zig.zon",
