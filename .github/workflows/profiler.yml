@@ -19,10 +19,8 @@ jobs:
       - uses: mlugg/setup-zig@v2
         with:
           version: master
-      - name: Load profiler parser bench files
-        run: bun run load-profiler-parser-bench-files
-      - name: Run benchmarks with CodSpeed
+      - name: Run profiler
         uses: CodSpeedHQ/action@v4
         with:
           mode: simulation
-          run: zig build --release=fast profile
+          run: bun run profile
