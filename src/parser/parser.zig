@@ -40,27 +40,25 @@ pub const Error = error{OutOfMemory};
 
 pub const Parser = struct {
     source: []const u8,
+    source_type: ast.SourceType,
+    lang: ast.Lang,
     lexer: lexer.Lexer,
+    current_token: token.Token,
+    context: ParserContext = .{},
+    state: ParserState = .{},
+
     arena: std.heap.ArenaAllocator,
-    diagnostics: std.ArrayList(ast.Diagnostic) = .empty,
     nodes: ast.NodeList = .empty,
     extra: std.ArrayList(ast.NodeIndex) = .empty,
-    current_token: token.Token,
+    diagnostics: std.ArrayList(ast.Diagnostic) = .empty,
 
     scratch_statements: ScratchBuffer = .{},
     scratch_cover: ScratchBuffer = .{},
     scratch_decorators: ScratchBuffer = .{},
 
-    // multiple scratches to handle multiple extras at the same time
+    // multiple scratches to handle multiple extras at the same time.
     scratch_a: ScratchBuffer = .{},
     scratch_b: ScratchBuffer = .{},
-    //
-
-    context: ParserContext = .{},
-    state: ParserState = .{},
-
-    source_type: ast.SourceType,
-    lang: ast.Lang,
 
     pub fn init(child_allocator: std.mem.Allocator, source: []const u8, options: Options) Parser {
         return .{
@@ -133,10 +131,6 @@ pub const Parser = struct {
         while (!self.isAtBodyEnd(terminator)) {
             if (try statements.parseStatement(self, .{})) |statement| {
                 try self.scratch_statements.append(self.allocator(), statement);
-
-                const data = self.getData(statement);
-
-                _ = data;
             } else {
                 try self.synchronize(terminator) orelse break;
             }

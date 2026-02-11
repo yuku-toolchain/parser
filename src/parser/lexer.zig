@@ -55,16 +55,14 @@ const LexerState = struct {
 };
 
 pub const Lexer = struct {
-    comments: std.ArrayList(ast.Comment),
-    allocator: std.mem.Allocator,
-
-    state: LexerState,
-
     source: []const u8,
-
     /// current byte index being scanned in the source
     cursor: u32,
+    state: LexerState,
     source_type: ast.SourceType,
+
+    comments: std.ArrayList(ast.Comment),
+    allocator: std.mem.Allocator,
 
     pub fn init(source: []const u8, allocator: std.mem.Allocator, source_type: ast.SourceType) error{OutOfMemory}!Lexer {
         return .{
