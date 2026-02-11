@@ -3,8 +3,8 @@
     .version = "0.0.0",
     .dependencies = .{
         .codspeed_zig = .{
-            .url = "git+https://github.com/arshad-yaseen/codspeed-zig.git#e6dd808091b2b59027cdc346dc2d5c41a53fb382",
-            .hash = "codspeed_zig-0.0.1-cdqftpx0DwALsIqze8abAl7OtnLUNaScJt-TTHSj0OwU",
+            .url = "git+https://github.com/arshad-yaseen/codspeed-zig.git#80446323c1513562d2924f062b0d58bf42538d4f",
+            .hash = "codspeed_zig-0.0.1-cdqftup3DwAmssrHTUDgV4ROaP3am_N55l6GcXOYCBiZ",
         },
     },
     .fingerprint = 0xc32fad6e9edaaa9b, // Changing this has security and trust implications.
