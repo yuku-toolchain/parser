@@ -26,6 +26,8 @@ const ParserContext = struct {
     ///          ~~
     ///           ^ this is in a single statement context
     in_single_statement_context: bool = false,
+    // https://tc39.es/ecma262/#directive-prologue
+    in_directive_prologue: bool = false
 };
 
 const ParserState = struct {
@@ -125,10 +127,13 @@ pub const Parser = struct {
     }
 
     pub fn parseBody(self: *Parser, terminator: ?token.TokenType) Error!ast.IndexRange {
+        // it's a directive prologue if it's a function body or if we are at the program level
+        // terminator null means, we are at program level
+        self.context.in_directive_prologue = self.context.in_function or terminator == null;
+        defer self.context.in_directive_prologue = false;
+
         const statements_checkpoint = self.scratch_statements.begin();
         defer self.scratch_statements.reset(statements_checkpoint);
-
-        // var in_directive_prologue = true;
 
         while (!self.isAtBodyEnd(terminator)) {
             if (try statements.parseStatement(self, .{})) |statement| {
