@@ -133,10 +133,6 @@ pub const Parser = struct {
         while (!self.isAtBodyEnd(terminator)) {
             if (try statements.parseStatement(self, .{})) |statement| {
                 try self.scratch_statements.append(self.allocator(), statement);
-
-                const data = self.getData(statement);
-
-                _ = data;
             } else {
                 try self.synchronize(terminator) orelse break;
             }
