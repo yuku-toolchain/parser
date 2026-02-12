@@ -22,6 +22,14 @@ const ParseStatementOpts = struct {
 pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.NodeIndex {
     parser.context.in_single_statement_context = false;
 
+    if (parser.context.in_directive_prologue) {
+        if (parser.current_token.type == .string_literal) {
+            return parseDirective(parser);
+        }
+
+        parser.context.in_directive_prologue = false;
+    }
+
     if (parser.current_token.type == .left_brace) {
         return parseBlockStatement(parser);
     }
@@ -112,20 +120,47 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
 
 fn parseExpressionOrLabeledStatement(parser: *Parser) Error!?ast.NodeIndex {
     const expression = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
-    const expression_span = parser.getSpan(expression);
     const expression_data = parser.getData(expression);
+    const expression_span = parser.getSpan(expression);
 
     // labeled statement: identifier ':'
     if (expression_data == .identifier_reference and parser.current_token.type == .colon) {
         return parseLabeledStatement(parser, expression);
     }
 
-    const start = expression_span.start;
+    return parseExpressionStatement(parser, expression, expression_span);
+}
 
+fn parseExpressionStatement(
+    parser: *Parser,
+    expression: ast.NodeIndex,
+    expression_span: ast.Span,
+) Error!?ast.NodeIndex {
     return try parser.addNode(
         .{ .expression_statement = .{ .expression = expression } },
-        .{ .start = start, .end = try parser.eatSemicolon(expression_span.end) orelse return null },
+        .{ .start = expression_span.start, .end = try parser.eatSemicolon(expression_span.end) orelse return null },
     );
+}
+
+fn parseDirective(parser: *Parser) Error!?ast.NodeIndex {
+    const string_literal = try literals.parseStringLiteral(parser) orelse return null;
+
+    const string_literal_data = parser.getData(string_literal);
+    const string_literal_span = parser.getSpan(string_literal);
+
+    const value_start = string_literal_data.string_literal.raw_start + 1;
+    const value_len: u16 = string_literal_data.string_literal.raw_len - 2;
+
+    return try parser.addNode(.{
+        .directive = .{
+            .expression = string_literal,
+            .value_start = value_start,
+            .value_len = value_len,
+        },
+    }, .{
+        .start = string_literal_span.start,
+        .end = try parser.eatSemicolon(string_literal_span.end) orelse return null,
+    });
 }
 
 /// https://tc39.es/ecma262/#sec-labelled-statements
