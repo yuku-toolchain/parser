@@ -148,7 +148,7 @@ fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts, precedence: u8) Error
 }
 
 pub inline fn parsePrimaryExpression(parser: *Parser, opts: ParseExpressionOpts, precedence: u8) Error!?ast.NodeIndex {
-    if(parser.current_token.type.isNumericLiteral()) {
+    if (parser.current_token.type.isNumericLiteral()) {
         return literals.parseNumericLiteral(parser);
     }
 

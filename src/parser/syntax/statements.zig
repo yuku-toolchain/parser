@@ -6,7 +6,6 @@ const Precedence = @import("../token.zig").Precedence;
 
 const expressions = @import("expressions.zig");
 const variables = @import("variables.zig");
-const parenthesized = @import("parenthesized.zig");
 const literals = @import("literals.zig");
 const patterns = @import("patterns.zig");
 const functions = @import("functions.zig");
@@ -42,59 +41,12 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
         parser.context.in_single_statement_context = true;
     }
 
-    if (parser.current_token.type == .await) {
-        const next = try parser.lookAhead() orelse return null;
-
-        if (next.type == .using) {
-            const start = parser.current_token.span.start;
-            try parser.advance() orelse return null; // consume 'await'
-            return variables.parseVariableDeclaration(parser, true, start);
-        }
-    }
-
-    if (parser.current_token.type == .import) {
-        const next = try parser.lookAhead() orelse return null;
-
-        // `import(` and `import.` are expression forms (dynamic import / import.meta or phase imports)
-        if (next.type != .left_paren and next.type != .dot) {
-            return modules.parseImportDeclaration(parser);
-        }
-    }
-
-    if (parser.current_token.type == .async) {
-        const next = try parser.lookAhead() orelse return null;
-
-        if (next.type == .function and !next.has_line_terminator_before) {
-            const start = parser.current_token.span.start;
-            try parser.advance() orelse return null;
-            return functions.parseFunction(parser, .{ .is_async = true }, start);
-        }
-    }
-
-    const is_var_decl = switch (parser.current_token.type) {
-        .@"var", .@"const", .let, .using => true,
-        else => false,
-    };
-
-    if (is_var_decl) {
-        // 'let' can be either a keyword or an identifier depending on context.
-        // check if it should be parsed as an identifier (eg, `let;`) before treating it as a declaration.
-        if (parser.current_token.type == .let) {
-            const is_identifier = try variables.isLetIdentifier(parser) orelse return null;
-
-            if (!is_identifier) {
-                // parse as variable declaration: let x = 5;
-                return variables.parseVariableDeclaration(parser, false, null);
-            }
-
-            // otherwise, fall through to parse 'let' as an identifier in an expression statement.
-        } else {
-            // other variable declaration keywords (var, const, using) are always keywords.
-            return variables.parseVariableDeclaration(parser, false, null);
-        }
-    }
-
     const statement = switch (parser.current_token.type) {
+        .await => parseAwaitUsingOrExpression(parser),
+        .import => parseImportDeclarationOrExpression(parser),
+        .async => parseAsyncFunctionOrExpression(parser),
+        .@"var", .@"const", .using => variables.parseVariableDeclaration(parser, false, null),
+        .let => parseLet(parser),
         .function => functions.parseFunction(parser, .{}, null),
         .class => class.parseClass(parser, .{}, null),
         .@"export" => modules.parseExportDeclaration(parser),
@@ -141,6 +93,58 @@ fn parseExpressionStatement(
         .{ .expression_statement = .{ .expression = expression } },
         .{ .start = span.start, .end = try parser.eatSemicolon(span.end) orelse return null },
     );
+}
+
+/// 'let' can be either a keyword or an identifier depending on context.
+/// check if it should be parsed as an identifier (eg, `let;`) before treating it as a declaration.
+fn parseLet(parser: *Parser) Error!?ast.NodeIndex {
+    const is_identifier = try variables.isLetIdentifier(parser) orelse return null;
+
+    if (!is_identifier) {
+        // parse as variable declaration: let x = 5;
+        return variables.parseVariableDeclaration(parser, false, null);
+    }
+
+    // otherwise, fall through to parse 'let' as an identifier in an expression statement.
+    return parseExpressionOrLabeledStatement(parser);
+}
+
+/// `await using` declaration, or fall through to expression statement.
+fn parseAwaitUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
+    const next = try parser.lookAhead() orelse return null;
+
+    if (next.type == .using) {
+        const start = parser.current_token.span.start;
+        try parser.advance() orelse return null; // consume 'await'
+        return variables.parseVariableDeclaration(parser, true, start);
+    }
+
+    return parseExpressionOrLabeledStatement(parser);
+}
+
+/// import declaration, or fall through to import expression statement (`import(` / `import.`).
+fn parseImportDeclarationOrExpression(parser: *Parser) Error!?ast.NodeIndex {
+    const next = try parser.lookAhead() orelse return null;
+
+    // `import(` and `import.` are expression forms (dynamic import / import.meta / phase imports)
+    if (next.type == .left_paren or next.type == .dot) {
+        return parseExpressionOrLabeledStatement(parser);
+    }
+
+    return modules.parseImportDeclaration(parser);
+}
+
+/// `async function` declaration, or fall through to expression statement.
+fn parseAsyncFunctionOrExpression(parser: *Parser) Error!?ast.NodeIndex {
+    const next = try parser.lookAhead() orelse return null;
+
+    if (next.type == .function and !next.has_line_terminator_before) {
+        const start = parser.current_token.span.start;
+        try parser.advance() orelse return null; // consume 'async'
+        return functions.parseFunction(parser, .{ .is_async = true }, start);
+    }
+
+    return parseExpressionOrLabeledStatement(parser);
 }
 
 fn parseDirective(parser: *Parser) Error!?ast.NodeIndex {
