@@ -19,7 +19,8 @@ const ParseStatementOpts = struct {
 };
 
 pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.NodeIndex {
-    parser.context.in_single_statement_context = false;
+    parser.context.in_single_statement_context = opts.can_be_single_statement_context;
+    defer parser.context.in_single_statement_context = false;
 
     if (parser.context.in_directive_prologue) {
         if (parser.current_token.type == .string_literal) {
@@ -29,19 +30,8 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
         parser.context.in_directive_prologue = false;
     }
 
-    if (parser.current_token.type == .left_brace) {
-        return parseBlockStatement(parser);
-    }
-
-    if (parser.current_token.type == .at) {
-        return extensions.parseDecorated(parser, .{});
-    }
-
-    if (opts.can_be_single_statement_context) {
-        parser.context.in_single_statement_context = true;
-    }
-
-    const statement = switch (parser.current_token.type) {
+    return switch (parser.current_token.type) {
+        .at => extensions.parseDecorated(parser, .{}),
         .await => parseAwaitUsingOrExpression(parser),
         .import => parseImportDeclarationOrExpression(parser),
         .async => parseAsyncFunctionOrExpression(parser),
@@ -61,14 +51,11 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
         .@"return" => parseReturnStatement(parser),
         .throw => parseThrowStatement(parser),
         .@"try" => parseTryStatement(parser),
+        .left_brace => parseBlockStatement(parser),
         .debugger => parseDebuggerStatement(parser),
         .semicolon => parseEmptyStatement(parser),
         else => parseExpressionOrLabeledStatement(parser),
     };
-
-    parser.context.in_single_statement_context = false;
-
-    return statement;
 }
 
 fn parseExpressionOrLabeledStatement(parser: *Parser) Error!?ast.NodeIndex {
