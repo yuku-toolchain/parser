@@ -216,17 +216,15 @@ fn parseClassElement(parser: *Parser) Error!?ast.NodeIndex {
     if (ast.isNull(key) and !is_async and !is_generator and parser.current_token.type == .identifier) {
         if (std.mem.eql(u8, parser.getTokenText(parser.current_token), "accessor")) {
             const accessor_token = parser.current_token;
-            const next = try parser.lookAhead() orelse return null;
+            try parser.advance() orelse return null; // consume 'accessor'
 
-            if (isClassElementKeyStart(next.type)) {
+            if (isClassElementKeyStart(parser.current_token.type)) {
                 is_accessor = true;
-                try parser.advance() orelse return null; // consume 'accessor'
             } else {
                 key = try parser.addNode(
                     .{ .identifier_name = .{ .name_start = accessor_token.span.start, .name_len = @intCast(accessor_token.len()) } },
                     accessor_token.span,
                 );
-                try parser.advance() orelse return null; // consume 'accessor' as key
             }
         }
     }

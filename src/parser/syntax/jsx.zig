@@ -244,11 +244,7 @@ fn parseJsxChildren(parser: *Parser, gt_end: u32) Error!?ast.IndexRange {
                 try parser.scratch_b.append(parser.allocator(), child);
             },
             .left_brace => {
-                const next = try parser.lookAhead() orelse return null;
-                const child = if (next.type == .spread)
-                    try parseJsxSpreadChild(parser) orelse return null
-                else
-                    try parseJsxExpressionContainer(parser, .child) orelse return null;
+                const child = try parseJsxChildFromLeftBrace(parser) orelse return null;
                 scan_from = parser.getSpan(child).end;
                 try parser.scratch_b.append(parser.allocator(), child);
             },
@@ -257,6 +253,40 @@ fn parseJsxChildren(parser: *Parser, gt_end: u32) Error!?ast.IndexRange {
     }
 
     return try parser.addExtraFromScratch(&parser.scratch_b, checkpoint);
+}
+
+fn parseJsxChildFromLeftBrace(parser: *Parser) Error!?ast.NodeIndex {
+    const start = parser.current_token.span.start;
+
+    // already in normal mode from parseJsxChildren
+    try parser.advance() orelse return null; // consume '{'
+
+    if (parser.current_token.type == .spread) {
+        try parser.advance() orelse return null; // consume '...'
+
+        const expression = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
+        const end = parser.current_token.span.end;
+
+        if (!try parser.expect(.right_brace, "Expected '}' to close JSX spread", "Add '}' to close the spread expression")) return null;
+
+        return try parser.addNode(.{ .jsx_spread_child = .{ .expression = expression } }, .{ .start = start, .end = end });
+    }
+
+    // empty expression: {}
+    if (parser.current_token.type == .right_brace) {
+        const end = parser.current_token.span.end;
+        try parser.advance() orelse return null;
+
+        const empty = try parser.addNode(.{ .jsx_empty_expression = .{} }, .{ .start = start + 1, .end = end - 1 });
+        return try parser.addNode(.{ .jsx_expression_container = .{ .expression = empty } }, .{ .start = start, .end = end });
+    }
+
+    const expression = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
+    const end = parser.current_token.span.end;
+
+    if (!try parser.expect(.right_brace, "Expected '}' to close JSX expression", "Add '}' to close the expression")) return null;
+
+    return try parser.addNode(.{ .jsx_expression_container = .{ .expression = expression } }, .{ .start = start, .end = end });
 }
 
 // https://facebook.github.io/jsx/#prod-JSXAttributes
@@ -443,24 +473,6 @@ fn parseJsxSpreadAttribute(parser: *Parser) Error!?ast.NodeIndex {
     if (!try parser.expect(.right_brace, "Expected '}' to close JSX spread", "Add '}' to close the spread expression")) return null;
 
     return try parser.addNode(.{ .jsx_spread_attribute = .{ .argument = expression } }, .{ .start = start, .end = end });
-}
-
-// parses {...expr} as spread child
-fn parseJsxSpreadChild(parser: *Parser) Error!?ast.NodeIndex {
-    const start = parser.current_token.span.start;
-
-    // already in normal mode from parseJsxChildren
-    try parser.advance() orelse return null; // consume '{'
-
-    if (!try parser.expect(.spread, "Expected '...' after '{' in JSX spread", "Add '...' to spread the expression")) return null;
-
-    const expression = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
-    const end = parser.current_token.span.end;
-
-    // stay in normal mode for children
-    if (!try parser.expect(.right_brace, "Expected '}' to close JSX spread", "Add '}' to close the spread expression")) return null;
-
-    return try parser.addNode(.{ .jsx_spread_child = .{ .expression = expression } }, .{ .start = start, .end = end });
 }
 
 // https://facebook.github.io/jsx/#prod-JSXElementName
