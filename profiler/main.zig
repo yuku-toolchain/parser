@@ -23,7 +23,7 @@ pub fn main() !void {
             }
         };
 
-        const bench_name = "parser[" ++ file.name ++ ']';
+        const bench_name = "parser[" ++ file.name ++ "]";
         try session.bench(bench_name, BenchFn.run);
     }
 }
