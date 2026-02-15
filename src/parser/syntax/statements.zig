@@ -22,13 +22,7 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
     parser.context.in_single_statement_context = opts.can_be_single_statement_context;
     defer parser.context.in_single_statement_context = false;
 
-    if (parser.context.in_directive_prologue) {
-        if (parser.current_token.type == .string_literal) {
-            return parseDirective(parser);
-        }
-
-        parser.context.in_directive_prologue = false;
-    }
+    parser.context.in_directive_prologue = parser.context.in_directive_prologue and parser.current_token.type == .string_literal;
 
     return switch (parser.current_token.type) {
         .at => extensions.parseDecorated(parser, .{}),
@@ -54,13 +48,17 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
         .left_brace => parseBlockStatement(parser),
         .debugger => parseDebuggerStatement(parser),
         .semicolon => parseEmptyStatement(parser),
-        else => parseExpressionOrLabeledStatement(parser),
+        else => parseExpressionOrLabeledStatementOrDirective(parser),
     };
 }
 
-fn parseExpressionOrLabeledStatement(parser: *Parser) Error!?ast.NodeIndex {
+fn parseExpressionOrLabeledStatementOrDirective(parser: *Parser) Error!?ast.NodeIndex {
     const expression = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
     const expression_data = parser.getData(expression);
+
+    if(parser.context.in_directive_prologue and expression_data == .string_literal) {
+        return parseDirective(parser, expression, expression_data);
+    }
 
     // labeled statement: identifier ':'
     if (expression_data == .identifier_reference and parser.current_token.type == .colon) {
@@ -82,6 +80,24 @@ fn parseExpressionStatement(
     );
 }
 
+fn parseDirective(parser: *Parser, expression: ast.NodeIndex, expression_data: ast.NodeData) Error!?ast.NodeIndex {
+    const string_literal_span = parser.getSpan(expression);
+
+    const value_start = expression_data.string_literal.raw_start + 1;
+    const value_len: u16 = expression_data.string_literal.raw_len - 2;
+
+    return try parser.addNode(.{
+        .directive = .{
+            .expression = expression,
+            .value_start = value_start,
+            .value_len = value_len,
+        },
+    }, .{
+        .start = string_literal_span.start,
+        .end = try parser.eatSemicolon(string_literal_span.end) orelse return null,
+    });
+}
+
 /// 'let' can be either a keyword or an identifier depending on context.
 /// check if it should be parsed as an identifier (eg, `let;`) before treating it as a declaration.
 fn parseLet(parser: *Parser) Error!?ast.NodeIndex {
@@ -93,7 +109,7 @@ fn parseLet(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     // otherwise, fall through to parse 'let' as an identifier in an expression statement.
-    return parseExpressionOrLabeledStatement(parser);
+    return parseExpressionOrLabeledStatementOrDirective(parser);
 }
 
 /// `await using` declaration, or fall through to expression statement.
@@ -106,7 +122,7 @@ fn parseAwaitUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
         return variables.parseVariableDeclaration(parser, true, start);
     }
 
-    return parseExpressionOrLabeledStatement(parser);
+    return parseExpressionOrLabeledStatementOrDirective(parser);
 }
 
 /// import declaration, or fall through to import expression statement (`import(` / `import.`).
@@ -115,7 +131,7 @@ fn parseImportDeclarationOrExpression(parser: *Parser) Error!?ast.NodeIndex {
 
     // `import(` and `import.` are expression forms (dynamic import / import.meta / phase imports)
     if (next.type == .left_paren or next.type == .dot) {
-        return parseExpressionOrLabeledStatement(parser);
+        return parseExpressionOrLabeledStatementOrDirective(parser);
     }
 
     return modules.parseImportDeclaration(parser);
@@ -131,28 +147,7 @@ fn parseAsyncFunctionOrExpression(parser: *Parser) Error!?ast.NodeIndex {
         return functions.parseFunction(parser, .{ .is_async = true }, start);
     }
 
-    return parseExpressionOrLabeledStatement(parser);
-}
-
-fn parseDirective(parser: *Parser) Error!?ast.NodeIndex {
-    const string_literal = try literals.parseStringLiteral(parser) orelse return null;
-
-    const string_literal_data = parser.getData(string_literal);
-    const string_literal_span = parser.getSpan(string_literal);
-
-    const value_start = string_literal_data.string_literal.raw_start + 1;
-    const value_len: u16 = string_literal_data.string_literal.raw_len - 2;
-
-    return try parser.addNode(.{
-        .directive = .{
-            .expression = string_literal,
-            .value_start = value_start,
-            .value_len = value_len,
-        },
-    }, .{
-        .start = string_literal_span.start,
-        .end = try parser.eatSemicolon(string_literal_span.end) orelse return null,
-    });
+    return parseExpressionOrLabeledStatementOrDirective(parser);
 }
 
 /// https://tc39.es/ecma262/#sec-labelled-statements
