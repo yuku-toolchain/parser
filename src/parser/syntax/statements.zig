@@ -15,6 +15,8 @@ const grammar = @import("../grammar.zig");
 const modules = @import("modules.zig");
 
 const ParseStatementOpts = struct {
+    /// true when parsing the body of `if`, `while`, `do`, `for`, `with`, or labeled statements,
+    /// where lexical declarations (`let`, `const`) are not allowed without a block.
     can_be_single_statement_context: bool = false,
 };
 
@@ -29,8 +31,9 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
         .await => parseAwaitUsingOrExpression(parser),
         .import => parseImportDeclarationOrExpression(parser),
         .async => parseAsyncFunctionOrExpression(parser),
-        .@"var", .@"const", .using => variables.parseVariableDeclaration(parser, false, null),
+        .@"var", .@"const" => variables.parseVariableDeclaration(parser, false, null),
         .let => parseLet(parser),
+        .using => parseUsingOrExpression(parser),
         .function => functions.parseFunction(parser, .{}, null),
         .class => class.parseClass(parser, .{}, null),
         .@"export" => modules.parseExportDeclaration(parser),
@@ -112,29 +115,40 @@ fn parseLet(parser: *Parser) Error!?ast.NodeIndex {
     return parseExpressionOrLabeledStatementOrDirective(parser);
 }
 
+/// `using` declaration, or fall through to expression statement.
+fn parseUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
+    const next = try parser.lookAhead() orelse return null;
+
+    return switch(next.type) {
+        // `using.`, `using(`, `using[` are expression forms where `using` is an identifier.
+        .dot, .left_paren, .left_bracket => parseExpressionOrLabeledStatementOrDirective(parser),
+        else => variables.parseVariableDeclaration(parser, false, null)
+    };
+}
+
 /// `await using` declaration, or fall through to expression statement.
 fn parseAwaitUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
     const next = try parser.lookAhead() orelse return null;
 
-    if (next.type == .using) {
-        const start = parser.current_token.span.start;
-        try parser.advance() orelse return null; // consume 'await'
-        return variables.parseVariableDeclaration(parser, true, start);
-    }
-
-    return parseExpressionOrLabeledStatementOrDirective(parser);
+    return switch (next.type) {
+        .using => {
+            const start = parser.current_token.span.start;
+            try parser.advance() orelse return null; // consume 'await'
+            return variables.parseVariableDeclaration(parser, true, start);
+        },
+        else => parseExpressionOrLabeledStatementOrDirective(parser)
+    };
 }
 
 /// import declaration, or fall through to import expression statement (`import(` / `import.`).
 fn parseImportDeclarationOrExpression(parser: *Parser) Error!?ast.NodeIndex {
     const next = try parser.lookAhead() orelse return null;
 
-    // `import(` and `import.` are expression forms (dynamic import / import.meta / phase imports)
-    if (next.type == .left_paren or next.type == .dot) {
-        return parseExpressionOrLabeledStatementOrDirective(parser);
-    }
-
-    return modules.parseImportDeclaration(parser);
+    return switch (next.type) {
+        // `import(` and `import.` are expression forms (dynamic import / import.meta / phase imports)
+        .left_paren, .dot => parseExpressionOrLabeledStatementOrDirective(parser),
+        else => modules.parseImportDeclaration(parser)
+    };
 }
 
 /// `async function` declaration, or fall through to expression statement.
@@ -492,8 +506,13 @@ fn parseForLoopVariableKindOrNull(parser: *Parser) Error!?ast.VariableKind {
     switch (token_type) {
         .using => {
             const next = try parser.lookAhead() orelse return null;
+
             // 'using' is an identifier in 'for (using of/in ...)' unless it's a declaration.
             if (next.type == .of or next.type == .in) return null;
+
+            // 'using.', 'using(', 'using[' are expression forms where 'using' is an identifier.
+            if (next.type == .dot or next.type == .left_paren or next.type == .left_bracket) return null;
+
             try parser.advance() orelse return null;
             return .using;
         },
