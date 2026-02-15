@@ -29,8 +29,9 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
         .await => parseAwaitUsingOrExpression(parser),
         .import => parseImportDeclarationOrExpression(parser),
         .async => parseAsyncFunctionOrExpression(parser),
-        .@"var", .@"const", .using => variables.parseVariableDeclaration(parser, false, null),
+        .@"var", .@"const" => variables.parseVariableDeclaration(parser, false, null),
         .let => parseLet(parser),
+        .using => parseUsingOrExpression(parser),
         .function => functions.parseFunction(parser, .{}, null),
         .class => class.parseClass(parser, .{}, null),
         .@"export" => modules.parseExportDeclaration(parser),
@@ -112,29 +113,38 @@ fn parseLet(parser: *Parser) Error!?ast.NodeIndex {
     return parseExpressionOrLabeledStatementOrDirective(parser);
 }
 
+fn parseUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
+    const next = try parser.lookAhead() orelse return null;
+
+    return switch(next.type) {
+        .dot, .left_paren, .left_bracket, .left_brace => parseExpressionOrLabeledStatementOrDirective(parser),
+        else => variables.parseVariableDeclaration(parser, false, null)
+    };
+}
+
 /// `await using` declaration, or fall through to expression statement.
 fn parseAwaitUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
     const next = try parser.lookAhead() orelse return null;
 
-    if (next.type == .using) {
-        const start = parser.current_token.span.start;
-        try parser.advance() orelse return null; // consume 'await'
-        return variables.parseVariableDeclaration(parser, true, start);
-    }
-
-    return parseExpressionOrLabeledStatementOrDirective(parser);
+    return switch (next.type) {
+        .using => {
+            const start = parser.current_token.span.start;
+            try parser.advance() orelse return null; // consume 'await'
+            return variables.parseVariableDeclaration(parser, true, start);
+        },
+        else => parseExpressionOrLabeledStatementOrDirective(parser)
+    };
 }
 
 /// import declaration, or fall through to import expression statement (`import(` / `import.`).
 fn parseImportDeclarationOrExpression(parser: *Parser) Error!?ast.NodeIndex {
     const next = try parser.lookAhead() orelse return null;
 
-    // `import(` and `import.` are expression forms (dynamic import / import.meta / phase imports)
-    if (next.type == .left_paren or next.type == .dot) {
-        return parseExpressionOrLabeledStatementOrDirective(parser);
-    }
-
-    return modules.parseImportDeclaration(parser);
+    return switch (next.type) {
+        // `import(` and `import.` are expression forms (dynamic import / import.meta / phase imports)
+        .left_paren, .dot => parseExpressionOrLabeledStatementOrDirective(parser),
+        else => modules.parseImportDeclaration(parser)
+    };
 }
 
 /// `async function` declaration, or fall through to expression statement.
