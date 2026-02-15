@@ -180,6 +180,12 @@ pub const Serializer = struct {
         try self.fieldType("Program");
         try self.fieldSpan(span);
         try self.fieldString("sourceType", if (data.source_type == .module) "module" else "script");
+        try self.field("hashbang");
+        if (data.hashbang) |h| {
+            try self.writeString(self.tree.getSourceText(h.value_start, h.value_len));
+        } else {
+            try self.writeNull();
+        }
         try self.field("body");
         try self.beginArray();
         for (self.getExtra(data.body)) |idx| try self.elemNode(idx);

@@ -1,35 +1,29 @@
 const BIG_INT_PREFIX = "(BigInt) ";
 const REGEXP_PREFIX = "(RegExp) ";
+const REGEXP_LITERAL = /^\/(.+)\/([gimsuy]*)$/;
 
 /**
- * Parses AST JSON that Yuku passes from Zig (via estree.toJSON) to JS.
+ * Deserializes AST JSON that Yuku passes from Zig (via estree.toJSON) to JS.
  *
  * BigInt and RegExp values are encoded as tagged strings:
  * - `(BigInt) 10n`
  * - `(RegExp) /pattern/flags`
  */
-export function parseYukuForeignAstJson<T = unknown>(jsonString: string): T {
+export function deserializeAstJson<T = unknown>(jsonString: string): T {
   return JSON.parse(jsonString, (_, value) => {
     if (typeof value !== "string") {
       return value;
     }
 
     if (value.startsWith(BIG_INT_PREFIX)) {
-      return BigInt(value.slice(BIG_INT_PREFIX.length).slice(0, -1));
+      return BigInt(value.slice(BIG_INT_PREFIX.length).replace(/n$/, "").replaceAll("_", ""));
     }
 
     if (value.startsWith(REGEXP_PREFIX)) {
-      const literal = value.slice(REGEXP_PREFIX.length);
+      const match = value.slice(REGEXP_PREFIX.length).match(REGEXP_LITERAL);
 
-      if (literal.startsWith("/")) {
-        const lastSlashIndex = literal.lastIndexOf("/");
-
-        if (lastSlashIndex > 0) {
-          const pattern = literal.slice(1, lastSlashIndex);
-          const flags = literal.slice(lastSlashIndex + 1);
-
-          return new RegExp(pattern, flags);
-        }
+      if (match) {
+        return new RegExp(match[1]!, match[2]);
       }
     }
 
@@ -38,11 +32,11 @@ export function parseYukuForeignAstJson<T = unknown>(jsonString: string): T {
 }
 
 /**
- * Stringifies AST JSON for transport between JS and Zig while preserving
+ * Serializes AST JSON for transport between JS and Zig while preserving
  * BigInt and RegExp values as tagged strings that can be converted back by
- * parseYukuForeignAstJson.
+ * deserializeAstJson.
  */
-export function stringifyYukuForeignAstJson(
+export function serializeAstJson(
   obj: unknown,
   space?: string | number,
 ): string {

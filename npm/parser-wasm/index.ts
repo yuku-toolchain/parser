@@ -1,4 +1,4 @@
-import { parseYukuForeignAstJson } from "yuku-shared"
+import { deserializeAstJson } from "yuku-shared"
 
 export enum SourceType {
   Script = 0,
@@ -92,7 +92,7 @@ function parseInternal(
 
       const jsonStr = decoder.decode(jsonBytes);
 
-      return parseYukuForeignAstJson<YukuAST>(jsonStr);
+      return deserializeAstJson<YukuAST>(jsonStr);
     } finally {
       wasm.free(resultPtr, jsonLen);
     }
