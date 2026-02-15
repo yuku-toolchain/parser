@@ -4,6 +4,7 @@
     "start": 0,
     "end": 19,
     "sourceType": "module",
+    "hashbang": null,
     "body": [
       {
         "type": "ExpressionStatement",

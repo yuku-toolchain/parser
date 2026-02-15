@@ -85,7 +85,6 @@ pub const Parser = struct {
     pub fn parse(self: *Parser) Error!ast.ParseTree {
         const alloc = self.allocator();
 
-        // init lexer
         self.lexer = try lexer.Lexer.init(self.source, alloc, self.source_type);
 
         // let's begin
@@ -106,6 +105,7 @@ pub const Parser = struct {
                 .program = .{
                     .source_type = if (self.source_type == .module) .module else .script,
                     .body = body,
+                    .hashbang = self.lexer.hashbang,
                 },
             },
             .{ .start = 0, .end = end },

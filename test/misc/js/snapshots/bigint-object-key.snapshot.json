@@ -4,6 +4,7 @@
     "start": 0,
     "end": 47,
     "sourceType": "script",
+    "hashbang": null,
     "body": [
       {
         "type": "VariableDeclaration",
@@ -35,7 +36,7 @@
                     "type": "Literal",
                     "start": 20,
                     "end": 23,
-                    "value": null,
+                    "value": "(BigInt) 10n",
                     "raw": "10n",
                     "bigint": "10"
                   },
@@ -58,7 +59,7 @@
                     "type": "Literal",
                     "start": 35,
                     "end": 38,
-                    "value": null,
+                    "value": "(BigInt) 20n",
                     "raw": "20n",
                     "bigint": "20"
                   },
@@ -66,7 +67,7 @@
                     "type": "Literal",
                     "start": 41,
                     "end": 44,
-                    "value": null,
+                    "value": "(BigInt) 72n",
                     "raw": "72n",
                     "bigint": "72"
                   },

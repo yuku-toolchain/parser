@@ -4,6 +4,7 @@
     "start": 0,
     "end": 89,
     "sourceType": "script",
+    "hashbang": null,
     "body": [
       {
         "type": "VariableDeclaration",

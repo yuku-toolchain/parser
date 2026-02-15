@@ -65,18 +65,32 @@ pub const Lexer = struct {
     /// current byte index being scanned in the source
     cursor: u32,
     source_type: ast.SourceType,
+    hashbang: ?ast.Hashbang = null,
 
     pub fn init(source: []const u8, allocator: std.mem.Allocator, source_type: ast.SourceType) error{OutOfMemory}!Lexer {
-        return .{
+        var self: Lexer = .{
             .source = source,
-
             .state = .{},
-
             .cursor = 0,
             .comments = try .initCapacity(allocator, @max(64, @min(source.len / 64, 131_072))),
             .allocator = allocator,
             .source_type = source_type,
         };
+
+        self.skipHashbang();
+
+        return self;
+    }
+
+    fn skipHashbang(self: *Lexer) void {
+        if (self.source.len >= 2 and self.source[0] == '#' and self.source[1] == '!') {
+            var end: u32 = 2;
+            while (end < self.source.len and self.source[end] != '\n' and self.source[end] != '\r') {
+                end += 1;
+            }
+            self.hashbang = .{ .value_start = 2, .value_len = @intCast(end - 2) };
+            self.cursor = end;
+        }
     }
 
     pub fn nextToken(self: *Lexer) LexicalError!token.Token {

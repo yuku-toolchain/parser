@@ -967,6 +967,13 @@ pub const Program = struct {
     source_type: SourceType,
     /// (Statement | Directive)[]
     body: IndexRange,
+    /// Hashbang comment (e.g. `#!/usr/bin/env node`), null if not present
+    hashbang: ?Hashbang = null,
+};
+
+pub const Hashbang = struct {
+    value_start: u32,
+    value_len: u16,
 };
 
 /// `"use strict";`

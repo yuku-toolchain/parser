@@ -4,6 +4,7 @@
     "start": 0,
     "end": 97,
     "sourceType": "script",
+    "hashbang": null,
     "body": [
       {
         "type": "FunctionDeclaration",
