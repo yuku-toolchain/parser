@@ -85,7 +85,6 @@ pub const Parser = struct {
     pub fn parse(self: *Parser) Error!ast.ParseTree {
         const alloc = self.allocator();
 
-        // init lexer
         self.lexer = try lexer.Lexer.init(self.source, alloc, self.source_type);
 
         // let's begin
@@ -106,6 +105,7 @@ pub const Parser = struct {
                 .program = .{
                     .source_type = if (self.source_type == .module) .module else .script,
                     .body = body,
+                    .hashbang = self.lexer.hashbang,
                 },
             },
             .{ .start = 0, .end = end },
@@ -395,13 +395,16 @@ pub const Parser = struct {
         const alloc = self.allocator();
 
         const estimated_nodes = if (self.source.len < 10_000)
-            @max(1024, (self.source.len * 3) / 4)
-        else if (self.source.len < 100_000)
-            self.source.len / 2
-        else
-            self.source.len / 3;
+                @max(512, self.source.len / 2)
+            else if (self.source.len < 100_000)
+                self.source.len / 5
+            else
+                self.source.len / 8;
 
-        const estimated_extra = estimated_nodes / 2;
+        const estimated_extra = if (self.source.len < 5_000_000)
+                estimated_nodes / 4
+            else
+                estimated_nodes / 3;
 
         try self.nodes.ensureTotalCapacity(alloc, estimated_nodes);
         try self.extra.ensureTotalCapacity(alloc, estimated_extra);
