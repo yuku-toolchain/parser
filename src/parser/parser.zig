@@ -395,13 +395,16 @@ pub const Parser = struct {
         const alloc = self.allocator();
 
         const estimated_nodes = if (self.source.len < 10_000)
-               @max(512, self.source.len / 2)      // 0.5 ratio
-           else if (self.source.len < 100_000)
-               self.source.len / 3                 // 0.33 ratio
-           else
-               self.source.len / 4;                // 0.25 ratio
+                @max(512, self.source.len / 2)
+            else if (self.source.len < 100_000)
+                self.source.len / 5
+            else
+                self.source.len / 8;
 
-        const estimated_extra = estimated_nodes / 2;
+        const estimated_extra = if (self.source.len < 5_000_000)
+                estimated_nodes / 4
+            else
+                estimated_nodes / 3;
 
         try self.nodes.ensureTotalCapacity(alloc, estimated_nodes);
         try self.extra.ensureTotalCapacity(alloc, estimated_extra);

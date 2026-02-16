@@ -36,7 +36,7 @@ pub fn main(init: std.process.Init) !void {
     const json = try parser.estree.toJSON(&tree, allocator, .{});
     defer allocator.free(json);
 
-    // std.debug.print("{s}", .{json});
+    std.debug.print("nodes: {d} extra: {d} comments: {d}", .{tree.nodes.len, tree.extra.len, tree.comments.len});
 
     if (tree.hasDiagnostics()) {
         for (tree.diagnostics) |err| {
