@@ -86,14 +86,7 @@ pub const Lexer = struct {
     }
 
     fn ensureCapacity(self: *Lexer) error{OutOfMemory}!void {
-        if (self.comments.capacity > 0) return;
-
-        const estimated_comments = @min(
-            @as(usize, 131_072),
-            @max(@as(usize, 128), self.source.len / 80),
-        );
-
-        try self.comments.ensureTotalCapacity(self.allocator, estimated_comments);
+        try self.comments.ensureTotalCapacity(self.allocator, @max(32, @min(self.source.len / 200, 32_768)));
     }
 
     fn skipHashbang(self: *Lexer) void {
