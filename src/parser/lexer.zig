@@ -64,6 +64,7 @@ pub const Lexer = struct {
 
     /// current byte index being scanned in the source
     cursor: u32,
+
     source_type: ast.SourceType,
     hashbang: ?ast.Hashbang = null,
 
@@ -72,14 +73,29 @@ pub const Lexer = struct {
             .source = source,
             .state = .{},
             .cursor = 0,
-            .comments = try .initCapacity(allocator, @max(64, @min(source.len / 64, 131_072))),
+            .comments = .empty,
             .allocator = allocator,
             .source_type = source_type,
         };
 
+        try self.ensureCapacity();
+
         self.skipHashbang();
 
         return self;
+    }
+
+    fn ensureCapacity(self: *Lexer) error{OutOfMemory}!void {
+        if (self.comments.capacity > 0) return;
+
+        const estimated_comments = if (self.source.len < 10_000)
+            @max(64, self.source.len / 100)
+        else if (self.source.len < 100_000)
+            @max(128, self.source.len / 150)
+        else
+            @min(self.source.len / 200, 65_536);
+
+        try self.comments.ensureTotalCapacity(self.allocator, estimated_comments);
     }
 
     fn skipHashbang(self: *Lexer) void {
@@ -235,7 +251,7 @@ pub const Lexer = struct {
                     self.puncToken(1, .question, start)
                 else
                     self.puncToken(2, .optional_chaining, start),
-                    else => self.puncToken(1, .question, start),
+                else => self.puncToken(1, .question, start),
             },
             else => unreachable,
         };
