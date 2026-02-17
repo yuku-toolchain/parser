@@ -77,7 +77,7 @@ fn parseForLoopVariableKindOrNull(parser: *Parser) Error!?ast.VariableKind {
             const next = try parser.lookAhead(1) orelse return null;
 
             // `using of` is ambiguous because `of` is a valid identifier:
-            //   `for (using of of[(0, 1, 2)])` → for-of loop, `using` is the expression, first `of` is the keyword
+            //   `for (using of of[(0, 1, 2)])` -> for-of loop, `using` is the expression, first `of` is the keyword
             //   `for (using of = 1;;)` → `using` declaration, `of` is the variable name
             // if `=`, `;`, or `:` follows `of`, it's a declaration. otherwise, it's a for-of loop.
             if (next.type == .of) {
