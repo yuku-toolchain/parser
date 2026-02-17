@@ -69,10 +69,15 @@ fn parseExpressionOrLabeledStatementOrDirective(parser: *Parser) Error!?ast.Node
         return parseLabeledStatement(parser, expression);
     }
 
-    return parseExpressionStatement(parser, expression);
+    return parseExpressionStatementWithExpression(parser, expression);
 }
 
-fn parseExpressionStatement(
+fn parseExpressionStatement(parser: *Parser) Error!?ast.NodeIndex {
+    const expression = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
+    return parseExpressionStatementWithExpression(parser, expression);
+}
+
+fn parseExpressionStatementWithExpression(
     parser: *Parser,
     expression: ast.NodeIndex,
 ) Error!?ast.NodeIndex {
@@ -113,7 +118,7 @@ fn parseLet(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     // otherwise, fall through to parse 'let' as an identifier in an expression statement.
-    return parseExpressionOrLabeledStatementOrDirective(parser);
+    return parseExpressionStatement(parser);
 }
 
 /// `using` declaration, or fall through to expression statement.
@@ -122,23 +127,37 @@ fn parseUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
 
     return switch(next.type) {
         // `using.`, `using(`, `using[` are expression forms where `using` is an identifier.
-        .dot, .left_paren, .left_bracket => parseExpressionOrLabeledStatementOrDirective(parser),
+        .dot, .left_paren, .left_bracket => parseExpressionStatement(parser),
         else => variables.parseVariableDeclaration(parser, false, null)
     };
 }
 
 /// `await using` declaration, or fall through to expression statement.
 fn parseAwaitUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
-    const next = try parser.lookAhead() orelse return null;
+     const next = try parser.lookAhead() orelse return null;
 
     return switch (next.type) {
         .using => {
             const start = parser.current_token.span.start;
+
             try parser.advance() orelse return null; // consume 'await'
+
+            const is_using_identifier = try variables.isUsingIdentifier(parser) orelse return null;
+
+            if(is_using_identifier) {
+                return parseAwaitExpressionStatement(parser, start);
+            }
+
             return variables.parseVariableDeclaration(parser, true, start);
         },
-        else => parseExpressionOrLabeledStatementOrDirective(parser)
+        else => parseExpressionOrLabeledStatementOrDirective(parser),
     };
+}
+
+fn parseAwaitExpressionStatement(parser: *Parser, start: u32) Error!?ast.NodeIndex {
+    const await_expr = try expressions.parseAwaitExpression(parser, start) orelse return null;
+
+    return parseExpressionStatementWithExpression(parser, await_expr);
 }
 
 /// import declaration, or fall through to import expression statement (`import(` / `import.`).
@@ -147,7 +166,7 @@ fn parseImportDeclarationOrExpression(parser: *Parser) Error!?ast.NodeIndex {
 
     return switch (next.type) {
         // `import(` and `import.` are expression forms (dynamic import / import.meta / phase imports)
-        .left_paren, .dot => parseExpressionOrLabeledStatementOrDirective(parser),
+        .left_paren, .dot => parseExpressionStatement(parser),
         else => modules.parseImportDeclaration(parser)
     };
 }

@@ -124,7 +124,9 @@ fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts, precedence: u8) Error
     }
 
     if (token_type == .await and (parser.context.in_async or parser.isModule())) {
-        return parseAwaitExpression(parser);
+        const await_start = parser.current_token.span.start;
+        try parser.advance() orelse return null; // consume 'await'
+        return parseAwaitExpression(parser, await_start);
     }
 
     if (token_type == .yield and parser.context.yield_is_keyword) {
@@ -292,15 +294,12 @@ fn parseUnaryExpression(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 /// `await expression`
-fn parseAwaitExpression(parser: *Parser) Error!?ast.NodeIndex {
-    const start = parser.current_token.span.start;
-    try parser.advance() orelse return null; // consume 'await'
-
+pub fn parseAwaitExpression(parser: *Parser, await_start: u32) Error!?ast.NodeIndex {
     const argument = try parseExpression(parser, Precedence.Unary, .{}) orelse return null;
 
     return try parser.addNode(
         .{ .await_expression = .{ .argument = argument } },
-        .{ .start = start, .end = parser.getSpan(argument).end },
+        .{ .start = await_start, .end = parser.getSpan(argument).end },
     );
 }
 

@@ -80,7 +80,6 @@ fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) Error!?ast.N
             "Using declarations may not have binding patterns",
             .{},
         );
-        return null;
     }
 
     var init: ast.NodeIndex = ast.null_node;
@@ -140,4 +139,20 @@ pub fn isLetIdentifier(parser: *Parser) Error!?bool {
     }
 
     return false;
+}
+
+pub fn isUsingIdentifier(parser: *Parser) Error!?bool {
+    std.debug.assert(parser.current_token.type == .using);
+
+    const next = try parser.lookAhead() orelse return null;
+
+    if (
+        (next.type == .left_brace or next.type == .left_bracket or next.type.isIdentifierLike())
+        and
+        !next.has_line_terminator_before
+    ) {
+        return false;
+    }
+
+    return true;
 }
