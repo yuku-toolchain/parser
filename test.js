@@ -1,2 +1,3 @@
-for (using in cool) {
+for (using
+of = cool;;) {
 }

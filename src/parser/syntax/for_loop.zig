@@ -56,7 +56,13 @@ fn parseForHead(parser: *Parser, start: u32, is_for_await: bool) Error!?ast.Node
             const next = try parser.lookAhead() orelse return null;
 
             switch (next.type) {
-                // `using in` -> for-in; `.`/`(`/`[` -> member/call expr; `{` -> invalid (no destructuring)
+                // `using in` is always a for-in loop (`for (using in obj)`),
+                // because `in` is reserved and can never be a variable name.
+                //
+                // `using.`, `using(`, `using[` are expression forms where `using` is an identifier.
+                //
+                // `using` doesn't support destructuring, so `for (using {} = ...;;)` is invalid.
+                // by returning null (not a declaration), the caller produces a natural "expected ';', found '{'" error.
                 .in, .dot, .left_paren, .left_bracket, .left_brace => {
                     return parseForWithExpression(parser, start, is_for_await);
                 },
@@ -272,6 +278,7 @@ fn createSingleDeclaration(parser: *Parser, kind: ast.VariableKind, declarator: 
 /// in a regular for-loop, destructuring patterns and const declarations require an initializer.
 fn validateRegularForDeclarator(parser: *Parser, declarator: ast.NodeIndex, kind: ast.VariableKind) Error!bool {
     const data = parser.getData(declarator).variable_declarator;
+
     if (!ast.isNull(data.init)) return true;
 
     if (parser.getData(data.id) != .binding_identifier) {
@@ -280,11 +287,13 @@ fn validateRegularForDeclarator(parser: *Parser, declarator: ast.NodeIndex, kind
         });
         return false;
     }
+
     if (kind == .@"const") {
         try parser.report(parser.getSpan(data.id), "'const' declarations in for loop initializer must be initialized", .{
             .help = "Add '= value' to initialize the constant in the for loop.",
         });
         return false;
     }
+
     return true;
 }
