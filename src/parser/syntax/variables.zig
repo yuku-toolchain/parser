@@ -134,7 +134,7 @@ pub fn isLetIdentifier(parser: *Parser) Error!?bool {
 
     // in single-statement contexts (eg, if/while bodies), 'let' followed by an implicit semicolon
     // should also be parsed as an identifier, since lexical declarations aren't allowed there.
-    if (parser.context.in_single_statement_context and parser.canInsertSemicolon(next)) {
+    if (parser.context.in_single_statement_context and parser.canInsertImplicitSemicolon(next)) {
         return true;
     }
 

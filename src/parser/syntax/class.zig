@@ -521,7 +521,7 @@ fn parsePropertyDefinition(
     if (tok_type == .semicolon) {
         end = parser.current_token.span.end;
         try parser.advance() orelse return null;
-    } else if (!parser.canInsertSemicolon(parser.current_token) and tok_type != .right_brace) {
+    } else if (!parser.canInsertImplicitSemicolon(parser.current_token) and tok_type != .right_brace) {
         try parser.reportExpected(
             parser.current_token.span,
             "Expected ';' after class field",

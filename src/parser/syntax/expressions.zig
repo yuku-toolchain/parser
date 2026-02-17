@@ -321,7 +321,7 @@ fn parseYieldExpression(parser: *Parser) Error!?ast.NodeIndex {
 
     if (
     // yield [no LineTerminator here] AssignmentExpression[?In, +Yield, ?Await]
-    !parser.canInsertSemicolon(parser.current_token) and
+    !parser.canInsertImplicitSemicolon(parser.current_token) and
         parser.current_token.type != .semicolon)
     {
         // the yield argument is optional.

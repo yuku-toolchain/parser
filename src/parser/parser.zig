@@ -292,7 +292,7 @@ pub const Parser = struct {
             try self.advance() orelse return null;
             return semicolon_end;
         } else {
-            if (!self.canInsertSemicolon(self.current_token)) {
+            if (!self.canInsertImplicitSemicolon(self.current_token)) {
                 try self.reportExpected(
                     self.current_token.span,
                     "Expected a semicolon or an implicit semicolon after a statement",
@@ -321,7 +321,7 @@ pub const Parser = struct {
     }
 
     /// https://tc39.es/ecma262/#sec-rules-of-automatic-semicolon-insertion
-    pub inline fn canInsertSemicolon(_: *Parser, tok: token.Token) bool {
+    pub inline fn canInsertImplicitSemicolon(_: *Parser, tok: token.Token) bool {
         return tok.type == .eof or tok.has_line_terminator_before or tok.type == .right_brace;
     }
 
