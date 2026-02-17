@@ -1,3 +1,4 @@
 for (using
-of = cool;;) {
+cool = nice;;) {
+
 }

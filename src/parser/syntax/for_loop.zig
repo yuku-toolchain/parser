@@ -55,6 +55,11 @@ fn parseForHead(parser: *Parser, start: u32, is_for_await: bool) Error!?ast.Node
         .using => {
             const next = try parser.lookAhead() orelse return null;
 
+            // [+Using] using [no LineTerminator here] ForBinding
+            if (next.has_line_terminator_before) {
+                return parseForWithExpression(parser, start, is_for_await);
+            }
+
             switch (next.type) {
                 // `using in` is always a for-in loop (`for (using in obj)`),
                 // because `in` is reserved and can never be a variable name.
@@ -90,7 +95,7 @@ fn parseForHead(parser: *Parser, start: u32, is_for_await: bool) Error!?ast.Node
         },
         .await => {
             const next = try parser.lookAhead() orelse return null;
-            if (next.type != .using) return parseForWithExpression(parser, start, is_for_await);
+            if (next.type != .using or next.has_line_terminator_before) return parseForWithExpression(parser, start, is_for_await);
             try parser.advance() orelse return null; // consume 'await'
             try parser.advance() orelse return null; // consume 'using'
             return parseForWithDeclaration(parser, start, is_for_await, .await_using, decl_start);
