@@ -141,6 +141,10 @@ pub fn isLetIdentifier(parser: *Parser) Error!?bool {
     return false;
 }
 
+/// `using` can be either a keyword (for variable declarations) or an identifier depending on context.
+/// if the next token is a binding pattern (`{`, `[`) or an identifier on the same line,
+/// then `using` is a keyword: `using x = ...`, `using { x } = ...`.
+/// otherwise, `using` is just an identifier: `using;`, `using + 1`.
 pub fn isUsingIdentifier(parser: *Parser) Error!?bool {
     std.debug.assert(parser.current_token.type == .using);
 
@@ -151,8 +155,8 @@ pub fn isUsingIdentifier(parser: *Parser) Error!?bool {
         and
         !next.has_line_terminator_before
     ) {
-        return false;
+        return false; // `using` is a keyword, not an identifier.
     }
 
-    return true;
+    return true; // `using` is an identifier.
 }

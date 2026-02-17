@@ -142,6 +142,10 @@ fn parseAwaitUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
 
             try parser.advance() orelse return null; // consume 'await'
 
+            // after consuming 'await', the current token is 'using'.
+            // determine if 'using' is an identifier or a keyword:
+            // - identifier: `await using;` -> parse as await expression
+            // - keyword:    `await using x = ...` -> parse as `await using` variable declaration
             const is_using_identifier = try variables.isUsingIdentifier(parser) orelse return null;
 
             if(is_using_identifier) {
