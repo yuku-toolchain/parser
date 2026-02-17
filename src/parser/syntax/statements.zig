@@ -148,11 +148,11 @@ fn parseAwaitUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
             // - keyword:    `await using x = ...` -> parse as `await using` variable declaration
             const is_using_identifier = try variables.isUsingIdentifier(parser) orelse return null;
 
-            if(is_using_identifier) {
-                return parseAwaitExpressionStatement(parser, start);
+            if(!is_using_identifier) {
+                return variables.parseVariableDeclaration(parser, true, start);
             }
 
-            return variables.parseVariableDeclaration(parser, true, start);
+            return parseAwaitExpressionStatement(parser, start);
         },
         else => parseExpressionOrLabeledStatementOrDirective(parser),
     };
