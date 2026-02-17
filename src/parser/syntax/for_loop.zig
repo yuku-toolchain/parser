@@ -74,19 +74,41 @@ fn parseForLoopVariableKindOrNull(parser: *Parser) Error!?ast.VariableKind {
 
     switch (token_type) {
         .using => {
-            const next = try parser.lookAhead() orelse return null;
+            const next = try parser.lookAhead(1) orelse return null;
 
-            // 'using' is an identifier in 'for (using of/in ...)' unless it's a declaration.
-            if (next.type == .of or next.type == .in) return null;
+            // `using of` is ambiguous because `of` is a valid identifier:
+            //   `for (using of of[(0, 1, 2)])` → for-of loop, `using` is the expression, first `of` is the keyword
+            //   `for (using of = 1;;)` → `using` declaration, `of` is the variable name
+            // if `=`, `;`, or `:` follows `of`, it's a declaration. otherwise, it's a for-of loop.
+            if (next.type == .of) {
+                const next_next = try parser.lookAhead(2) orelse return null;
+
+                if(next_next.type == .assign or next_next.type == .semicolon or next_next.type == .colon) {
+                    try parser.advance() orelse return null;
+
+                    return .using;
+                }
+
+                return null;
+            }
+
+            // `using in` is always a for-in loop (`for (using in obj)`),
+            // because `in` is reserved and can never be a variable name.
+            if(next.type == .in) return null;
 
             // 'using.', 'using(', 'using[' are expression forms where 'using' is an identifier.
             if (next.type == .dot or next.type == .left_paren or next.type == .left_bracket) return null;
 
+            // `using` doesn't support destructuring, so `for (using {} = ...;;)` is invalid.
+            // by returning null (not a declaration), the caller produces a natural "expected ';', found '{'" error.
+            if (next.type == .left_brace) return null;
+
             try parser.advance() orelse return null;
+
             return .using;
         },
         .await => {
-            const next = try parser.lookAhead() orelse return null;
+            const next = try parser.lookAhead(1) orelse return null;
             if (next.type != .using) return null;
             try parser.advance() orelse return null; // consume 'await'
             try parser.advance() orelse return null; // consume 'using'

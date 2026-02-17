@@ -1,1 +1,2 @@
-await
+for (using in cool) {
+}

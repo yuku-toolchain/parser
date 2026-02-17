@@ -123,7 +123,7 @@ fn parseLet(parser: *Parser) Error!?ast.NodeIndex {
 
 /// `using` declaration, or fall through to expression statement.
 fn parseUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
-    const next = try parser.lookAhead() orelse return null;
+    const next = try parser.lookAhead(1) orelse return null;
 
     return switch(next.type) {
         // `using.`, `using(`, `using[` are expression forms where `using` is an identifier.
@@ -134,7 +134,7 @@ fn parseUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
 
 /// `await using` declaration, or fall through to expression statement.
 fn parseAwaitUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
-     const next = try parser.lookAhead() orelse return null;
+     const next = try parser.lookAhead(1) orelse return null;
 
     return switch (next.type) {
         .using => {
@@ -166,7 +166,7 @@ fn parseAwaitExpressionStatement(parser: *Parser, start: u32) Error!?ast.NodeInd
 
 /// import declaration, or fall through to import expression statement (`import(` / `import.`).
 fn parseImportDeclarationOrExpression(parser: *Parser) Error!?ast.NodeIndex {
-    const next = try parser.lookAhead() orelse return null;
+    const next = try parser.lookAhead(1) orelse return null;
 
     return switch (next.type) {
         // `import(` and `import.` are expression forms (dynamic import / import.meta / phase imports)
@@ -177,7 +177,7 @@ fn parseImportDeclarationOrExpression(parser: *Parser) Error!?ast.NodeIndex {
 
 /// `async function` declaration, or fall through to expression statement.
 fn parseAsyncFunctionOrExpression(parser: *Parser) Error!?ast.NodeIndex {
-    const next = try parser.lookAhead() orelse return null;
+    const next = try parser.lookAhead(1) orelse return null;
 
     if (next.type == .function and !next.has_line_terminator_before) {
         const start = parser.current_token.span.start;

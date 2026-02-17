@@ -125,7 +125,7 @@ fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) Error!?ast.N
 pub fn isLetIdentifier(parser: *Parser) Error!?bool {
     std.debug.assert(parser.current_token.type == .let);
 
-    const next = try parser.lookAhead() orelse return null;
+    const next = try parser.lookAhead(1) orelse return null;
 
     // 'let' followed by a semicolon should be parsed as an identifier, not a declaration.
     if (next.type == .semicolon) {
@@ -148,7 +148,7 @@ pub fn isLetIdentifier(parser: *Parser) Error!?bool {
 pub fn isUsingIdentifier(parser: *Parser) Error!?bool {
     std.debug.assert(parser.current_token.type == .using);
 
-    const next = try parser.lookAhead() orelse return null;
+    const next = try parser.lookAhead(1) orelse return null;
 
     if (
         (next.type == .left_brace or next.type == .left_bracket or next.type.isIdentifierLike())
