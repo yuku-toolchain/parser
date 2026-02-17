@@ -254,8 +254,7 @@ pub const Parser = struct {
         self.current_token = try self.nextToken() orelse return null;
     }
 
-    // maximum two lookaheads
-    pub fn lookAhead(self: *Parser, comptime offset: u2) Error!?token.Token {
+    pub fn lookAhead(self: *Parser) Error!?token.Token {
         const prev_state = self.lexer.state;
         const prev_cursor = self.lexer.cursor;
         const prev_comments_len = self.lexer.comments.items.len;
@@ -266,13 +265,7 @@ pub const Parser = struct {
             self.lexer.comments.shrinkRetainingCapacity(prev_comments_len);
         }
 
-        var future_token: token.Token = undefined;
-
-        inline for (0..offset) |_| {
-            future_token = try self.nextToken() orelse return null;
-        }
-
-        return future_token;
+        return try self.nextToken();
     }
 
     /// sets current token from a re-scanned token and advances to the next token.
