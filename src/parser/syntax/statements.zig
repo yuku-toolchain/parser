@@ -716,6 +716,20 @@ fn parseForLoopDeclarator(parser: *Parser) Error!?ast.NodeIndex {
     return try parser.addNode(.{ .variable_declarator = .{ .id = id, .init = init } }, .{ .start = decl_start, .end = end });
 }
 
+/// create a variable declaration with a single declarator
+fn createSingleDeclaration(parser: *Parser, kind: ast.VariableKind, declarator: ast.NodeIndex, decl_start: u32, decl_end: u32) Error!ast.NodeIndex {
+    const checkpoint = parser.scratch_a.begin();
+    defer parser.scratch_a.reset(checkpoint);
+    try parser.scratch_a.append(parser.allocator(), declarator);
+
+    return try parser.addNode(.{
+        .variable_declaration = .{
+            .declarators = try parser.addExtraFromScratch(&parser.scratch_a, checkpoint),
+            .kind = kind,
+        },
+    }, .{ .start = decl_start, .end = decl_end });
+}
+
 /// https://tc39.es/ecma262/#sec-return-statement
 fn parseReturnStatement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
@@ -831,18 +845,4 @@ fn parseDebuggerStatement(parser: *Parser) Error!?ast.NodeIndex {
     try parser.advance() orelse return null; // consume 'debugger'
     end = try parser.eatSemicolon(end) orelse return null;
     return try parser.addNode(.debugger_statement, .{ .start = start, .end = end });
-}
-
-/// create a variable declaration with a single declarator
-fn createSingleDeclaration(parser: *Parser, kind: ast.VariableKind, declarator: ast.NodeIndex, decl_start: u32, decl_end: u32) Error!ast.NodeIndex {
-    const checkpoint = parser.scratch_a.begin();
-    defer parser.scratch_a.reset(checkpoint);
-    try parser.scratch_a.append(parser.allocator(), declarator);
-
-    return try parser.addNode(.{
-        .variable_declaration = .{
-            .declarators = try parser.addExtraFromScratch(&parser.scratch_a, checkpoint),
-            .kind = kind,
-        },
-    }, .{ .start = decl_start, .end = decl_end });
 }
