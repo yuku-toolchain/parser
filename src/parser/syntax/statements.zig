@@ -472,7 +472,7 @@ fn parseForHead(parser: *Parser, start: u32, is_for_await: bool) Error!?ast.Node
 
     // empty init: for (;;)
     if (token_type == .semicolon) {
-        return parseForStatementRest(parser, start, ast.null_node);
+        return parseForStatementRest(parser, start, ast.null_node, is_for_await);
     }
 
     const decl_start = parser.current_token.span.start;
@@ -535,18 +535,11 @@ fn parseForWithDeclaration(parser: *Parser, start: u32, is_for_await: bool, kind
 
     // check for for-in/for-of
     if (parser.current_token.type == .in) {
-        // for (var/let/const x in ...)
-        if (is_for_await) {
-            try parser.report(parser.current_token.span, "'for await' requires 'of', not 'in'", .{});
-            return null;
-        }
-
         const decl = try createSingleDeclaration(parser, kind, first_declarator, decl_start, first_end);
-        return parseForInStatementRest(parser, start, decl);
+        return parseForInStatementRest(parser, start, decl, is_for_await);
     }
 
     if (parser.current_token.type == .of) {
-        // for (var/let/const x of ...)
         const decl = try createSingleDeclaration(parser, kind, first_declarator, decl_start, first_end);
         return parseForOfStatementRest(parser, start, decl, is_for_await);
     }
@@ -595,7 +588,7 @@ fn parseForWithDeclaration(parser: *Parser, start: u32, is_for_await: bool, kind
         },
     }, .{ .start = decl_start, .end = end });
 
-    return parseForStatementRest(parser, start, decl);
+    return parseForStatementRest(parser, start, decl, is_for_await);
 }
 
 /// for loop starting with expression
@@ -611,34 +604,26 @@ fn parseForWithExpression(parser: *Parser, start: u32, is_for_await: bool) Error
 
     // check for for-in/for-of
     if (parser.current_token.type == .in) {
-        // for (expr in ...)
-        if (is_for_await) {
-            try parser.report(parser.current_token.span, "'for await' requires 'of', not 'in'", .{});
-            return null;
-        }
-
         try grammar.expressionToPattern(parser, expr, .assignable) orelse return null;
-
-        // expr is now pattern
-
-        return parseForInStatementRest(parser, start, expr);
+        return parseForInStatementRest(parser, start, expr, is_for_await);
     }
 
     if (parser.current_token.type == .of) {
-        // for (expr of ...)
         try grammar.expressionToPattern(parser, expr, .assignable) orelse return null;
-
-        // expr is now pattern
-
         return parseForOfStatementRest(parser, start, expr, is_for_await);
     }
 
     // regular for statement
-    return parseForStatementRest(parser, start, expr);
+    return parseForStatementRest(parser, start, expr, is_for_await);
 }
 
 /// parse rest of regular for statement after init
-fn parseForStatementRest(parser: *Parser, start: u32, init: ast.NodeIndex) Error!?ast.NodeIndex {
+fn parseForStatementRest(parser: *Parser, start: u32, init: ast.NodeIndex, is_for_await: bool) Error!?ast.NodeIndex {
+    if (is_for_await) {
+        try parser.report(parser.current_token.span, "'for await' is only valid with for-of loops", .{});
+        return null;
+    }
+
     if (!try parser.expect(.semicolon, "Expected ';' after for-loop init", null)) return null;
 
     var test_expr: ast.NodeIndex = ast.null_node;
@@ -670,7 +655,12 @@ fn parseForStatementRest(parser: *Parser, start: u32, init: ast.NodeIndex) Error
 }
 
 /// rest of for-in statement after left
-fn parseForInStatementRest(parser: *Parser, start: u32, left: ast.NodeIndex) Error!?ast.NodeIndex {
+fn parseForInStatementRest(parser: *Parser, start: u32, left: ast.NodeIndex, is_for_await: bool) Error!?ast.NodeIndex {
+    if (is_for_await) {
+        try parser.report(parser.current_token.span, "'for await' requires 'of', not 'in'", .{});
+        return null;
+    }
+
     try parser.advance() orelse return null; // consume 'in'
 
     const right = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
