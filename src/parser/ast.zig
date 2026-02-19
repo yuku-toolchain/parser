@@ -851,6 +851,8 @@ pub const TemplateElement = struct {
     raw_start: u32,
     raw_len: u16,
     tail: bool,
+    /// when true, the cooked value is null/undefined (invalid escape in tagged template)
+    has_invalid_escape: bool = false,
 };
 
 /// used in expressions

@@ -162,8 +162,8 @@ pub inline fn parsePrimaryExpression(parser: *Parser, opts: ParseExpressionOpts,
         .this => parseThisExpression(parser),
         .super => parseSuperExpression(parser),
         .slash, .slash_assign => literals.parseRegExpLiteral(parser),
-        .template_head => literals.parseTemplateLiteral(parser),
-        .no_substitution_template => literals.parseNoSubstitutionTemplate(parser),
+        .template_head => literals.parseTemplateLiteral(parser, false),
+        .no_substitution_template => literals.parseNoSubstitutionTemplate(parser, false),
         .left_bracket => parseArrayExpression(parser, opts.in_cover),
         .left_brace => parseObjectExpression(parser, opts.in_cover),
         .function => functions.parseFunction(parser, .{ .is_expression = true }, null),
@@ -922,9 +922,9 @@ fn parseTaggedTemplateExpression(parser: *Parser, tag_node: ast.NodeIndex) Error
     const start = parser.getSpan(tag_node).start;
 
     const quasi = if (parser.current_token.type == .no_substitution_template)
-        try literals.parseNoSubstitutionTemplate(parser)
+        try literals.parseNoSubstitutionTemplate(parser, true)
     else
-        try literals.parseTemplateLiteral(parser);
+        try literals.parseTemplateLiteral(parser, true);
 
     if (quasi == null) return null;
 

@@ -31,6 +31,9 @@ const ParserContext = struct {
 };
 
 const ParserState = struct {
+    /// Whether the parser is currently in strict mode.
+    /// Modules are always strict; otherwise enabled by "use strict" directives or class bodies.
+    strict_mode: bool = false,
     /// Tracks if the cover (array or object) we are parsing has a trailing comma
     /// value is the start index of the cover
     cover_has_trailing_comma: ?u32 = null,
@@ -60,9 +63,6 @@ pub const Parser = struct {
 
     context: ParserContext = .{},
     state: ParserState = .{},
-
-    /// Whether the parser is currently in strict mode.
-    strict_mode: bool = false,
 
     source_type: ast.SourceType,
     lang: ast.Lang,
@@ -173,25 +173,25 @@ pub const Parser = struct {
     }
 
     pub inline fn isStrictMode(self: *Parser) bool {
-        return self.strict_mode;
+        return self.state.strict_mode;
     }
 
     pub inline fn enterStrictMode(self: *Parser) bool {
-        const prev = self.isStrictMode();
-        self.strict_mode = true;
-        self.lexer.strict_mode = true;
+        const prev = self.state.strict_mode;
+        self.state.strict_mode = true;
+        self.lexer.state.strict_mode = true;
         return prev;
     }
 
     pub inline fn restoreStrictMode(self: *Parser, prev: bool) void {
-        self.strict_mode = prev;
-        self.lexer.strict_mode = prev;
+        self.state.strict_mode = prev;
+        self.lexer.state.strict_mode = prev;
     }
 
     // utils
 
     pub inline fn setLexerMode(self: *Parser, mode: lexer.LexerMode) void {
-        self.lexer.state.mode = mode;
+        self.lexer.mode = mode;
     }
 
     pub inline fn addNode(self: *Parser, data: ast.NodeData, span: ast.Span) Error!ast.NodeIndex {

@@ -55,8 +55,12 @@ pub const LexerMode = enum {
 };
 
 const LexerState = struct {
+    /// whether the previous token was preceded by a line terminator (for ASI)
     has_line_terminator_before: bool = false,
-    mode: LexerMode = .normal,
+    /// whether the lexer is currently in strict mode (synced by the parser)
+    strict_mode: bool = false,
+    /// set by consumeEscape when an invalid escape is encountered in loose mode (templates)
+    has_invalid_escape: bool = false,
 };
 
 pub const Lexer = struct {
@@ -64,6 +68,7 @@ pub const Lexer = struct {
     allocator: std.mem.Allocator,
 
     state: LexerState,
+    mode: LexerMode = .normal,
 
     source: []const u8,
 
@@ -73,11 +78,12 @@ pub const Lexer = struct {
     source_type: ast.SourceType,
     hashbang: ?ast.Hashbang = null,
 
-    /// whether the lexer is currently in strict mode (synced by the parser)
-    strict_mode: bool = false,
-
     pub inline fn isStrictMode(self: *const Lexer) bool {
-        return self.strict_mode;
+        return self.state.strict_mode;
+    }
+
+    pub inline fn hasInvalidEscape(self: *const Lexer) bool {
+        return self.state.has_invalid_escape;
     }
 
     pub fn init(source: []const u8, allocator: std.mem.Allocator, source_type: ast.SourceType) error{OutOfMemory}!Lexer {
@@ -113,6 +119,7 @@ pub const Lexer = struct {
     }
 
     pub fn nextToken(self: *Lexer) LexicalError!token.Token {
+        self.state.has_invalid_escape = false;
         try self.skipWsAndComments();
 
         if (self.cursor >= self.source.len) {
@@ -206,7 +213,7 @@ pub const Lexer = struct {
                     // in jsx, <div attr=<elem></elem>></div>
                     //                               ~~
                     //                               this should be interepted as separate '>' tokens for ease of parsing
-                    if (self.state.mode == .jsx_tag) {
+                    if (self.mode == .jsx_tag) {
                         return self.puncToken(1, .greater_than, start);
                     } else {
                         return self.puncToken(2, .right_shift, start);
@@ -286,6 +293,7 @@ pub const Lexer = struct {
     pub inline fn rewindTo(self: *Lexer, position: u32) void {
         self.cursor = position;
         self.state.has_line_terminator_before = false;
+        self.state.has_invalid_escape = false;
     }
 
     // functions exclusively called by the parser for context-specific lexing
@@ -304,18 +312,16 @@ pub const Lexer = struct {
         while (self.cursor < self.source.len) {
             const c = self.source[self.cursor];
             if (c == '\\') {
-                try self.consumeEscape();
+                try self.consumeEscape(true);
                 continue;
             }
             if (c == '`') {
                 self.cursor += 1;
-                const end = self.cursor;
-                return self.createToken(.template_tail, start, end);
+                return self.createToken(.template_tail, start, self.cursor);
             }
             if (c == '$' and self.peek(1) == '{') {
                 self.cursor += 2;
-                const end = self.cursor;
-                return self.createToken(.template_middle, start, end);
+                return self.createToken(.template_middle, start, self.cursor);
             }
             self.cursor += 1;
         }
@@ -437,8 +443,8 @@ pub const Lexer = struct {
         while (self.cursor < self.source.len) {
             const c = self.source[self.cursor];
 
-            if (c == '\\' and self.state.mode != .jsx_tag) {
-                try self.consumeEscape();
+            if (c == '\\' and self.mode != .jsx_tag) {
+                try self.consumeEscape(false);
                 continue;
             }
 
@@ -448,7 +454,7 @@ pub const Lexer = struct {
             }
 
             // in jsx tag mode, strings can contain newlines (for multi-line attribute values)
-            if ((c == '\n' or c == '\r') and self.state.mode != .jsx_tag) {
+            if ((c == '\n' or c == '\r') and self.mode != .jsx_tag) {
                 return error.UnterminatedString;
             }
 
@@ -466,20 +472,18 @@ pub const Lexer = struct {
             const c = self.source[self.cursor];
 
             if (c == '\\') {
-                try self.consumeEscape();
+                try self.consumeEscape(true);
                 continue;
             }
 
             if (c == '`') {
                 self.cursor += 1;
-                const end = self.cursor;
-                return self.createToken(.no_substitution_template, start, end);
+                return self.createToken(.no_substitution_template, start, self.cursor);
             }
 
             if (c == '$' and self.peek(1) == '{') {
                 self.cursor += 2;
-                const end = self.cursor;
-                return self.createToken(.template_head, start, end);
+                return self.createToken(.template_head, start, self.cursor);
             }
 
             self.cursor += 1;
@@ -488,7 +492,21 @@ pub const Lexer = struct {
         return error.NonTerminatedTemplateLiteral;
     }
 
-    fn consumeEscape(self: *Lexer) LexicalError!void {
+    /// consumes an escape sequence. when loose (templates), invalid escapes
+    /// set has_invalid_escape and skip instead of returning errors.
+    fn consumeEscape(self: *Lexer, comptime loose: bool) LexicalError!void {
+        if (loose) {
+            self.consumeEscapeImpl() catch |err| {
+                if (err == error.OutOfMemory) return error.OutOfMemory;
+                self.state.has_invalid_escape = true;
+                if (self.cursor < self.source.len) self.cursor += 1;
+            };
+        } else {
+            try self.consumeEscapeImpl();
+        }
+    }
+
+    fn consumeEscapeImpl(self: *Lexer) LexicalError!void {
         self.cursor += 1; // skip backslash
 
         if (self.cursor >= self.source.len) {
@@ -658,7 +676,7 @@ pub const Lexer = struct {
 
     fn scanIdentifierOrKeyword(self: *Lexer) !token.Token {
         const start = self.cursor;
-        const is_jsx_tag = self.state.mode == .jsx_tag;
+        const is_jsx_tag = self.mode == .jsx_tag;
 
         const is_private = self.source[self.cursor] == '#';
 
