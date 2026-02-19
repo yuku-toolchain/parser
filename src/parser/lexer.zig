@@ -59,7 +59,9 @@ const LexerState = struct {
     has_line_terminator_before: bool = false,
     /// whether the lexer is currently in strict mode (synced by the parser)
     strict_mode: bool = false,
-    /// set by consumeEscape when an invalid escape is encountered in loose mode (templates)
+    /// set by consumeEscape in template context when an invalid escape is encountered.
+    /// the parser uses this to set cooked value to null for tagged templates,
+    /// or to report an error for untagged templates.
     has_invalid_escape: bool = false,
 };
 
@@ -500,7 +502,7 @@ pub const Lexer = struct {
     /// consumes an escape sequence.
     /// in string context, errors propagate directly (fatal).
     /// in template context, errors are absorbed and has_invalid_escape is set instead,
-    /// because tagged templates tolerate invalid escapes (cooked value becomes undefined).
+    /// because tagged templates tolerate invalid escapes (cooked value becomes null/undefined).
     fn consumeEscape(self: *Lexer, comptime context: EscapeContext) LexicalError!void {
         if (context == .template) {
             self.consumeEscapeImpl(context) catch |err| {
