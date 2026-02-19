@@ -91,9 +91,8 @@ fn parseClassBody(parser: *Parser) Error!?ast.NodeIndex {
     )) return null;
 
     // class bodies are always in strict mode (https://tc39.es/ecma262/#sec-class-definitions)
-    const prev_strict = parser.state.strict_mode;
-    defer parser.state.strict_mode = prev_strict;
-    parser.enterStrictMode();
+    const prev_strict = parser.enterStrictMode();
+    defer parser.restoreStrictMode(prev_strict);
 
     const checkpoint = parser.scratch_a.begin();
     defer parser.scratch_a.reset(checkpoint);

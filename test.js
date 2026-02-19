@@ -1,4 +1,1 @@
-for (using
-cool = nice;;) {
-
-}
+01.toString()

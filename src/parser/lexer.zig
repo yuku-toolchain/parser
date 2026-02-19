@@ -29,6 +29,10 @@ pub const LexicalError = error{
     IdentifierAfterNumericLiteral,
     InvalidUtf8,
     OutOfMemory,
+    // strict mode errors
+    OctalEscapeInStrict,
+    OctalLiteralInStrict,
+    LeadingZeroInStrict,
     // jsx-specific errors
     JsxIdentifierCannotContainEscapes,
     JsxIdentifierCannotStartWithBackslash,
@@ -67,6 +71,9 @@ pub const Lexer = struct {
 
     source_type: ast.SourceType,
     hashbang: ?ast.Hashbang = null,
+
+    /// whether the lexer is currently in strict mode (synced by the parser)
+    strict_mode: bool = false,
 
     pub fn init(source: []const u8, allocator: std.mem.Allocator, source_type: ast.SourceType) error{OutOfMemory}!Lexer {
         var self: Lexer = .{
@@ -490,10 +497,11 @@ pub const Lexer = struct {
                 const c1 = self.peek(1);
 
                 if (!util.Utf.isOctalDigit(c1)) {
-                    self.cursor += 1; // null escape
+                    self.cursor += 1; // null escape (\0)
                     break :brk;
                 }
 
+                if (self.strict_mode) return error.OctalEscapeInStrict;
                 try self.consumeOctal();
             },
             'x' => {
@@ -503,9 +511,11 @@ pub const Lexer = struct {
                 try self.consumeUnicodeEscape(.normal);
             },
             '1'...'7' => {
+                if (self.strict_mode) return error.OctalEscapeInStrict;
                 try self.consumeOctal();
             },
             '8'...'9' => {
+                if (self.strict_mode) return error.OctalEscapeInStrict;
                 self.cursor += 1;
             },
             '\n', '\r' => {
@@ -849,9 +859,6 @@ pub const Lexer = struct {
         // handle prefixes: 0x, 0o, 0b
         var has_decimal_or_exponent = false;
 
-        // 017
-        var is_legacy_octal = false;
-
         if (self.source[self.cursor] == '0') {
             const prefix = self.peek(1);
 
@@ -878,10 +885,10 @@ pub const Lexer = struct {
                     if (self.cursor == bin_start) return error.InvalidBinaryLiteral;
                 },
                 '0'...'9' => {
-                    is_legacy_octal = true;
-
+                    // legacy octal (077) or decimal with leading zero (089)
                     try self.consumeDecimalDigits();
 
+                    var is_legacy_octal = true;
                     for (self.source[start..self.cursor]) |c| {
                         if (c == '8' or c == '9') {
                             is_legacy_octal = false;
@@ -889,7 +896,11 @@ pub const Lexer = struct {
                         }
                     }
 
-                    token_type = .leading_zero_literal;
+                    if (self.strict_mode) {
+                        return if (is_legacy_octal) error.OctalLiteralInStrict else error.LeadingZeroInStrict;
+                    }
+
+                    token_type = if (is_legacy_octal) .octal_literal else .numeric_literal;
                 },
                 else => {
                     try self.consumeDecimalDigits();
@@ -899,26 +910,18 @@ pub const Lexer = struct {
             try self.consumeDecimalDigits();
         }
 
-        const can_have_fraction_or_exponent = token_type == .numeric_literal or token_type == .leading_zero_literal;
-
-        // handle decimal point for decimal/leading-zero literals, but not legacy octals before member access
-        if (can_have_fraction_or_exponent and
+        // fraction and exponent only for regular decimal literals
+        if (token_type == .numeric_literal and
             self.cursor < self.source.len and self.source[self.cursor] == '.')
         {
             const next = self.peek(1);
             if (next == '_') return error.NumericSeparatorMisuse;
-
-            if (is_legacy_octal and !(next >= '0' and next <= '9')) {
-                // don't consume the '.', it's member access (e.g., 01.toString())
-            } else {
-                self.cursor += 1;
-                has_decimal_or_exponent = true;
-                if (next >= '0' and next <= '9') try self.consumeDecimalDigits();
-            }
+            self.cursor += 1;
+            has_decimal_or_exponent = true;
+            if (next >= '0' and next <= '9') try self.consumeDecimalDigits();
         }
 
-        // handle exponent for decimal/leading-zero literals
-        if (can_have_fraction_or_exponent and self.cursor < self.source.len) {
+        if (token_type == .numeric_literal and self.cursor < self.source.len) {
             const exp_char = self.source[self.cursor];
             if (exp_char == 'e' or exp_char == 'E') {
                 has_decimal_or_exponent = true;
@@ -1236,6 +1239,9 @@ pub fn getLexicalErrorMessage(error_type: LexicalError) []const u8 {
         error.IdentifierAfterNumericLiteral => "Identifier cannot immediately follow a numeric literal",
         error.InvalidUtf8 => "Invalid UTF-8 byte sequence",
         error.OutOfMemory => "Out of memory",
+        error.OctalEscapeInStrict => "Octal escape sequences are not allowed in strict mode",
+        error.OctalLiteralInStrict => "Octal literals are not allowed in strict mode",
+        error.LeadingZeroInStrict => "Decimals with leading zeros are not allowed in strict mode",
         error.JsxIdentifierCannotContainEscapes => "JSX tag names cannot contain escape sequences",
         error.JsxIdentifierCannotStartWithBackslash => "JSX tag names cannot start with a backslash",
     };
@@ -1268,6 +1274,9 @@ pub fn getLexicalErrorHelp(error_type: LexicalError) []const u8 {
         error.IdentifierAfterNumericLiteral => "Try adding whitespace here between the number and identifier",
         error.InvalidUtf8 => "The source file contains invalid UTF-8 encoding. Ensure the file is saved with valid UTF-8 encoding",
         error.OutOfMemory => "The system ran out of memory while parsing",
+        error.OctalEscapeInStrict => "Use \\xHH (hex) or \\uHHHH (unicode) escape instead",
+        error.OctalLiteralInStrict => "Use the 0o prefix for octal literals (e.g., 0o77), or a decimal equivalent",
+        error.LeadingZeroInStrict => "Remove the leading zero, or use 0o for octal, 0x for hex, or 0b for binary notation",
         error.JsxIdentifierCannotContainEscapes => "Remove the escape sequence and use the literal character instead",
         error.JsxIdentifierCannotStartWithBackslash => "JSX tag names must be plain identifiers without escape sequences",
     };

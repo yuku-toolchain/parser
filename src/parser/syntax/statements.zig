@@ -98,7 +98,7 @@ fn parseDirective(parser: *Parser, expression: ast.NodeIndex, expression_data: a
 
     // "use strict" directive enables strict mode for the current scope
     if (std.mem.eql(u8, parser.getSourceText(value_start, value_len), "use strict")) {
-        parser.enterStrictMode();
+        _ = parser.enterStrictMode();
     }
 
     return try parser.addNode(.{
