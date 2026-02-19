@@ -90,6 +90,8 @@ pub const Parser = struct {
 
         self.lexer = try lexer.Lexer.init(self.source, alloc, self.source_type);
 
+        if (self.isModule()) _ = self.enterStrictMode();
+
         // let's begin
         try self.advance() orelse {
             self.current_token = token.Token.eof(0);
@@ -98,8 +100,6 @@ pub const Parser = struct {
         errdefer self.arena.deinit();
 
         try self.ensureCapacity();
-
-        if (self.isModule()) _ = self.enterStrictMode();
 
         const body = try self.parseBody(null);
 
