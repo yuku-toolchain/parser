@@ -28,6 +28,11 @@ const ParseExpressionOpts = struct {
     /// when true, silently returns null on immediate expression parsing failure, which means no expression found.
     /// but still reports errors on subsequent parsing failures if an expression is detected.
     optional: bool = false,
+    /// whether to stop at `in` when `allow_in` is disabled. only the direct caller
+    /// that sets `allow_in = false` should pass `true` here, recursive calls (inside
+    /// parentheses, computed members, etc.) leave this `false` so `in` is parsed as
+    /// a binary operator normally.
+    respect_allow_in: bool = false,
 };
 
 pub fn parseExpression(parser: *Parser, precedence: u8, opts: ParseExpressionOpts) Error!?ast.NodeIndex {
@@ -35,31 +40,29 @@ pub fn parseExpression(parser: *Parser, precedence: u8, opts: ParseExpressionOpt
 
     while (true) {
         const current_type = parser.current_token.type;
-        if (current_type == .eof) break;
 
-        if (current_type == .in and !parser.context.allow_in) break;
+        if (opts.respect_allow_in and current_type == .in and !parser.context.allow_in) break;
 
-        const left_data = parser.getData(left);
+        const needs_yield_check = parser.current_token.has_line_terminator_before;
 
-        // `yield\n+a`
-        // it's not a binary expression, these are separate 'YieldExpression (argument=null)'
-        // and an another 'UnaryExpression'.
-        // because 'yield' is an expression and a statement at the same time lol
-        if (parser.current_token.has_line_terminator_before and left_data == .yield_expression) {
-            break;
-        }
+        const needs_postfix_check = isPostfixOperation(current_type);
 
-        // only LeftHandSideExpressions can have postfix operations applied.
-        //   a++()        <- can't call an update expression
-        //   () => {}()   <- can't call an arrow function
-        // breaking here produces natural "expected semicolon" error.
-        if (isPostfixOperation(current_type)) {
-            if (!isLeftHandSideExpression(left_data)) {
-                break;
-            }
+        if (needs_yield_check or needs_postfix_check) {
+            const left_data = parser.getData(left);
+
+            // `yield\n+a`: this not a binary expression, these are separate 'YieldExpression (argument=null)' and an another 'UnaryExpression'.
+            // because 'yield' is an expression and a statement at the same time lol
+            if (needs_yield_check and left_data == .yield_expression) break;
+
+            // only LeftHandSideExpressions can have postfix operations applied.
+            //   a++()        <- can't call an update expression
+            //   () => {}()   <- can't call an arrow function
+            // breaking here produces natural "expected semicolon" error.
+            if (needs_postfix_check and !isLeftHandSideExpression(left_data)) break;
         }
 
         const lbp = parser.current_token.leftBp();
+
         if (lbp < precedence or lbp == 0) break;
 
         left = try parseInfix(parser, lbp, left) orelse return null;
@@ -124,7 +127,9 @@ fn parsePrefix(parser: *Parser, opts: ParseExpressionOpts, precedence: u8) Error
     }
 
     if (token_type == .await and (parser.context.in_async or parser.isModule())) {
-        return parseAwaitExpression(parser);
+        const await_start = parser.current_token.span.start;
+        try parser.advance() orelse return null; // consume 'await'
+        return parseAwaitExpression(parser, await_start);
     }
 
     if (token_type == .yield and parser.context.yield_is_keyword) {
@@ -160,8 +165,8 @@ pub inline fn parsePrimaryExpression(parser: *Parser, opts: ParseExpressionOpts,
         .this => parseThisExpression(parser),
         .super => parseSuperExpression(parser),
         .slash, .slash_assign => literals.parseRegExpLiteral(parser),
-        .template_head => literals.parseTemplateLiteral(parser),
-        .no_substitution_template => literals.parseNoSubstitutionTemplate(parser),
+        .template_head => literals.parseTemplateLiteral(parser, false),
+        .no_substitution_template => literals.parseNoSubstitutionTemplate(parser, false),
         .left_bracket => parseArrayExpression(parser, opts.in_cover),
         .left_brace => parseObjectExpression(parser, opts.in_cover),
         .function => functions.parseFunction(parser, .{ .is_expression = true }, null),
@@ -202,7 +207,6 @@ fn parseParenthesizedOrArrowFunction(parser: *Parser, is_async: bool, arrow_star
     const cover = try parenthesized.parseCover(parser) orelse return null;
 
     // [no LineTerminator here] => ConciseBody
-    // arrow function's precedence is 2, assignment level
     if (parser.current_token.type == .arrow and !parser.current_token.has_line_terminator_before and precedence <= Precedence.Assignment) {
         return parenthesized.coverToArrowFunction(parser, cover, is_async, start);
     }
@@ -241,19 +245,15 @@ fn parseAsyncFunctionOrArrow(parser: *Parser, precedence: u8) Error!?ast.NodeInd
     }
 
     // [no LineTerminator here] => ConciseBody
-    if (parser.current_token.type.isIdentifierLike() and !parser.current_token.has_line_terminator_before and precedence <= Precedence.Assignment) {
-        const id = try literals.parseIdentifier(parser) orelse return null;
+    if (parser.current_token.type.isIdentifierLike() and !parser.current_token.has_line_terminator_before) {
+        const after_id_token = try parser.lookAhead() orelse return null;
 
-        if (parser.current_token.type == .arrow and !parser.current_token.has_line_terminator_before) {
+        if (after_id_token.type == .arrow and !after_id_token.has_line_terminator_before) {
+            const id = try literals.parseIdentifier(parser) orelse return null;
             return parenthesized.identifierToArrowFunction(parser, id, true, start);
         }
 
-        try parser.report(
-            parser.current_token.span,
-            "Expected '=>' after async arrow function parameter",
-            .{ .help = "Use 'async x => ...' or 'async (x) => ...' for async arrow functions." },
-        );
-        return null;
+        return async_id;
     }
 
     return async_id;
@@ -292,15 +292,12 @@ fn parseUnaryExpression(parser: *Parser) Error!?ast.NodeIndex {
 }
 
 /// `await expression`
-fn parseAwaitExpression(parser: *Parser) Error!?ast.NodeIndex {
-    const start = parser.current_token.span.start;
-    try parser.advance() orelse return null; // consume 'await'
-
+pub fn parseAwaitExpression(parser: *Parser, await_start: u32) Error!?ast.NodeIndex {
     const argument = try parseExpression(parser, Precedence.Unary, .{}) orelse return null;
 
     return try parser.addNode(
         .{ .await_expression = .{ .argument = argument } },
-        .{ .start = start, .end = parser.getSpan(argument).end },
+        .{ .start = await_start, .end = parser.getSpan(argument).end },
     );
 }
 
@@ -322,7 +319,7 @@ fn parseYieldExpression(parser: *Parser) Error!?ast.NodeIndex {
 
     if (
     // yield [no LineTerminator here] AssignmentExpression[?In, +Yield, ?Await]
-    !parser.canInsertSemicolon(parser.current_token) and
+    !parser.canInsertImplicitSemicolon(parser.current_token) and
         parser.current_token.type != .semicolon)
     {
         // the yield argument is optional.
@@ -335,7 +332,7 @@ fn parseYieldExpression(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     if (delegate and ast.isNull(argument)) {
-        try parser.report(parser.current_token.span, "Expected expression after 'yield*'", .{});
+        try parser.reportExpected(parser.current_token.span, "Expected expression after 'yield*'", .{});
         return null;
     }
 
@@ -495,7 +492,7 @@ fn parseNewExpression(parser: *Parser) Error!?ast.NodeIndex {
         const arguments_end = parser.current_token.span.end;
 
         if (parser.current_token.type != .right_paren) {
-            try parser.report(
+            try parser.reportExpected(
                 parser.current_token.span,
                 "Expected ')' after constructor arguments",
                 .{
@@ -787,7 +784,7 @@ fn parseMemberProperty(parser: *Parser, object_node: ast.NodeIndex, optional: bo
     else if (tok_type == .private_identifier)
         try literals.parsePrivateIdentifier(parser)
     else {
-        try parser.report(
+        try parser.reportExpected(
             parser.current_token.span,
             "Expected property name after '.'",
             .{ .help = "Use an identifier or private identifier (#name) for member access." },
@@ -822,7 +819,7 @@ fn parseComputedMemberExpression(parser: *Parser, object_node: ast.NodeIndex, op
 
     const end = parser.current_token.span.end; // ']' position
     if (parser.current_token.type != .right_bracket) {
-        try parser.report(
+        try parser.reportExpected(
             parser.current_token.span,
             "Expected ']' after computed property",
             .{
@@ -854,7 +851,7 @@ fn parseCallExpression(parser: *Parser, callee_node: ast.NodeIndex, optional: bo
 
     const end = parser.current_token.span.end; // ')' position
     if (parser.current_token.type != .right_paren) {
-        try parser.report(
+        try parser.reportExpected(
             parser.current_token.span,
             "Expected ')' after function arguments",
             .{
@@ -923,9 +920,9 @@ fn parseTaggedTemplateExpression(parser: *Parser, tag_node: ast.NodeIndex) Error
     const start = parser.getSpan(tag_node).start;
 
     const quasi = if (parser.current_token.type == .no_substitution_template)
-        try literals.parseNoSubstitutionTemplate(parser)
+        try literals.parseNoSubstitutionTemplate(parser, true)
     else
-        try literals.parseTemplateLiteral(parser);
+        try literals.parseTemplateLiteral(parser, true);
 
     if (quasi == null) return null;
 
@@ -999,7 +996,7 @@ fn parseOptionalChainElement(parser: *Parser, object_node: ast.NodeIndex, option
             return null;
         },
         else => {
-            try parser.report(
+            try parser.reportExpected(
                 parser.current_token.span,
                 "Expected property name, '[', or '(' after '?.'",
                 .{ .help = "Optional chaining must be followed by property access (.x), computed access ([x]), or a call (())." },
@@ -1057,8 +1054,6 @@ pub inline fn parseLeftHandSideExpression(parser: *Parser) Error!?ast.NodeIndex 
 /// this operation is valid when the left side is wrapped in parentheses,
 /// which creates a `parenthesized_expression` (which is a LeftHandSideExpression):
 /// - `(a++).prop` - valid
-///
-/// just explaining things xD
 fn isPostfixOperation(token_type: token.TokenType) bool {
     return switch (token_type) {
         .dot, // obj.prop

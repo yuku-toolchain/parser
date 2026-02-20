@@ -11,7 +11,7 @@
   "errors": [
     {
       "severity": "error",
-      "message": "Expected declaration after 'export'",
+      "message": "Expected declaration after 'export', but found 'using'",
       "help": "Use 'export var', 'export let', 'export const', 'export function', or 'export class'",
       "start": 7,
       "end": 12,

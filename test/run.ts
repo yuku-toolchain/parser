@@ -11,6 +11,7 @@ import { deserializeAstJson, serializeAstJson } from "yuku-shared"
 await preload()
 
 console.clear()
+console.log('')
 
 const isCI = !!process.env.CI
 const updateSnapshots = process.argv.includes("--update-snapshots")
@@ -28,7 +29,7 @@ interface TestConfig {
 }
 
 const configs: TestConfig[] = [
-  { path: "test/suite/js/pass", type: "snapshot", languages: ["js"], skipOnCI: true },
+  { path: "test/suite/js/pass", type: "snapshot", languages: ["js"] },
   { path: "test/suite/js/fail", type: "should_fail", languages: ["js"], skipOnCI: true },
   // uncomment when we add semantic checks (first needs a visitor/traverser)
   // { path: "test/suite/js/semantic", type: "should_fail", languages: ["js"] },
@@ -86,11 +87,27 @@ const shouldIncludeFile = (path: string, languages: Language[], exclude?: string
   return languages.includes(lang)
 }
 
+let progressCurrent = 0
+let progressTotal = 0
+
+const updateProgress = (file: string, passed: boolean) => {
+  if (isCI) return
+  progressCurrent++
+  const icon = passed ? "\x1b[32m✓\x1b[0m" : "\x1b[31m✗\x1b[0m"
+  const label = file.length > 60 ? "..." + file.slice(-57) : file
+  process.stdout.write(`\r\x1b[K  ${icon} ${progressCurrent}/${progressTotal}  ${label}`)
+}
+
+const clearProgress = () => {
+  if (isCI) return
+  process.stdout.write("\r\x1b[K")
+}
+
 const runTest = async (
   file: string,
   config: TestConfig,
   result: TestResult,
-): Promise<void> => {
+): Promise<boolean> => {
   try {
     const { type, checkAstOnError } = config
     const content = await Bun.file(file).text()
@@ -104,25 +121,25 @@ const runTest = async (
     if (type === "should_pass") {
       if (hasErrors) {
         result.failures.push(file)
-        return
+        return false
       }
       result.passed++
-      return
+      return true
     }
 
     if (type === "should_fail") {
       if (!hasErrors) {
         result.failures.push(file)
-        return
+        return false
       }
       result.passed++
-      return
+      return true
     }
 
     if (type === "snapshot") {
       if (hasErrors && !checkAstOnError) {
         result.failures.push(file)
-        return
+        return false
       }
 
       const dir = dirname(file)
@@ -135,7 +152,7 @@ const runTest = async (
         await mkdir(snapshotsDir, { recursive: true })
         await Bun.write(snapshotFile, serializeAstJson(parsed, 2))
         result.passed++
-        return
+        return true
       }
 
       const snapshot = deserializeAstJson(await Bun.file(snapshotFile).text())
@@ -146,63 +163,78 @@ const runTest = async (
         if (updateSnapshots) {
           await Bun.write(snapshotFile, serializeAstJson(parsed, 2))
           result.passed++
-          return
+          return true
         }
 
         const difference = diff(snapshot, parsed, { contextLines: 2 })
+
+        clearProgress()
 
         console.log(`\nx ${file}\n${difference}\n`)
         result.failures.push(`${file} (AST mismatch)`)
         result.astMismatches++
 
-        return
+        return false
       }
 
       result.passed++
+      return true
     }
   } catch (err) {
     result.failures.push(`${file} - error: ${err}`)
+    return false
   }
+  return true
 }
 
-const runCategory = async (config: TestConfig) => {
-  const result: TestResult = {
-    path: config.path,
-    passed: 0, failed: 0, total: 0, failures: [], astMismatches: 0, astComparisons: 0
-  }
-  results.set(config.path, result)
-
-  const pattern = `${config.path}/**/*`
-  const glob = new Glob(pattern)
+const collectFiles = async (config: TestConfig): Promise<string[]> => {
+  const glob = new Glob(`${config.path}/**/*`)
   const files: string[] = []
-
   for await (const file of glob.scan(".")) {
     if (shouldIncludeFile(file, config.languages, config.exclude)) {
       files.push(file)
     }
   }
+  return files
+}
 
-  result.total = files.length
+const runCategory = async (config: TestConfig, files: string[]) => {
+  const result: TestResult = {
+    path: config.path,
+    passed: 0, failed: 0, total: files.length, failures: [], astMismatches: 0, astComparisons: 0
+  }
+  results.set(config.path, result)
 
   if (result.total === 0) return
 
   for (const file of files) {
-    await runTest(file, config, result)
+    const passed = await runTest(file, config, result)
+    updateProgress(file, passed)
   }
 
   result.failed = result.failures.length
 }
 
-console.log("\nRunning tests...\n")
+const configFiles = new Map<TestConfig, string[]>()
+
+for (const config of configs) {
+  if (config.skipOnCI && isCI) continue
+  const files = await collectFiles(config)
+  configFiles.set(config, files)
+  progressTotal += files.length
+}
+
+for (const [config, files] of configFiles) {
+  await runCategory(config, files)
+}
 
 for (const config of configs) {
   if (config.skipOnCI && isCI) {
     console.log(`\nSkipping ${config.path} on CI`)
-    continue
   }
-
-  await runCategory(config)
 }
+
+clearProgress()
 
 let totalPassed = 0
 let totalFailed = 0
@@ -216,7 +248,7 @@ for (const [, result] of results) {
   console.log(`${status} ${result.path} ${result.passed}/${result.total}`)
 
   result.failures.forEach(f => console.log(`  x ${f}`))
-  console.log('')
+  console.log()
 
   if (result.total === 0) continue
   totalPassed += result.passed

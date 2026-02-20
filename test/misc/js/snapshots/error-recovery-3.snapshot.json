@@ -76,7 +76,7 @@
     },
     {
       "severity": "error",
-      "message": "Expected '{' to start function body",
+      "message": "Expected '{' to start function body, but found '10'",
       "help": "Function bodies must be enclosed in braces: function name() { ... }",
       "start": 79,
       "end": 81,

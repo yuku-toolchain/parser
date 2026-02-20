@@ -74,15 +74,6 @@ fn parseVariableDeclarator(parser: *Parser, kind: ast.VariableKind) Error!?ast.N
     const start = parser.current_token.span.start;
     const id = try patterns.parseBindingPattern(parser) orelse return null;
 
-    if ((kind == .using or kind == .await_using) and patterns.isDestructuringPattern(parser, id)) {
-        try parser.report(
-            parser.getSpan(id),
-            "Using declarations may not have binding patterns",
-            .{},
-        );
-        return null;
-    }
-
     var init: ast.NodeIndex = ast.null_node;
     var end = parser.getSpan(id).end;
 
@@ -135,9 +126,28 @@ pub fn isLetIdentifier(parser: *Parser) Error!?bool {
 
     // in single-statement contexts (eg, if/while bodies), 'let' followed by an implicit semicolon
     // should also be parsed as an identifier, since lexical declarations aren't allowed there.
-    if (parser.context.in_single_statement_context and parser.canInsertSemicolon(next)) {
+    if (parser.context.in_single_statement_context and parser.canInsertImplicitSemicolon(next)) {
         return true;
     }
 
     return false;
+}
+
+/// returns whether the current `using` token is an `IdentifierReference`
+/// (expression path) or the contextual keyword for a declaration.
+///
+/// implements the cover-grammar disambiguation from:
+/// - CoverAwaitExpressionAndAwaitUsingDeclarationHead
+pub fn isUsingIdentifier(parser: *Parser) Error!?bool {
+    std.debug.assert(parser.current_token.type == .using);
+
+    const next = try parser.lookAhead() orelse return null;
+
+    // if next token starts a BindingList and ASI cannot insert a semicolon,
+    // treat `using` as the contextual keyword (declaration form).
+    if (next.type.isIdentifierLike() and !parser.canInsertImplicitSemicolon(next)) {
+        return false;
+    }
+
+    return true; // `using` is an identifier
 }

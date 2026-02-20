@@ -27,14 +27,16 @@ const ParserContext = struct {
     ///           ^ this is in a single statement context
     in_single_statement_context: bool = false,
     // https://tc39.es/ecma262/#directive-prologue
-    in_directive_prologue: bool = false
+    in_directive_prologue: bool = false,
 };
 
 const ParserState = struct {
-    /// tracks if the cover (array or object) we are parsing has a trailing comma
+    /// Whether the parser is currently in strict mode.
+    strict_mode: bool = false,
+    /// Tracks if the cover (array or object) we are parsing has a trailing comma
     /// value is the start index of the cover
     cover_has_trailing_comma: ?u32 = null,
-    /// tracks if CoverInitializedName ({a = 1}) was parsed in current cover context.
+    /// Tracks if CoverInitializedName ({a = 1}) was parsed in current cover context.
     cover_has_init_name: bool = false,
 };
 
@@ -87,6 +89,8 @@ pub const Parser = struct {
 
         self.lexer = try lexer.Lexer.init(self.source, alloc, self.source_type);
 
+        if (self.isModule()) _ = self.enterStrictMode();
+
         // let's begin
         try self.advance() orelse {
             self.current_token = token.Token.eof(0);
@@ -127,6 +131,10 @@ pub const Parser = struct {
     }
 
     pub fn parseBody(self: *Parser, terminator: ?token.TokenType) Error!ast.IndexRange {
+        // save and restore strict mode, directives like "use strict" only apply within this scope
+        const prev_strict = self.isStrictMode();
+        defer self.restoreStrictMode(prev_strict);
+
         // it's a directive prologue if it's a function body or if we are at the program level
         // terminator null means, we are at program level
         self.context.in_directive_prologue = self.context.in_function or terminator == null;
@@ -163,10 +171,26 @@ pub const Parser = struct {
         return self.source_type == .module;
     }
 
+    pub inline fn isStrictMode(self: *Parser) bool {
+        return self.state.strict_mode;
+    }
+
+    pub inline fn enterStrictMode(self: *Parser) bool {
+        const prev = self.state.strict_mode;
+        self.state.strict_mode = true;
+        self.lexer.state.strict_mode = true;
+        return prev;
+    }
+
+    pub inline fn restoreStrictMode(self: *Parser, prev: bool) void {
+        self.state.strict_mode = prev;
+        self.lexer.state.strict_mode = prev;
+    }
+
     // utils
 
     pub inline fn setLexerMode(self: *Parser, mode: lexer.LexerMode) void {
-        self.lexer.state.mode = mode;
+        self.lexer.mode = mode;
     }
 
     pub inline fn addNode(self: *Parser, data: ast.NodeData, span: ast.Span) Error!ast.NodeIndex {
@@ -281,7 +305,7 @@ pub const Parser = struct {
             return true;
         }
 
-        try self.report(self.current_token.span, message, .{ .help = help });
+        try self.reportExpected(self.current_token.span, message, .{ .help = help });
 
         return false;
     }
@@ -292,8 +316,12 @@ pub const Parser = struct {
             try self.advance() orelse return null;
             return semicolon_end;
         } else {
-            if (!self.canInsertSemicolon(self.current_token)) {
-                try self.reportFmt(self.current_token.span, "Expected a semicolon or an implicit semicolon after a statement, but found '{s}'", .{self.describeToken(self.current_token)}, .{ .help = "Try inserting a semicolon here" });
+            if (!self.canInsertImplicitSemicolon(self.current_token)) {
+                try self.reportExpected(
+                    self.current_token.span,
+                    "Expected a semicolon or an implicit semicolon after a statement",
+                    .{ .help = "Try inserting a semicolon here" },
+                );
                 return null;
             }
         }
@@ -317,7 +345,7 @@ pub const Parser = struct {
     }
 
     /// https://tc39.es/ecma262/#sec-rules-of-automatic-semicolon-insertion
-    pub inline fn canInsertSemicolon(_: *Parser, tok: token.Token) bool {
+    pub inline fn canInsertImplicitSemicolon(_: *Parser, tok: token.Token) bool {
         return tok.type == .eof or tok.has_line_terminator_before or tok.type == .right_brace;
     }
 
@@ -340,6 +368,15 @@ pub const Parser = struct {
             .help = opts.help,
             .labels = opts.labels,
         });
+    }
+
+    pub fn reportExpected(self: *Parser, span: ast.Span, message: []const u8, opts: ReportOptions) Error!void {
+        const expected_message = try std.fmt.allocPrint(self.allocator(), "{s}, but found '{s}'", .{
+            message,
+            self.describeToken(self.current_token),
+        });
+
+        try self.report(span, expected_message, opts);
     }
 
     pub fn reportFmt(self: *Parser, span: ast.Span, comptime format: []const u8, args: anytype, opts: ReportOptions) Error!void {
@@ -395,16 +432,16 @@ pub const Parser = struct {
         const alloc = self.allocator();
 
         const estimated_nodes = if (self.source.len < 10_000)
-                @max(512, self.source.len / 2)
-            else if (self.source.len < 100_000)
-                self.source.len / 5
-            else
-                self.source.len / 8;
+            @max(512, self.source.len / 2)
+        else if (self.source.len < 100_000)
+            self.source.len / 5
+        else
+            self.source.len / 8;
 
         const estimated_extra = if (self.source.len < 5_000_000)
-                estimated_nodes / 4
-            else
-                estimated_nodes / 3;
+            estimated_nodes / 4
+        else
+            estimated_nodes / 3;
 
         try self.nodes.ensureTotalCapacity(alloc, estimated_nodes);
         try self.extra.ensureTotalCapacity(alloc, estimated_extra);

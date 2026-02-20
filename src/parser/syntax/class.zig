@@ -90,6 +90,10 @@ fn parseClassBody(parser: *Parser) Error!?ast.NodeIndex {
         "Class body must be enclosed in braces: class Name { ... }",
     )) return null;
 
+    // class bodies are always in strict mode (https://tc39.es/ecma262/#sec-class-definitions)
+    const prev_strict = parser.enterStrictMode();
+    defer parser.restoreStrictMode(prev_strict);
+
     const checkpoint = parser.scratch_a.begin();
     defer parser.scratch_a.reset(checkpoint);
 
@@ -270,7 +274,7 @@ fn parseClassElement(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     if (is_async or is_generator) {
-        try parser.report(
+        try parser.reportExpected(
             parser.current_token.span,
             "Expected '(' for method definition",
             .{ .help = "Method definitions require a parameter list. Use 'method() {}' syntax." },
@@ -279,7 +283,7 @@ fn parseClassElement(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     if (kind != .method) {
-        try parser.report(
+        try parser.reportExpected(
             parser.current_token.span,
             "Expected '(' for getter/setter definition",
             .{ .help = "Getters and setters require parentheses. Use 'get prop() {}' or 'set prop(value) {}' syntax." },
@@ -521,8 +525,8 @@ fn parsePropertyDefinition(
     if (tok_type == .semicolon) {
         end = parser.current_token.span.end;
         try parser.advance() orelse return null;
-    } else if (!parser.canInsertSemicolon(parser.current_token) and tok_type != .right_brace) {
-        try parser.report(
+    } else if (!parser.canInsertImplicitSemicolon(parser.current_token) and tok_type != .right_brace) {
+        try parser.reportExpected(
             parser.current_token.span,
             "Expected ';' after class field",
             .{ .help = "Add a semicolon after the field declaration." },

@@ -805,11 +805,8 @@ pub const NumericLiteral = struct {
     pub const Kind = enum {
         decimal,
         hex,
-        /// modern octal literal
         octal,
         binary,
-        /// deprecated in strict mode
-        leading_zero,
 
         pub fn fromToken(tok: token.TokenType) Kind {
             return switch (tok) {
@@ -817,7 +814,6 @@ pub const NumericLiteral = struct {
                 .hex_literal => .hex,
                 .octal_literal => .octal,
                 .binary_literal => .binary,
-                .leading_zero_literal => .leading_zero,
                 else => unreachable,
             };
         }
@@ -855,6 +851,8 @@ pub const TemplateElement = struct {
     raw_start: u32,
     raw_len: u16,
     tail: bool,
+    /// when true, the cooked value is null/undefined (invalid escape in tagged template)
+    has_invalid_escape: bool = false,
 };
 
 /// used in expressions

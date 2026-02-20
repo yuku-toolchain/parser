@@ -29,6 +29,11 @@ pub const LexicalError = error{
     IdentifierAfterNumericLiteral,
     InvalidUtf8,
     OutOfMemory,
+    // strict mode errors
+    OctalEscapeInStrict,
+    OctalLiteralInStrict,
+    LeadingZeroInStrict,
+    LeadingZeroEscapeInStrict,
     // jsx-specific errors
     JsxIdentifierCannotContainEscapes,
     JsxIdentifierCannotStartWithBackslash,
@@ -50,8 +55,14 @@ pub const LexerMode = enum {
 };
 
 const LexerState = struct {
+    /// whether the previous token was preceded by a line terminator (for ASI)
     has_line_terminator_before: bool = false,
-    mode: LexerMode = .normal,
+    /// whether the lexer is currently in strict mode (synced by the parser)
+    strict_mode: bool = false,
+    /// set by consumeEscape in template context when an invalid escape is encountered.
+    /// the parser uses this to set cooked value to null for tagged templates,
+    /// or to report an error for untagged templates.
+    has_invalid_escape: bool = false,
 };
 
 pub const Lexer = struct {
@@ -59,6 +70,7 @@ pub const Lexer = struct {
     allocator: std.mem.Allocator,
 
     state: LexerState,
+    mode: LexerMode = .normal,
 
     source: []const u8,
 
@@ -67,6 +79,14 @@ pub const Lexer = struct {
 
     source_type: ast.SourceType,
     hashbang: ?ast.Hashbang = null,
+
+    pub inline fn isStrictMode(self: *const Lexer) bool {
+        return self.state.strict_mode;
+    }
+
+    pub inline fn hasInvalidEscape(self: *const Lexer) bool {
+        return self.state.has_invalid_escape;
+    }
 
     pub fn init(source: []const u8, allocator: std.mem.Allocator, source_type: ast.SourceType) error{OutOfMemory}!Lexer {
         var self: Lexer = .{
@@ -101,6 +121,7 @@ pub const Lexer = struct {
     }
 
     pub fn nextToken(self: *Lexer) LexicalError!token.Token {
+        self.state.has_invalid_escape = false;
         try self.skipWsAndComments();
 
         if (self.cursor >= self.source.len) {
@@ -194,7 +215,7 @@ pub const Lexer = struct {
                     // in jsx, <div attr=<elem></elem>></div>
                     //                               ~~
                     //                               this should be interepted as separate '>' tokens for ease of parsing
-                    if (self.state.mode == .jsx_tag) {
+                    if (self.mode == .jsx_tag) {
                         return self.puncToken(1, .greater_than, start);
                     } else {
                         return self.puncToken(2, .right_shift, start);
@@ -274,6 +295,7 @@ pub const Lexer = struct {
     pub inline fn rewindTo(self: *Lexer, position: u32) void {
         self.cursor = position;
         self.state.has_line_terminator_before = false;
+        self.state.has_invalid_escape = false;
     }
 
     // functions exclusively called by the parser for context-specific lexing
@@ -292,18 +314,16 @@ pub const Lexer = struct {
         while (self.cursor < self.source.len) {
             const c = self.source[self.cursor];
             if (c == '\\') {
-                try self.consumeEscape();
+                try self.consumeEscape(.template);
                 continue;
             }
             if (c == '`') {
                 self.cursor += 1;
-                const end = self.cursor;
-                return self.createToken(.template_tail, start, end);
+                return self.createToken(.template_tail, start, self.cursor);
             }
             if (c == '$' and self.peek(1) == '{') {
                 self.cursor += 2;
-                const end = self.cursor;
-                return self.createToken(.template_middle, start, end);
+                return self.createToken(.template_middle, start, self.cursor);
             }
             self.cursor += 1;
         }
@@ -425,8 +445,8 @@ pub const Lexer = struct {
         while (self.cursor < self.source.len) {
             const c = self.source[self.cursor];
 
-            if (c == '\\' and self.state.mode != .jsx_tag) {
-                try self.consumeEscape();
+            if (c == '\\' and self.mode != .jsx_tag) {
+                try self.consumeEscape(.string);
                 continue;
             }
 
@@ -436,7 +456,7 @@ pub const Lexer = struct {
             }
 
             // in jsx tag mode, strings can contain newlines (for multi-line attribute values)
-            if ((c == '\n' or c == '\r') and self.state.mode != .jsx_tag) {
+            if ((c == '\n' or c == '\r') and self.mode != .jsx_tag) {
                 return error.UnterminatedString;
             }
 
@@ -454,20 +474,18 @@ pub const Lexer = struct {
             const c = self.source[self.cursor];
 
             if (c == '\\') {
-                try self.consumeEscape();
+                try self.consumeEscape(.template);
                 continue;
             }
 
             if (c == '`') {
                 self.cursor += 1;
-                const end = self.cursor;
-                return self.createToken(.no_substitution_template, start, end);
+                return self.createToken(.no_substitution_template, start, self.cursor);
             }
 
             if (c == '$' and self.peek(1) == '{') {
                 self.cursor += 2;
-                const end = self.cursor;
-                return self.createToken(.template_head, start, end);
+                return self.createToken(.template_head, start, self.cursor);
             }
 
             self.cursor += 1;
@@ -476,7 +494,28 @@ pub const Lexer = struct {
         return error.NonTerminatedTemplateLiteral;
     }
 
-    fn consumeEscape(self: *Lexer) LexicalError!void {
+    const EscapeContext = enum {
+        string,
+        template,
+    };
+
+    /// consumes an escape sequence.
+    /// in string context, errors propagate directly (fatal).
+    /// in template context, errors are absorbed and has_invalid_escape is set instead,
+    /// because tagged templates tolerate invalid escapes (cooked value becomes null/undefined).
+    fn consumeEscape(self: *Lexer, comptime context: EscapeContext) LexicalError!void {
+        if (context == .template) {
+            self.consumeEscapeImpl(context) catch |err| {
+                if (err == error.OutOfMemory) return error.OutOfMemory;
+                self.state.has_invalid_escape = true;
+                if (self.cursor < self.source.len) self.cursor += 1;
+            };
+        } else {
+            try self.consumeEscapeImpl(context);
+        }
+    }
+
+    fn consumeEscapeImpl(self: *Lexer, comptime context: EscapeContext) LexicalError!void {
         self.cursor += 1; // skip backslash
 
         if (self.cursor >= self.source.len) {
@@ -489,11 +528,15 @@ pub const Lexer = struct {
             '0' => {
                 const c1 = self.peek(1);
 
+                // null escape \0
                 if (!util.Utf.isOctalDigit(c1)) {
-                    self.cursor += 1; // null escape
+                    self.cursor += 1;
                     break :brk;
                 }
 
+                // octal escape \0
+                // always invalid in templates, only invalid in strict mode for strings
+                if (context == .template or self.isStrictMode()) return error.OctalEscapeInStrict;
                 try self.consumeOctal();
             },
             'x' => {
@@ -503,9 +546,14 @@ pub const Lexer = struct {
                 try self.consumeUnicodeEscape(.normal);
             },
             '1'...'7' => {
+                // octal escapes, always invalid in templates, only invalid in strict mode for strings
+                if (context == .template or self.isStrictMode()) return error.OctalEscapeInStrict;
                 try self.consumeOctal();
             },
             '8'...'9' => {
+                // \8 and \9
+                // always invalid in templates, only invalid in strict mode for strings
+                if (context == .template or self.isStrictMode()) return error.LeadingZeroEscapeInStrict;
                 self.cursor += 1;
             },
             '\n', '\r' => {
@@ -643,7 +691,7 @@ pub const Lexer = struct {
 
     fn scanIdentifierOrKeyword(self: *Lexer) !token.Token {
         const start = self.cursor;
-        const is_jsx_tag = self.state.mode == .jsx_tag;
+        const is_jsx_tag = self.mode == .jsx_tag;
 
         const is_private = self.source[self.cursor] == '#';
 
@@ -849,9 +897,6 @@ pub const Lexer = struct {
         // handle prefixes: 0x, 0o, 0b
         var has_decimal_or_exponent = false;
 
-        // 017
-        var is_legacy_octal = false;
-
         if (self.source[self.cursor] == '0') {
             const prefix = self.peek(1);
 
@@ -878,10 +923,10 @@ pub const Lexer = struct {
                     if (self.cursor == bin_start) return error.InvalidBinaryLiteral;
                 },
                 '0'...'9' => {
-                    is_legacy_octal = true;
-
+                    // legacy octal (077) or decimal with leading zero (089)
                     try self.consumeDecimalDigits();
 
+                    var is_legacy_octal = true;
                     for (self.source[start..self.cursor]) |c| {
                         if (c == '8' or c == '9') {
                             is_legacy_octal = false;
@@ -889,7 +934,11 @@ pub const Lexer = struct {
                         }
                     }
 
-                    token_type = .leading_zero_literal;
+                    if (self.isStrictMode()) {
+                        return if (is_legacy_octal) error.OctalLiteralInStrict else error.LeadingZeroInStrict;
+                    }
+
+                    token_type = if (is_legacy_octal) .octal_literal else .numeric_literal;
                 },
                 else => {
                     try self.consumeDecimalDigits();
@@ -899,26 +948,18 @@ pub const Lexer = struct {
             try self.consumeDecimalDigits();
         }
 
-        const can_have_fraction_or_exponent = token_type == .numeric_literal or token_type == .leading_zero_literal;
-
-        // handle decimal point for decimal/leading-zero literals, but not legacy octals before member access
-        if (can_have_fraction_or_exponent and
+        // fraction and exponent only for regular decimal literals
+        if (token_type == .numeric_literal and
             self.cursor < self.source.len and self.source[self.cursor] == '.')
         {
             const next = self.peek(1);
             if (next == '_') return error.NumericSeparatorMisuse;
-
-            if (is_legacy_octal and !(next >= '0' and next <= '9')) {
-                // don't consume the '.', it's member access (e.g., 01.toString())
-            } else {
-                self.cursor += 1;
-                has_decimal_or_exponent = true;
-                if (next >= '0' and next <= '9') try self.consumeDecimalDigits();
-            }
+            self.cursor += 1;
+            has_decimal_or_exponent = true;
+            if (next >= '0' and next <= '9') try self.consumeDecimalDigits();
         }
 
-        // handle exponent for decimal/leading-zero literals
-        if (can_have_fraction_or_exponent and self.cursor < self.source.len) {
+        if (token_type == .numeric_literal and self.cursor < self.source.len) {
             const exp_char = self.source[self.cursor];
             if (exp_char == 'e' or exp_char == 'E') {
                 has_decimal_or_exponent = true;
@@ -1236,6 +1277,10 @@ pub fn getLexicalErrorMessage(error_type: LexicalError) []const u8 {
         error.IdentifierAfterNumericLiteral => "Identifier cannot immediately follow a numeric literal",
         error.InvalidUtf8 => "Invalid UTF-8 byte sequence",
         error.OutOfMemory => "Out of memory",
+        error.OctalEscapeInStrict => "Octal escape sequences are not allowed in strict mode",
+        error.OctalLiteralInStrict => "Octal literals are not allowed in strict mode",
+        error.LeadingZeroInStrict => "Decimals with leading zeros are not allowed in strict mode",
+        error.LeadingZeroEscapeInStrict => "\\8 and \\9 escape sequences are not allowed in strict mode",
         error.JsxIdentifierCannotContainEscapes => "JSX tag names cannot contain escape sequences",
         error.JsxIdentifierCannotStartWithBackslash => "JSX tag names cannot start with a backslash",
     };
@@ -1268,6 +1313,10 @@ pub fn getLexicalErrorHelp(error_type: LexicalError) []const u8 {
         error.IdentifierAfterNumericLiteral => "Try adding whitespace here between the number and identifier",
         error.InvalidUtf8 => "The source file contains invalid UTF-8 encoding. Ensure the file is saved with valid UTF-8 encoding",
         error.OutOfMemory => "The system ran out of memory while parsing",
+        error.OctalEscapeInStrict => "Use \\xHH (hex) or \\uHHHH (unicode) escape instead",
+        error.OctalLiteralInStrict => "Use the 0o prefix for octal literals (e.g., 0o77), or a decimal equivalent",
+        error.LeadingZeroInStrict => "Remove the leading zero, or use 0o for octal, 0x for hex, or 0b for binary notation",
+        error.LeadingZeroEscapeInStrict => "Use \\xHH (hex) or \\uHHHH (unicode) escape instead",
         error.JsxIdentifierCannotContainEscapes => "Remove the escape sequence and use the literal character instead",
         error.JsxIdentifierCannotStartWithBackslash => "JSX tag names must be plain identifiers without escape sequences",
     };

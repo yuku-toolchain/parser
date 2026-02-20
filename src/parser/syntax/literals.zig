@@ -36,7 +36,7 @@ pub fn parseNumericLiteral(parser: *Parser) Error!?ast.NodeIndex {
     try parser.advance() orelse return null;
 
     // bigint literal is a separate node
-    if(token.type == .bigint_literal) {
+    if (token.type == .bigint_literal) {
         return try parser.addNode(.{
             .bigint_literal = .{
                 .raw_start = token.span.start,
@@ -74,15 +74,27 @@ pub fn parseRegExpLiteral(parser: *Parser) Error!?ast.NodeIndex {
     }, regex.span);
 }
 
-pub fn parseNoSubstitutionTemplate(parser: *Parser) Error!?ast.NodeIndex {
-    const token = parser.current_token;
+/// reads the lexer's invalid escape flag for the current template element.
+/// reports an error if the template is untagged.
+inline fn checkTemplateEscape(parser: *Parser, span: ast.Span, tagged: bool) Error!bool {
+    const invalid = parser.lexer.hasInvalidEscape();
+    if (!tagged and invalid) {
+        try parser.report(span, "Invalid escape sequence in template literal", .{});
+    }
+    return invalid;
+}
+
+pub fn parseNoSubstitutionTemplate(parser: *Parser, tagged: bool) Error!?ast.NodeIndex {
+    const tok = parser.current_token;
+    const has_invalid_escape = try checkTemplateEscape(parser, tok.span, tagged);
     try parser.advance() orelse return null;
-    const element_span = getTemplateElementSpan(token);
+    const element_span = getTemplateElementSpan(tok);
     const element = try parser.addNode(.{
         .template_element = .{
             .raw_start = element_span.start,
             .raw_len = @intCast(element_span.end - element_span.start),
             .tail = true,
+            .has_invalid_escape = has_invalid_escape,
         },
     }, element_span);
     return try parser.addNode(.{
@@ -90,10 +102,10 @@ pub fn parseNoSubstitutionTemplate(parser: *Parser) Error!?ast.NodeIndex {
             .quasis = try parser.addExtra(&[_]ast.NodeIndex{element}),
             .expressions = ast.IndexRange.empty,
         },
-    }, token.span);
+    }, tok.span);
 }
 
-pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
+pub fn parseTemplateLiteral(parser: *Parser, tagged: bool) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
     const quasis_checkpoint = parser.scratch_a.begin();
@@ -109,6 +121,7 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
             .raw_start = head_span.start,
             .raw_len = @intCast(head_span.end - head_span.start),
             .tail = false,
+            .has_invalid_escape = try checkTemplateEscape(parser, head.span, tagged),
         },
     }, head_span));
 
@@ -122,7 +135,7 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
         // after parsing the expression, we expect '}' which closes the ${} substitution.
         // we need to explicitly scan for template continuation (middle or tail).
         if (parser.current_token.type != .right_brace) {
-            try parser.report(
+            try parser.reportExpected(
                 parser.current_token.span,
                 "Expected '}' to close template expression",
                 .{ .help = "Template expressions must be closed with '}'" },
@@ -147,6 +160,7 @@ pub fn parseTemplateLiteral(parser: *Parser) Error!?ast.NodeIndex {
                 .raw_start = span.start,
                 .raw_len = @intCast(span.end - span.start),
                 .tail = is_tail,
+                .has_invalid_escape = try checkTemplateEscape(parser, span, tagged),
             },
         }, span));
 
@@ -232,10 +246,9 @@ pub fn parseLabelIdentifier(parser: *Parser) Error!?ast.NodeIndex {
 
 pub inline fn validateIdentifier(parser: *Parser, comptime as_what: []const u8, token: Token) Error!bool {
     if (!token.type.isIdentifierLike()) {
-        try parser.reportFmt(
+        try parser.reportExpected(
             token.span,
-            "Expected an identifier but found '{s}'",
-            .{parser.describeToken(token)},
+            "Expected an identifier",
             .{ .help = "Identifiers must start with a letter, underscore (_), or dollar sign ($)" },
         );
 

@@ -1,3 +1,4 @@
+const std = @import("std");
 const ast = @import("../ast.zig");
 const token = @import("../token.zig");
 const Parser = @import("../parser.zig").Parser;
@@ -12,6 +13,7 @@ const functions = @import("functions.zig");
 const class = @import("class.zig");
 const extensions = @import("extensions.zig");
 const grammar = @import("../grammar.zig");
+const for_loop = @import("for_loop.zig");
 const modules = @import("modules.zig");
 
 const ParseStatementOpts = struct {
@@ -39,7 +41,7 @@ pub fn parseStatement(parser: *Parser, opts: ParseStatementOpts) Error!?ast.Node
         .@"export" => modules.parseExportDeclaration(parser),
         .@"if" => parseIfStatement(parser),
         .@"switch" => parseSwitchStatement(parser),
-        .@"for" => parseForStatement(parser, false),
+        .@"for" => for_loop.parseForStatement(parser, false),
         .@"while" => parseWhileStatement(parser),
         .do => parseDoWhileStatement(parser),
         .with => parseWithStatement(parser),
@@ -59,7 +61,7 @@ fn parseExpressionOrLabeledStatementOrDirective(parser: *Parser) Error!?ast.Node
     const expression = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
     const expression_data = parser.getData(expression);
 
-    if(parser.context.in_directive_prologue and expression_data == .string_literal) {
+    if (parser.context.in_directive_prologue and expression_data == .string_literal) {
         return parseDirective(parser, expression, expression_data);
     }
 
@@ -68,10 +70,15 @@ fn parseExpressionOrLabeledStatementOrDirective(parser: *Parser) Error!?ast.Node
         return parseLabeledStatement(parser, expression);
     }
 
-    return parseExpressionStatement(parser, expression);
+    return parseExpressionStatementWithExpression(parser, expression);
 }
 
-fn parseExpressionStatement(
+fn parseExpressionStatement(parser: *Parser) Error!?ast.NodeIndex {
+    const expression = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
+    return parseExpressionStatementWithExpression(parser, expression);
+}
+
+fn parseExpressionStatementWithExpression(
     parser: *Parser,
     expression: ast.NodeIndex,
 ) Error!?ast.NodeIndex {
@@ -88,6 +95,11 @@ fn parseDirective(parser: *Parser, expression: ast.NodeIndex, expression_data: a
 
     const value_start = expression_data.string_literal.raw_start + 1;
     const value_len: u16 = expression_data.string_literal.raw_len - 2;
+
+    // "use strict" directive enables strict mode for the current scope
+    if (std.mem.eql(u8, parser.getSourceText(value_start, value_len), "use strict")) {
+        _ = parser.enterStrictMode();
+    }
 
     return try parser.addNode(.{
         .directive = .{
@@ -112,18 +124,19 @@ fn parseLet(parser: *Parser) Error!?ast.NodeIndex {
     }
 
     // otherwise, fall through to parse 'let' as an identifier in an expression statement.
-    return parseExpressionOrLabeledStatementOrDirective(parser);
+    return parseExpressionStatement(parser);
 }
 
 /// `using` declaration, or fall through to expression statement.
 fn parseUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
-    const next = try parser.lookAhead() orelse return null;
+    // determine if 'using' is an identifier or a keyword
+    const is_using_identifier = try variables.isUsingIdentifier(parser) orelse return null;
 
-    return switch(next.type) {
-        // `using.`, `using(`, `using[` are expression forms where `using` is an identifier.
-        .dot, .left_paren, .left_bracket => parseExpressionOrLabeledStatementOrDirective(parser),
-        else => variables.parseVariableDeclaration(parser, false, null)
-    };
+    if(!is_using_identifier) {
+        return variables.parseVariableDeclaration(parser, false, null);
+    }
+
+    return parseExpressionStatement(parser);
 }
 
 /// `await using` declaration, or fall through to expression statement.
@@ -133,11 +146,26 @@ fn parseAwaitUsingOrExpression(parser: *Parser) Error!?ast.NodeIndex {
     return switch (next.type) {
         .using => {
             const start = parser.current_token.span.start;
+
             try parser.advance() orelse return null; // consume 'await'
-            return variables.parseVariableDeclaration(parser, true, start);
+
+            // determine if 'using' is an identifier or a keyword
+            const is_using_identifier = try variables.isUsingIdentifier(parser) orelse return null;
+
+            if (!is_using_identifier) {
+                return variables.parseVariableDeclaration(parser, true, start);
+            }
+
+            return parseAwaitExpressionStatement(parser, start);
         },
-        else => parseExpressionOrLabeledStatementOrDirective(parser)
+        else => parseExpressionOrLabeledStatementOrDirective(parser),
     };
+}
+
+fn parseAwaitExpressionStatement(parser: *Parser, start: u32) Error!?ast.NodeIndex {
+    const await_expr = try expressions.parseAwaitExpression(parser, start) orelse return null;
+
+    return parseExpressionStatementWithExpression(parser, await_expr);
 }
 
 /// import declaration, or fall through to import expression statement (`import(` / `import.`).
@@ -146,8 +174,8 @@ fn parseImportDeclarationOrExpression(parser: *Parser) Error!?ast.NodeIndex {
 
     return switch (next.type) {
         // `import(` and `import.` are expression forms (dynamic import / import.meta / phase imports)
-        .left_paren, .dot => parseExpressionOrLabeledStatementOrDirective(parser),
-        else => modules.parseImportDeclaration(parser)
+        .left_paren, .dot => parseExpressionStatement(parser),
+        else => modules.parseImportDeclaration(parser),
     };
 }
 
@@ -375,6 +403,10 @@ fn parseDoWhileStatement(parser: *Parser) Error!?ast.NodeIndex {
 fn parseWithStatement(parser: *Parser) Error!?ast.NodeIndex {
     const start = parser.current_token.span.start;
 
+    if (parser.isStrictMode()) {
+        try parser.report(parser.current_token.span, "'with' statements are not allowed in strict mode", .{});
+    }
+
     try parser.advance() orelse return null; // consume 'with'
 
     if (!try parser.expect(.left_paren, "Expected '(' after 'with'", null)) return null;
@@ -409,7 +441,7 @@ fn parseBreakStatement(parser: *Parser) Error!?ast.NodeIndex {
     var label: ast.NodeIndex = ast.null_node;
 
     // break [no LineTerminator here] LabelIdentifier;
-    if (!parser.canInsertSemicolon(parser.current_token) and parser.current_token.type != .semicolon) {
+    if (!parser.canInsertImplicitSemicolon(parser.current_token) and parser.current_token.type != .semicolon) {
         const label_node = try literals.parseLabelIdentifier(parser) orelse return null;
         label = label_node;
         end = parser.getSpan(label_node).end;
@@ -429,7 +461,7 @@ fn parseContinueStatement(parser: *Parser) Error!?ast.NodeIndex {
     var label: ast.NodeIndex = ast.null_node;
 
     // continue [no LineTerminator here] LabelIdentifier;
-    if (!parser.canInsertSemicolon(parser.current_token) and parser.current_token.type != .semicolon) {
+    if (!parser.canInsertImplicitSemicolon(parser.current_token) and parser.current_token.type != .semicolon) {
         const label_node = try literals.parseLabelIdentifier(parser) orelse return null;
         label = label_node;
         end = parser.getSpan(label_node).end;
@@ -438,292 +470,6 @@ fn parseContinueStatement(parser: *Parser) Error!?ast.NodeIndex {
     end = try parser.eatSemicolon(end) orelse return null;
 
     return try parser.addNode(.{ .continue_statement = .{ .label = label } }, .{ .start = start, .end = end });
-}
-
-/// https://tc39.es/ecma262/#sec-for-statement
-/// https://tc39.es/ecma262/#sec-for-in-and-for-of-statements
-fn parseForStatement(parser: *Parser, is_for_await: bool) Error!?ast.NodeIndex {
-    const start = parser.current_token.span.start;
-    try parser.advance() orelse return null; // consume 'for'
-
-    // check for `for await (...)`
-    if (parser.current_token.type == .await) {
-        if (!parser.context.in_async and !parser.isModule()) {
-            try parser.report(parser.current_token.span, "'for await' is only valid in async functions or modules", .{});
-        }
-        try parser.advance() orelse return null; // consume 'await'
-
-        // continue parsing with is_for_await = true
-
-        if (!try parser.expect(.left_paren, "Expected '(' after 'for await'", null)) return null;
-
-        return parseForHead(parser, start, true);
-    }
-
-    if (!try parser.expect(.left_paren, "Expected '(' after 'for'", null)) return null;
-
-    // first part and determine which kind of for statement this is
-    return parseForHead(parser, start, is_for_await);
-}
-
-/// parse the head of a for statement to determine its type
-fn parseForHead(parser: *Parser, start: u32, is_for_await: bool) Error!?ast.NodeIndex {
-    const token_type = parser.current_token.type;
-
-    // empty init: for (;;)
-    if (token_type == .semicolon) {
-        return parseForStatementRest(parser, start, ast.null_node);
-    }
-
-    const decl_start = parser.current_token.span.start;
-
-    const var_decl_kind_or_null = try parseForLoopVariableKindOrNull(parser);
-
-    // variable declaration: for (var/let/const/using/await using ... )
-    if (var_decl_kind_or_null) |kind| {
-        return parseForWithDeclaration(parser, start, is_for_await, kind, decl_start);
-    }
-
-    // expression or assignment target: for (expr in/of ...) or for (expr; ...)
-    return parseForWithExpression(parser, start, is_for_await);
-}
-
-/// variable kind for for loops
-/// returns null if the left side of the for loop is not a variable declaration
-fn parseForLoopVariableKindOrNull(parser: *Parser) Error!?ast.VariableKind {
-    const token_type = parser.current_token.type;
-
-    if (token_type == .let or token_type == .@"const" or token_type == .@"var") {
-        try parser.advance() orelse return null;
-        return switch (token_type) {
-            .let => .let,
-            .@"const" => .@"const",
-            .@"var" => .@"var",
-            else => unreachable,
-        };
-    }
-
-    switch (token_type) {
-        .using => {
-            const next = try parser.lookAhead() orelse return null;
-
-            // 'using' is an identifier in 'for (using of/in ...)' unless it's a declaration.
-            if (next.type == .of or next.type == .in) return null;
-
-            // 'using.', 'using(', 'using[' are expression forms where 'using' is an identifier.
-            if (next.type == .dot or next.type == .left_paren or next.type == .left_bracket) return null;
-
-            try parser.advance() orelse return null;
-            return .using;
-        },
-        .await => {
-            const next = try parser.lookAhead() orelse return null;
-            if (next.type != .using) return null;
-            try parser.advance() orelse return null; // consume 'await'
-            try parser.advance() orelse return null; // consume 'using'
-            return .await_using;
-        },
-        else => return null,
-    }
-}
-
-/// for loop starting with variable declaration
-fn parseForWithDeclaration(parser: *Parser, start: u32, is_for_await: bool, kind: ast.VariableKind, decl_start: u32) Error!?ast.NodeIndex {
-    // first declarator
-    const first_declarator = try parseForLoopDeclarator(parser) orelse return null;
-    const first_end = parser.getSpan(first_declarator).end;
-
-    // check for for-in/for-of
-    if (parser.current_token.type == .in) {
-        // for (var/let/const x in ...)
-        if (is_for_await) {
-            try parser.report(parser.current_token.span, "'for await' requires 'of', not 'in'", .{});
-            return null;
-        }
-
-        const decl = try createSingleDeclaration(parser, kind, first_declarator, decl_start, first_end);
-        return parseForInStatementRest(parser, start, decl);
-    }
-
-    if (parser.current_token.type == .of) {
-        // for (var/let/const x of ...)
-        const decl = try createSingleDeclaration(parser, kind, first_declarator, decl_start, first_end);
-        return parseForOfStatementRest(parser, start, decl, is_for_await);
-    }
-
-    // regular for statement, might have more declarators
-    var end = first_end;
-
-    const checkpoint = parser.scratch_a.begin();
-    defer parser.scratch_a.reset(checkpoint);
-
-    try parser.scratch_a.append(parser.allocator(), first_declarator);
-
-    // additional declarators: for (let a = 1, b = 2; ...)
-    while (parser.current_token.type == .comma) {
-        try parser.advance() orelse return null;
-        const declarator = try parseForLoopDeclarator(parser) orelse return null;
-        try parser.scratch_a.append(parser.allocator(), declarator);
-        end = parser.getSpan(declarator).end;
-    }
-
-    const declarators = parser.scratch_a.items.items[checkpoint..parser.scratch_a.items.items.len];
-
-    const declarators_range = try parser.addExtraFromScratch(&parser.scratch_a, checkpoint);
-
-    // init is required for non idenitifer id's in regular loop
-    // for example, this is an error:
-    // for (let { a: b = let };;) {}
-    for (declarators) |decl| {
-        const data = parser.getData(decl).variable_declarator;
-        const id_data = parser.getData(data.id);
-        if (ast.isNull(data.init)) {
-            if (id_data != .binding_identifier) {
-                try parser.report(parser.getSpan(data.id), "Destructuring declaration in for loop initializer must be initialized", .{ .help = "Add '= value' to provide the object or array to destructure from." });
-                return null;
-            } else if (kind == .@"const") {
-                try parser.report(parser.getSpan(data.id), "'const' declarations in for loop initializer must be initialized", .{ .help = "Add '= value' to initialize the constant in the for loop." });
-                return null;
-            }
-        }
-    }
-
-    const decl = try parser.addNode(.{
-        .variable_declaration = .{
-            .declarators = declarators_range,
-            .kind = kind,
-        },
-    }, .{ .start = decl_start, .end = end });
-
-    return parseForStatementRest(parser, start, decl);
-}
-
-/// for loop starting with expression
-fn parseForWithExpression(parser: *Parser, start: u32, is_for_await: bool) Error!?ast.NodeIndex {
-    // disable 'in' as binary operator while parsing for-loop initializer
-    const saved_allow_in = parser.context.allow_in;
-    parser.context.allow_in = false;
-    const expr = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse {
-        parser.context.allow_in = saved_allow_in;
-        return null;
-    };
-    parser.context.allow_in = saved_allow_in;
-
-    // check for for-in/for-of
-    if (parser.current_token.type == .in) {
-        // for (expr in ...)
-        if (is_for_await) {
-            try parser.report(parser.current_token.span, "'for await' requires 'of', not 'in'", .{});
-            return null;
-        }
-
-        try grammar.expressionToPattern(parser, expr, .assignable) orelse return null;
-
-        // expr is now pattern
-
-        return parseForInStatementRest(parser, start, expr);
-    }
-
-    if (parser.current_token.type == .of) {
-        // for (expr of ...)
-        try grammar.expressionToPattern(parser, expr, .assignable) orelse return null;
-
-        // expr is now pattern
-
-        return parseForOfStatementRest(parser, start, expr, is_for_await);
-    }
-
-    // regular for statement
-    return parseForStatementRest(parser, start, expr);
-}
-
-/// parse rest of regular for statement after init
-fn parseForStatementRest(parser: *Parser, start: u32, init: ast.NodeIndex) Error!?ast.NodeIndex {
-    if (!try parser.expect(.semicolon, "Expected ';' after for-loop init", null)) return null;
-
-    var test_expr: ast.NodeIndex = ast.null_node;
-
-    if (parser.current_token.type != .semicolon) {
-        test_expr = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
-    }
-
-    if (!try parser.expect(.semicolon, "Expected ';' after for-loop condition", null)) return null;
-
-    var update: ast.NodeIndex = ast.null_node;
-
-    if (parser.current_token.type != .right_paren) {
-        update = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
-    }
-
-    if (!try parser.expect(.right_paren, "Expected ')' after for-loop update", null)) return null;
-
-    const body = try parseStatement(parser, .{ .can_be_single_statement_context = true }) orelse return null;
-
-    return try parser.addNode(.{
-        .for_statement = .{
-            .init = init,
-            .@"test" = test_expr,
-            .update = update,
-            .body = body,
-        },
-    }, .{ .start = start, .end = parser.getSpan(body).end });
-}
-
-/// rest of for-in statement after left
-fn parseForInStatementRest(parser: *Parser, start: u32, left: ast.NodeIndex) Error!?ast.NodeIndex {
-    try parser.advance() orelse return null; // consume 'in'
-
-    const right = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
-
-    if (!try parser.expect(.right_paren, "Expected ')' after for-in expression", null)) return null;
-
-    const body = try parseStatement(parser, .{ .can_be_single_statement_context = true }) orelse return null;
-
-    return try parser.addNode(.{
-        .for_in_statement = .{
-            .left = left,
-            .right = right,
-            .body = body,
-        },
-    }, .{ .start = start, .end = parser.getSpan(body).end });
-}
-
-/// rest of for-of statement after left
-fn parseForOfStatementRest(parser: *Parser, start: u32, left: ast.NodeIndex, is_for_await: bool) Error!?ast.NodeIndex {
-    try parser.advance() orelse return null; // consume 'of'
-
-    // for-of right side is AssignmentExpression, not Expression (no comma)
-    const right = try expressions.parseExpression(parser, Precedence.Assignment, .{}) orelse return null;
-
-    if (!try parser.expect(.right_paren, "Expected ')' after for-of expression", null)) return null;
-
-    const body = try parseStatement(parser, .{ .can_be_single_statement_context = true }) orelse return null;
-
-    return try parser.addNode(.{
-        .for_of_statement = .{
-            .left = left,
-            .right = right,
-            .body = body,
-            .await = is_for_await,
-        },
-    }, .{ .start = start, .end = parser.getSpan(body).end });
-}
-
-/// a single variable declarator for for loops
-fn parseForLoopDeclarator(parser: *Parser) Error!?ast.NodeIndex {
-    const decl_start = parser.current_token.span.start;
-    const id = try patterns.parseBindingPattern(parser) orelse return null;
-
-    var init: ast.NodeIndex = ast.null_node;
-    var end = parser.getSpan(id).end;
-
-    if (parser.current_token.type == .assign) {
-        try parser.advance() orelse return null;
-        init = try expressions.parseExpression(parser, Precedence.Assignment, .{}) orelse return null;
-        end = parser.getSpan(init).end;
-    }
-
-    return try parser.addNode(.{ .variable_declarator = .{ .id = id, .init = init } }, .{ .start = decl_start, .end = end });
 }
 
 /// https://tc39.es/ecma262/#sec-return-statement
@@ -744,7 +490,7 @@ fn parseReturnStatement(parser: *Parser) Error!?ast.NodeIndex {
     var argument: ast.NodeIndex = ast.null_node;
 
     // return [no LineTerminator here] Expression?
-    if (!parser.canInsertSemicolon(parser.current_token) and parser.current_token.type != .semicolon) {
+    if (!parser.canInsertImplicitSemicolon(parser.current_token) and parser.current_token.type != .semicolon) {
         argument = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
         end = parser.getSpan(argument).end;
     }
@@ -841,18 +587,4 @@ fn parseDebuggerStatement(parser: *Parser) Error!?ast.NodeIndex {
     try parser.advance() orelse return null; // consume 'debugger'
     end = try parser.eatSemicolon(end) orelse return null;
     return try parser.addNode(.debugger_statement, .{ .start = start, .end = end });
-}
-
-/// create a variable declaration with a single declarator
-fn createSingleDeclaration(parser: *Parser, kind: ast.VariableKind, declarator: ast.NodeIndex, decl_start: u32, decl_end: u32) Error!ast.NodeIndex {
-    const checkpoint = parser.scratch_a.begin();
-    defer parser.scratch_a.reset(checkpoint);
-    try parser.scratch_a.append(parser.allocator(), declarator);
-
-    return try parser.addNode(.{
-        .variable_declaration = .{
-            .declarators = try parser.addExtraFromScratch(&parser.scratch_a, checkpoint),
-            .kind = kind,
-        },
-    }, .{ .start = decl_start, .end = decl_end });
 }
