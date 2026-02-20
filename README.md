@@ -21,7 +21,7 @@ A high-performance JavaScript/TypeScript toolchain written in Zig, bringing mode
 
 ## Parser
 
-- **Correctness**: Full ECMAScript spec compliance. Passes all 40000+ files from [Test262](https://github.com/tc39/test262) with deep AST matching. See [test results](/test/results.txt).
+- **Correctness**: Full ECMAScript spec compliance. Passes all 40000+ files from [Test262](https://github.com/tc39/test262) with AST matching. See [test results](/test/results.txt).
 - **Performance**: Exceptionally fast through meticulous performance engineering and data-oriented design. Competitive with leading parsers like Oxc. [See benchmarks](https://github.com/yuku-toolchain/parser-benchmark).
 - **Modern**: Supports modern and experimental JavaScript features, including decorators, source and defer imports, and more.
 
