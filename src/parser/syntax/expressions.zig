@@ -1054,8 +1054,6 @@ pub inline fn parseLeftHandSideExpression(parser: *Parser) Error!?ast.NodeIndex 
 /// this operation is valid when the left side is wrapped in parentheses,
 /// which creates a `parenthesized_expression` (which is a LeftHandSideExpression):
 /// - `(a++).prop` - valid
-///
-/// just explaining things xD
 fn isPostfixOperation(token_type: token.TokenType) bool {
     return switch (token_type) {
         .dot, // obj.prop
