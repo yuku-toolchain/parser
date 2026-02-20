@@ -28,6 +28,16 @@ const ParseExpressionOpts = struct {
     /// when true, silently returns null on immediate expression parsing failure, which means no expression found.
     /// but still reports errors on subsequent parsing failures if an expression is detected.
     optional: bool = false,
+    /// whether this call to `parseExpression` should stop parsing when it encounters
+    /// an `in` token while `allow_in` is disabled in the parser context.
+    ///
+    /// by default this is false, because `allow_in` is a context flag that gets inherited
+    /// into recursive `parseExpression` calls (e.g. inside parentheses, computed members,
+    /// default values), where `in` should still be parsed as the binary operator.
+    /// only the direct caller that sets `allow_in = false` should pass `true` here,
+    /// so that `in` is correctly treated as a keyword delimiter (e.g. `for-in`) at
+    /// the top level, without affecting nested expressions.
+    respect_allow_in: bool = false,
 };
 
 pub fn parseExpression(parser: *Parser, precedence: u8, opts: ParseExpressionOpts) Error!?ast.NodeIndex {
@@ -35,21 +45,17 @@ pub fn parseExpression(parser: *Parser, precedence: u8, opts: ParseExpressionOpt
 
     while (true) {
         const current_type = parser.current_token.type;
-        if (current_type == .eof) break;
 
-        if (current_type == .in and !parser.context.allow_in) break;
+        if (opts.respect_allow_in and current_type == .in and !parser.context.allow_in) break;
 
         const left_data = parser.getData(left);
 
-        // `yield\n+a`
-        // it's not a binary expression, these are separate 'YieldExpression (argument=null)'
-        // and an another 'UnaryExpression'.
+        // `yield\n+a`: this not a binary expression, these are separate 'YieldExpression (argument=null)' and an another 'UnaryExpression'.
         // because 'yield' is an expression and a statement at the same time lol
         if (parser.current_token.has_line_terminator_before and left_data == .yield_expression) {
             break;
         }
 
-        // only LeftHandSideExpressions can have postfix operations applied.
         //   a++()        <- can't call an update expression
         //   () => {}()   <- can't call an arrow function
         // breaking here produces natural "expected semicolon" error.
@@ -60,6 +66,7 @@ pub fn parseExpression(parser: *Parser, precedence: u8, opts: ParseExpressionOpt
         }
 
         const lbp = parser.current_token.leftBp();
+
         if (lbp < precedence or lbp == 0) break;
 
         left = try parseInfix(parser, lbp, left) orelse return null;

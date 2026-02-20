@@ -155,10 +155,12 @@ fn parseForWithDeclaration(parser: *Parser, start: u32, is_for_await: bool, kind
 fn parseForWithExpression(parser: *Parser, start: u32, is_for_await: bool) Error!?ast.NodeIndex {
     const saved_allow_in = parser.context.allow_in;
     parser.context.allow_in = false;
-    const expr = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse {
+
+    const expr = try expressions.parseExpression(parser, Precedence.Lowest, .{ .respect_allow_in = true }) orelse {
         parser.context.allow_in = saved_allow_in;
         return null;
     };
+
     parser.context.allow_in = saved_allow_in;
 
     if (parser.current_token.type == .in) {
