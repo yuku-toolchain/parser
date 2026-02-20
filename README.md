@@ -21,9 +21,7 @@ A high-performance JavaScript/TypeScript toolchain written in Zig, bringing mode
 
 ## Parser
 
-### Features
-
-- **Correctness**: Full ECMAScript spec compliance. Passes all [Test262](https://github.com/tc39/test262) parser tests with node-by-node AST matching. See [test results](/test/results.txt).
+- **Correctness**: Full ECMAScript spec compliance. Passes all 40000+ files from [Test262](https://github.com/tc39/test262) with deep AST matching. See [test results](/test/results.txt).
 - **Performance**: Exceptionally fast through meticulous performance engineering and data-oriented design. Competitive with leading parsers like Oxc. [See benchmarks](https://github.com/yuku-toolchain/parser-benchmark).
 - **Modern**: Supports modern and experimental JavaScript features, including decorators, source and defer imports, and more.
 
@@ -34,7 +32,9 @@ Yuku produces the same AST as [Oxc](https://oxc.rs):
 - **JavaScript / JSX** — Fully conformant with the [ESTree](https://github.com/estree/estree) standard, identical to the AST produced by [Acorn](https://www.npmjs.com/package/acorn).
 - **TypeScript** — Conforms to the [TS-ESTree](https://www.npmjs.com/package/@typescript-eslint/typescript-estree) format used by `@typescript-eslint`.
 
-The only extensions beyond the base specs are support for Stage 3 [decorators](https://github.com/tc39/proposal-decorators), [import defer](https://github.com/tc39/proposal-defer-import-eval), [import source](https://github.com/tc39/proposal-source-phase-imports), and a non-standard `hashbang` field on `Program`. Outside of these additions, any deviation from ESTree or TS-ESTree is considered a bug.
+The only extensions beyond the base specs are support for Stage 3 [decorators](https://github.com/tc39/proposal-decorators), [import defer](https://github.com/tc39/proposal-defer-import-eval), [import source](https://github.com/tc39/proposal-source-phase-imports), and a non-standard `hashbang` field on `Program`.
+
+AST accuracy is verified by running Test262, TypeScript, and Babel test suites and performing a deep comparison against the Oxc AST (ESTree/TS-ESTree). See [test results](/test/results.txt).
 
 ## Roadmap
 
