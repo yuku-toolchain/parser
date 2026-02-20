@@ -23,7 +23,7 @@ A high-performance JavaScript/TypeScript toolchain written in Zig, bringing mode
 
 ### Features
 
-- **Correctness**: Full ECMAScript spec compliance. Passes all parser tests from [Test262](https://github.com/tc39/test262).
+- **Correctness**: Full ECMAScript spec compliance. Passes all [Test262](https://github.com/tc39/test262) tests with apple-to-apple AST matching. See [test results](/test/results.txt).
 - **Performance**: Exceptionally fast through meticulous performance engineering and data-oriented design. Competitive with leading parsers like Oxc. [See benchmarks](https://github.com/yuku-toolchain/parser-benchmark).
 - **Modern**: Supports modern and experimental JavaScript features, including decorators, source and defer imports, and more.
 - **Compliance**: Rigorously tested, 100% accurate ESTree/TypeScript-ESTree AST.
