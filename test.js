@@ -1,3 +1,1 @@
-asyncTest(async () => {
-	await using[x];
-});
+if (true) async function f() {  } else ;
