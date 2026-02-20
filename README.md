@@ -36,8 +36,6 @@ Yuku produces the same AST as [Oxc](https://oxc.rs):
 
 The only extensions beyond the base specs are support for Stage 3 [decorators](https://github.com/tc39/proposal-decorators), [import defer](https://github.com/tc39/proposal-defer-import-eval), [import source](https://github.com/tc39/proposal-source-phase-imports), and a non-standard `hashbang` field on `Program`. Outside of these additions, any deviation from ESTree or TS-ESTree is considered a bug.
 
-> **Note:** In the TS-ESTree AST, `import.defer(...)` and `import.source(...)` are represented as an `ImportExpression` with a `phase` field (following the ESTree spec), whereas TS-ESLint represents these as a `CallExpression` with a `MetaProperty` callee.
-
 ## Roadmap
 
 - [x] JavaScript Parser
