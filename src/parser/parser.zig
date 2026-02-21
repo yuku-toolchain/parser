@@ -299,7 +299,7 @@ pub const Parser = struct {
         return self.advance();
     }
 
-    pub fn expect(self: *Parser, token_type: token.TokenType, message: []const u8, help: ?[]const u8) Error!bool {
+    pub fn expect(self: *Parser, comptime token_type: token.TokenType, message: []const u8, help: ?[]const u8) Error!bool {
         if (self.current_token.type == token_type) {
             try self.advance() orelse return false;
             return true;
