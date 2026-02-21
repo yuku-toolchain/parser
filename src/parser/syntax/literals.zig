@@ -77,7 +77,7 @@ pub fn parseRegExpLiteral(parser: *Parser) Error!?ast.NodeIndex {
 pub fn parseNoSubstitutionTemplate(parser: *Parser, tagged: bool) Error!?ast.NodeIndex {
     const tok = parser.current_token;
 
-    const has_invalid_escape = try checkTemplateEscape(parser, tok.span, tagged);
+    const has_invalid_escape = try checkTemplateEscape(parser, tok, tok.span, tagged);
 
     try parser.advance() orelse return null;
 
@@ -116,7 +116,7 @@ pub fn parseTemplateLiteral(parser: *Parser, tagged: bool) Error!?ast.NodeIndex 
             .raw_start = head_span.start,
             .raw_len = @intCast(head_span.end - head_span.start),
             .tail = false,
-            .has_invalid_escape = try checkTemplateEscape(parser, head.span, tagged),
+            .has_invalid_escape = try checkTemplateEscape(parser, head, head.span, tagged),
         },
     }, head_span));
 
@@ -156,7 +156,7 @@ pub fn parseTemplateLiteral(parser: *Parser, tagged: bool) Error!?ast.NodeIndex 
                 .raw_start = span.start,
                 .raw_len = @intCast(span.end - span.start),
                 .tail = is_tail,
-                .has_invalid_escape = try checkTemplateEscape(parser, span, tagged),
+                .has_invalid_escape = try checkTemplateEscape(parser, template_token, span, tagged),
             },
         }, span));
 
@@ -177,10 +177,10 @@ pub fn parseTemplateLiteral(parser: *Parser, tagged: bool) Error!?ast.NodeIndex 
     }, .{ .start = start, .end = end });
 }
 
-/// reads the lexer's invalid escape flag for the current template element.
+/// reads invalid-escape metadata from the current template token.
 /// reports an error if the template is untagged.
-inline fn checkTemplateEscape(parser: *Parser, span: ast.Span, tagged: bool) Error!bool {
-    const invalid = parser.lexer.hasInvalidEscape();
+inline fn checkTemplateEscape(parser: *Parser, tok: Token, span: ast.Span, tagged: bool) Error!bool {
+    const invalid = tok.hasTemplateInvalidEscape();
 
     if (!tagged and invalid) {
         try parser.report(span, "Invalid escape sequence in template literal", .{});
