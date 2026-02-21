@@ -387,7 +387,7 @@ pub const Span = struct {
 
 pub const TokenFlag = enum(u3) {
     line_terminator_before,
-    template_invalid_escape,
+    invalid_escape,
     escaped,
 };
 
@@ -427,10 +427,10 @@ pub const Token = struct {
         return self.has(.line_terminator_before);
     }
 
-    /// true when template literal scanning encountered an invalid escape.
-    /// parser reports this for untagged templates but allows tagged templates.
-    pub inline fn hasTemplateInvalidEscape(self: Token) bool {
-        return self.has(.template_invalid_escape);
+    /// true when scanning this token encountered an invalid escape.
+    /// currently consumed by template literal parsing (tagged vs untagged behavior).
+    pub inline fn hasInvalidEscape(self: Token) bool {
+        return self.has(.invalid_escape);
     }
 
     /// true when token text came from an escaped spelling (for example, identifier/keyword escapes).

@@ -1,3 +1,1 @@
-asyncTest(async () => {
-	await using[x];
-});
+cool = {\u0069f: cool}

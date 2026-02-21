@@ -851,8 +851,12 @@ pub const TemplateElement = struct {
     raw_start: u32,
     raw_len: u16,
     tail: bool,
-    /// when true, the cooked value is null/undefined (invalid escape in tagged template)
-    has_invalid_escape: bool = false,
+    /// True when this quasi's cooked template value is undefined per
+    /// ECMAScript TV semantics.
+    /// This happens when the quasi contains a NotEscapeSequence.
+    /// Untagged templates are syntax errors, tagged templates allow this and
+    /// produce undefined cooked values.
+    is_cooked_undefined: bool = false,
 };
 
 /// used in expressions

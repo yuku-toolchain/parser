@@ -589,7 +589,7 @@ pub const Serializer = struct {
         try self.beginObject();
         try self.fieldString("raw", self.scratch.items);
         try self.field("cooked");
-        if (data.has_invalid_escape)
+        if (data.is_cooked_undefined)
             try self.writeNull()
         else
             try self.writeDecodedString(self.scratch.items);

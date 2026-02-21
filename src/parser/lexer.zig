@@ -359,10 +359,16 @@ pub const Lexer = struct {
         return self.createToken(.jsx_text, start, self.cursor);
     }
 
+    const RegexResult = struct {
+        span: token.Span,
+        pattern: []const u8,
+        flags: []const u8,
+    };
+
     /// re-scans a slash token as a regex literal
     /// called by the parser when context determines that a '/' token should be interpreted
     /// as the start of a regular expression rather than a division operator
-    pub fn reScanAsRegex(self: *Lexer, slash_token_start: u32) LexicalError!struct { span: token.Span, pattern: []const u8, flags: []const u8 } {
+    pub fn reScanAsRegex(self: *Lexer, slash_token_start: u32) LexicalError!RegexResult  {
         self.rewindTo(slash_token_start);
 
         const start = self.cursor;
@@ -435,6 +441,7 @@ pub const Lexer = struct {
                 const end = self.cursor;
 
                 const pattern = self.source[start + 1 .. closing_delimeter_pos - 1];
+
                 const flags = self.source[closing_delimeter_pos..end];
 
                 return .{ .span = .{ .start = start, .end = end }, .pattern = pattern, .flags = flags };
@@ -509,15 +516,21 @@ pub const Lexer = struct {
         template,
     };
 
-    /// consumes an escape sequence.
-    /// in string context, errors propagate directly (fatal).
-    /// in template context, errors are absorbed and a token flag is set instead,
-    /// because tagged templates tolerate invalid escapes (cooked value becomes null/undefined).
+    // in string literals, escape errors are fatal and propagate immediately.
+    // in template literals, escape errors are non-fatal: we set
+    // `invalid_escape` on the current token and continue lexing.
+    // this flag can exist on any token type, though template literals are the
+    // current parser use case.
+    // the parser then checks this flag:
+    // - tagged templates: no diagnostic (cooked becomes null/undefined)
+    // - untagged templates: report "Bad escape sequence in untagged template literal"
     fn consumeEscape(self: *Lexer, comptime context: EscapeContext) LexicalError!void {
         if (context == .template) {
             self.consumeEscapeImpl(context) catch |err| {
                 if (err == error.OutOfMemory) return error.OutOfMemory;
-                self.setTokenFlag(.template_invalid_escape);
+
+                self.setTokenFlag(.invalid_escape);
+
                 if (self.cursor < self.source.len) self.cursor += 1;
             };
         } else {
@@ -549,12 +562,8 @@ pub const Lexer = struct {
                 if (context == .template or self.isStrictMode()) return error.OctalEscapeInStrict;
                 try self.consumeOctal();
             },
-            'x' => {
-                try self.consumeHex();
-            },
-            'u' => {
-                try self.consumeUnicodeEscape(.normal);
-            },
+            'x' => try self.consumeHex(),
+            'u' => try self.consumeUnicodeEscape(.normal),
             '1'...'7' => {
                 // octal escapes, always invalid in templates, only invalid in strict mode for strings
                 if (context == .template or self.isStrictMode()) return error.OctalEscapeInStrict;
@@ -604,45 +613,49 @@ pub const Lexer = struct {
         normal,
     };
 
-    fn consumeUnicodeEscape(self: *Lexer, comptime context: ConsumeUnicodeContext) LexicalError!void {
-        self.cursor += 1; // skip 'u'
+    const ParsedUnicodeEscape = struct {
+        value: u21,
+        end: usize,
+    };
 
+    fn parseUnicodeEscapeValue(source: []const u8, u_index: usize) ?ParsedUnicodeEscape {
+        if (u_index >= source.len or source[u_index] != 'u') return null;
+
+        const start = u_index + 1;
+
+        if (start < source.len and source[start] == '{') {
+            const digit_start = start + 1;
+
+            const brace_end = std.mem.findScalarPos(u8, source, digit_start, '}') orelse return null;
+
+            const r = util.Utf.parseHexVariable(source, digit_start, brace_end - digit_start) orelse return null;
+
+            if (!r.has_digits or r.end != brace_end) return null;
+
+            return .{ .value = r.value, .end = brace_end + 1 };
+        }
+
+        const r = util.Utf.parseHex4(source, start) orelse return null;
+
+        return .{ .value = r.value, .end = r.end };
+    }
+
+    fn consumeUnicodeEscape(self: *Lexer, comptime context: ConsumeUnicodeContext) LexicalError!void {
         const in_identifier = context == .identifier_start or context == .identifier_continue;
+
+        // set the current token is escaped
+        // used by parser to check whether a reserved keyword is ecaped to throw error
+        self.setTokenFlag(.escaped);
 
         const id_error = if (context == .identifier_start) error.InvalidIdentifierStart else error.InvalidIdentifierContinue;
 
-        if (self.cursor < self.source.len and self.source[self.cursor] == '{') {
-            // \u{XXXXX}
-            self.cursor += 1;
-            const start = self.cursor;
-            const end = std.mem.findScalarPos(u8, self.source, self.cursor, '}') orelse
-                return error.InvalidUnicodeEscape;
+        const parsed = parseUnicodeEscapeValue(self.source, self.cursor) orelse return error.InvalidUnicodeEscape;
 
-            if (util.Utf.parseHexVariable(self.source, start, end - start)) |r| {
-                if (in_identifier and !util.UnicodeId.canContinueId(r.value)) {
-                    return id_error;
-                }
-
-                if (r.has_digits and r.end == end) {
-                    self.cursor = @intCast(end + 1); // skip past '}'
-                } else {
-                    return error.InvalidUnicodeEscape;
-                }
-            } else {
-                return error.InvalidUnicodeEscape;
-            }
-        } else {
-            // \uXXXX format
-            if (util.Utf.parseHex4(self.source, self.cursor)) |r| {
-                if (in_identifier and !util.UnicodeId.canContinueId(r.value)) {
-                    return id_error;
-                }
-
-                self.cursor = @intCast(r.end);
-            } else {
-                return error.InvalidUnicodeEscape;
-            }
+        if (in_identifier and !util.UnicodeId.canContinueId(parsed.value)) {
+            return id_error;
         }
+
+        self.cursor = @intCast(parsed.end);
     }
 
     fn handleRightBrace(self: *Lexer) token.Token {
@@ -665,10 +678,12 @@ pub const Lexer = struct {
         return self.puncToken(1, .dot, start);
     }
 
-    inline fn scanIdentifierBody(self: *Lexer, is_jsx_tag: bool) !void {
+    fn scanIdentifierBody(self: *Lexer, is_jsx_tag: bool) !bool {
+        var has_escape = false;
+
         while (self.cursor < self.source.len) {
             const c = self.source[self.cursor];
-            if (c < 0x80) {
+            if (std.ascii.isAscii(c)) {
                 @branchHint(.likely);
                 if (c == '\\') {
                     @branchHint(.cold);
@@ -678,7 +693,10 @@ pub const Lexer = struct {
                         return error.JsxIdentifierCannotContainEscapes;
                     }
 
+                    has_escape = true;
+
                     self.cursor += 1; // consume backslash to get to 'u'
+
                     try self.consumeUnicodeEscape(.identifier_continue);
                 } else {
                     if (canContinueIdentifierAscii(c, is_jsx_tag)) {
@@ -697,11 +715,16 @@ pub const Lexer = struct {
                 }
             }
         }
+
+        return has_escape;
     }
 
     fn scanIdentifierOrKeyword(self: *Lexer) !token.Token {
         const start = self.cursor;
+
         const is_jsx_tag = self.mode == .jsx_tag;
+
+        var has_escape = false;
 
         const is_private = self.source[self.cursor] == '#';
 
@@ -714,13 +737,17 @@ pub const Lexer = struct {
         }
 
         const first_char = self.source[self.cursor];
-        if (first_char < 0x80) {
+
+        if (std.ascii.isAscii(first_char)) {
             @branchHint(.likely);
+
             if (first_char == '\\') {
                 // JSX tag names don't support escape sequences
                 if (is_jsx_tag) {
                     return error.JsxIdentifierCannotStartWithBackslash;
                 }
+
+                has_escape = true;
 
                 self.cursor += 1; // consume backslash to get to 'u'
 
@@ -732,22 +759,73 @@ pub const Lexer = struct {
                 }
                 self.cursor += 1;
             }
-            try self.scanIdentifierBody(is_jsx_tag);
+
+            const body_has_escape = try self.scanIdentifierBody(is_jsx_tag);
+            has_escape = has_escape or body_has_escape;
         } else {
             @branchHint(.cold);
+
             const c_cp = try util.Utf.codePointAt(self.source, self.cursor);
+
             if (!util.UnicodeId.canStartId(c_cp.value)) {
                 return error.InvalidIdentifierStart;
             }
+
             self.cursor += c_cp.len;
-            try self.scanIdentifierBody(is_jsx_tag);
+
+            has_escape = try self.scanIdentifierBody(is_jsx_tag);
         }
 
         const lexeme = self.source[start..self.cursor];
 
-        const token_type: token.TokenType = if (is_jsx_tag) .jsx_identifier else if (is_private) .private_identifier else self.getKeywordType(lexeme);
+        const token_type: token.TokenType =
+            if (is_jsx_tag) .jsx_identifier
+            else if (is_private) .private_identifier
+            else if (has_escape) self.getEscapedKeywordType(lexeme)
+            else self.getKeywordType(lexeme);
 
         return self.createToken(token_type, start, self.cursor);
+    }
+
+    fn getEscapedKeywordType(self: *Lexer, lexeme: []const u8) token.TokenType {
+        @branchHint(.cold);
+
+        var decoded: [10]u8 = undefined; // max keyword len is 10
+        var out_len: usize = 0;
+        var i: usize = 0;
+
+        while (i < lexeme.len) {
+            if (out_len == decoded.len) return .identifier;
+
+            const c = lexeme[i];
+
+            if (c == '\\') {
+                i += 1;
+
+                const parsed = parseUnicodeEscapeValue(lexeme, i) orelse return .identifier;
+
+                // if codepoint is not ascii, then it's not a keyword
+                if (parsed.value >= 0x80) return .identifier;
+
+                decoded[out_len] = @intCast(parsed.value);
+
+                out_len += 1;
+
+                i = parsed.end;
+
+                continue;
+            }
+
+            if (!std.ascii.isAscii(c)) return .identifier;
+
+            decoded[out_len] = c;
+
+            out_len += 1;
+
+            i += 1;
+        }
+
+        return self.getKeywordType(decoded[0..out_len]);
     }
 
     fn getKeywordType(_: *Lexer, lexeme: []const u8) token.TokenType {
@@ -1069,7 +1147,7 @@ pub const Lexer = struct {
         while (self.cursor < self.source.len) {
             const c = self.source[self.cursor];
 
-            if (c < 0x80) {
+            if (std.ascii.isAscii(c)) {
                 @branchHint(.likely);
 
                 switch (c) {
