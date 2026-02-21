@@ -12,7 +12,7 @@ const expressions = @import("expressions.zig");
 const statements = @import("statements.zig");
 const extensions = @import("extensions.zig");
 
-pub const ParseClassOpts = packed struct {
+pub const ParseClassOpts = struct {
     /// whether the class is parsing in an expression position
     is_expression: bool = false,
     /// for export default class, allows optional name but produces ClassDeclaration
