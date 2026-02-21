@@ -516,15 +516,14 @@ pub const Lexer = struct {
         template,
     };
 
-    /// consumes an escape sequence.
     /// in string context, errors propagate directly (fatal).
-    /// in template context, errors are absorbed and a token flag is set instead,
-    /// because tagged templates tolerate invalid escapes (cooked value becomes null/undefined).
     fn consumeEscape(self: *Lexer, comptime context: EscapeContext) LexicalError!void {
         if (context == .template) {
             self.consumeEscapeImpl(context) catch |err| {
                 if (err == error.OutOfMemory) return error.OutOfMemory;
+
                 self.setTokenFlag(.template_invalid_escape);
+
                 if (self.cursor < self.source.len) self.cursor += 1;
             };
         } else {
