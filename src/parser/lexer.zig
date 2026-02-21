@@ -362,7 +362,7 @@ pub const Lexer = struct {
     const RegexResult = struct {
         span: token.Span,
         pattern: []const u8,
-        flags: []const u8
+        flags: []const u8,
     };
 
     /// re-scans a slash token as a regex literal
@@ -516,7 +516,12 @@ pub const Lexer = struct {
         template,
     };
 
-    /// in string context, errors propagate directly (fatal).
+    // in string literals, escape errors are fatal and propagate immediately.
+    // in template literals, escape errors are non-fatal: we set
+    // `template_invalid_escape` on the current template token and continue lexing.
+    // the parser then checks this flag:
+    // - tagged templates: no diagnostic (cooked becomes null/undefined)
+    // - untagged templates: report "Invalid escape sequence in template literal"
     fn consumeEscape(self: *Lexer, comptime context: EscapeContext) LexicalError!void {
         if (context == .template) {
             self.consumeEscapeImpl(context) catch |err| {

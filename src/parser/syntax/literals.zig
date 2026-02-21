@@ -77,20 +77,9 @@ pub fn parseRegExpLiteral(parser: *Parser) Error!?ast.NodeIndex {
 pub fn parseNoSubstitutionTemplate(parser: *Parser, tagged: bool) Error!?ast.NodeIndex {
     const tok = parser.current_token;
 
-    const has_invalid_escape = try checkTemplateEscape(parser, tok, tok.span, tagged);
+    const element = try addTemplateElement(parser, tok, true, tagged);
 
     try parser.advance() orelse return null;
-
-    const element_span = getTemplateElementSpan(tok);
-
-    const element = try parser.addNode(.{
-        .template_element = .{
-            .raw_start = element_span.start,
-            .raw_len = @intCast(element_span.end - element_span.start),
-            .tail = true,
-            .has_invalid_escape = has_invalid_escape,
-        },
-    }, element_span);
 
     return try parser.addNode(.{
         .template_literal = .{
@@ -109,20 +98,12 @@ pub fn parseTemplateLiteral(parser: *Parser, tagged: bool) Error!?ast.NodeIndex 
     defer parser.scratch_b.reset(exprs_checkpoint);
 
     const head = parser.current_token;
-    const head_span = getTemplateElementSpan(head);
 
-    try parser.scratch_a.append(parser.allocator(), try parser.addNode(.{
-        .template_element = .{
-            .raw_start = head_span.start,
-            .raw_len = @intCast(head_span.end - head_span.start),
-            .tail = false,
-            .has_invalid_escape = try checkTemplateEscape(parser, head, head.span, tagged),
-        },
-    }, head_span));
+    try parser.scratch_a.append(parser.allocator(), try addTemplateElement(parser, head, false, tagged));
 
     try parser.advance() orelse return null;
 
-    var end: u32 = undefined;
+    var end = head.span.end;
 
     while (true) {
         const expr = try expressions.parseExpression(parser, Precedence.Lowest, .{}) orelse return null;
@@ -139,34 +120,26 @@ pub fn parseTemplateLiteral(parser: *Parser, tagged: bool) Error!?ast.NodeIndex 
             return null;
         }
 
-        // now scan template continuation from right after right_brace
-
         const right_brace = parser.current_token;
-
         const template_token = parser.lexer.reScanTemplateContinuation(right_brace.span.start) catch |e| {
             try parser.report(right_brace.span, lexer.getLexicalErrorMessage(e), .{ .help = lexer.getLexicalErrorHelp(e) });
             return null;
         };
 
         const is_tail = template_token.type == .template_tail;
-        const span = getTemplateElementSpan(template_token);
 
-        try parser.scratch_a.append(parser.allocator(), try parser.addNode(.{
-            .template_element = .{
-                .raw_start = span.start,
-                .raw_len = @intCast(span.end - span.start),
-                .tail = is_tail,
-                .has_invalid_escape = try checkTemplateEscape(parser, template_token, span, tagged),
-            },
-        }, span));
+        try parser.scratch_a.append(parser.allocator(), try addTemplateElement(
+            parser,
+            template_token,
+            is_tail,
+            tagged,
+        ));
 
-        if (is_tail) {
-            end = template_token.span.end;
-            try parser.advanceWithRescannedToken(template_token) orelse return null;
-            break;
-        }
+        end = template_token.span.end;
 
         try parser.advanceWithRescannedToken(template_token) orelse return null;
+
+        if (is_tail) break;
     }
 
     return try parser.addNode(.{
@@ -177,16 +150,23 @@ pub fn parseTemplateLiteral(parser: *Parser, tagged: bool) Error!?ast.NodeIndex 
     }, .{ .start = start, .end = end });
 }
 
-/// reads invalid-escape metadata from the current template token.
-/// reports an error if the template is untagged.
-inline fn checkTemplateEscape(parser: *Parser, tok: Token, span: ast.Span, tagged: bool) Error!bool {
-    const invalid = tok.hasTemplateInvalidEscape();
+inline fn addTemplateElement(parser: *Parser, tok: Token, tail: bool, tagged: bool) Error!ast.NodeIndex {
+    const span = getTemplateElementSpan(tok);
 
-    if (!tagged and invalid) {
-        try parser.report(span, "Invalid escape sequence in template literal", .{});
+    const is_cooked_undefined = tok.hasTemplateInvalidEscape();
+
+    if (!tagged and is_cooked_undefined) {
+        try parser.report(span, "Bad escape sequence in untagged template literal", .{});
     }
 
-    return invalid;
+    return parser.addNode(.{
+        .template_element = .{
+            .raw_start = span.start,
+            .raw_len = @intCast(span.end - span.start),
+            .tail = tail,
+            .is_cooked_undefined = is_cooked_undefined,
+        },
+    }, span);
 }
 
 inline fn getTemplateElementSpan(token: @import("../token.zig").Token) ast.Span {
