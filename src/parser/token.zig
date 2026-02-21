@@ -405,6 +405,7 @@ pub const Token = struct {
         return source[self.span.start..self.span.end];
     }
 
+    // returns left binding power of this token to use in expression parsing loop (pratt parsing)
     pub fn leftBp(self: *const Token) u5 {
         // handle: [no LineTerminator here] ++ --
         if ((self.type == .increment or self.type == .decrement) and self.has_line_terminator_before) {
