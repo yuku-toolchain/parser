@@ -153,7 +153,7 @@ pub fn parseTemplateLiteral(parser: *Parser, tagged: bool) Error!?ast.NodeIndex 
 inline fn addTemplateElement(parser: *Parser, tok: Token, tail: bool, tagged: bool) Error!ast.NodeIndex {
     const span = getTemplateElementSpan(tok);
 
-    const is_cooked_undefined = tok.hasTemplateInvalidEscape();
+    const is_cooked_undefined = tok.hasInvalidEscape();
 
     if (!tagged and is_cooked_undefined) {
         try parser.report(span, "Bad escape sequence in untagged template literal", .{});

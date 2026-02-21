@@ -518,16 +518,18 @@ pub const Lexer = struct {
 
     // in string literals, escape errors are fatal and propagate immediately.
     // in template literals, escape errors are non-fatal: we set
-    // `template_invalid_escape` on the current template token and continue lexing.
+    // `invalid_escape` on the current token and continue lexing.
+    // this flag can exist on any token type, though template literals are the
+    // current parser use case.
     // the parser then checks this flag:
     // - tagged templates: no diagnostic (cooked becomes null/undefined)
-    // - untagged templates: report "Invalid escape sequence in template literal"
+    // - untagged templates: report "Bad escape sequence in untagged template literal"
     fn consumeEscape(self: *Lexer, comptime context: EscapeContext) LexicalError!void {
         if (context == .template) {
             self.consumeEscapeImpl(context) catch |err| {
                 if (err == error.OutOfMemory) return error.OutOfMemory;
 
-                self.setTokenFlag(.template_invalid_escape);
+                self.setTokenFlag(.invalid_escape);
 
                 if (self.cursor < self.source.len) self.cursor += 1;
             };
