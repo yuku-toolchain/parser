@@ -421,14 +421,19 @@ pub const Token = struct {
         return (self.flags & flagMask(flag)) != 0;
     }
 
+    /// true when skipped trivia before this token contained a line terminator.
+    /// parser uses this for ASI and newline-restricted grammar rules.
     pub inline fn hasLineTerminatorBefore(self: Token) bool {
         return self.has(.line_terminator_before);
     }
 
+    /// true when template literal scanning encountered an invalid escape.
+    /// parser reports this for untagged templates but allows tagged templates.
     pub inline fn hasTemplateInvalidEscape(self: Token) bool {
         return self.has(.template_invalid_escape);
     }
 
+    /// true when token text came from an escaped spelling (for example, identifier/keyword escapes).
     pub inline fn isEscaped(self: Token) bool {
         return self.has(.escaped);
     }
