@@ -637,6 +637,8 @@ pub const Lexer = struct {
     fn consumeUnicodeEscape(self: *Lexer, comptime context: ConsumeUnicodeContext) LexicalError!void {
         const in_identifier = context == .identifier_start or context == .identifier_continue;
 
+        // set the current token is escaped
+        // used by parser to check whether a reserved keyword is ecaped to throw error
         self.setTokenFlag(.escaped);
 
         const id_error = if (context == .identifier_start) error.InvalidIdentifierStart else error.InvalidIdentifierContinue;
